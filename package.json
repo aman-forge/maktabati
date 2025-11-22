@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "arabic-book",
   "private": true,
   "scripts": {
     "build": "turbo run build",
