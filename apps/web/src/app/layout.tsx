@@ -3,6 +3,9 @@ import type {Metadata} from "next";
 import LayoutProvider from "@/components/layout";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Nunito_Sans } from "next/font/google";
+
+const nunitoSans = Nunito_Sans({variable:'--font-sans'});
 
 const alJazeeraArabic = localFont({
     src: [
@@ -33,7 +36,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({children}: { children: React.ReactNode }) => {
     return (
-        <html lang="ar" dir="rtl" suppressHydrationWarning>
+        <html lang="ar" dir="rtl" suppressHydrationWarning className={nunitoSans.variable}>
         <body className={`${alJazeeraArabic.variable} font-body antialiased`}>
         <LayoutProvider>{children}</LayoutProvider>
         </body>
