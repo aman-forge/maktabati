@@ -8,28 +8,6 @@ const notoSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
 });
 
-// const alJazeeraArabic = localFont({
-//   src: [
-//     {
-//       path: "./fonts/Al-Jazeera-Arabic Light.ttf",
-//       weight: "200",
-//       style: "normal",
-//     },
-//     {
-//       path: "./fonts/Al-Jazeera-Arabic Regular.ttf",
-//       weight: "400",
-//       style: "normal",
-//     },
-//     {
-//       path: "./fonts/Al-Jazeera-Arabic Bold.ttf",
-//       weight: "700",
-//       style: "normal",
-//     },
-//   ],
-//   variable: "--font-body",
-//   display: "swap",
-// });
-
 export const metadata: Metadata = {
   title: "Your App Name",
   description: "Your app description",
