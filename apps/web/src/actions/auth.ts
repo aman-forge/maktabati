@@ -1,8 +1,9 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { LoginFormData, loginFormSchema, type RegisterFormData, registerFormSchema } from "@/types/auth";
+import { redirect } from "next/navigation";
+import type { LoginFormData, RegisterFormData } from "@/types/auth";
+import { loginFormSchema, registerFormSchema } from "@/types/auth";
 import { createClient } from "@/utils/supabase/server";
 
 // Type for action responses
@@ -105,8 +106,12 @@ export async function loginUser(
     console.error("Login error:", error);
 
     if (error instanceof Error) {
-      if ('digest' in error && typeof error.digest === 'string' && error.digest.startsWith('NEXT_REDIRECT')) {
-        throw error
+      if (
+        "digest" in error &&
+        typeof error.digest === "string" &&
+        error.digest.startsWith("NEXT_REDIRECT")
+      ) {
+        throw error;
       }
     }
 

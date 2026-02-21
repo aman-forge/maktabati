@@ -18,7 +18,7 @@ import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -35,8 +35,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "../theme-toggle";
 import { createClient } from "@/utils/supabase/client";
+import { ThemeToggle } from "../theme-toggle";
 
 const browseItems = [
   {
@@ -99,32 +99,34 @@ const ListItem = React.forwardRef<
 >(({ className, title, children, icon, position, ...props }, ref) => {
   return (
     <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent",
-            className,
-            position === "row" ? "flex-row" : "flex-col",
-          )}
-          {...props}
-        >
-          {icon && (
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
-              <HugeiconsIcon
-                icon={icon}
-                className="size-4 text-muted-foreground transition-colors group-hover:text-primary"
-              />
+      <NavigationMenuLink
+        render={
+          <a
+            ref={ref}
+            className={cn(
+              "group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent",
+              className,
+              position === "row" ? "flex-row" : "flex-col",
+            )}
+            {...props}
+          >
+            {icon && (
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
+                <HugeiconsIcon
+                  icon={icon}
+                  className="size-4 text-muted-foreground transition-colors group-hover:text-primary"
+                />
+              </div>
+            )}
+            <div className="flex-1 space-y-0.5">
+              <div className="text-sm font-medium">{title}</div>
+              <p className="line-clamp-1 text-xs text-muted-foreground">
+                {children}
+              </p>
             </div>
-          )}
-          <div className="flex-1 space-y-0.5">
-            <div className="text-sm font-medium">{title}</div>
-            <p className="line-clamp-1 text-xs text-muted-foreground">
-              {children}
-            </p>
-          </div>
-        </a>
-      </NavigationMenuLink>
+          </a>
+        }
+      />
     </li>
   );
 });
@@ -135,12 +137,14 @@ function MobileNav() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="size-9 md:hidden">
-          <HugeiconsIcon icon={Menu01Icon} className="size-8" />
-          <span className="sr-only">القائمة</span>
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger
+        render={
+          <Button variant="ghost" size="icon" className="size-9 md:hidden">
+            <HugeiconsIcon icon={Menu01Icon} className="size-8" />
+            <span className="sr-only">القائمة</span>
+          </Button>
+        }
+      />
       <SheetContent
         side="left"
         className="max-w-screen w-80 px-4 overflow-y-scroll rounded-r-4xl"
@@ -210,12 +214,21 @@ function MobileNav() {
           </div>
 
           <div className="mt-auto flex flex-col gap-1 border-t pt-3">
-            <Button variant="outline" className="w-full bg-transparent" asChild>
-              <Link href="/login">تسجيل الدخول</Link>
-            </Button>
-            <Button className="w-full" asChild>
-              <Link href="/signup">إنشاء حساب</Link>
-            </Button>
+            <Link
+              href="/login"
+              className={cn(
+                "w-full bg-transparent",
+                buttonVariants({ variant: "outline" }),
+              )}
+            >
+              تسجيل الدخول
+            </Link>
+            <Link
+              href="/signup"
+              className={cn("w-full", buttonVariants({ variant: "default" }))}
+            >
+              إنشاء حساب
+            </Link>
           </div>
         </div>
       </SheetContent>
@@ -223,6 +236,8 @@ function MobileNav() {
   );
 }
 
+import type { User } from "@supabase/supabase-js";
+import { logoutUser } from "@/actions/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -231,8 +246,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logoutUser } from "@/actions/auth";
-import type { User } from "@supabase/supabase-js";
 
 function Header({ user: initialUser }: { user: User | null }) {
   const [user, setUser] = React.useState<User | null>(initialUser);
@@ -242,7 +255,7 @@ function Header({ user: initialUser }: { user: User | null }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
@@ -278,32 +291,36 @@ function Header({ user: initialUser }: { user: User | null }) {
                 <div className="grid w-[400px] grid-cols-[0.8fr_1fr] gap-0">
                   {/* Featured: My Library */}
                   <div className="p-2">
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/library"
-                        className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10 group"
-                      >
-                        <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
-                          <HugeiconsIcon
-                            icon={LibraryIcon}
-                            className="size-6 text-primary-foreground"
-                          />
-                        </div>
-                        <div className="mt-4 space-y-1">
-                          <div className="text-base font-semibold">مكتبتي</div>
-                          <p className="text-xs leading-relaxed text-muted-foreground">
-                            عرض وإدارة مجموعة كتبك الشخصية
-                          </p>
-                        </div>
-                        <div className="mt-3 flex items-center gap-0.5 group-hover:gap-1 duration-200 text-xs font-medium text-primary">
-                          <span>الذهاب للمكتبة</span>
-                          <HugeiconsIcon
-                            icon={ArrowLeft01Icon}
-                            className="text-primary"
-                          />
-                        </div>
-                      </Link>
-                    </NavigationMenuLink>
+                    <NavigationMenuLink
+                      render={
+                        <Link
+                          href="/library"
+                          className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10 group"
+                        >
+                          <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
+                            <HugeiconsIcon
+                              icon={LibraryIcon}
+                              className="size-6 text-primary-foreground"
+                            />
+                          </div>
+                          <div className="mt-4 space-y-1">
+                            <div className="text-base font-semibold">
+                              مكتبتي
+                            </div>
+                            <p className="text-xs leading-relaxed text-muted-foreground">
+                              عرض وإدارة مجموعة كتبك الشخصية
+                            </p>
+                          </div>
+                          <div className="mt-3 flex items-center gap-0.5 group-hover:gap-1 duration-200 text-xs font-medium text-primary">
+                            <span>الذهاب للمكتبة</span>
+                            <HugeiconsIcon
+                              icon={ArrowLeft01Icon}
+                              className="text-primary"
+                            />
+                          </div>
+                        </Link>
+                      }
+                    />
                   </div>
                   {/* Other browse items */}
                   <ul className="flex flex-col gap-0.5 p-1">
@@ -403,12 +420,14 @@ function Header({ user: initialUser }: { user: User | null }) {
 
         {user ? (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <HugeiconsIcon icon={UserIcon} className="size-6" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <HugeiconsIcon icon={UserIcon} className="size-6" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="w-56" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
@@ -421,7 +440,10 @@ function Header({ user: initialUser }: { user: User | null }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link href={`/u/${user.user_metadata.full_name}`} className="w-full">
+                <Link
+                  href={`/u/${user.user_metadata.full_name}`}
+                  className="w-full"
+                >
                   الملف الشخصي
                 </Link>
               </DropdownMenuItem>
@@ -438,9 +460,9 @@ function Header({ user: initialUser }: { user: User | null }) {
           </DropdownMenu>
         ) : (
           <div className="hidden items-center gap-1.5 sm:flex">
-            <Button size="default" className="h-9 px-4" asChild>
-              <Link href="/login">تسجيل الدخول</Link>
-            </Button>
+            <Link href="/login" className={cn("h-9 px-4", buttonVariants())}>
+              تسجيل الدخول
+            </Link>
           </div>
         )}
 

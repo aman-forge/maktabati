@@ -1,7 +1,13 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { loginUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,24 +17,17 @@ import {
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-  FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Controller, useForm } from "react-hook-form";
-import { loginUser } from "@/actions/auth";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { LoginFormData, loginFormSchema } from "@/types/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { type LoginFormData, loginFormSchema } from "@/types/auth";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [_errorMessage, setErrorMessage] = useState<string>("");
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -62,7 +61,10 @@ export function LoginForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 py-10 md:pb-0", className)} {...props}>
+    <div
+      className={cn("flex flex-col gap-6 py-10 md:pb-0", className)}
+      {...props}
+    >
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form
