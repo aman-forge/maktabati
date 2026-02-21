@@ -39,20 +39,16 @@ export const registerFormSchema = z
 // Inferred TypeScript type
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-
 // Registration form schema
-export const loginFormSchema = z
-  .object({
-    email: z
-      .string()
-      .email({ message: "يرجى إدخال عنوان بريد إلكتروني صالح." })
-      .toLowerCase()
-      .trim(),
+export const loginFormSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "يرجى إدخال عنوان بريد إلكتروني صالح." })
+    .toLowerCase()
+    .trim(),
 
-    password: z
-      .string()
-
-  })
+  password: z.string(),
+});
 
 // Inferred TypeScript type
 export type LoginFormData = z.infer<typeof loginFormSchema>;

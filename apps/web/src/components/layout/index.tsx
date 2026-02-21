@@ -1,9 +1,10 @@
 "use client";
 
-import { DirectionProvider } from "@radix-ui/react-direction";
+import type { User } from "@supabase/supabase-js";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { DirectionProvider } from "@/components/ui/direction";
 import { Toaster } from "@/components/ui/sonner";
-import { type User } from "@supabase/supabase-js";
+import { TooltipProvider } from "../ui/tooltip";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
 
@@ -15,17 +16,19 @@ const LayoutProvider = ({
   user: User | null;
 }) => {
   return (
-    <DirectionProvider dir="rtl">
+    <DirectionProvider direction="rtl">
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
       >
-        <Header user={user} />
-        <main>{children}</main>
-        <BottomBar />
-        <Toaster />
+        <TooltipProvider>
+          <Header user={user} />
+          <main>{children}</main>
+          <BottomBar />
+          <Toaster />
+        </TooltipProvider>
       </ThemeProvider>
     </DirectionProvider>
   );

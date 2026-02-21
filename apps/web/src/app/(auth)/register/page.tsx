@@ -65,8 +65,10 @@ export function RegisterForm({
   }
 
   return (
-    <div className={cn("flex w-screen overflow-x-hidden",
-      className)} {...props}>
+    <div
+      className={cn("flex w-screen overflow-x-hidden", className)}
+      {...props}
+    >
       <form
         id="register-form"
         onSubmit={form.handleSubmit(onSubmit)}

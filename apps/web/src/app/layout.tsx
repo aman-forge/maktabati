@@ -3,16 +3,16 @@ import LayoutProvider from "@/components/layout";
 import "./globals.css";
 import { Noto_Sans_Arabic } from "next/font/google";
 
-const notoSans = Noto_Sans_Arabic({
-  variable: "--font-sans",
+const fontSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
+  variable: "--font-sans",
 });
 
 import { createClient } from "@/utils/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Your App Name",
-  description: "Your app description",
+  title: "Maktabati",
+  description: "",
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -26,7 +26,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       lang="ar"
       dir="rtl"
       suppressHydrationWarning
-      className={notoSans.variable}
+      className={fontSans.variable}
     >
       <body className={`antialiased`}>
         <LayoutProvider user={user}>{children}</LayoutProvider>
