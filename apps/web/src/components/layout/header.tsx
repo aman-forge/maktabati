@@ -8,8 +8,10 @@ import {
   CheckListIcon,
   Clock01Icon,
   LibraryIcon,
+  Menu01Icon,
   UserCircleIcon,
   UserGroupIcon,
+  UserIcon,
   UserMultiple02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
@@ -34,6 +36,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "../theme-toggle";
+import { createClient } from "@/utils/supabase/client";
 
 const browseItems = [
   {
@@ -134,7 +137,7 @@ function MobileNav() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="size-9 md:hidden">
-          <HugeiconsIcon icon={UserCircleIcon} className="size-8" />
+          <HugeiconsIcon icon={Menu01Icon} className="size-8" />
           <span className="sr-only">القائمة</span>
         </Button>
       </SheetTrigger>
@@ -220,10 +223,40 @@ function MobileNav() {
   );
 }
 
-function Header() {
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { logoutUser } from "@/actions/auth";
+import type { User } from "@supabase/supabase-js";
+
+function Header({ user: initialUser }: { user: User | null }) {
+  const [user, setUser] = React.useState<User | null>(initialUser);
+
+  React.useEffect(() => {
+    const supabase = createClient();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await logoutUser();
+  };
+
   return (
     <header className="fixed top-2 px-2 z-50 w-[calc(100%-32px)] left-1/2 -translate-x-1/2 max-w-6xl mx-auto border rounded-xl bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex h-12 items-center justify-between gap-4">
-      {/* Right: Logo + Nav (RTL) */}
       <div className="flex items-center gap-2 lg:gap-4">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
@@ -368,11 +401,48 @@ function Header() {
           <span className="sr-only">بحث</span>
         </Button>
 
-        <div className="hidden items-center gap-1.5 --border-r --pr-2 --mr-1 sm:flex">
-          <Button size="default" className="h-9 px-4" asChild>
-            <Link href="/login">تسجيل الدخول</Link>
-          </Button>
-        </div>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <HugeiconsIcon icon={UserIcon} className="size-6" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {user.user_metadata.full_name || "مستخدم"}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link href={`/u/${user.user_metadata.full_name}`} className="w-full">
+                  الملف الشخصي
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href="/settings" className="w-full">
+                  الإعدادات
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                تسجيل الخروج
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <div className="hidden items-center gap-1.5 sm:flex">
+            <Button size="default" className="h-9 px-4" asChild>
+              <Link href="/login">تسجيل الدخول</Link>
+            </Button>
+          </div>
+        )}
 
         <MobileNav />
       </div>

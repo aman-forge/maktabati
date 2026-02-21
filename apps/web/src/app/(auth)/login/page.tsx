@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -5,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
@@ -12,16 +15,61 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Controller, useForm } from "react-hook-form";
+import { loginUser } from "@/actions/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { LoginFormData, loginFormSchema } from "@/types/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  async function onSubmit(data: LoginFormData) {
+    try {
+      setErrorMessage("");
+
+      const result = await loginUser(data);
+
+      if (!result.success) {
+        setErrorMessage(result.error || "حدث خطأ غير متوقع");
+        toast.error(result.error || "حدث خطأ غير متوقع");
+        return;
+      }
+
+      toast.success("تم إنشاء الحساب بنجاح! يرجى التحقق من بريدك الإلكتروني.");
+
+      // Redirect to verification page or dashboard
+      router.push("/verify-email");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setErrorMessage("حدث خطأ أثناء إنشاء الحساب");
+      toast.error("حدث خطأ أثناء إنشاء الحساب");
+    }
+  }
+
   return (
-    <div className={cn("flex flex-col gap-6 pt-10", className)} {...props}>
+    <div className={cn("flex flex-col gap-6 py-10 md:pb-0", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <FieldSet className="p-6 md:p-8">
+          <form
+            id="login-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="p-6 md:p-8"
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold"> مرحباً بك</h1>
@@ -29,34 +77,55 @@ export function LoginForm({
                   تسجيل الدخول لحساب مكتبتي
                 </p>
               </div>
-              <Field>
-                <FieldLabel htmlFor="email">البريد الإلكتروني</FieldLabel>
-                <Input
-                  className={"ltr"}
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">كلمة المرور</FieldLabel>
-                  <Link
-                    href="#"
-                    className="mr-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    هل نسيت كلمة المرور؟
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder={""}
-                  className={"ltr"}
-                  required
-                />
-              </Field>
+
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="rtl">
+                    <FieldLabel htmlFor="email">البريد الإلكتروني</FieldLabel>
+                    <Input
+                      {...field}
+                      className={"ltr"}
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      required
+                    />
+                    {fieldState.error && (
+                      <FieldError>{fieldState.error.message}</FieldError>
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="password">كلمة المرور</FieldLabel>
+                      <Link
+                        href="#"
+                        className="mr-auto text-sm underline-offset-2 hover:underline"
+                      >
+                        هل نسيت كلمة المرور؟
+                      </Link>
+                    </div>
+                    <Input
+                      {...field}
+                      id="password"
+                      type="password"
+                      placeholder={""}
+                      className={"ltr"}
+                      required
+                    />
+                    {fieldState.error && (
+                      <FieldError>{fieldState.error.message}</FieldError>
+                    )}
+                  </Field>
+                )}
+              />
               <Field>
                 <Button type="submit">تسجيل الدخول</Button>
               </Field>
@@ -110,7 +179,7 @@ export function LoginForm({
                 <Link href="/register">إنشاء حساب</Link>
               </FieldDescription>
             </FieldGroup>
-          </FieldSet>
+          </form>
           <div className="bg-muted relative hidden md:block">
             <Image
               src="/wallpaper.jpg"

@@ -65,11 +65,12 @@ export function RegisterForm({
   }
 
   return (
-    <div className={cn("flex w-full h-full gap-4", className)} {...props}>
+    <div className={cn("flex w-screen overflow-x-hidden",
+      className)} {...props}>
       <form
         id="register-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="p-6 md:p-8 flex-1 mb-8 md:mb-0 mt-16 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
+        className="p-6 md:p-0 flex-1 mb-16 md:mb-0 mt-16 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
       >
         <FieldGroup className="max-w-md mx-auto w-full gap-4">
           <div className="flex flex-col items-center gap-2 text-center mb-6">
@@ -293,16 +294,14 @@ export function RegisterForm({
         </FieldGroup>
         <p className="p-2">{errorMessage}</p>
       </form>
-      <div className="bg-card relative hidden md:block flex-1 shadow-2xl shadow-card">
-        <Image
-          src="/wallpaper.jpg"
-          alt="Image"
-          width={500}
-          height={500}
-          loading="eager"
-          className="absolute inset-0 h-screen w-full object-cover dark:brightness-[0.6] dark:grayscale-0 md:p-4 rounded-2xl"
-        />
-      </div>
+      <Image
+        src="/wallpaper.jpg"
+        alt="Image"
+        width={500}
+        height={500}
+        loading="eager"
+        className="hidden lg:block flex-1 h-screen object-cover dark:brightness-[0.6] dark:grayscale-0 md:p-0 rounded-none sticky top-0"
+      />
     </div>
   );
 }

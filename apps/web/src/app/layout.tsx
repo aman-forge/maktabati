@@ -8,12 +8,19 @@ const notoSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
 });
 
+import { createClient } from "@/utils/supabase/server";
+
 export const metadata: Metadata = {
   title: "Your App Name",
   description: "Your app description",
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html
       lang="ar"
@@ -22,7 +29,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       className={notoSans.variable}
     >
       <body className={`antialiased`}>
-        <LayoutProvider>{children}</LayoutProvider>
+        <LayoutProvider user={user}>{children}</LayoutProvider>
       </body>
     </html>
   );

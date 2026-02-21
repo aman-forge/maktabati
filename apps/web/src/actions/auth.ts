@@ -1,8 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { type RegisterFormData, registerFormSchema } from "@/types/auth";
+import { revalidatePath } from "next/cache";
+import { LoginFormData, loginFormSchema, type RegisterFormData, registerFormSchema } from "@/types/auth";
 import { createClient } from "@/utils/supabase/server";
 
 // Type for action responses
@@ -79,15 +79,17 @@ export async function registerUser(
  * Login user with email and password
  */
 export async function loginUser(
-  email: string,
-  password: string,
+  formData: LoginFormData,
 ): Promise<ActionResponse> {
   try {
+    // Validate form data
+    const validatedData = loginFormSchema.parse(formData);
+
     const supabase = await createClient();
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: validatedData.email,
+      password: validatedData.password,
     });
 
     if (error) {
@@ -97,10 +99,16 @@ export async function loginUser(
       };
     }
 
-    revalidatePath("/", "layout");
-    redirect("/dashboard");
+    revalidatePath("/");
+    redirect("/");
   } catch (error) {
     console.error("Login error:", error);
+
+    if (error instanceof Error) {
+      if ('digest' in error && typeof error.digest === 'string' && error.digest.startsWith('NEXT_REDIRECT')) {
+        throw error
+      }
+    }
 
     return {
       success: false,
@@ -126,7 +134,7 @@ export async function logoutUser(): Promise<ActionResponse> {
     }
 
     revalidatePath("/", "layout");
-    redirect("/login");
+    redirect("/");
   } catch (error) {
     console.error("Logout error:", error);
 
