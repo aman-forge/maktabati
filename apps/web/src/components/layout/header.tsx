@@ -25,6 +25,7 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuPositioner,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
@@ -241,6 +242,7 @@ import { logoutUser } from "@/actions/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -269,204 +271,203 @@ function Header({ user: initialUser }: { user: User | null }) {
   };
 
   return (
-    <header className="fixed top-2 px-2 z-50 w-[calc(100%-32px)] left-1/2 -translate-x-1/2 max-w-6xl mx-auto border rounded-xl bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex h-12 items-center justify-between gap-4">
-      <div className="flex items-center gap-2 lg:gap-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-            <BookOpen className="size-4 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-bold tracking-tight inline-block">
-            مكتبتي
-          </span>
-        </Link>
+    <header className={cn(
+      "fixed px-4 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 gap-4",
+      // "top-2 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-6xl border rounded-xl",
+      "border-b w-full"
+    )} >
+      <div className="container mx-auto flex items-center justify-between h-14">
+        <div className="flex items-center gap-2 lg:gap-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
+              <BookOpen className="size-4 text-primary-foreground" />
+            </div>
+            <span className="text-lg font-bold tracking-tight inline-block">
+              مكتبتي
+            </span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList className="gap-1">
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="gap-1 bg-transparent px-3">
-                تصفح
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid w-[400px] grid-cols-[0.8fr_1fr] gap-0">
-                  {/* Featured: My Library */}
-                  <div className="p-2">
-                    <NavigationMenuLink
-                      render={
-                        <Link
-                          href="/library"
-                          className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10 group"
-                        >
-                          <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
-                            <HugeiconsIcon
-                              icon={LibraryIcon}
-                              className="size-6 text-primary-foreground"
-                            />
-                          </div>
-                          <div className="mt-4 space-y-1">
-                            <div className="text-base font-semibold">
-                              مكتبتي
+          {/* Desktop Navigation */}
+          <NavigationMenu dir="rtl" align="center" className="hidden md:flex">
+            <NavigationMenuList className="gap-1">
+              {/* ========== Browse ========== */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>
+                  تصفح
+                </NavigationMenuTrigger>
+
+                <NavigationMenuContent>
+                  <div className="grid w-[400px] grid-cols-[0.8fr_1fr] gap-1">
+                    {/* Featured */}
+                    <div>
+                      <NavigationMenuLink
+                        render={
+                          <Link
+                            href="/library"
+                            className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10"
+                          >
+                            <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
+                              <HugeiconsIcon
+                                icon={LibraryIcon}
+                                className="size-8 text-primary-foreground"
+                              />
                             </div>
-                            <p className="text-xs leading-relaxed text-muted-foreground">
-                              عرض وإدارة مجموعة كتبك الشخصية
-                            </p>
-                          </div>
-                          <div className="mt-3 flex items-center gap-0.5 group-hover:gap-1 duration-200 text-xs font-medium text-primary">
-                            <span>الذهاب للمكتبة</span>
-                            <HugeiconsIcon
-                              icon={ArrowLeft01Icon}
-                              className="text-primary"
-                            />
-                          </div>
-                        </Link>
-                      }
-                    />
+
+                            <div className="mt-4 space-y-1">
+                              <div className="text-base font-semibold">
+                                مكتبتي
+                              </div>
+                              <p className="text-xs leading-relaxed text-muted-foreground">
+                                عرض وإدارة مجموعة كتبك الشخصية
+                              </p>
+                            </div>
+
+                            <div className="mt-3 flex items-center gap-1 text-xs font-medium text-primary">
+                              <span>الذهاب للمكتبة</span>
+                              <HugeiconsIcon icon={ArrowLeft01Icon} />
+                            </div>
+                          </Link>
+                        }
+                      />
+                    </div>
+
+                    {/* List */}
+                    <ul className="flex flex-col gap-0.5 p-1">
+                      {browseItems.map((item) => (
+                        <ListItem
+                          key={item.href}
+                          title={item.title}
+                          href={item.href}
+                          icon={item.icon}
+                          position="row"
+                        >
+                          {item.description}
+                        </ListItem>
+                      ))}
+                    </ul>
                   </div>
-                  {/* Other browse items */}
-                  <ul className="flex flex-col gap-0.5 p-1">
-                    {browseItems.map((item) => (
-                      <ListItem
-                        key={item.href}
-                        title={item.title}
-                        href={item.href}
-                        icon={item.icon}
-                        position={"row"}
-                      >
-                        {item.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
 
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="h-9 gap-1.5 bg-transparent px-3">
-                اكتشف
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="w-[300px]">
-                  <ul className="grid grid-cols-1 gap-0.5">
-                    {discoverItems.map((item) => (
-                      <ListItem
-                        key={item.href}
-                        title={item.title}
-                        href={item.href}
-                        icon={item.icon}
-                        position="row"
-                      >
-                        {item.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                  {/* Awards Section */}
-                  {/*      <div className="mt-2 border-t pt-2">*/}
-                  {/*          <div className="flex items-center gap-2">*/}
-                  {/*              /!* 2025 Awards - Featured *!/*/}
-                  {/*              <Link*/}
-                  {/*                  href="/awards/2025"*/}
-                  {/*                  className="flex flex-1 items-center gap-3 rounded-lg bg-linear-to-l from-amber-500/10 to-orange-500/10 p-3 transition-colors hover:from-amber-500/20 hover:to-orange-500/20"*/}
-                  {/*              >*/}
-                  {/*                  <div*/}
-                  {/*                      className="flex size-10 items-center justify-center rounded-lg bg-linear-to-br from-amber-500 to-orange-500 shadow-sm">*/}
-                  {/*                      <Trophy className="size-5 text-white"/>*/}
-                  {/*                  </div>*/}
-                  {/*                  <div>*/}
-                  {/*                      <div className="flex items-center gap-2">*/}
-                  {/*<span className="font-semibold text-amber-700 dark:text-amber-400">*/}
-                  {/*  جوائز 2025*/}
-                  {/*</span>*/}
-                  {/*                          <span*/}
-                  {/*                              className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400">*/}
-                  {/*  جديد*/}
-                  {/*</span>*/}
-                  {/*                      </div>*/}
-                  {/*                      <p className="text-xs text-muted-foreground">*/}
-                  {/*                          أفضل كتب العام*/}
-                  {/*                      </p>*/}
-                  {/*                  </div>*/}
-                  {/*              </Link>*/}
-                  {/*          </div>*/}
-                  {/*      </div>*/}
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+              {/* ========== Discover ========== */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>
+                  اكتشف
+                </NavigationMenuTrigger>
 
-      <div className="flex items-center gap-1">
-        <ThemeToggle />
+                <NavigationMenuContent>
+                  <div className="w-[300px]">
+                    <ul className="grid gap-0.5">
+                      {discoverItems.map((item) => (
+                        <ListItem
+                          key={item.href}
+                          title={item.title}
+                          href={item.href}
+                          icon={item.icon}
+                          position="row"
+                        >
+                          {item.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
 
-        <Button
-          variant="outline"
-          className="hidden h-9 gap-2 pl-2 pr-3 text-muted-foreground lg:flex"
-        >
-          <Search className="size-4" />
-          <span className="text-sm">بحث...</span>
-          <kbd className="pointer-events-none mr-2 rounded-full hidden h-5 select-none items-center gap-0.5 border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 lg:flex">
-            K<span className="text-xs">⌘</span>
-          </kbd>
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-9 hidden sm:flex lg:hidden"
-        >
-          <Search className="size-[18px]" />
-          <span className="sr-only">بحث</span>
-        </Button>
-
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <HugeiconsIcon icon={UserIcon} className="size-6" />
-                </Button>
+            {/* ===== Positioner (ONE TIME ONLY) ===== */}
+            <NavigationMenuPositioner
+              side="bottom"
+              align="center"
+              sideOffset={5}
+              style={
+                {
+                  ['--popup-width']: 'max-content',
+                  ['--popup-height']: 'auto',
+                  ['--available-width']: '100vw',
+                  ['--transform-origin']: 'top center',
+                } as React.CSSProperties
               }
             />
-            <DropdownMenuContent className="w-56" align="end">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {user.user_metadata.full_name || "مستخدم"}
-                  </p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link
-                  href={`/u/${user.user_metadata.full_name}`}
-                  className="w-full"
-                >
-                  الملف الشخصي
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/settings" className="w-full">
-                  الإعدادات
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                تسجيل الخروج
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <div className="hidden items-center gap-1.5 sm:flex">
-            <Link href="/login" className={cn("h-9 px-4", buttonVariants())}>
-              تسجيل الدخول
-            </Link>
-          </div>
-        )}
+          </NavigationMenu>
+        </div>
 
-        <MobileNav />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+
+          <Button
+            variant="outline"
+            className="hidden h-9 gap-2 pl-2 pr-3 text-muted-foreground lg:flex"
+          >
+            <Search className="size-4" />
+            <span className="text-sm">بحث...</span>
+            <kbd className="pointer-events-none mr-2 rounded-full hidden h-5 select-none items-center gap-0.5 border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 lg:flex">
+              K<span className="text-xs">⌘</span>
+            </kbd>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-9 hidden sm:flex lg:hidden"
+          >
+            <Search className="size-[18px]" />
+            <span className="sr-only">بحث</span>
+          </Button>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="ghost" size="icon-lg">
+                    <HugeiconsIcon icon={UserIcon} className="size-6" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent className="w-42" align="end">
+                <DropdownMenuGroup className={"p-0"}>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-2">
+                      <p className="text-sm font-medium leading-none">
+                        الأسم
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Link
+                      href={`/u/${user.id}`}
+                      className="w-full"
+                    >
+                      الملف الشخصي
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/settings" className="w-full">
+                      الإعدادات
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuItem onClick={handleLogout}>
+                  تسجيل الخروج
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="hidden items-center gap-1.5 sm:flex">
+              <Link href="/login" className={cn("h-9 px-4", buttonVariants())}>
+                تسجيل الدخول
+              </Link>
+            </div>
+          )}
+
+          <MobileNav />
+        </div>
       </div>
     </header>
   );
