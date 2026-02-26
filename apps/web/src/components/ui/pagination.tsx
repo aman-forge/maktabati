@@ -1,21 +1,22 @@
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  DotsThreeIcon,
-} from "@phosphor-icons/react";
-import type * as React from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { CaretLeftIcon, CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
+      role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn(
+        "mx-auto flex w-full justify-center",
+        className
+      )}
       {...props}
     />
-  );
+  )
 }
 
 function PaginationContent({
@@ -25,20 +26,20 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("gap-0.5 flex items-center", className)}
+      className={cn("gap-1 flex items-center", className)}
       {...props}
     />
-  );
+  )
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />;
+  return <li data-slot="pagination-item" {...props} />
 }
 
 type PaginationLinkProps = {
-  isActive?: boolean;
+  isActive?: boolean
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">;
+  React.ComponentProps<"a">
 
 function PaginationLink({
   className,
@@ -61,7 +62,7 @@ function PaginationLink({
         />
       }
     />
-  );
+  )
 }
 
 function PaginationPrevious({
@@ -73,13 +74,15 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("ps-1.5!", className)}
+      className={cn("ps-2!", className)}
       {...props}
     >
       <CaretLeftIcon data-icon="inline-start" className="rtl:rotate-180" />
-      <span className="hidden sm:block">{text}</span>
+      <span className="hidden sm:block">
+        {text}
+      </span>
     </PaginationLink>
-  );
+  )
 }
 
 function PaginationNext({
@@ -91,13 +94,13 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("pe-1.5!", className)}
+      className={cn("pe-2!", className)}
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
       <CaretRightIcon data-icon="inline-end" className="rtl:rotate-180" />
     </PaginationLink>
-  );
+  )
 }
 
 function PaginationEllipsis({
@@ -109,15 +112,16 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "size-8 [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
-        className,
+        "size-9 [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
+        className
       )}
       {...props}
     >
-      <DotsThreeIcon />
+      <DotsThreeIcon
+      />
       <span className="sr-only">More pages</span>
     </span>
-  );
+  )
 }
 
 export {
@@ -128,4 +132,4 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-};
+}
