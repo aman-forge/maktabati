@@ -55,8 +55,8 @@ export function RegisterForm({
 
       toast.success("تم إنشاء الحساب بنجاح! يرجى التحقق من بريدك الإلكتروني.");
 
-      // Redirect to verification page or dashboard
-      router.push("/verify-email");
+      // TODO: Redirect to verification page or dashboard
+      router.push("/");
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage("حدث خطأ أثناء إنشاء الحساب");
@@ -87,7 +87,7 @@ export function RegisterForm({
             name="name"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="rtl">
+              <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="fullname">الاسم الكامل</FieldLabel>
                 <Input
                   {...field}

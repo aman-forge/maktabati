@@ -1,6 +1,17 @@
 "use client";
 
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   AllBookmarkIcon,
   ArrowLeft01Icon,
   Book03Icon,
@@ -38,6 +49,17 @@ import {
 import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { ThemeToggle } from "../theme-toggle";
+import type { User } from "@supabase/supabase-js";
+import { logoutUser } from "@/actions/auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const browseItems = [
   {
@@ -91,165 +113,8 @@ const discoverItems = [
     icon: AllBookmarkIcon,
   },
 ];
-const ListItem = React.forwardRef<
-  React.ComponentRef<"a">,
-  React.ComponentPropsWithoutRef<"a"> & {
-    icon?: IconSvgElement;
-    position?: "row" | "column";
-  }
->(({ className, title, children, icon, position, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink
-        render={
-          <a
-            ref={ref}
-            className={cn(
-              "group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent",
-              className,
-              position === "row" ? "flex-row" : "flex-col",
-            )}
-            {...props}
-          >
-            {icon && (
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
-                <HugeiconsIcon
-                  icon={icon}
-                  className="size-4 text-muted-foreground transition-colors group-hover:text-primary"
-                />
-              </div>
-            )}
-            <div className="flex-1 space-y-0.5">
-              <div className="text-sm font-medium">{title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">
-                {children}
-              </p>
-            </div>
-          </a>
-        }
-      />
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";
 
-function MobileNav() {
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <Button variant="ghost" size="icon" className="size-9 md:hidden">
-            <HugeiconsIcon icon={Menu01Icon} className="size-8" />
-            <span className="sr-only">القائمة</span>
-          </Button>
-        }
-      />
-      <SheetContent
-        side="left"
-        className="max-w-screen w-80 px-4 overflow-y-scroll rounded-r-4xl"
-        dir="rtl"
-      >
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2.5 text-right">
-            معلومات الحساب
-          </SheetTitle>
-        </SheetHeader>
-        <div className="mb-4 flex flex-col gap-6 h-full">
-          {/* My Library - Featured */}
-          {/*<Link
-            href="/library"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 rounded-xl bg-primary/5 p-4 transition-colors hover:bg-primary/10"
-          >
-            <div className="flex size-11 items-center justify-center rounded-xl bg-primary">
-              <Library className="size-5 text-primary-foreground" />
-            </div>
-            <div>
-              <div className="font-semibold">مكتبتي</div>
-              <div className="text-xs text-muted-foreground">
-                إدارة مجموعة كتبك
-              </div>
-            </div>
-          </Link>*/}
-
-          <div className="flex flex-col gap-1.5">
-            <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
-              تصفح
-            </span>
-            {browseItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-base transition-colors hover:bg-accent"
-              >
-                <HugeiconsIcon
-                  icon={item.icon}
-                  className="size-5 text-muted-foreground"
-                />
-                {item.title}
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
-              اكتشف
-            </span>
-            {discoverItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-base transition-colors hover:bg-accent"
-              >
-                <HugeiconsIcon
-                  icon={item.icon}
-                  className="size-5 text-muted-foreground"
-                />
-                {item.title}
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-auto flex flex-col gap-1 border-t pt-3">
-            <Link
-              href="/login"
-              className={cn(
-                "w-full bg-transparent",
-                buttonVariants({ variant: "outline" }),
-              )}
-            >
-              تسجيل الدخول
-            </Link>
-            <Link
-              href="/signup"
-              className={cn("w-full", buttonVariants({ variant: "default" }))}
-            >
-              إنشاء حساب
-            </Link>
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-}
-
-import type { User } from "@supabase/supabase-js";
-import { logoutUser } from "@/actions/auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-function Header({ user: initialUser }: { user: User | null }) {
+export default function Header({ user: initialUser }: { user: User | null }) {
   const [user, setUser] = React.useState<User | null>(initialUser);
 
   React.useEffect(() => {
@@ -266,7 +131,13 @@ function Header({ user: initialUser }: { user: User | null }) {
     };
   }, []);
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const handleLogout = async () => {
+    // 1. Close the dialog immediately for better UX
+    setIsOpen(false);
+
+    // 2. Fire the server action
     await logoutUser();
   };
 
@@ -435,20 +306,37 @@ function Header({ user: initialUser }: { user: User | null }) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem render={
                     <Link href={`/u/${user.id}`} className="w-full">
                       الملف الشخصي
                     </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+
+                  } />
+                  <DropdownMenuItem render={
                     <Link href="/settings" className="w-full">
                       الإعدادات
                     </Link>
-                  </DropdownMenuItem>
+                  } />
                 </DropdownMenuGroup>
-                <DropdownMenuItem onClick={handleLogout}>
-                  تسجيل الخروج
-                </DropdownMenuItem>
+                <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+                  <AlertDialogTrigger className={cn("w-full justify-start! hover:bg-destructive/10! hover:text-destructive!", buttonVariants({ variant: "ghost" }))}>
+                    تسجيل الخروج
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>هل أنت متأكد من تسجيل الخروج؟</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        سيتم إنهاء جلستك الحالية، وستحتاج إلى إدخال بياناتك مرة أخرى للوصول إلى حسابك.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleLogout} className={buttonVariants({ variant: "destructive" })}>
+                        تسجيل الخروج
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -462,8 +350,150 @@ function Header({ user: initialUser }: { user: User | null }) {
           <MobileNav />
         </div>
       </div>
-    </header>
+    </header >
   );
 }
+function MobileNav() {
+  const [open, setOpen] = React.useState(false);
 
-export default Header;
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        render={
+          <Button variant="ghost" size="icon" className="size-9 md:hidden">
+            <HugeiconsIcon icon={Menu01Icon} className="size-8" />
+            <span className="sr-only">القائمة</span>
+          </Button>
+        }
+      />
+      <SheetContent
+        side="left"
+        className="max-w-screen w-80 px-4 overflow-y-scroll rounded-r-4xl"
+        dir="rtl"
+      >
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2.5 text-right">
+            معلومات الحساب
+          </SheetTitle>
+        </SheetHeader>
+        <div className="mb-4 flex flex-col gap-6 h-full">
+          {/* My Library - Featured */}
+          {/*<Link
+            href="/library"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-xl bg-primary/5 p-4 transition-colors hover:bg-primary/10"
+          >
+            <div className="flex size-11 items-center justify-center rounded-xl bg-primary">
+              <Library className="size-5 text-primary-foreground" />
+            </div>
+            <div>
+              <div className="font-semibold">مكتبتي</div>
+              <div className="text-xs text-muted-foreground">
+                إدارة مجموعة كتبك
+              </div>
+            </div>
+          </Link>*/}
+
+          <div className="flex flex-col gap-1.5">
+            <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
+              تصفح
+            </span>
+            {browseItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-base transition-colors hover:bg-accent"
+              >
+                <HugeiconsIcon
+                  icon={item.icon}
+                  className="size-5 text-muted-foreground"
+                />
+                {item.title}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
+              اكتشف
+            </span>
+            {discoverItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-base transition-colors hover:bg-accent"
+              >
+                <HugeiconsIcon
+                  icon={item.icon}
+                  className="size-5 text-muted-foreground"
+                />
+                {item.title}
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-auto flex flex-col gap-1 border-t pt-3">
+            <Link
+              href="/login"
+              className={cn(
+                "w-full bg-transparent",
+                buttonVariants({ variant: "outline" }),
+              )}
+            >
+              تسجيل الدخول
+            </Link>
+            <Link
+              href="/signup"
+              className={cn("w-full", buttonVariants({ variant: "default" }))}
+            >
+              إنشاء حساب
+            </Link>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+const ListItem = React.forwardRef<
+  React.ComponentRef<"a">,
+  React.ComponentPropsWithoutRef<"a"> & {
+    icon?: IconSvgElement;
+    position?: "row" | "column";
+  }
+>(({ className, title, children, icon, position, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink
+        render={
+          <a
+            ref={ref}
+            className={cn(
+              "group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent",
+              className,
+              position === "row" ? "flex-row" : "flex-col",
+            )}
+            {...props}
+          >
+            {icon && (
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
+                <HugeiconsIcon
+                  icon={icon}
+                  className="size-4 text-muted-foreground transition-colors group-hover:text-primary"
+                />
+              </div>
+            )}
+            <div className="flex-1 space-y-0.5">
+              <div className="text-sm font-medium">{title}</div>
+              <p className="line-clamp-1 text-xs text-muted-foreground">
+                {children}
+              </p>
+            </div>
+          </a>
+        }
+      />
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
