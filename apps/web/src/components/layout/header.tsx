@@ -271,11 +271,13 @@ function Header({ user: initialUser }: { user: User | null }) {
   };
 
   return (
-    <header className={cn(
-      "fixed px-4 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 gap-4",
-      // "top-2 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-6xl border rounded-xl",
-      "border-b w-full"
-    )} >
+    <header
+      className={cn(
+        "fixed px-4 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 gap-4",
+        // "top-2 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-6xl border rounded-xl",
+        "border-b w-full",
+      )}
+    >
       <div className="container mx-auto flex items-center justify-between h-14">
         <div className="flex items-center gap-2 lg:gap-4">
           <Link href="/" className="flex items-center gap-2.5">
@@ -292,9 +294,7 @@ function Header({ user: initialUser }: { user: User | null }) {
             <NavigationMenuList className="gap-1">
               {/* ========== Browse ========== */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  تصفح
-                </NavigationMenuTrigger>
+                <NavigationMenuTrigger>تصفح</NavigationMenuTrigger>
 
                 <NavigationMenuContent>
                   <div className="grid w-[400px] grid-cols-[0.8fr_1fr] gap-1">
@@ -351,9 +351,7 @@ function Header({ user: initialUser }: { user: User | null }) {
 
               {/* ========== Discover ========== */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  اكتشف
-                </NavigationMenuTrigger>
+                <NavigationMenuTrigger>اكتشف</NavigationMenuTrigger>
 
                 <NavigationMenuContent>
                   <div className="w-[300px]">
@@ -382,10 +380,10 @@ function Header({ user: initialUser }: { user: User | null }) {
               sideOffset={5}
               style={
                 {
-                  ['--popup-width']: 'max-content',
-                  ['--popup-height']: 'auto',
-                  ['--available-width']: '100vw',
-                  ['--transform-origin']: 'top center',
+                  ["--popup-width"]: "max-content",
+                  ["--popup-height"]: "auto",
+                  ["--available-width"]: "100vw",
+                  ["--transform-origin"]: "top center",
                 } as React.CSSProperties
               }
             />
@@ -428,9 +426,7 @@ function Header({ user: initialUser }: { user: User | null }) {
                 <DropdownMenuGroup className={"p-0"}>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-2">
-                      <p className="text-sm font-medium leading-none">
-                        الأسم
-                      </p>
+                      <p className="text-sm font-medium leading-none">الأسم</p>
                       <p className="text-xs leading-none text-muted-foreground">
                         {user.email}
                       </p>
@@ -440,10 +436,7 @@ function Header({ user: initialUser }: { user: User | null }) {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <Link
-                      href={`/u/${user.id}`}
-                      className="w-full"
-                    >
+                    <Link href={`/u/${user.id}`} className="w-full">
                       الملف الشخصي
                     </Link>
                   </DropdownMenuItem>
