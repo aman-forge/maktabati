@@ -43,9 +43,9 @@ export function LoginForm({
 
       const result = await loginUser(data);
 
-      if (!result.success) {
-        setErrorMessage(result.error || "حدث خطأ غير متوقع");
-        toast.error(result.error || "حدث خطأ غير متوقع");
+      if (!result?.success) {
+        setErrorMessage(result?.error || "حدث خطأ غير متوقع");
+        toast.error(result?.error || "حدث خطأ غير متوقع");
         return;
       }
 
