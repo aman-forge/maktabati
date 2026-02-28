@@ -10,27 +10,22 @@ import {
   EmptyMedia,
 } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
-import { LinkBreakIcon } from "@phosphor-icons/react";
 
 export default function NotFound() {
   return (
     <Empty>
-      <EmptyHeader className="text-xl md:text-3xl lg:text-5xl h-screen flex items-center justify-center  ">
+      <EmptyHeader className="text-xl md:text-3xl lg:text-5xl h-screen flex items-center justify-center gap-2 ">
         <EmptyTitle className=" text-5xl flex gap-2 font-semibold">
-          <LinkBreakIcon size={48} /> 404
+          404
         </EmptyTitle>
-        <Separator />
-        <EmptyTitle className="text-xl">
-          عذراً لم يتم ايجاد ما تبحث عنه
-        </EmptyTitle>
+
+        <EmptyTitle className="text-xl">الصفحة غير موجودة</EmptyTitle>
         <EmptyDescription className="text-xl">
-          الصفحة التي تبحث عنها غير موجودة
+          عذرًا، الصفحة التي تحاول الوصول إليها غير متوفرة أو ربما تم نقلها.
+          يمكنك العودة إلى الصفحة السابقة أو الانتقال إلى الصفحة الرئيسية
+          للمتابعة.
         </EmptyDescription>
-        <Button
-          className="bg-[#dc7602eb] text-lg py-5 px-2"
-          variant="secondary"
-          type="submit"
-        >
+        <Button className="text-lg py-5 px-2" size={"lg"} variant="default">
           <Link href="/"> العودة إلى الرئيسية</Link>
         </Button>
       </EmptyHeader>
