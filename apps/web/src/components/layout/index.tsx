@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@supabase/supabase-js";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
 import { Toaster } from "@/components/ui/sonner";
@@ -8,13 +7,7 @@ import { TooltipProvider } from "../ui/tooltip";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
 
-const LayoutProvider = ({
-  children,
-  user,
-}: {
-  children: React.ReactNode;
-  user: User | null;
-}) => {
+const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <DirectionProvider direction="rtl">
       <ThemeProvider
@@ -24,10 +17,10 @@ const LayoutProvider = ({
         disableTransitionOnChange
       >
         <TooltipProvider>
-          <Header user={user} />
+          <Header />
           <main>{children}</main>
           <BottomBar />
-          <Toaster />
+          <Toaster richColors />
         </TooltipProvider>
       </ThemeProvider>
     </DirectionProvider>

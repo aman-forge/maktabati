@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   AllBookmarkIcon,
   ArrowLeft01Icon,
@@ -60,6 +60,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUser } from "@/context/user-context";
 
 const browseItems = [
   {
@@ -114,30 +115,12 @@ const discoverItems = [
   },
 ];
 
-export default function Header({ user: initialUser }: { user: User | null }) {
-  const [user, setUser] = React.useState<User | null>(initialUser);
-
-  React.useEffect(() => {
-    const supabase = createClient();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
+export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { user, loading } = useUser();
 
   const handleLogout = async () => {
-    // 1. Close the dialog immediately for better UX
     setIsOpen(false);
-
-    // 2. Fire the server action
     await logoutUser();
   };
 
@@ -284,7 +267,9 @@ export default function Header({ user: initialUser }: { user: User | null }) {
             <span className="sr-only">بحث</span>
           </Button>
 
-          {user ? (
+          {loading ? (
+            <span>LOADING!!!</span>
+          ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -306,32 +291,46 @@ export default function Header({ user: initialUser }: { user: User | null }) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem render={
-                    <Link href={`/u/${user.id}`} className="w-full">
-                      الملف الشخصي
-                    </Link>
-
-                  } />
-                  <DropdownMenuItem render={
-                    <Link href="/settings" className="w-full">
-                      الإعدادات
-                    </Link>
-                  } />
+                  <DropdownMenuItem
+                    render={
+                      <Link href={`/u/${user.id}`} className="w-full">
+                        الملف الشخصي
+                      </Link>
+                    }
+                  />
+                  <DropdownMenuItem
+                    render={
+                      <Link href="/settings" className="w-full">
+                        الإعدادات
+                      </Link>
+                    }
+                  />
                 </DropdownMenuGroup>
                 <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-                  <AlertDialogTrigger className={cn("w-full justify-start! hover:bg-destructive/10! hover:text-destructive!", buttonVariants({ variant: "ghost" }))}>
+                  <AlertDialogTrigger
+                    className={cn(
+                      "w-full justify-start! hover:bg-destructive/10! hover:text-destructive!",
+                      buttonVariants({ variant: "ghost" }),
+                    )}
+                  >
                     تسجيل الخروج
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>هل أنت متأكد من تسجيل الخروج؟</AlertDialogTitle>
+                      <AlertDialogTitle>
+                        هل أنت متأكد من تسجيل الخروج؟
+                      </AlertDialogTitle>
                       <AlertDialogDescription>
-                        سيتم إنهاء جلستك الحالية، وستحتاج إلى إدخال بياناتك مرة أخرى للوصول إلى حسابك.
+                        سيتم إنهاء جلستك الحالية، وستحتاج إلى إدخال بياناتك مرة
+                        أخرى للوصول إلى حسابك.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>إلغاء</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleLogout} className={buttonVariants({ variant: "destructive" })}>
+                      <AlertDialogAction
+                        onClick={handleLogout}
+                        className={buttonVariants({ variant: "destructive" })}
+                      >
                         تسجيل الخروج
                       </AlertDialogAction>
                     </AlertDialogFooter>
@@ -350,7 +349,7 @@ export default function Header({ user: initialUser }: { user: User | null }) {
           <MobileNav />
         </div>
       </div>
-    </header >
+    </header>
   );
 }
 function MobileNav() {

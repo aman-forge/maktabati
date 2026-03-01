@@ -112,7 +112,6 @@ export async function loginUser(
     // 3. Prepare for success
     revalidatePath("/", "layout");
     success = true;
-
   } catch (error) {
     // 4. Handle Redirects separately or re-throw them
     if (isRedirectError(error)) throw error;
