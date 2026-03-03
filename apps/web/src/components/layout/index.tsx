@@ -18,7 +18,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
       >
         <TooltipProvider>
           <Header />
-          <main>{children}</main>
+          <main className="pt-14">{children}</main>
           <BottomBar />
           <Toaster richColors />
         </TooltipProvider>

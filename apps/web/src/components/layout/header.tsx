@@ -28,6 +28,7 @@ import {
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -50,7 +51,6 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { ThemeToggle } from "../theme-toggle";
 import type { User } from "@supabase/supabase-js";
-import { logoutUser } from "@/actions/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -118,10 +118,13 @@ const discoverItems = [
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { user, loading } = useUser();
+  const router = useRouter();
+  const supabase = React.useMemo(() => createClient(), []);
 
   const handleLogout = async () => {
     setIsOpen(false);
-    await logoutUser();
+    await supabase.auth.signOut();
+    router.push("/login");
   };
 
   return (
@@ -267,9 +270,7 @@ export default function Header() {
             <span className="sr-only">بحث</span>
           </Button>
 
-          {loading ? (
-            <span>LOADING!!!</span>
-          ) : user ? (
+          {user && !loading ? (
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={

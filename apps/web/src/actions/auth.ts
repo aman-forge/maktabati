@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { LoginFormData, RegisterFormData } from "@/types/auth";
-import { loginFormSchema, registerFormSchema } from "@/types/auth";
+import type { RegisterFormData } from "@/types/auth";
+import { registerFormSchema } from "@/types/auth";
 import { createClient } from "@/utils/supabase/server";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
@@ -73,95 +73,6 @@ export async function registerUser(
       error: "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
     };
   }
-}
-
-/**
- * Login user with email and password
- */
-export async function loginUser(
-  formData: LoginFormData,
-): Promise<ActionResponse | void> {
-  const supabase = await createClient();
-  let success = false;
-
-  try {
-    // 1. Validate - use safeParse to handle errors gracefully without throwing
-    const result = loginFormSchema.safeParse(formData);
-
-    if (!result.success) {
-      return {
-        success: false,
-        error: "بيانات المدخلات غير صالحة.",
-        // Optional: you could return result.error.flatten() for field-specific errors
-      };
-    }
-
-    // 2. Authenticate
-    const { error } = await supabase.auth.signInWithPassword({
-      email: result.data.email,
-      password: result.data.password,
-    });
-
-    if (error) {
-      return {
-        success: false,
-        error: getArabicErrorMessage(error.message),
-      };
-    }
-
-    // 3. Prepare for success
-    revalidatePath("/", "layout");
-    success = true;
-  } catch (error) {
-    // 4. Handle Redirects separately or re-throw them
-    if (isRedirectError(error)) throw error;
-
-    console.error("Login error:", error);
-    return {
-      success: false,
-      error: "فشل تسجيل الدخول. يرجى المحقق من اتصالك.",
-    };
-  }
-
-  // 5. Final Redirect
-  if (success) {
-    redirect("/");
-  }
-}
-
-/**
- * Logout current user
- */
-export async function logoutUser(): Promise<ActionResponse | void> {
-  const supabase = await createClient();
-  let isError = false;
-
-  try {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      return {
-        success: false,
-        error: "فشل تسجيل الخروج.",
-      };
-    }
-
-    revalidatePath("/", "layout");
-  } catch (error) {
-    console.error("Logout error:", error);
-    isError = true;
-  }
-
-  // Handle the error return outside the try/catch if needed
-  if (isError) {
-    return {
-      success: false,
-      error: "حدث خطأ أثناء تسجيل الخروج.",
-    };
-  }
-
-  // 1. Always call redirect() OUTSIDE of the try/catch block
-  redirect("/login");
 }
 
 /**

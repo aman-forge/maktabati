@@ -3,6 +3,7 @@ import LayoutProvider from "@/components/layout";
 import "./globals.css";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { UserProvider } from "@/context/user-context";
+import { getCurrentUser } from "@/actions/auth";
 
 const fontSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await getCurrentUser();
+
   return (
     <html
       lang="ar"
@@ -23,7 +26,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       className={fontSans.variable}
     >
       <body className={`antialiased`}>
-        <UserProvider>
+        <UserProvider initialUser={user}>
           <LayoutProvider>{children}</LayoutProvider>
         </UserProvider>
       </body>

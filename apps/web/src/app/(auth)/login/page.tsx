@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { loginUser } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -21,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { type LoginFormData, loginFormSchema } from "@/types/auth";
+import { createClient } from "@/utils/supabase/client";
 
 export function LoginForm({
   className,
@@ -41,18 +41,27 @@ export function LoginForm({
     try {
       setErrorMessage("");
 
-      const result = await loginUser(data);
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
 
-      if (!result?.success) {
-        setErrorMessage(result?.error || "حدث خطأ غير متوقع");
-        toast.error(result?.error || "حدث خطأ غير متوقع");
+      if (error) {
+        const message =
+          error.message === "Invalid login credentials"
+            ? "بيانات الدخول غير صحيحة."
+            : "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.";
+
+        setErrorMessage(message);
+        toast.error(message);
         return;
       }
 
-      toast.success("تم إنشاء الحساب بنجاح! يرجى التحقق من بريدك الإلكتروني.");
+      toast.success("تم تسجيل الدخول بنجاح.");
 
-      // Redirect to verification page or dashboard
-      router.push("/verify-email");
+      // Redirect to home – navbar will update via UserProvider
+      router.push("/");
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage("حدث خطأ أثناء إنشاء الحساب");
