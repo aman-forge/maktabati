@@ -48,7 +48,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/client";
 import { ThemeToggle } from "../theme-toggle";
 import type { User } from "@supabase/supabase-js";
 import {
@@ -117,13 +116,12 @@ const discoverItems = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { user, loading } = useUser();
+  const { user, loading, logout } = useUser();
   const router = useRouter();
-  const supabase = React.useMemo(() => createClient(), []);
 
   const handleLogout = async () => {
     setIsOpen(false);
-    await supabase.auth.signOut();
+    await logout();
     router.push("/login");
   };
 
@@ -355,6 +353,7 @@ export default function Header() {
 }
 function MobileNav() {
   const [open, setOpen] = React.useState(false);
+  const { user, loading } = useUser();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -434,23 +433,28 @@ function MobileNav() {
             ))}
           </div>
 
-          <div className="mt-auto flex flex-col gap-1 border-t pt-3">
-            <Link
-              href="/login"
-              className={cn(
-                "w-full bg-transparent",
-                buttonVariants({ variant: "outline" }),
-              )}
-            >
-              تسجيل الدخول
-            </Link>
-            <Link
-              href="/signup"
-              className={cn("w-full", buttonVariants({ variant: "default" }))}
-            >
-              إنشاء حساب
-            </Link>
-          </div>
+          {!user && !loading && (
+            <div className="mt-auto flex flex-col gap-1 border-t pt-3">
+              <Link
+                href="/login"
+                className={cn(
+                  "w-full bg-transparent",
+                  buttonVariants({ variant: "outline" }),
+                )}
+              >
+                تسجيل الدخول
+              </Link>
+              <Link
+                href="/register"
+                className={cn(
+                  "w-full",
+                  buttonVariants({ variant: "default" }),
+                )}
+              >
+                إنشاء حساب
+              </Link>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>

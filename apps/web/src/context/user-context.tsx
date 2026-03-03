@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 type UserContextType = {
   user: User | null;
   loading: boolean;
+  logout: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -46,8 +47,13 @@ export function UserProvider({ children, initialUser }: UserProviderProps) {
     return () => subscription.unsubscribe();
   }, [initialUser, supabase]);
 
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, logout }}>
       {children}
     </UserContext.Provider>
   );

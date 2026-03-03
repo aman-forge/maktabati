@@ -31,7 +31,9 @@ export async function registerUser(
       password: validatedData.password,
       options: {
         data: {
-          full_name: validatedData.name,
+          username: validatedData.username,
+          first_name: validatedData.first_name,
+          last_name: validatedData.last_name,
         },
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
       },
@@ -205,6 +207,7 @@ export async function resendVerificationEmail(
 function getArabicErrorMessage(errorMessage: string): string {
   const errorMap: Record<string, string> = {
     "User already registered": "البريد الإلكتروني مسجل بالفعل.",
+    "duplicate key value": "اسم المستخدم مستخدم بالفعل. يرجى اختيار اسم آخر.",
     "Invalid login credentials": "بيانات الدخول غير صحيحة.",
     "Email not confirmed": "يرجى تأكيد بريدك الإلكتروني.",
     "Password should be at least 6 characters":

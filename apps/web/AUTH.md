@@ -6,6 +6,7 @@ This app uses **Supabase Auth** with:
 - **Client-side utilities** in `src/utils/supabase/client.ts`
 - A shared **user context** in `src/context/user-context.tsx`
 - Optional **server actions** in `src/actions/auth.ts`
+- A `profiles` table that is populated from `raw_user_meta_data` when a user is created
 
 Below is how to work with auth in different places.
 
@@ -13,11 +14,11 @@ Below is how to work with auth in different places.
 
 ## 1. Global session flow
 
-- `src/middleware.ts` calls `updateSession` from `src/utils/supabase/middleware.ts`
+- `apps/web/middleware.ts` calls `updateSession` from `src/utils/supabase/middleware.ts`
   - Keeps Supabase auth cookies in sync for all requests
   - Can protect routes (e.g. `/settings`, `/admin`) and redirect unauthenticated users to `/login`
 - `src/actions/auth.ts` exposes helpers like:
-  - `registerUser(formData)` – server action for sign up
+  - `registerUser(formData)` – server action for sign up, sending `username`, `first_name`, `last_name` into `raw_user_meta_data`
   - `getCurrentUser()` – get the current user on the server
 - `src/context/user-context.tsx` exposes:
   - `<UserProvider initialUser={user}>` – wraps the app and hydrates from the server
@@ -66,7 +67,7 @@ import { getCurrentUser } from "@/actions/auth";
 import { UserProvider } from "@/context/user-context";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getCurrentUser(); // server-side fetch
+  const user = await getCurrentUser(); // single server-side fetch at the root
 
   return (
     <html /* ... */>
@@ -162,16 +163,16 @@ const { error } = await supabase.auth.signInWithPassword({
 
 ### 4.3. Logging out on the client
 
-Example (simplified from `src/components/layout/header.tsx`):
+Logout is now centralized in the user context:
 
 ```ts
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { useUser } from "@/context/user-context";
 
 const router = useRouter();
-const supabase = createClient();
+const { logout } = useUser();
 
-await supabase.auth.signOut();
+await logout();
 router.push("/login");
 ```
 

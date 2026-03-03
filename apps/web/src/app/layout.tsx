@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "",
 };
 
+export const dynamic = "force-dynamic";
+
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser();
 
