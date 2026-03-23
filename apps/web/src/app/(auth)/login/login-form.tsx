@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { type LoginFormData, loginFormSchema } from "@/types/auth";
 import { createClient } from "@/utils/supabase/client";
 
-function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+function LoginForm({ ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -65,10 +65,10 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
 
   return (
     <div
-      className={cn("flex flex-col gap-6 py-10 md:pb-0", className)}
+      className={cn("flex flex-col gap-6 md:p-6 w-full max-w-xl md:max-w-4xl")}
       {...props}
     >
-      <Card className="overflow-hidden p-0">
+      <Card className="overflow-hidden p-0 ring-0 md:border">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form
             id="login-form"
@@ -211,9 +211,8 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div >
   );
 }
 
 export default LoginForm;
-

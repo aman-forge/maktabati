@@ -27,7 +27,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       suppressHydrationWarning
       className={fontSans.variable}
     >
-      <body className={`antialiased`}>
+      <body className={`antialiased pb-18 md:p-0`}>
         <UserProvider initialUser={user}>
           <LayoutProvider>{children}</LayoutProvider>
         </UserProvider>
