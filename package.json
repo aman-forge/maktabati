@@ -1,5 +1,5 @@
 {
-  "name": "maktabati",
+  "name": "test",
   "private": true,
   "scripts": {
     "build": "turbo run build",
