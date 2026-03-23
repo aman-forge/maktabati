@@ -74,7 +74,7 @@ function PaginationPrevious({
       className={cn("ps-2!", className)}
       {...props}
     >
-      <CaretLeftIcon data-icon="inline-start" />
+      <CaretLeftIcon data-icon="inline-start" className="rtl:rotate-180" />
       <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   )
@@ -93,7 +93,7 @@ function PaginationNext({
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
-      <CaretRightIcon data-icon="inline-end" />
+      <CaretRightIcon data-icon="inline-end" className="rtl:rotate-180" />
     </PaginationLink>
   )
 }
