@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "../ui/tooltip";
+import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
 
@@ -16,12 +17,14 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
         enableSystem
         disableTransitionOnChange
       >
-        <TooltipProvider>
-          <Header />
-          <main className="pt-14">{children}</main>
-          <BottomBar />
-          <Toaster richColors />
-        </TooltipProvider>
+        <AuthDialogProvider>
+          <TooltipProvider>
+            <Header />
+            <main className="pt-14">{children}</main>
+            <BottomBar />
+            <Toaster richColors />
+          </TooltipProvider>
+        </AuthDialogProvider>
       </ThemeProvider>
     </DirectionProvider>
   );

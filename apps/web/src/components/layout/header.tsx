@@ -60,6 +60,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@/context/user-context";
+import { useAuthDialog } from "../auth/auth-dialog-provider";
 
 const browseItems = [
   {
@@ -118,6 +119,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { user, loading, logout } = useUser();
   const router = useRouter();
+  const { openDialog } = useAuthDialog();
 
   const handleLogout = async () => {
     setIsOpen(false);
@@ -339,9 +341,13 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <div className="hidden items-center gap-1.5 sm:flex">
-              <Link href="/login" className={cn("h-9 px-4", buttonVariants())}>
+              <button
+                type="button"
+                onClick={() => openDialog("login")}
+                className={cn("h-9 px-4 cursor-pointer", buttonVariants())}
+              >
                 تسجيل الدخول
-              </Link>
+              </button>
             </div>
           )}
 
@@ -354,6 +360,7 @@ export default function Header() {
 function MobileNav() {
   const [open, setOpen] = React.useState(false);
   const { user, loading } = useUser();
+  const { openDialog } = useAuthDialog();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -435,24 +442,29 @@ function MobileNav() {
 
           {!user && !loading && (
             <div className="mt-auto flex flex-col gap-1 border-t pt-3">
-              <Link
-                href="/login"
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openDialog("login");
+                }}
                 className={cn(
-                  "w-full bg-transparent",
+                  "w-full bg-transparent text-foreground",
                   buttonVariants({ variant: "outline" }),
                 )}
               >
                 تسجيل الدخول
-              </Link>
-              <Link
-                href="/register"
-                className={cn(
-                  "w-full",
-                  buttonVariants({ variant: "default" }),
-                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openDialog("register");
+                }}
+                className={cn("w-full", buttonVariants({ variant: "default" }))}
               >
                 إنشاء حساب
-              </Link>
+              </button>
             </div>
           )}
         </div>
