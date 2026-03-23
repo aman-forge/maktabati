@@ -1,8 +1,9 @@
+import * as React from "react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react";
-import type * as React from "react";
+
 import { cn } from "@/lib/utils";
+import { CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -20,7 +21,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "text-muted-foreground gap-1.5 text-sm flex flex-wrap items-center wrap-break-word",
+        "text-muted-foreground gap-1.5 text-sm sm:gap-2.5 flex flex-wrap items-center wrap-break-word",
         className,
       )}
       {...props}
@@ -32,7 +33,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn("gap-1 inline-flex items-center", className)}
+      className={cn("gap-1.5 inline-flex items-center", className)}
       {...props}
     />
   );

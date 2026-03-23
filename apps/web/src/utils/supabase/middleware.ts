@@ -6,72 +6,47 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY; // or _ANON_KEY if that's what you're using
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-  if (!supabaseUrl) {
-    throw new Error("Missing environment variable NEXT_PUBLIC_SUPABASE_URL");
-  }
-
-  if (!supabaseKey) {
-    throw new Error(
-      "Missing environment variable NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-    );
-  }
-
-  // With Fluid compute, don't put this client in a global environment
-  // variable. Always create a new one on each request.
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value);
-        });
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value),
+        );
         supabaseResponse = NextResponse.next({
           request,
         });
-        cookiesToSet.forEach(({ name, value, options }) => {
-          supabaseResponse.cookies.set(name, value, options);
-        });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options),
+        );
       },
     },
   });
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // IMPORTANT: Use getUser() instead of getClaims() or getSession()
+  // getUser() sends a request to the Supabase Auth server to verify the JWT.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // IMPORTANT: If you remove getClaims() and you use server-side rendering
-  // with the Supabase client, your users may be randomly logged out.
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  // Route Protection Logic
+  const isProtectedRoute =
+    request.nextUrl.pathname.startsWith("/settings") ||
+    request.nextUrl.pathname.startsWith("/admin") ||
+    request.nextUrl.pathname.startsWith("/dashboard");
 
-  if (
-    !user &&
-    (request.nextUrl.pathname.startsWith("/settings") ||
-      request.nextUrl.pathname.startsWith("/admin"))
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = "/login";
+    // Optional: add a "next" param to redirect back after login
+    url.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
-
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
 
   return supabaseResponse;
 }

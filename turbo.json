@@ -5,11 +5,18 @@
       "dependsOn": [
         "^build"
       ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
       "outputs": [
         ".next/**",
-        ".open-next/**",
-        "!.next/cache/**",
-        "!.open-next/cache/**"
+        "!.next/cache/**"
+      ]
+    },
+    "lint": {
+      "dependsOn": [
+        "^lint"
       ]
     },
     "check-types": {

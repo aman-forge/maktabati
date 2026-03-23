@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { LoginFormData, RegisterFormData } from "@/types/auth";
-import { loginFormSchema, registerFormSchema } from "@/types/auth";
+import type { RegisterFormData } from "@/types/auth";
+import { registerFormSchema } from "@/types/auth";
 import { createClient } from "@/utils/supabase/server";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 // Type for action responses
 type ActionResponse<T = void> = {
@@ -13,9 +14,7 @@ type ActionResponse<T = void> = {
   data?: T;
 };
 
-/**
- * Register a new user with email and password
- */
+/* Register a new user with email and password */
 export async function registerUser(
   formData: RegisterFormData,
 ): Promise<ActionResponse<{ userId: string }>> {
@@ -32,7 +31,9 @@ export async function registerUser(
       password: validatedData.password,
       options: {
         data: {
-          full_name: validatedData.name,
+          username: validatedData.username,
+          first_name: validatedData.first_name,
+          last_name: validatedData.last_name,
         },
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
       },
@@ -72,80 +73,6 @@ export async function registerUser(
     return {
       success: false,
       error: "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
-    };
-  }
-}
-
-/**
- * Login user with email and password
- */
-export async function loginUser(
-  formData: LoginFormData,
-): Promise<ActionResponse> {
-  try {
-    // Validate form data
-    const validatedData = loginFormSchema.parse(formData);
-
-    const supabase = await createClient();
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email: validatedData.email,
-      password: validatedData.password,
-    });
-
-    if (error) {
-      return {
-        success: false,
-        error: getArabicErrorMessage(error.message),
-      };
-    }
-
-    revalidatePath("/");
-    redirect("/");
-  } catch (error) {
-    console.error("Login error:", error);
-
-    if (error instanceof Error) {
-      if (
-        "digest" in error &&
-        typeof error.digest === "string" &&
-        error.digest.startsWith("NEXT_REDIRECT")
-      ) {
-        throw error;
-      }
-    }
-
-    return {
-      success: false,
-      error: "فشل تسجيل الدخول. يرجى التحقق من بياناتك.",
-    };
-  }
-}
-
-/**
- * Logout current user
- */
-export async function logoutUser(): Promise<ActionResponse> {
-  try {
-    const supabase = await createClient();
-
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      return {
-        success: false,
-        error: "فشل تسجيل الخروج.",
-      };
-    }
-
-    revalidatePath("/", "layout");
-    redirect("/");
-  } catch (error) {
-    console.error("Logout error:", error);
-
-    return {
-      success: false,
-      error: "حدث خطأ أثناء تسجيل الخروج.",
     };
   }
 }
@@ -280,6 +207,7 @@ export async function resendVerificationEmail(
 function getArabicErrorMessage(errorMessage: string): string {
   const errorMap: Record<string, string> = {
     "User already registered": "البريد الإلكتروني مسجل بالفعل.",
+    "duplicate key value": "اسم المستخدم مستخدم بالفعل. يرجى اختيار اسم آخر.",
     "Invalid login credentials": "بيانات الدخول غير صحيحة.",
     "Email not confirmed": "يرجى تأكيد بريدك الإلكتروني.",
     "Password should be at least 6 characters":
