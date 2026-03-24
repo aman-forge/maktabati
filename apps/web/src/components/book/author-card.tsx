@@ -64,9 +64,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               >
                 {author.name}
               </h3>
-              <p className="text-sm text-muted-foreground">
-                {author.location}
-              </p>
+              <p className="text-sm text-muted-foreground">{author.location}</p>
             </div>
 
             {/* Stats */}

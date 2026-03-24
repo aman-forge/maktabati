@@ -136,7 +136,9 @@ export function BookHero({ book }: { book: BookDetail }) {
                     key={i}
                     variant={i === 0 ? "default" : "secondary"}
                     className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0 ? "bg-primary text-primary-foreground border-0 shadow-sm" : ""
+                      i === 0
+                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
+                        : ""
                     }`}
                   >
                     {b}
@@ -153,9 +155,7 @@ export function BookHero({ book }: { book: BookDetail }) {
               >
                 {book.title}
               </h1>
-              <p className="text-xl text-primary font-medium">
-                {book.author}
-              </p>
+              <p className="text-xl text-primary font-medium">{book.author}</p>
             </div>
 
             {/* Series info */}
@@ -191,7 +191,8 @@ export function BookHero({ book }: { book: BookDetail }) {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {book.ratingTotal?.toLocaleString("ar-EG")} تقييم · {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
+                  {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
+                  {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
                 </p>
               </div>
 

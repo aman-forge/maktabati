@@ -9,7 +9,13 @@ import { FeaturedArticles } from "@/components/book/featured-articles";
 import { MemberLists } from "@/components/book/member-lists";
 import { BookCarousel } from "@/components/discovery/book-carousel";
 import { Separator } from "@/components/ui/separator";
-import { BOOKS, TRENDING_BOOKS, ARTICLES, OFFICIAL_LISTS, MEMBER_LISTS } from "@/data/books";
+import {
+  BOOKS,
+  TRENDING_BOOKS,
+  ARTICLES,
+  OFFICIAL_LISTS,
+  MEMBER_LISTS,
+} from "@/data/books";
 
 export default async function BookPage({
   params,
@@ -18,9 +24,9 @@ export default async function BookPage({
 }) {
   const { id } = await params;
   console.log(`BOOK ID: ${id}`);
-  
+
   const book = BOOKS.find((b) => b.id === id);
-  
+
   if (!book) {
     notFound();
   }
@@ -36,7 +42,10 @@ export default async function BookPage({
           {/* ── Left column ── */}
           <div className="flex flex-col gap-12 min-w-0">
             {/* Description + tags */}
-            <BookDescription paragraphs={book.descriptionParagraphs} tags={book.descriptionTags} />
+            <BookDescription
+              paragraphs={book.descriptionParagraphs}
+              tags={book.descriptionTags}
+            />
 
             <Separator style={{ backgroundColor: "var(--border)" }} />
 
@@ -52,7 +61,10 @@ export default async function BookPage({
           {/* ── Right sidebar ── */}
           <aside className="flex flex-col gap-10">
             <AuthorCard author={book.authorDetails} />
-            <BookDetailsSidebar details={book.sidebarDetails} otherEditions={book.otherEditions} />
+            <BookDetailsSidebar
+              details={book.sidebarDetails}
+              otherEditions={book.otherEditions}
+            />
           </aside>
         </div>
       </div>
@@ -66,7 +78,10 @@ export default async function BookPage({
         }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
-          <FeaturedArticles articles={ARTICLES} officialLists={OFFICIAL_LISTS} />
+          <FeaturedArticles
+            articles={ARTICLES}
+            officialLists={OFFICIAL_LISTS}
+          />
         </div>
       </div>
 

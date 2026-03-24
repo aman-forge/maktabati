@@ -68,8 +68,8 @@ export function HeroSection() {
               </h1>
 
               <p className="text-lg leading-relaxed max-w-md text-muted-foreground">
-                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابحث عن إدمانك القادم — كل
-                ذلك في مكان واحد جميل.
+                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابحث عن إدمانك القادم — كل ذلك
+                في مكان واحد جميل.
               </p>
             </div>
 

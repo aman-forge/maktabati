@@ -12,12 +12,17 @@ interface BookDescriptionProps {
   tags?: string[];
 }
 
-export function BookDescription({ paragraphs = [], tags = [] }: BookDescriptionProps) {
+export function BookDescription({
+  paragraphs = [],
+  tags = [],
+}: BookDescriptionProps) {
   const [expanded, setExpanded] = useState(false);
 
   if (paragraphs.length === 0) return null;
 
-  const previewText = paragraphs[0].slice(0, PREVIEW_LENGTH) + (paragraphs[0].length > PREVIEW_LENGTH ? "…" : "");
+  const previewText =
+    paragraphs[0].slice(0, PREVIEW_LENGTH) +
+    (paragraphs[0].length > PREVIEW_LENGTH ? "…" : "");
 
   return (
     <section dir="rtl" className="flex flex-col gap-6">
@@ -51,7 +56,9 @@ export function BookDescription({ paragraphs = [], tags = [] }: BookDescriptionP
             <CaretDown
               weight="bold"
               className="w-4 h-4 transition-transform duration-200"
-              style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+              style={{
+                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+              }}
             />
           </Button>
         ) : null}

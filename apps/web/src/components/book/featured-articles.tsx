@@ -28,7 +28,10 @@ interface FeaturedArticlesProps {
   officialLists?: OfficialList[];
 }
 
-export function FeaturedArticles({ articles = [], officialLists = [] }: FeaturedArticlesProps) {
+export function FeaturedArticles({
+  articles = [],
+  officialLists = [],
+}: FeaturedArticlesProps) {
   if (articles.length === 0 && officialLists.length === 0) return null;
 
   return (

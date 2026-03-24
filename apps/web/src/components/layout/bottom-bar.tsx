@@ -41,11 +41,8 @@ function BottomBar() {
           href={"/"}
           className="rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1"
         >
-          <HugeiconsIcon
-            icon={Search02Icon}
-            className="size-6.5" />
+          <HugeiconsIcon icon={Search02Icon} className="size-6.5" />
           <span className="text-xs font-semibold">البحث</span>
-
         </Link>
         <Link
           href={"/"}

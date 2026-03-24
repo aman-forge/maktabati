@@ -64,10 +64,7 @@ function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
   }
 
   return (
-    <div
-      className={cn("flex flex-col gap-6 w-full", className)}
-      {...props}
-    >
+    <div className={cn("flex flex-col gap-6 w-full", className)} {...props}>
       <form
         id="register-form"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -273,16 +270,23 @@ function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
 
           <FieldDescription className="text-center gap-1 flex items-center justify-center mt-4">
             لديك حساب بالفعل؟
-            <button type="button" onClick={() => setView("login")} className="underline text-primary hover:text-primary/80">
+            <button
+              type="button"
+              onClick={() => setView("login")}
+              className="underline text-primary hover:text-primary/80"
+            >
               تسجيل الدخول
             </button>
           </FieldDescription>
         </FieldGroup>
-        {errorMessage && <p className="text-destructive text-sm text-center mt-2">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="text-destructive text-sm text-center mt-2">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </div>
   );
 }
 
 export default RegisterForm;
-
