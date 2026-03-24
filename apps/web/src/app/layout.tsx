@@ -3,7 +3,6 @@ import LayoutProvider from "@/components/layout";
 import "./globals.css";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { UserProvider } from "@/context/user-context";
-import { createClient } from "@/utils/supabase/server";
 
 const fontSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
@@ -15,12 +14,7 @@ export const metadata: Metadata = {
   description: "",
 };
 
-const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html
       lang="ar"
@@ -29,7 +23,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       className={fontSans.variable}
     >
       <body className={`antialiased pb-18 md:p-0`}>
-        <UserProvider initialUser={user}>
+        <UserProvider>
           <LayoutProvider>{children}</LayoutProvider>
         </UserProvider>
       </body>
