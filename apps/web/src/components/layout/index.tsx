@@ -1,5 +1,3 @@
-"use client";
-
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
 import { Toaster } from "@/components/ui/sonner";

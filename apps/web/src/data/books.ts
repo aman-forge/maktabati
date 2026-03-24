@@ -104,8 +104,8 @@ export const BOOKS: BookDetail[] = [
           year: 2024,
           cover: "/books/وليدو الضباب.png",
         },
-        { title: "طريق الملوك", year: 2023, cover: "/book.png" },
-        { title: "إلانتريس", year: 2022, cover: "/book.png" },
+        { title: "طريق الملوك", year: 2023, cover: "/books/شطرنج.png" },
+        { title: "إلانتريس", year: 2022, cover: "/books/شطرنج.png" },
       ],
     },
     sidebarDetails: [
@@ -316,7 +316,7 @@ export const ARTICLES = [
     author: "محررو فوليو",
     date: "4 أكتوبر 2025",
     readTime: "6 دقائق قراءة",
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
   {
     id: "2",
@@ -341,7 +341,7 @@ export const ARTICLES = [
     author: "محررو فوليو",
     date: "1 نوفمبر 2025",
     readTime: "12 دقيقة قراءة",
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
 ];
 
@@ -351,28 +351,28 @@ export const OFFICIAL_LISTS = [
     title: "أفضل روايات الفانتازيا لعام 2025",
     bookCount: 25,
     rank: 1,
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
   {
     id: "l2",
     title: "أساسيات الفانتازيا البداية — مجموعة فوليو",
     bookCount: 30,
     rank: 3,
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
   {
     id: "l3",
     title: "أفضل أنظمة سحر لا تُنسى",
     bookCount: 18,
     rank: 2,
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
   {
     id: "l4",
     title: "روايات السرقة والثورة في الفانتازيا",
     bookCount: 22,
     rank: 4,
-    cover: "/book.png",
+    cover: "/books/شطرنج.png",
   },
 ];
 
@@ -384,7 +384,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-1.jpg",
     votes: 2843,
     bookCount: 42,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 1,
   },
   {
@@ -394,7 +394,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-2.jpg",
     votes: 1920,
     bookCount: 15,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 3,
   },
   {
@@ -404,7 +404,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-3.jpg",
     votes: 1455,
     bookCount: 28,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 2,
   },
   {
@@ -414,7 +414,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-1.jpg",
     votes: 1102,
     bookCount: 20,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 7,
   },
   {
@@ -424,7 +424,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-3.jpg",
     votes: 988,
     bookCount: 35,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 4,
   },
   {
@@ -434,7 +434,7 @@ export const MEMBER_LISTS = [
     avatar: "/images/reviewer-1.jpg",
     votes: 761,
     bookCount: 12,
-    covers: ["/book.png", "/book.png", "/book.png"],
+    covers: ["/books/شطرنج.png", "/books/شطرنج.png", "/books/شطرنج.png"],
     rank: 1,
   },
 ];

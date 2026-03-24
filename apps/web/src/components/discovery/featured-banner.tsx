@@ -116,7 +116,7 @@ export function FeaturedBanner() {
           <div className="relative flex items-center justify-center p-8 lg:p-12">
             <div className="relative w-full max-w-[260px] md:max-w-[300px] aspect-2/3 rotate-[-4deg] shadow rounded-lg">
               <Image
-                src="/book.png" // ← Replace with real path, e.g. "/covers/blat-al-jamar.jpg"
+                src="/books/شطرنج.png" // ← Replace with real path, e.g. "/covers/blat-al-jamar.jpg"
                 alt="غلاف كتاب بلاط الجمر"
                 fill
                 className="object-cover rounded-lg border border-border/40 shadow-inner"

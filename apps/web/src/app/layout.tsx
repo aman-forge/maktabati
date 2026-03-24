@@ -3,7 +3,7 @@ import LayoutProvider from "@/components/layout";
 import "./globals.css";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { UserProvider } from "@/context/user-context";
-import { getCurrentUser } from "@/actions/auth";
+import { createClient } from "@/utils/supabase/server";
 
 const fontSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],
@@ -15,10 +15,11 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export const dynamic = "force-dynamic";
-
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getCurrentUser();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <html

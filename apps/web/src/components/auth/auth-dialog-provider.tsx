@@ -47,7 +47,7 @@ export function AuthDialogProvider({ children }: { children: ReactNode }) {
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="w-dvw h-dvh sm:h-auto max-w-none sm:max-w-md top-0 start-0 translate-x-0 rtl:translate-x-0 translate-y-0 sm:top-1/2 sm:start-1/2 sm:-translate-x-1/2 sm:rtl:translate-x-1/2 sm:-translate-y-1/2 rounded-none sm:rounded-4xl p-6 md:p-8 flex flex-col justify-center overflow-y-auto"
+          className="w-dvw h-dvh sm:h-auto max-w-none sm:max-w-md top-0 inset-s-0 translate-x-0 rtl:translate-x-0 translate-y-0 sm:top-1/2 sm:inset-s-1/2 sm:-translate-x-1/2 sm:rtl:translate-x-1/2 sm:-translate-y-1/2 rounded-none sm:rounded-4xl p-6 md:p-8 flex flex-col justify-center overflow-y-auto"
           showCloseButton={true}
         >
           {view === "login" && <LoginForm />}

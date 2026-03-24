@@ -124,7 +124,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
 
         {/* Static badge when idle */}
         {book.badge && !hovered && (
-          <div className="absolute top-2 start-2">
+          <div className="absolute top-2 inset-s-2">
             <Badge className="text-[10px] px-2 py-0.5 font-medium shadow-sm bg-primary text-primary-foreground border-0">
               {book.badge}
             </Badge>

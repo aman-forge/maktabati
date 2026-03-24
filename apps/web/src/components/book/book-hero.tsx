@@ -59,7 +59,7 @@ export function BookHero({ book }: { book: BookDetail }) {
             <div className="w-full max-w-[280px] flex flex-col gap-3">
               <div className="relative">
                 <Button
-                  className="w-full gap-2.5 rounded-xl font-semibold bg-gradient-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
+                  className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
                   onClick={() => setShelfOpen((o) => !o)}
                 >
                   {shelf ? (
@@ -213,7 +213,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                     />
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-500"
+                        className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
