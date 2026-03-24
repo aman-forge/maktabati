@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Book, BookCard } from "../book-card";
+import { Book, BookCard } from "../book/book-card";
 
 interface BookCarouselProps {
   title: string;
@@ -152,7 +152,11 @@ export function BookCarousel({
           aria-label={`قائمة كتب ${title}`}
         >
           {books.map((book, i) => (
-            <div key={`${book.id}-${i}`} role="listitem" className="shrink-0">
+            <div
+              key={`${book.id}-${i}`}
+              role="listitem"
+              className="shrink-0 pt-1"
+            >
               <BookCard book={book} size="md" />
             </div>
           ))}

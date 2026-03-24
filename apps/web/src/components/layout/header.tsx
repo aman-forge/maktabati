@@ -128,13 +128,7 @@ export default function Header() {
   };
 
   return (
-    <header
-      className={cn(
-        "fixed px-4 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 gap-4",
-        // "top-2 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-6xl border rounded-xl",
-        "border-b w-full",
-      )}
-    >
+    <header className="fixed px-4 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/95 gap-4 border-b w-full">
       <div className="container mx-auto flex items-center justify-between h-14">
         <div className="flex items-center gap-2 lg:gap-4">
           <Link href="/" className="flex items-center gap-2.5">

@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 const BOOK_META = [
-  { label: "الصفحات", value: "5٩٨" },
+  { label: "الصفحات", value: "598" },
   { label: "النوع", value: "فانتازيا" },
   { label: "النشر", value: "2024" },
 ] as const;
@@ -71,7 +71,7 @@ export function FeaturedBanner() {
                 />
               ))}
               <span className="text-sm font-semibold text-foreground me-1">
-                4.٨
+                4.8
               </span>
               <span className="text-sm text-muted-foreground">
                 · 34.5 ألف تقييم

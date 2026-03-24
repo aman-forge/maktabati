@@ -39,7 +39,7 @@ export function HeroSection() {
         className="pointer-events-none absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full opacity-20"
         style={{
           background:
-            "radial-gradient(circle, hsl(var(--primary) / 0.5) 0%, transparent 70%)",
+            "radial-gradient(circle, var(--primary) 0%, transparent 80%)",
         }}
       />
 
@@ -61,14 +61,10 @@ export function HeroSection() {
                 className="text-5xl lg:text-7xl font-bold leading-[1.15] text-balance tracking-tight text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                اكتشف
+                اكتشف{" "}
+                <span className="italic font-normal text-primary">كتباً</span>
                 <br />
-                <span className="italic font-normal text-primary">
-                  قصصاً
-                </span>{" "}
-                تبقى
-                <br />
-                معك للأبد.
+                تبقى معك للأبد.
               </h1>
 
               <p className="text-lg leading-relaxed max-w-md text-muted-foreground">

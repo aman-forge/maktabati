@@ -27,7 +27,7 @@ export function QuoteSection() {
         </blockquote>
 
         <div className="flex flex-col items-center gap-1">
-          <span className="text-sm font-semibold text-primary-foreground">
+          <span className="text-sm font-semibold text-foreground">
             جورج ر. ر. مارتن
           </span>
           <span className="text-xs text-muted-foreground">

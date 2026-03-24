@@ -80,13 +80,13 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           }}
         >
           {/* Badge top-start (right in RTL) */}
-          {book.badge && (
-            <div className="flex justify-start">
+          <div className="flex justify-start">
+            {book.badge && (
               <Badge className="text-[10px] px-2 py-0.5 font-medium bg-primary text-primary-foreground border-0">
                 {book.badge}
               </Badge>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Bottom actions */}
           <div className="flex items-center justify-between gap-2">
@@ -151,12 +151,12 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           </span>
         </div>
 
-        <Badge
+        {/* <Badge
           variant="outline"
           className="w-fit text-[10px] px-2 py-0 mt-0.5 rounded-full border-border text-muted-foreground"
         >
           {book.genre}
-        </Badge>
+        </Badge> */}
       </div>
     </article>
   );

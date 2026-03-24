@@ -21,27 +21,27 @@ type Genre = {
 };
 
 const GENRES: Genre[] = [
-  { name: "الرواية الأدبية", icon: Book, count: "١٤٢ ألف", hsl: "30 80% 55%" },
-  { name: "الخيال العلمي", icon: Planet, count: "٩٨ ألف", hsl: "220 70% 60%" },
-  { name: "الفانتازيا", icon: Sparkle, count: "٢٠١ ألف", hsl: "145 55% 48%" },
-  { name: "الإثارة", icon: Lightning, count: "٧٦ ألف", hsl: "15 85% 55%" },
-  { name: "الرومانسية", icon: Heart, count: "٣١٠ ألف", hsl: "350 70% 60%" },
+  { name: "الرواية الأدبية", icon: Book, count: "142 ألف", hsl: "30 80% 55%" },
+  { name: "الخيال العلمي", icon: Planet, count: "98 ألف", hsl: "220 70% 60%" },
+  { name: "الفانتازيا", icon: Sparkle, count: "201 ألف", hsl: "145 55% 48%" },
+  { name: "الإثارة", icon: Lightning, count: "76 ألف", hsl: "15 85% 55%" },
+  { name: "الرومانسية", icon: Heart, count: "310 ألف", hsl: "350 70% 60%" },
   {
     name: "الغموض",
     icon: MagnifyingGlass,
-    count: "٨٩ ألف",
+    count: "89 ألف",
     hsl: "270 55% 58%",
   },
   {
     name: "الرواية التاريخية",
     icon: Scroll,
-    count: "٦٤ ألف",
+    count: "64 ألف",
     hsl: "45 65% 50%",
   },
   {
     name: "المذكرات والسيرة الذاتية",
     icon: User,
-    count: "٥٣ ألف",
+    count: "53 ألف",
     hsl: "195 55% 50%",
   },
 ];
