@@ -18,25 +18,40 @@ export function UserProvider({
   initialUser,
 }: {
   children: React.ReactNode;
-  initialUser: User | null;
+  initialUser?: User | null;
 }) {
-  const [user, setUser] = useState<User | null>(initialUser);
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(initialUser ?? null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
-    // Always verify the session on the client — the server-rendered
-    // user could be stale if the token expired between SSR and hydration
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
+    let mounted = true;
+
+    const initAuth = async () => {
+      // Read the cached client session first to avoid navbar flicker.
+      const { data } = await supabase.auth.getSession();
+      if (mounted) {
+        setUser(data.session?.user ?? null);
+        setLoading(false);
+      }
+
+      // Keep a verified user in sync without blocking initial paint.
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (mounted) {
+          setUser(user);
+        }
+      });
+    };
+
+    void initAuth();
 
     // Keep in sync with any auth changes (login, logout, token refresh)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      setLoading(false);
 
       // Handle token refresh failures — force logout
       if (event === "TOKEN_REFRESHED" && !session) {
@@ -44,7 +59,10 @@ export function UserProvider({
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []); // empty deps — supabase client is stable
 
   const logout = async () => {

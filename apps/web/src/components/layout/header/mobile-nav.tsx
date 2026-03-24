@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Menu01Icon } from "@hugeicons/core-free-icons";
@@ -19,19 +18,12 @@ import { useUser } from "@/context/user-context";
 import { useAuthDialog } from "@/components/auth/auth-dialog-provider";
 import { browseItems, discoverItems } from "../../../data/header";
 
-export function MobileNav({
-  user: initialUser,
-  profile,
-}: {
-  user: User | null;
-  profile: any;
-}) {
+export function MobileNav() {
   const [open, setOpen] = useState(false);
   const { user, loading } = useUser();
   const { openDialog } = useAuthDialog();
 
-  const currentUser = loading ? user : (user ?? initialUser);
-  const isLoggedIn = !!currentUser;
+  const isLoggedIn = !!user;
 
   const close = () => setOpen(false);
 
@@ -39,10 +31,6 @@ export function MobileNav({
     close();
     openDialog(type);
   };
-
-  const displayName = profile?.first_name
-    ? `${profile.first_name} ${profile.last_name ?? ""}`.trim()
-    : (profile?.username ?? null);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -62,12 +50,10 @@ export function MobileNav({
       >
         {/* ── Header ── */}
         <SheetHeader className="text-right">
-          <SheetTitle>
-            {isLoggedIn && displayName ? `مرحباً، ${displayName}` : "مكتبتي"}
-          </SheetTitle>
-          {isLoggedIn && currentUser?.email && (
+          <SheetTitle>{isLoggedIn ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
+          {isLoggedIn && user?.email && (
             <p className="truncate text-xs text-muted-foreground">
-              {currentUser.email}
+              {user.email}
             </p>
           )}
         </SheetHeader>
@@ -78,7 +64,7 @@ export function MobileNav({
             <div className="flex flex-col gap-1">
               <NavSection label="حسابي">
                 <MobileNavLink
-                  href={`/u/${profile?.username ?? currentUser?.id}`}
+                  href={`/u/${user?.id}`}
                   onClick={close}
                 >
                   الملف الشخصي
@@ -118,7 +104,7 @@ export function MobileNav({
         </NavSection>
 
         {/* ── Auth buttons (logged out only) — pinned to bottom ── */}
-        {!isLoggedIn && (
+        {!isLoggedIn && !loading && (
           <div className="mt-auto flex flex-col gap-2 border-t pt-4">
             <button
               type="button"

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useUser } from "@/context/user-context";
 import { useAuthDialog } from "@/components/auth/auth-dialog-provider";
@@ -26,42 +25,28 @@ import {
 } from "@/components/ui/alert-dialog";
 import { UserIcon } from "@phosphor-icons/react";
 
-export type HeaderProfile = {
-  username: string;
-  first_name: string | null;
-  last_name: string | null;
-  profile_image_url: string | null;
-} | null;
-
-export function HeaderActions({
-  user: initialUser,
-  profile,
-}: {
-  user: User | null;
-  profile: HeaderProfile;
-}) {
+export function HeaderActions() {
   const { user, loading, logout } = useUser();
   const { openDialog } = useAuthDialog();
 
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const currentUser = loading ? user : (user ?? initialUser);
-  const isLoggedIn = !!currentUser;
+  const isLoggedIn = !!user;
 
   const handleLogout = async () => {
     await logout();
     setLogoutOpen(false);
   };
 
-  const displayName = profile?.first_name
-    ? `${profile.first_name} ${profile.last_name ?? ""}`.trim()
-    : (profile?.username ?? null);
+  if (loading) {
+    return <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />;
+  }
 
-  const email = currentUser?.email;
-  const profileHref = `/u/${profile?.username ?? currentUser?.id}`;
+  const email = user?.email;
+  const profileHref = `/u/${user?.id}`;
 
   // ── حالة غير مسجل الدخول ─────────────────────────────────────────────
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !user) {
     return (
       <Button
         onClick={() => openDialog("login")}
@@ -82,9 +67,6 @@ export function HeaderActions({
 
         <DropdownMenuContent align="end" className="w-42">
           <div className="flex flex-col space-y-1 px-2 py-3">
-            {displayName && (
-              <p className="text-sm font-medium leading-none">{displayName}</p>
-            )}
             {email && (
               <p className="truncate text-xs leading-none text-muted-foreground">
                 {email}
