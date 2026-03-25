@@ -25,7 +25,6 @@ export default function DiscoveryPage() {
           subtitle="ما لا يستطيع القراء تركه هذا الأسبوع"
           books={TRENDING_BOOKS}
           accentColor="var(--badge-amber)"
-          viewAllhref="/"
         />
 
         {/* Staff Picks */}
@@ -34,7 +33,6 @@ export default function DiscoveryPage() {
           subtitle="تم اختيارها بعناية من قبل محررينا لرواية قصص استثنائية"
           books={STAFF_PICKS}
           accentColor="oklch(0.55 0.14 140)"
-          viewAllhref="/"
         />
 
         {/* Featured book of the month */}
@@ -46,7 +44,6 @@ export default function DiscoveryPage() {
           subtitle="طازجة من المطبعة — تم نشرها للتو"
           books={NEW_RELEASES}
           accentColor="oklch(0.52 0.15 250)"
-          viewAllhref="/"
         />
 
         {/* Quote break */}

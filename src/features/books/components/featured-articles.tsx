@@ -1,6 +1,6 @@
 import { Badge } from "@components/ui/badge";
 import { Separator } from "@components/ui/separator";
-import { ArrowRightIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 
 interface Article {

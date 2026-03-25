@@ -1,4 +1,4 @@
-// apps/web/src/components/book/author-card.tsx
+"use client";
 
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";

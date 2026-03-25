@@ -58,7 +58,7 @@ function Header() {
             size="icon"
             className="hidden size-9 sm:flex lg:hidden"
           >
-            <MagnifyingGlassIcon className="size-[18px]" />
+            <MagnifyingGlassIcon className="size-4.5" />
             <span className="sr-only">بحث</span>
           </Button>
 
@@ -84,7 +84,7 @@ function DesktopNav() {
         <NavigationMenuItem>
           <NavigationMenuTrigger>تصفح</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid w-[400px] grid-cols-[0.8fr_1fr] gap-1">
+            <div className="grid w-100 grid-cols-[0.8fr_1fr] gap-1">
               <NavigationMenuLink
                 render={
                   <Link
@@ -120,7 +120,7 @@ function DesktopNav() {
         <NavigationMenuItem>
           <NavigationMenuTrigger>اكتشف</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="w-[300px]">
+            <div className="w-75">
               <ul className="grid gap-0.5">
                 {discoverItems.map((item) => (
                   <NavListItem key={item.href} item={item} />
