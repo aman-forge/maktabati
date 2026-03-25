@@ -1,5 +1,24 @@
-import type { Book as BaseBook } from "@features/books/components/book-card";
+export interface Book {
+  id: string;
+  title?: string;
+  description?: string;
+  author_id?: string;
+  page_count?: number;
+  publication_date?: string;
+  created_at?: string;
+  cover_image_url?: string;
+  author?: Author;
+}
+export interface Author {
+  id: string;
+  name?: string;
+  bio?: string;
+  birth_date?: string;
+  death_date?: string;
+  image_url?: string;
+}
 
+// FAKE TYPE
 export interface Review {
   id: string;
   name: string;
@@ -13,18 +32,7 @@ export interface Review {
   verified: boolean;
 }
 
-export interface Author {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  bio: string;
-  stats: { label: string; value: string }[];
-  tags: string[];
-  books: { title: string; year: number; cover: string }[];
-}
-
-export interface BookDetail extends BaseBook {
+export interface BookDetail extends Book {
   series?: string;
   badges?: string[];
   ratingCounts?: { stars: number; pct: number }[];
@@ -39,264 +47,125 @@ export interface BookDetail extends BaseBook {
   reviews?: Review[];
 }
 
-export const BOOKS: BookDetail[] = [
+export const BOOKS: Book[] = [
   {
     id: "1",
     title: "وليدو الضباب: الإمبراطورية النهائية",
-    author: "براندون ساندرسون",
-    cover: "/books/وليدو الضباب.png",
-    rating: 4.8,
-    ratingCount: "124k+",
-    genre: "فانتازيا ملحمية",
-    pages: 647,
-    year: 2024,
     description:
       "بداية ملحمة الرماد والسحر؛ صراع اللصوص ضد الطاغية الخالد في عالم تُحكمه المعادن.",
-    badge: "🔥 الأكثر رواجاً",
-    series: "الجزء الأول من سلسلة وليدو الضباب",
-    badges: ["اختيار المحررين", "فانتازيا ملحمية", "#1 في الفانتازيا العالمية"],
-    ratingTotal: 124870,
-    reviewCountTotal: 28430,
-    ratingCounts: [
-      { stars: 5, pct: 68 },
-      { stars: 4, pct: 20 },
-      { stars: 3, pct: 8 },
-      { stars: 2, pct: 3 },
-      { stars: 1, pct: 1 },
-    ],
-    meta: [
-      { label: "الصفحات", value: "647" },
-      { label: "النشر", value: "2024" },
-      { label: "الناشر", value: "دار كيان" },
-      { label: "الترجمة", value: "محمود عاطف" },
-    ],
-    descriptionTags: [
-      "الألومنسي",
-      "ثورة ضد الإمبراطورية",
-      "عصابة السرقة",
-      "اللورد الحاكم",
-      "عالم مغطى بالرماد",
-      "فانتازيا ملحمية",
-      "نظام سحر مبتكر",
-    ],
-    descriptionParagraphs: [
-      `في عالم يغطي الرماد كل شيء منذ ألف عام، يحكم اللورد الحاكم بقبضة حديدية، محولاً السكا إلى عبيد تحت خوف دائم. لكن شرارة أمل تشتعل عندما يكتشف كيلسير — أسطورة حية — قوى وليدي الضباب، ويجمع فريقًا لتحقيق المستحيل: سرقة الإمبراطورية نفسها.`,
-      `فين — فتاة شوارع قاسية الحياة — تُجبر على الانضمام إلى الخطة الجريئة. تمتلك قدرة نادرة على حرق المعادن داخل جسمها لتكتسب قوى خارقة: دفع المعادن، جذبها، تعزيز الحواس، أو حتى التأثير على العواطف. لكن استخدام هذه القوى يأتي بثمن، والخيانة تتربص في كل زاوية.`,
-      `بينما يخطط الفريق لاقتحام قصر اللورد الحاكم، تكتشف فين أسرارًا عن ماضيها وعن العالم الذي يُعتقد أنه لا يمكن تغييره. هل يمكن لمجموعة من المنبوذين قلب نظام دام ألف سنة؟ أم أن الإمبراطورية النهائية حقًا لا تُقهر؟`,
-      `رواية براندون ساندرسون الشهيرة تقدم نظام سحر منطقيًا ومبتكرًا، شخصيات عميقة، ومكائد سياسية مشوقة. «وليدو الضباب: الإمبراطورية النهائية» هي بداية ملحمة غيرت وجه الفانتازيا الحديثة، وألهمت ملايين القراء حول العالم.`,
-      `ترجمة عربية مميزة تجعل العالم الرمادي والمغامرة الملحمية تتنفس بالعربية، مع تفاصيل تجعلك تشعر بثقل الرماد وإثارة حرق المعادن.`,
-    ],
-    authorDetails: {
+    page_count: 647,
+    publication_date: "2024",
+    cover_image_url: "/books/وليدو الضباب.png",
+    author: {
       id: "brandon-sanderson",
       name: "براندون ساندرسون",
-      image: "/sanderson.png",
-      location: "روائي فانتازيا أمريكي · يوتا، الولايات المتحدة",
-      bio: `براندون ساندرسون هو أحد أبرز كتاب الفانتازيا المعاصرين، مبتكر عالم "الكوزمير" الضخم. اشتهر بنظم سحر منطقية ومفصلة، شخصيات عميقة، وقصص ملحمية مليئة بالمفاجآت. روايته "وليدو الضباب: الإمبراطورية النهائية" أحدثت ثورة في النوع، وبيعت ملايين النسخ حول العالم. يُعرف بإنتاجه الغزير وجودة كتاباته المتسقة.`,
-      stats: [
-        { label: "متابع", value: "1.2 مليون" },
-        { label: "كتب", value: "35+" },
-        { label: "متوسط التقييم", value: "4.4" },
-      ],
-      tags: ["فانتازيا ملحمية", "عالم الكوزمير", "نظم سحر مبتكرة"],
-      books: [
-        {
-          title: "وليدو الضباب: الإمبراطورية النهائية",
-          year: 2024,
-          cover: "/books/وليدو الضباب.png",
-        },
-        { title: "طريق الملوك", year: 2023, cover: "/books/شطرنج.png" },
-        { title: "إلانتريس", year: 2022, cover: "/books/شطرنج.png" },
-      ],
+      bio: 'براندون ساندرسون هو أحد أبرز كتاب الفانتازيا المعاصرين، مبتكر عالم "الكوزمير" الضخم. اشتهر بنظم سحر منطقية ومفصلة، شخصيات عميقة، وقصص ملحمية مليئة بالمفاجآت.',
+      image_url: "/sanderson.png",
     },
-    sidebarDetails: [
-      { label: "العنوان الأصلي", value: "Mistborn: The Final Empire" },
-      { label: "تاريخ النشر (العربية)", value: "2024" },
-      { label: "الناشر", value: "دار كيان للنشر والتوزيع" },
-      { label: "الترجمة", value: "محمود عاطف" },
-      { label: "الصفحات", value: "1008 صفحة" },
-      { label: "النوع", value: "غلاف ورقي" },
-      { label: "الطبعة", value: "الطبعة الأولى (عربية)" },
-      { label: "ISBN-13", value: "978-977-820-173-4" },
-      { label: "اللغة", value: "العربية" },
-      { label: "السلسلة", value: "وليدو الضباب، الجزء الأول" },
-    ],
-    otherEditions: [
-      {
-        format: "غلاف ورقي (إنجليزي)",
-        detail: "2007 · 647 صفحة (Tor mass market)",
-        publisher: "Tor Books",
-      },
-      {
-        format: "كتاب إلكتروني",
-        detail: "متوفر · Kindle",
-        publisher: "Tor Books / Amazon",
-      },
-      {
-        format: "كتاب صوتي",
-        detail: "متوفر · ~22 ساعة 40 دقيقة",
-        publisher: "Audible / Macmillan Audio",
-      },
-      {
-        format: "طباعة كبيرة",
-        detail: "متوفر · أكثر من 700 صفحة",
-        publisher: "Thorndike Press",
-      },
-    ],
-    reviews: [
-      {
-        id: "1",
-        name: "أمارا نووسو",
-        avatar: "/images/reviewer-1.jpg",
-        rating: 5,
-        date: "15 نوفمبر 2025",
-        title: "نظام سحر يغير قواعد الفانتازيا",
-        body: "لم أقرأ من قبل نظام سحر بهذه الدقة والمنطقية! حرق المعادن، الألومنسي، كل شيء مبني بعناية تجعلك تشعر أنك تتعلم قواعد حقيقية. فين شخصية مذهلة — قاسية، ذكية، وتتطور بشكل مؤثر. والعالم المغطى بالرماد يبقى في ذهنك طويلاً. كيلسير أسطورة! أكثر من 600 صفحة مرت كأنها ساعات قليلة. إذا كنت تحب الفانتازيا الذكية، ابدأ بهذا الكتاب فورًا.",
-        likes: 1247,
-        shelf: "قرأتُه",
-        verified: true,
-      },
-      {
-        id: "2",
-        name: "أوليفر برنشتاين",
-        avatar: "/images/reviewer-2.jpg",
-        rating: 4.5,
-        date: "8 ديسمبر 2025",
-        title: "عصابة سرقة ملحمية مع توتر مذهل",
-        body: "البداية بطيئة قليلاً لبناء العالم، لكن بمجرد أن يبدأ التخطيط للضربة الكبرى ضد اللورد الحاكم، يصبح الكتاب لا يُقاوم. الفريق (كيلسير، فين، الجميع) لديهم كيمياء رائعة — مزيج من الفكاهة، الخيانة المحتملة، والأمل. النهاية صدمتني تمامًا. ترجمة محمود عاطف ممتازة، تجعل الرماد والضباب يشعران حقيقيين. أحد أفضل الروايات التي قرأتها هذا العام.",
-        likes: 689,
-        shelf: "قرأتُه",
-        verified: true,
-      },
-      {
-        id: "3",
-        name: "دايسوكي موري",
-        avatar: "/images/reviewer-3.jpg",
-        rating: 5,
-        date: "2 أكتوبر 2025",
-        title: "ثورة ضد الإمبراطورية الخالدة — تحفة!",
-        body: "براندون ساندرسون يثبت لماذا هو أحد أعظم كتاب الفانتازيا الحديثة. عالم دام ألف سنة تحت حكم طاغية خالد، ثم تأتي فتاة شوارع لتقلب كل شيء. المكائد، الخطط، الخيانات، والكشوفات — كل شيء متقن. النهاية جعلتني أصرخ من الدهشة! إذا أردت فانتازيا مع نظام سحر مبتكر، شخصيات لا تُنسى، ورهانات عالية — هذا الكتاب سيغير توقعاتك.",
-        likes: 1582,
-        shelf: "مفضّل",
-        verified: true,
-      },
-      {
-        id: "4",
-        name: "أمارا نووسو",
-        avatar: "/images/reviewer-1.jpg",
-        rating: 1,
-        date: "15 نوفمبر 2025",
-        title: "نظام سحر يغير قواعد الفانتازيا",
-        body: "لم أقرأ من قبل نظام سحر بهذه الدقة والمنطقية! حرق المعادن، الألومنسي، كل شيء مبني بعناية تجعلك تشعر أنك تتعلم قواعد حقيقية. فين شخصية مذهلة — قاسية، ذكية، وتتطور بشكل مؤثر. والعالم المغطى بالرماد يبقى في ذهنك طويلاً. كيلسير أسطورة! أكثر من 600 صفحة مرت كأنها ساعات قليلة. إذا كنت تحب الفانتازيا الذكية، ابدأ بهذا الكتاب فورًا.",
-        likes: 1247,
-        shelf: "قرأتُه",
-        verified: false,
-      },
-    ],
   },
   {
     id: "3",
     title: "البلاء الشديد والميلاد الجديد",
-    author: "فايز الكندري",
-    cover: "/books/البلاء الشديد.png",
-    rating: 4.8,
-    ratingCount: "45k+",
-    genre: "فكر إسلامي / سيرة ذاتية",
-    pages: 512,
-    year: 2020,
     description:
       "مذكرات واقعية وملهمة تروي تفاصيل 14 عاماً قضاها المؤلف في سجن غوانتانامو، تجسد الصبر واليقين في وجه الابتلاء.",
+    page_count: 512,
+    publication_date: "2020",
+    cover_image_url: "/books/البلاء الشديد.png",
+    author: {
+      id: "faiz-alkandari",
+      name: "فايز الكندري",
+    },
   },
   {
     id: "4",
     title: "ذو البدلة البنية",
-    author: "أغاثا كريستي",
-    cover: "/books/ذو البدلة البنية.png",
-    rating: 4.7,
-    ratingCount: "60k+",
-    genre: "غموض وجريمة",
-    pages: 320,
-    year: 2024,
     description:
       "مغامرة مثيرة تبدأ من محطة قطار لندن وتنتهي في جنوب أفريقيا بحثاً عن قاتل غامض وماسة مفقودة.",
+    page_count: 320,
+    publication_date: "2024",
+    cover_image_url: "/books/ذو البدلة البنية.png",
+    author: {
+      id: "agatha-christie",
+      name: "أغاثا كريستي",
+    },
   },
   {
     id: "6",
     title: "على ثرى دمشق",
-    author: "أيمن أحمد الشربجي",
-    cover: "/books/على ثرى دمشق.png",
-    rating: 4.9,
-    ratingCount: "40k+",
-    genre: "تاريخ وسير",
-    pages: 445,
-    year: 2017,
     description:
       "مذكرات تاريخية توثق تفاصيل دقيقة ومرحلة مفصلية من الصراع وتاريخ العمل الإسلامي في دمشق خلال السبعينيات والثمانينيات.",
+    page_count: 445,
+    publication_date: "2017",
+    cover_image_url: "/books/على ثرى دمشق.png",
+    author: {
+      id: "ayman-alsharbaji",
+      name: "أيمن أحمد الشربجي",
+    },
   },
   {
     id: "8",
     title: "أول مرة أتدبر فيها القرآن",
-    author: "عادل محمد خليل",
-    cover: "/books/أول مرة أتدبر القرآن.png",
-    rating: 4.9,
-    ratingCount: "110k+",
-    genre: "علوم القرآن",
-    pages: 280,
-    year: 2025,
     description:
       "دليل عملي لفهم مقاصد السور والآيات لتعيش مع القرآن روحاً ومعنى.",
+    page_count: 280,
+    publication_date: "2025",
+    cover_image_url: "/books/أول مرة أتدبر القرآن.png",
+    author: {
+      id: "adel-khalil",
+      name: "عادل محمد خليل",
+    },
   },
   {
     id: "9",
     title: "أسئلة الثورة",
-    author: "سلمان العودة",
-    cover: "/books/أسئلة الثورة.png",
-    rating: 4.5,
-    ratingCount: "50k+",
-    genre: "فكر واجتماع",
-    pages: 240,
-    year: 2024,
     description:
       "مراجعات فكرية حول مفاهيم التغيير، المجتمع، وقضايا النهضة والحرية والاستبداد.",
+    page_count: 240,
+    publication_date: "2024",
+    cover_image_url: "/books/أسئلة الثورة.png",
+    author: {
+      id: "salman-alodah",
+      name: "سلمان العودة",
+    },
   },
   {
     id: "10",
     title: "أحجار على رقعة الشطرنج",
-    author: "ويليام غاي كار",
-    cover: "/books/شطرنج.png",
-    rating: 4.4,
-    ratingCount: "150k+",
-    genre: "تاريخ ومؤامرة",
-    pages: 320,
-    year: 2025,
     description:
       "كتاب تاريخي يتحدث عن القوى الخفية والمؤامرات التي تدير الصراعات العالمية من وراء الستار.",
+    page_count: 320,
+    publication_date: "2025",
+    cover_image_url: "/books/شطرنج.png",
+    author: {
+      id: "william-guy-carr",
+      name: "ويليام غاي كار",
+    },
   },
   {
     id: "2",
     title: "نهج الملوك: أرشيف أضواء العاصفة",
-    author: "براندون ساندرسون",
-    cover: "/books/نهج الملوك.png",
-    rating: 4.9,
-    ratingCount: "120k+",
-    genre: "فانتازيا عالية",
-    pages: 1200,
-    year: 2025,
     description:
       "عالم روشار الذي تضربه العواصف العاتية وصراع الفرسان لاستعادة مجدهم القديم.",
-    badge: "⭐ الأكثر طلباً",
+    page_count: 1200,
+    publication_date: "2025",
+    cover_image_url: "/books/نهج الملوك.png",
+    author: {
+      id: "brandon-sanderson",
+      name: "براندون ساندرسون",
+    },
   },
   {
     id: "7",
     title: "فصول في العقيدة",
-    author: "عبدالعزيز الطريفي",
-    cover: "/books/فصول في العقيدة.png",
-    rating: 4.8,
-    ratingCount: "55k+",
-    genre: "عقيدة",
-    pages: 72,
-    year: 2013,
     description:
       "رسالة علمية رصينة (تعرف بالرسالة الشامية) تؤصل لأبواب العقيدة الإسلامية بأسلوب واضح ومختصر يرسخ الإيمان.",
+    page_count: 72,
+    publication_date: "2013",
+    cover_image_url: "/books/فصول في العقيدة.png",
+    author: {
+      id: "abdulaziz-al-tarifi",
+      name: "عبدالعزيز الطريفي",
+    },
   },
 ];
 

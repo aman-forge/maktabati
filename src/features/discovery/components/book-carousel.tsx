@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/button";
-import { type Book, BookCard } from "@features/books/components/book-card";
+import { BookCard } from "@features/books/components/book-card";
 import {
   ArrowLeftIcon,
   CaretLeftIcon,
@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/ui/lib/utils";
+import { Book } from "@features/books/types";
 
 interface BookCarouselProps {
   title: string;
