@@ -56,7 +56,7 @@ export function BookHero({ book }: { book: BookDetail }) {
             </div>
 
             {/* Shelf & Actions */}
-            <div className="w-full max-w-[280px] flex flex-col gap-3">
+            <div className="w-full max-w-70 flex flex-col gap-3">
               <div className="relative">
                 <Button
                   className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
@@ -136,11 +136,10 @@ export function BookHero({ book }: { book: BookDetail }) {
                   <Badge
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
-                    className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0
+                    className={`text-xs px-4 py-1.5 font-semibold ${i === 0
                         ? "bg-primary text-primary-foreground border-0 shadow-sm"
                         : ""
-                    }`}
+                      }`}
                   >
                     {b}
                   </Badge>
@@ -183,11 +182,10 @@ export function BookHero({ book }: { book: BookDetail }) {
                     <StarIcon
                       key={star}
                       weight="fill"
-                      className={`w-6 h-6 ${
-                        star <= Math.round(book.rating)
+                      className={`w-6 h-6 ${star <= Math.round(book.rating)
                           ? "text-yellow-400"
                           : "text-muted/30"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
