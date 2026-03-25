@@ -33,7 +33,7 @@ File: `src/actions/auth.ts`
 ```ts
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@server/db/server";
 
 export async function exampleAction() {
   const supabase = await createClient();
@@ -63,8 +63,8 @@ export async function exampleAction() {
 Example: `src/app/layout.tsx`:
 
 ```ts
-import { getCurrentUser } from "@/actions/auth";
-import { UserProvider } from "@/context/user-context";
+import { getCurrentUser } from "@features/auth/actions";
+import { UserProvider } from "@features/auth/user-context";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser(); // single server-side fetch at the root
@@ -84,7 +84,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 In any other **server component** (e.g. dashboard layout, page):
 
 ```ts
-import { getCurrentUser } from "@/actions/auth";
+import { getCurrentUser } from "@features/auth/actions";
 
 export default async function ProtectedPage() {
   const user = await getCurrentUser();
@@ -114,7 +114,7 @@ export default async function ProtectedPage() {
 File: `src/context/user-context.tsx`:
 
 ```ts
-import { useUser } from "@/context/user-context";
+import { useUser } from "@features/auth/user-context";
 
 export function ExampleClientComponent() {
   const { user, loading } = useUser();
@@ -145,7 +145,7 @@ export function ExampleClientComponent() {
 Example: `src/app/(auth)/login/page.tsx` uses the browser client:
 
 ```ts
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@server/db/client";
 
 const supabase = createClient();
 
@@ -167,7 +167,7 @@ Logout is now centralized in the user context:
 
 ```ts
 import { useRouter } from "next/navigation";
-import { useUser } from "@/context/user-context";
+import { useUser } from "@features/auth/user-context";
 
 const router = useRouter();
 const { logout } = useUser();
@@ -192,7 +192,7 @@ File: `src/middleware.ts`:
 
 ```ts
 import type { NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
+import { updateSession } from "@server/db/middleware";
 
 export async function middleware(request: NextRequest) {
   return updateSession(request);
@@ -218,4 +218,3 @@ export async function middleware(request: NextRequest) {
 - **Client components**:
   - Use `useUser()` for reactive UI based on login state.
   - Use `createClient()` (browser) for login, logout, and other auth flows that must run fully on the client.
-
