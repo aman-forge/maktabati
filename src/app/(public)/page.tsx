@@ -9,8 +9,6 @@ import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
 
-export { TRENDING_BOOKS, NEW_RELEASES, STAFF_PICKS };
-
 export default function DiscoveryPage() {
   return (
     <main className="min-h-screen font-sans">
