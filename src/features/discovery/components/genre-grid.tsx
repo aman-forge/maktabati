@@ -1,16 +1,16 @@
+import { Badge } from "@components/ui/badge";
+import { Separator } from "@components/ui/separator";
 import {
   ArrowUpRight,
   Book,
-  Planet,
-  Sparkle,
-  Lightning,
   Heart,
+  Lightning,
   MagnifyingGlass,
+  Planet,
   Scroll,
+  Sparkle,
   User,
 } from "@phosphor-icons/react/dist/ssr";
-import { Badge } from "@components/ui/badge";
-import { Separator } from "@components/ui/separator";
 
 type Genre = {
   name: string;
@@ -93,7 +93,7 @@ export function GenreGrid() {
           return (
             <a
               key={genre.name}
-              href="#"
+              href="/"
               className="group relative flex flex-col gap-4 p-5 rounded-2xl border border-border bg-card overflow-hidden transition-all duration-200 hover:border-border/80 hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label={`تصفح ${genre.name}`}
             >

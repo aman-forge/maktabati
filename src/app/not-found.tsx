@@ -1,11 +1,11 @@
-import Link from "next/link";
+import { Button } from "@components/ui/button";
 import {
   Empty,
+  EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-  EmptyDescription,
 } from "@components/ui/empty";
-import { Button } from "@components/ui/button";
+import Link from "next/link";
 
 export default function NotFound() {
   return (

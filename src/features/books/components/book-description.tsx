@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { CaretDown } from "@phosphor-icons/react";
-import { Button } from "@components/ui/button";
 import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
+import { CaretDownIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 
 const PREVIEW_LENGTH = 280;
 
@@ -37,7 +37,7 @@ export function BookDescription({
         <div className="text-base leading-relaxed text-foreground/85">
           {expanded ? (
             paragraphs.map((para, i) => (
-              <p key={i} className={i > 0 ? "mt-4" : ""}>
+              <p key={para} className={i > 0 ? "mt-4" : ""}>
                 {para}
               </p>
             ))
@@ -53,7 +53,7 @@ export function BookDescription({
             onClick={() => setExpanded((e) => !e)}
           >
             {expanded ? "عرض أقل" : "اقرأ المزيد"}
-            <CaretDown
+            <CaretDownIcon
               weight="bold"
               className="w-4 h-4 transition-transform duration-200"
               style={{

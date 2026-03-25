@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
 import { createClient } from "@server/db/client";
+import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type UserContextType = {
   user: User | null;
@@ -23,7 +23,7 @@ export function UserProvider({
   const [user, setUser] = useState<User | null>(initialUser ?? null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     let mounted = true;
@@ -63,7 +63,7 @@ export function UserProvider({
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []); // empty deps — supabase client is stable
+  }, [supabase]);
 
   const logout = async () => {
     setLoading(true);

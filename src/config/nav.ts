@@ -1,14 +1,14 @@
+import type { Icon } from "@phosphor-icons/react";
 import {
   BookmarkIcon,
+  BooksIcon,
   ChartLineIcon,
   CheckIcon,
   ClockIcon,
-  BooksIcon,
   UserCircleIcon,
   UserIcon,
   UsersIcon,
 } from "@phosphor-icons/react/ssr";
-import type { Icon } from "@phosphor-icons/react";
 
 export type NavItem = {
   title: string;

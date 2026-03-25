@@ -1,13 +1,10 @@
-// apps/web/src/components/book/book-details-sidebar.tsx
 "use client";
 
-import {
-  ArrowSquareOut,
-  Trophy,
-  BookOpen,
-} from "@phosphor-icons/react/dist/ssr";
-import { Badge } from "@components/ui/badge";
 import { Separator } from "@components/ui/separator";
+import {
+  ArrowSquareOutIcon,
+  BookOpenIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 // ── Reusable card shell ──────────────────────────────────────────────────────
 function SidebarCard({
@@ -79,7 +76,7 @@ export function BookDetailsSidebar({
 
       {/* Other Editions */}
       {otherEditions.length > 0 && (
-        <SidebarCard icon={BookOpen} title="طبعات أخرى">
+        <SidebarCard icon={BookOpenIcon} title="طبعات أخرى">
           <div className="px-5 py-4 flex flex-col gap-0">
             {otherEditions.map(({ format, detail, publisher }, i) => (
               <div key={format}>
@@ -93,7 +90,7 @@ export function BookDetailsSidebar({
                       {publisher}
                     </p>
                   </div>
-                  <ArrowSquareOut className="w-3.5 h-3.5 shrink-0 text-primary opacity-0 group-hover:opacity-70 transition-opacity" />
+                  <ArrowSquareOutIcon className="w-3.5 h-3.5 shrink-0 text-primary opacity-0 group-hover:opacity-70 transition-opacity" />
                 </div>
                 {i < otherEditions.length - 1 && (
                   <Separator className="bg-border opacity-50" />

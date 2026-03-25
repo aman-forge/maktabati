@@ -1,10 +1,5 @@
-import Link from "next/link";
-import {
-  ArrowLeftIcon,
-  BookIcon,
-  MagnifyingGlassIcon,
-  BookOpenIcon,
-} from "@phosphor-icons/react/ssr";
+import { ThemeToggle } from "@components/theme-toggle";
+import { Button } from "@components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,11 +9,16 @@ import {
   NavigationMenuPositioner,
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
-import { Button } from "@components/ui/button";
+import { browseItems, discoverItems, type NavItem } from "@config/nav";
+import {
+  ArrowLeftIcon,
+  BookIcon,
+  BookOpenIcon,
+  MagnifyingGlassIcon,
+} from "@phosphor-icons/react/ssr";
+import Link from "next/link";
 import { HeaderActions } from "./header-actions";
 import { MobileNav } from "./mobile-nav";
-import { ThemeToggle } from "@components/theme-toggle";
-import { browseItems, discoverItems, NavItem } from "@config/nav";
 
 function Header() {
   return (

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@server/db/server";
+import { redirect } from "next/navigation";
 
 type Profile = {
   id: string;

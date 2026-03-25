@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { BookOpen, Plus, Check, Star } from "@phosphor-icons/react";
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
+import {
+  BookOpenIcon,
+  CheckIcon,
+  PlusIcon,
+  StarIcon,
+} from "@phosphor-icons/react";
+import Image from "next/image";
+import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
 
 export interface Book {
@@ -94,7 +99,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
               size="sm"
               className="h-8 gap-1.5 text-xs rounded-lg flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              <BookOpen weight="bold" className="w-3.5 h-3.5" />
+              <BookOpenIcon weight="bold" className="w-3.5 h-3.5" />
               التفاصيل
             </Button>
             <Button
@@ -114,9 +119,9 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
               }
             >
               {saved ? (
-                <Check weight="bold" className="w-3.5 h-3.5" />
+                <CheckIcon weight="bold" className="w-3.5 h-3.5" />
               ) : (
-                <Plus weight="bold" className="w-3.5 h-3.5" />
+                <PlusIcon weight="bold" className="w-3.5 h-3.5" />
               )}
             </Button>
           </div>
@@ -142,7 +147,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         </p>
 
         <div className="flex items-center gap-1 mt-0.5">
-          <Star weight="fill" className="w-3 h-3 text-primary" />
+          <StarIcon weight="fill" className="w-3 h-3 text-primary" />
           <span className="text-xs font-medium text-foreground">
             {book.rating}
           </span>

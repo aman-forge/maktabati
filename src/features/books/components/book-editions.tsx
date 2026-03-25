@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import {
-  ShoppingCart,
+  Books,
   DownloadSimple,
   Headphones,
-  Books,
+  ShoppingCart,
 } from "@phosphor-icons/react";
-import { Button } from "@components/ui/button";
-import { Badge } from "@components/ui/badge";
+import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
 
 interface Edition {
@@ -85,6 +85,7 @@ export function BookEditions() {
             return (
               <button
                 key={id}
+                type="button"
                 onClick={() => setSelected(id)}
                 className={cn(
                   "group flex items-center gap-4 rounded-xl px-4 py-3.5 text-right transition-all border",

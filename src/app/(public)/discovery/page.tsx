@@ -1,9 +1,8 @@
-import { HeroSection } from "@features/discovery/components/hero-section";
 import { BookCarousel } from "@features/discovery/components/book-carousel";
-import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { FeaturedBanner } from "@features/discovery/components/featured-banner";
+import { GenreGrid } from "@features/discovery/components/genre-grid";
+import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
-import { Book } from "@features/books/components/book-card";
 import { NEW_RELEASES, STAFF_PICKS, TRENDING_BOOKS } from "../page";
 
 export default function DiscoveryPage() {
@@ -20,7 +19,6 @@ export default function DiscoveryPage() {
           subtitle="ما لا يستطيع القراء تركه هذا الأسبوع"
           books={TRENDING_BOOKS}
           accentColor="var(--badge-amber)"
-          viewAllHref="#"
         />
 
         {/* Staff Picks */}
@@ -29,7 +27,6 @@ export default function DiscoveryPage() {
           subtitle="تم اختيارها بعناية من قبل محررينا لرواية قصص استثنائية"
           books={STAFF_PICKS}
           accentColor="oklch(0.55 0.14 140)"
-          viewAllHref="#"
         />
 
         {/* Featured book of the month */}
@@ -41,7 +38,6 @@ export default function DiscoveryPage() {
           subtitle="طازجة من المطبعة — تم نشرها للتو"
           books={NEW_RELEASES}
           accentColor="oklch(0.52 0.15 250)"
-          viewAllHref="#"
         />
 
         {/* Quote break */}

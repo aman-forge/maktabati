@@ -1,9 +1,6 @@
 "use client";
 
-import * as React from "react";
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-
-import { cn } from "@/ui/lib/utils";
 import { Button } from "@components/ui/button";
 import {
   InputGroup,
@@ -11,7 +8,9 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@components/ui/input-group";
-import { CaretDownIcon, XIcon, CheckIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, CheckIcon, XIcon } from "@phosphor-icons/react";
+import * as React from "react";
+import { cn } from "@/ui/lib/utils";
 
 const Combobox = ComboboxPrimitive.Root;
 

@@ -1,11 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import type { RegisterFormData } from "@features/auth/types";
 import { registerFormSchema } from "@features/auth/types";
 import { createClient } from "@server/db/server";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { revalidatePath } from "next/cache";
 
 // Type for action responses
 type ActionResponse<T = void> = {

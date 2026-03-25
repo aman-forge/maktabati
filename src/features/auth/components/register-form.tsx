@@ -1,12 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import type React from "react";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { registerUser } from "@features/auth/actions";
 import { Button, buttonVariants } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
 import {
@@ -17,8 +10,18 @@ import {
   FieldLabel,
 } from "@components/ui/field";
 import { Input } from "@components/ui/input";
+import { registerUser } from "@features/auth/actions";
+import {
+  type RegisterFormData,
+  registerFormSchema,
+} from "@features/auth/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import type React from "react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { cn } from "@/ui/lib/utils";
-import { type RegisterFormData, registerFormSchema } from "@features/auth/types";
 import { useAuthDialog } from "./auth-dialog-provider";
 
 function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
@@ -231,7 +234,7 @@ function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
                   >
                     <span className="ml-1">أوافق على</span>
                     <Link
-                      href="#"
+                      href="/"
                       className={cn(
                         buttonVariants({ variant: "link", size: "sm" }),
                         "px-0 ml-1 bg-transparent hover:bg-transparent text-primary underline",
@@ -241,7 +244,7 @@ function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
                     </Link>
                     <span className="mx-1">و</span>
                     <Link
-                      href="#"
+                      href="/"
                       className={cn(
                         buttonVariants({ variant: "link", size: "sm" }),
                         "p-0 bg-transparent hover:bg-transparent text-primary underline",

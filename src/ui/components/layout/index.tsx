@@ -1,8 +1,8 @@
 import { ThemeProvider } from "@components/layout/theme-provider";
 import { DirectionProvider } from "@components/ui/direction";
 import { Toaster } from "@components/ui/sonner";
-import { TooltipProvider } from "../ui/tooltip";
 import { AuthDialogProvider } from "@features/auth/components/auth-dialog-provider";
+import { TooltipProvider } from "../ui/tooltip";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
 

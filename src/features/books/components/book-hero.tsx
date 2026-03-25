@@ -1,24 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import {
-  Star,
-  BookOpen,
-  BookmarkSimple,
-  ShareNetwork,
-  Check,
-  Heart,
-} from "@phosphor-icons/react";
-import { Button } from "@components/ui/button";
 import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { BookDetail } from "@features/books/types";
+import type { BookDetail } from "@features/books/types";
+import {
+  BookmarkSimpleIcon,
+  BookOpenIcon,
+  CheckIcon,
+  HeartIcon,
+  ShareNetworkIcon,
+  StarIcon,
+} from "@phosphor-icons/react";
+import Image from "next/image";
+import { useState } from "react";
 
 const SHELF_OPTIONS = [
-  { label: "أريد القراءة", icon: BookmarkSimple },
-  { label: "أقرأ الآن", icon: BookOpen },
-  { label: "قرأتُه", icon: Check },
+  { label: "أريد القراءة", icon: BookmarkSimpleIcon },
+  { label: "أقرأ الآن", icon: BookOpenIcon },
+  { label: "قرأتُه", icon: CheckIcon },
 ] as const;
 
 export function BookHero({ book }: { book: BookDetail }) {
@@ -64,12 +64,12 @@ export function BookHero({ book }: { book: BookDetail }) {
                 >
                   {shelf ? (
                     <>
-                      <Check weight="bold" className="w-5 h-5" />
+                      <CheckIcon weight="bold" className="w-5 h-5" />
                       {shelf}
                     </>
                   ) : (
                     <>
-                      <BookmarkSimple weight="bold" className="w-5 h-5" />
+                      <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
                       أضف إلى الرف
                     </>
                   )}
@@ -80,6 +80,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                     {SHELF_OPTIONS.map(({ label, icon: Icon }) => (
                       <button
                         key={label}
+                        type="button"
                         className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
                         style={{
                           color:
@@ -105,7 +106,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                   onClick={() => setLiked((l) => !l)}
                   aria-label={liked ? "إلغاء الإعجاب" : "إعجاب"}
                 >
-                  <Heart
+                  <HeartIcon
                     weight={liked ? "fill" : "regular"}
                     className="w-5 h-5 transition-all"
                     style={{
@@ -120,7 +121,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                   className="rounded-xl shrink-0"
                   aria-label="مشاركة الكتاب"
                 >
-                  <ShareNetwork weight="bold" className="w-5 h-5" />
+                  <ShareNetworkIcon weight="bold" className="w-5 h-5" />
                 </Button>
               </div>
             </div>
@@ -133,12 +134,13 @@ export function BookHero({ book }: { book: BookDetail }) {
               <div className="flex flex-wrap gap-2.5">
                 {book.badges.map((b, i) => (
                   <Badge
-                    key={i}
+                    key={b}
                     variant={i === 0 ? "default" : "secondary"}
-                    className={`text-xs px-4 py-1.5 font-semibold ${i === 0
-                      ? "bg-primary text-primary-foreground border-0 shadow-sm"
-                      : ""
-                      }`}
+                    className={`text-xs px-4 py-1.5 font-semibold ${
+                      i === 0
+                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
+                        : ""
+                    }`}
                   >
                     {b}
                   </Badge>
@@ -177,14 +179,15 @@ export function BookHero({ book }: { book: BookDetail }) {
                   <span className="text-xl text-muted-foreground">/5</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <StarIcon
+                      key={star}
                       weight="fill"
-                      className={`w-6 h-6 ${i < Math.round(book.rating)
-                        ? "text-yellow-400"
-                        : "text-muted/30"
-                        }`}
+                      className={`w-6 h-6 ${
+                        star <= Math.round(book.rating)
+                          ? "text-yellow-400"
+                          : "text-muted/30"
+                      }`}
                     />
                   ))}
                 </div>
@@ -205,7 +208,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
                     </span>
-                    <Star
+                    <StarIcon
                       weight="fill"
                       className="w-4 h-4 shrink-0 text-yellow-400/80"
                     />

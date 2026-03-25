@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Star } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { Textarea } from "@components/ui/textarea";
+import { Star } from "lucide-react";
+import { useState } from "react";
 
 export function WriteReview() {
   const [hoverRating, setHoverRating] = useState(0);
@@ -46,6 +46,7 @@ export function WriteReview() {
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
+              type="button"
               onMouseEnter={() => setHoverRating(star)}
               onMouseLeave={() => setHoverRating(0)}
               onClick={() => setRating(star)}

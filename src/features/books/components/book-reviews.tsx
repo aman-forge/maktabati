@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import {
-  StarIcon,
-  ThumbsUpIcon,
-  ChatCircleIcon,
-  CaretDown,
-} from "@phosphor-icons/react";
+import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { Badge } from "@components/ui/badge";
-import { Review } from "@features/books/types";
+import type { Review } from "@features/books/types";
+import {
+  CaretDownIcon,
+  ChatCircleIcon,
+  StarIcon,
+  ThumbsUpIcon,
+} from "@phosphor-icons/react";
+import Image from "next/image";
+import { useState } from "react";
 
 const SORT_OPTIONS = [
   "الأكثر إعجابًا",
@@ -99,19 +99,21 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-0.5">
-                          {Array.from({ length: 5 }).map((_, j) => (
-                            <StarIcon
-                              key={j}
-                              weight={j < review.rating ? "fill" : "regular"}
-                              className="w-3 h-3"
-                              style={{
-                                color:
-                                  j < review.rating
+                          {[1, 2, 3, 4, 5].map((star) => {
+                            const filled = star - 1 < review.rating;
+                            return (
+                              <StarIcon
+                                key={star}
+                                weight={filled ? "fill" : "regular"}
+                                className="w-3 h-3"
+                                style={{
+                                  color: filled
                                     ? "hsl(var(--primary))"
                                     : "hsl(var(--border))",
-                              }}
-                            />
-                          ))}
+                                }}
+                              />
+                            );
+                          })}
                         </div>
                         <span className="text-xs text-muted-foreground">
                           {review.date}
@@ -151,7 +153,10 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                     />
                     {review.likes + (isLiked ? 1 : 0)} مفيدة
                   </Button>
-                  <button className="flex items-center gap-1.5 text-xs text-muted-foreground transition-opacity hover:opacity-70">
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 text-xs text-muted-foreground transition-opacity hover:opacity-70"
+                  >
                     <ChatCircleIcon weight="regular" className="w-3.5 h-3.5" />
                     ردّ
                   </button>
@@ -169,7 +174,7 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
           className="self-start gap-2 rounded-xl"
           onClick={() => setShowAll(true)}
         >
-          <CaretDown weight="bold" className="w-4 h-4" />
+          <CaretDownIcon weight="bold" className="w-4 h-4" />
           عرض جميع المراجعات ({reviews.length - 3})
         </Button>
       )}

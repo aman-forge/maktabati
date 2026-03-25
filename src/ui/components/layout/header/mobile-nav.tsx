@@ -1,11 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { cn } from "@/ui/lib/utils";
-import { Menu01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { Button, buttonVariants } from "@components/ui/button";
+import { Separator } from "@components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -13,10 +9,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@components/ui/sheet";
-import { Separator } from "@components/ui/separator";
-import { useUser } from "@features/auth/user-context";
-import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
 import { browseItems, discoverItems } from "@config/nav";
+import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
+import { useUser } from "@features/auth/user-context";
+import { Menu01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { useState } from "react";
+import { cn } from "@/ui/lib/utils";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -63,10 +63,7 @@ export function MobileNav() {
           <>
             <div className="flex flex-col gap-1">
               <NavSection label="حسابي">
-                <MobileNavLink
-                  href={`/u/${user?.id}`}
-                  onClick={close}
-                >
+                <MobileNavLink href={`/u/${user?.id}`} onClick={close}>
                   الملف الشخصي
                 </MobileNavLink>
                 <MobileNavLink href="/dashboard" onClick={close}>

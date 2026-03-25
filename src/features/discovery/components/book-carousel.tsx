@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { ArrowLeft } from "lucide-react";
-import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Button } from "@components/ui/button";
+import { type Book, BookCard } from "@features/books/components/book-card";
+import {
+  ArrowLeftIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+} from "@phosphor-icons/react";
+import { useCallback, useRef, useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { Book, BookCard } from "@features/books/components/book-card"
 
 interface BookCarouselProps {
   title: string;
@@ -22,7 +25,7 @@ export function BookCarousel({
   accentColor,
   viewAllHref = "#",
 }: BookCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLUListElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -112,7 +115,7 @@ export function BookCarousel({
           >
             عرض الكل
             {/* Arrow points left (back) in RTL = "forward" */}
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            <ArrowLeftIcon className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           </a>
         </div>
       </div>
@@ -143,24 +146,19 @@ export function BookCarousel({
           }}
         />
 
-        <div
+        <ul
           ref={scrollRef}
           onScroll={checkScroll}
-          className="flex gap-5 overflow-x-auto pb-4 px-6 lg:px-12 scroll-smooth"
+          className="list-none m-0 p-0 flex gap-5 overflow-x-auto pb-4 px-6 lg:px-12 scroll-smooth"
           style={{ scrollbarWidth: "none" }}
-          role="list"
           aria-label={`قائمة كتب ${title}`}
         >
-          {books.map((book, i) => (
-            <div
-              key={`${book.id}-${i}`}
-              role="listitem"
-              className="shrink-0 pt-1"
-            >
+          {books.map((book) => (
+            <li key={book.id} className="shrink-0 pt-1">
               <BookCard book={book} size="md" />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

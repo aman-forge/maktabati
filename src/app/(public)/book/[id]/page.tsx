@@ -1,21 +1,21 @@
-import { notFound } from "next/navigation";
-import { BookHero } from "@features/books/components/book-hero";
-import { BookDescription } from "@features/books/components/book-description";
-import { BookReviews } from "@features/books/components/book-reviews";
+import { Separator } from "@components/ui/separator";
 import { AuthorCard } from "@features/books/components/author-card";
-import { WriteReview } from "@features/books/components/write-review";
+import { BookDescription } from "@features/books/components/book-description";
 import { BookDetailsSidebar } from "@features/books/components/book-details-sidebar";
+import { BookHero } from "@features/books/components/book-hero";
+import { BookReviews } from "@features/books/components/book-reviews";
 import { FeaturedArticles } from "@features/books/components/featured-articles";
 import { MemberLists } from "@features/books/components/member-lists";
-import { BookCarousel } from "@features/discovery/components/book-carousel";
-import { Separator } from "@components/ui/separator";
+import { WriteReview } from "@features/books/components/write-review";
 import {
-  BOOKS,
-  TRENDING_BOOKS,
   ARTICLES,
-  OFFICIAL_LISTS,
+  BOOKS,
   MEMBER_LISTS,
+  OFFICIAL_LISTS,
+  TRENDING_BOOKS,
 } from "@features/books/types";
+import { BookCarousel } from "@features/discovery/components/book-carousel";
+import { notFound } from "next/navigation";
 
 export default async function BookPage({
   params,
@@ -105,7 +105,6 @@ export default async function BookPage({
           subtitle="كتب أحبها محبو سلسلة الإمبراطورية الأخيرة"
           books={TRENDING_BOOKS}
           accentColor="var(--badge-amber)"
-          viewAllHref="#"
         />
       </div>
     </main>

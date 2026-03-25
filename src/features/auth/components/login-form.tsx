@@ -1,8 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Button } from "@components/ui/button";
 import {
   Field,
@@ -12,9 +9,12 @@ import {
   FieldLabel,
 } from "@components/ui/field";
 import { Input } from "@components/ui/input";
-import { cn } from "@/ui/lib/utils";
 import { type LoginFormData, loginFormSchema } from "@features/auth/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@server/db/client";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { cn } from "@/ui/lib/utils";
 import { useAuthDialog } from "./auth-dialog-provider";
 
 function LoginForm({ className, ...props }: React.ComponentProps<"div">) {

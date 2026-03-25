@@ -1,10 +1,16 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Dialog, DialogContent } from "@components/ui/dialog";
+// import { usePathname } from "next/navigation";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
-import { usePathname } from "next/navigation";
 
 type AuthView = "login" | "register" | null;
 
@@ -23,12 +29,12 @@ const AuthDialogContext = createContext<AuthDialogContextType | undefined>(
 export function AuthDialogProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<AuthView>(null);
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   // Close dialog on route change (optional but good practice)
-  React.useEffect(() => {
+  useEffect(() => {
     setIsOpen(false);
-  }, [pathname]);
+  }, []);
 
   const openDialog = (newView: AuthView) => {
     setView(newView);

@@ -1,8 +1,8 @@
 import "@/ui/style/globals.css";
-import type { Metadata } from "next";
 import LayoutProvider from "@components/layout";
-import { Noto_Sans_Arabic } from "next/font/google";
 import { UserProvider } from "@features/auth/user-context";
+import type { Metadata } from "next";
+import { Noto_Sans_Arabic } from "next/font/google";
 
 const fontSans = Noto_Sans_Arabic({
   subsets: ["arabic", "latin"],

@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "@components/ui/button";
 import { Moon02Icon, Sun03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
-import { Button } from "@components/ui/button";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();

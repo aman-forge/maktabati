@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { Search, Sparkles, ArrowRight } from "lucide-react";
-import { Button } from "@components/ui/button";
 import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import { TrophyIcon } from "@phosphor-icons/react";
+import { ArrowRight, Search, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 
 const TRENDING_TAGS = [
   "روايات أدبية",
@@ -116,6 +116,7 @@ export function HeroSection() {
                 {TRENDING_TAGS.map((tag) => (
                   <button
                     key={tag}
+                    type="button"
                     className="text-xs px-3 py-1 rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground"
                     onClick={() => setQuery(tag)}
                   >

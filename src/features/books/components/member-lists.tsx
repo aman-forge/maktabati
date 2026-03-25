@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ArrowRight, ThumbsUp, Users } from "lucide-react";
+import Image from "next/image";
 
 interface MemberList {
   id: string;
@@ -52,7 +52,7 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
           </p>
         </div>
         <a
-          href="#"
+          href="/"
           className="hidden sm:flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
           style={{ color: "var(--accent)" }}
         >
@@ -65,7 +65,7 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
           ({ id, title, curator, avatar, votes, bookCount, covers, rank }) => (
             <a
               key={id}
-              href="#"
+              href="/"
               className="group flex flex-col gap-4 rounded-2xl p-5 transition-all hover:-translate-y-0.5"
               style={{
                 backgroundColor: "var(--card)",
@@ -77,7 +77,7 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
               <div className="flex items-end gap-0 relative h-16">
                 {covers.map((src, i) => (
                   <div
-                    key={i}
+                    key={src}
                     className="absolute rounded-lg overflow-hidden shadow-md"
                     style={{
                       width: 36,

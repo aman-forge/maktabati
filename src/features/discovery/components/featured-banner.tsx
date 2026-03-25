@@ -1,13 +1,13 @@
-import Image from "next/image";
+import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
+import { Separator } from "@components/ui/separator";
 import {
-  StarIcon,
-  BookOpenIcon,
   ArrowLeftIcon,
   BookmarkSimpleIcon,
+  BookOpenIcon,
+  StarIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "@components/ui/button";
-import { Badge } from "@components/ui/badge";
-import { Separator } from "@components/ui/separator";
+import Image from "next/image";
 
 const BOOK_META = [
   { label: "الصفحات", value: "598" },
@@ -63,9 +63,9 @@ export function FeaturedBanner() {
 
             {/* Rating stars */}
             <div className="flex items-center gap-1.5">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {[1, 2, 3, 4, 5].map((star) => (
                 <StarIcon
-                  key={i}
+                  key={star}
                   weight="fill"
                   className="w-4 h-4 text-primary"
                 />

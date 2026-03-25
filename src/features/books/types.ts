@@ -1,4 +1,4 @@
-import { Book as BaseBook } from "@features/books/components/book-card";
+import type { Book as BaseBook } from "@features/books/components/book-card";
 
 export interface Review {
   id: string;

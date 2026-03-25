@@ -1,10 +1,12 @@
 // apps/web/src/components/book/author-card.tsx
-import Image from "next/image";
-import { ArrowLeft, BookOpen } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "@components/ui/button";
+
 import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { Author } from "@features/books/types";
+import type { Author } from "@features/books/types";
+import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import Link from "next/link";
 
 interface AuthorCardProps {
   author?: Author;
@@ -51,7 +53,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               className="gap-1.5 rounded-xl mb-1"
             >
               متابعة
-              <ArrowLeft weight="bold" className="w-3.5 h-3.5" />
+              <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
           </div>
 
@@ -106,9 +108,9 @@ export function AuthorCard({ author }: AuthorCardProps) {
 
             <div className="flex gap-3">
               {author.books.map((b) => (
-                <a
+                <Link
                   key={b.title}
-                  href="#"
+                  href="/"
                   className="group flex flex-col gap-1.5 shrink-0"
                 >
                   <div
@@ -125,24 +127,24 @@ export function AuthorCard({ author }: AuthorCardProps) {
                   <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
                     {b.title}
                   </p>
-                </a>
+                </Link>
               ))}
 
               {/* "View all" slot */}
-              <a
-                href="#"
+              <Link
+                href="/"
                 className="flex flex-col items-center gap-1.5 w-14 shrink-0"
               >
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}
                 >
-                  <BookOpen className="w-5 h-5" />
+                  <BookOpenIcon className="w-5 h-5" />
                 </div>
                 <p className="text-[11px] leading-tight text-center text-muted-foreground">
                   عرض الكل
                 </p>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

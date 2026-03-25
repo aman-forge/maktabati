@@ -1,7 +1,7 @@
-import Image from "next/image";
-import { ArrowRight, FileText, List } from "lucide-react";
 import { Badge } from "@components/ui/badge";
 import { Separator } from "@components/ui/separator";
+import { ArrowRightIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react";
+import Image from "next/image";
 
 interface Article {
   id: string;
@@ -42,7 +42,7 @@ export function FeaturedArticles({
           <div className="flex items-end justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <FileText
+                <FileTextIcon
                   className="w-4 h-4"
                   style={{ color: "var(--accent)" }}
                 />
@@ -64,11 +64,11 @@ export function FeaturedArticles({
               </h2>
             </div>
             <a
-              href="#"
+              href="/"
               className="hidden sm:flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
               style={{ color: "var(--accent)" }}
             >
-              جميع المقالات <ArrowRight className="w-4 h-4" />
+              جميع المقالات <ArrowRightIcon className="w-4 h-4" />
             </a>
           </div>
 
@@ -76,7 +76,7 @@ export function FeaturedArticles({
             {articles.map((article) => (
               <a
                 key={article.id}
-                href="#"
+                href="/"
                 className="group flex flex-col gap-4 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
                 style={{
                   backgroundColor: "var(--card)",
@@ -155,7 +155,10 @@ export function FeaturedArticles({
           <div className="flex items-end justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <List className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                <ListIcon
+                  className="w-4 h-4"
+                  style={{ color: "var(--accent)" }}
+                />
                 <span
                   className="text-xs font-semibold uppercase tracking-widest"
                   style={{ color: "var(--accent)" }}
@@ -174,11 +177,11 @@ export function FeaturedArticles({
               </h2>
             </div>
             <a
-              href="#"
+              href="/"
               className="hidden sm:flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
               style={{ color: "var(--accent)" }}
             >
-              جميع القوائم <ArrowRight className="w-4 h-4" />
+              جميع القوائم <ArrowRightIcon className="w-4 h-4" />
             </a>
           </div>
 
@@ -186,7 +189,7 @@ export function FeaturedArticles({
             {officialLists.map(({ id, title, bookCount, rank, cover }) => (
               <a
                 key={id}
-                href="#"
+                href="/"
                 className="group flex items-center gap-4 rounded-2xl p-4 transition-all hover:-translate-y-0.5"
                 style={{
                   backgroundColor: "var(--card)",
