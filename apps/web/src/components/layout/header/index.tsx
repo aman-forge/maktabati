@@ -1,6 +1,3 @@
-"use server";
-
-import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import {
   ArrowLeftIcon,
@@ -23,24 +20,7 @@ import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { browseItems, discoverItems, NavItem } from "../../../data/header";
 
-// ─── Server Component ─────────────────────────────────────────────────────────
-
-async function Header() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let profile = null;
-  if (user) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("username, first_name, last_name, profile_image_url")
-      .eq("id", user.id)
-      .single();
-    profile = data;
-  }
-
+function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-14 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-full items-center justify-between px-4">
@@ -84,11 +64,10 @@ async function Header() {
 
           {/* User dropdown — desktop only */}
           <div className="hidden sm:flex">
-            <HeaderActions user={user} profile={profile} />
+            <HeaderActions />
           </div>
 
-          {/* Mobile hamburger — passes server data to avoid refetch */}
-          <MobileNav user={user} profile={profile} />
+          <MobileNav />
         </div>
       </div>
     </header>
