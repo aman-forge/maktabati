@@ -1,8 +1,6 @@
 "use client";
 
-// import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
-import { Book } from "@features/books/types";
 import {
   BookOpenIcon,
   CheckIcon,
@@ -12,9 +10,10 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
+import { BookCardType } from "../types";
 
 interface BookCardProps {
-  book: Book;
+  book: BookCardType;
   size?: "sm" | "md" | "lg";
 }
 
@@ -38,7 +37,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
       )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      aria-label={`${book.title} بقلم ${book.author}`}
+      aria-label={`${book.title} بقلم ${book.authors?.name}`}
     >
       {/* Cover */}
       <div
@@ -130,7 +129,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           {book.title}
         </h3>
         <p className="text-xs leading-tight text-muted-foreground">
-          {book.author?.name}
+          {book?.authors?.name}
         </p>
 
         <div className="flex items-center gap-1 mt-0.5">

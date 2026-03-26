@@ -1,3 +1,4 @@
+import { Database } from "../../../database.types";
 import { createBrowserClient } from "@supabase/ssr";
 
 export const createClient = () => {
@@ -14,5 +15,5 @@ export const createClient = () => {
     );
   }
 
-  return createBrowserClient(supabaseUrl, supabaseKey);
+  return createBrowserClient<Database>(supabaseUrl, supabaseKey);
 };
