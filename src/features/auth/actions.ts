@@ -28,11 +28,6 @@ export async function registerUser(
       email: validatedData.email,
       password: validatedData.password,
       options: {
-        data: {
-          username: validatedData.username,
-          first_name: validatedData.first_name,
-          last_name: validatedData.last_name,
-        },
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
       },
     });
