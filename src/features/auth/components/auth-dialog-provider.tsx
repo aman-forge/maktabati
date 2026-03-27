@@ -2,13 +2,7 @@
 
 import { Dialog, DialogContent } from "@components/ui/dialog";
 // import { usePathname } from "next/navigation";
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 
@@ -22,9 +16,7 @@ interface AuthDialogContextType {
   setView: (view: AuthView) => void;
 }
 
-const AuthDialogContext = createContext<AuthDialogContextType | undefined>(
-  undefined,
-);
+const AuthDialogContext = createContext<AuthDialogContextType | undefined>(undefined);
 
 export function AuthDialogProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,13 +39,11 @@ export function AuthDialogProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthDialogContext.Provider
-      value={{ isOpen, view, openDialog, closeDialog, setView }}
-    >
+    <AuthDialogContext.Provider value={{ isOpen, view, openDialog, closeDialog, setView }}>
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="w-dvw h-dvh sm:h-auto max-w-none sm:max-w-md top-0 inset-s-0 translate-x-0 rtl:translate-x-0 translate-y-0 sm:top-1/2 sm:inset-s-1/2 sm:-translate-x-1/2 sm:rtl:translate-x-1/2 sm:-translate-y-1/2 rounded-none sm:rounded-4xl p-6 md:p-8 flex flex-col justify-center overflow-y-auto"
+          className="w-dvw h-dvh sm:h-auto max-w-none sm:max-w-md top-0 inset-s-0 translate-x-0 rtl:translate-x-0 translate-y-0 sm:top-1/2 sm:inset-s-1/2 sm:-translate-x-1/2 sm:rtl:translate-x-1/2 sm:-translate-y-1/2 rounded-none sm:rounded-4xl p-6 flex flex-col justify-center overflow-y-auto overflow-x-clip"
           showCloseButton={true}
         >
           {view === "login" && <LoginForm />}
