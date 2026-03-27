@@ -1,18 +1,18 @@
 "use client";
 
-import { Badge } from "@components/ui/badge";
+// import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import type { BookDetail } from "@features/books/types";
+// import type { BookDetail } from "@features/books/types";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
   CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
-  StarIcon,
+  // StarIcon,
 } from "@phosphor-icons/react";
-import Image from "next/image";
+// import Image from "next/image";
 import { useState } from "react";
 
 const SHELF_OPTIONS = [
@@ -21,13 +21,14 @@ const SHELF_OPTIONS = [
   { label: "قرأتُه", icon: CheckIcon },
 ] as const;
 
-export function BookHero({ book }: { book: BookDetail }) {
+// export function BookHero({ book }: { book: BookDetail }) {
+export function BookHero() {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden hidden">
       {/* Subtle ash/mist background glow */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -36,13 +37,12 @@ export function BookHero({ book }: { book: BookDetail }) {
             "radial-gradient(circle at 20% 80%, hsl(200 40% 20% / 0.4) 0%, transparent 60%)",
         }}
       />
-
       {/* Main content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-12 lg:py-16">
         <div className="grid lg:grid-cols-[minmax(0,auto)_1fr] gap-10 lg:gap-16 items-start">
           {/* Cover + Actions */}
           <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
-            <div
+            {/* <div
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
             >
@@ -53,7 +53,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                 className="object-cover"
                 priority
               />
-            </div>
+            </div> */}
 
             {/* Shelf & Actions */}
             <div className="w-full max-w-70 flex flex-col gap-3">
@@ -130,25 +130,26 @@ export function BookHero({ book }: { book: BookDetail }) {
           {/* Details */}
           <div className="flex flex-col gap-8">
             {/* Badges */}
-            {book.badges && book.badges.length > 0 && (
+            {/* {book.badges && book.badges.length > 0 && (
               <div className="flex flex-wrap gap-2.5">
                 {book.badges.map((b, i) => (
                   <Badge
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
-                    className={`text-xs px-4 py-1.5 font-semibold ${i === 0
+                    className={`text-xs px-4 py-1.5 font-semibold ${
+                      i === 0
                         ? "bg-primary text-primary-foreground border-0 shadow-sm"
                         : ""
-                      }`}
+                    }`}
                   >
                     {b}
                   </Badge>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Title & Author */}
-            <div className="flex flex-col gap-3">
+            {/* <div className="flex flex-col gap-3">
               <h1
                 className="text-xxl lg:text-3xl font-extrabold leading-[1.05] text-balance tracking-tight text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
@@ -156,19 +157,19 @@ export function BookHero({ book }: { book: BookDetail }) {
                 {book.title}
               </h1>
               <p className="text-xl text-primary font-medium">{book.author}</p>
-            </div>
+            </div> */}
 
             {/* Series info */}
-            {book.series && (
+            {/* {book.series && (
               <p className="text-base text-muted-foreground font-medium">
                 {book.series}
               </p>
-            )}
+            )} */}
 
             {/* Rating */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-8">
               <div className="flex flex-col items-start gap-2">
-                <div className="flex items-baseline gap-3">
+                {/* <div className="flex items-baseline gap-3">
                   <span
                     className="text-6xl lg:text-7xl font-black text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
@@ -176,23 +177,24 @@ export function BookHero({ book }: { book: BookDetail }) {
                     {book.rating}
                   </span>
                   <span className="text-xl text-muted-foreground">/5</span>
-                </div>
-                <div className="flex items-center gap-1">
+                </div> */}
+                {/* <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <StarIcon
                       key={star}
                       weight="fill"
-                      className={`w-6 h-6 ${star <= Math.round(book.rating)
+                      className={`w-6 h-6 ${
+                        star <= Math.round(book.rating)
                           ? "text-yellow-400"
                           : "text-muted/30"
-                        }`}
+                      }`}
                     />
                   ))}
-                </div>
-                <p className="text-sm text-muted-foreground">
+                </div> */}
+                {/* <p className="text-sm text-muted-foreground">
                   {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
                   {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
-                </p>
+                </p> */}
               </div>
 
               <Separator
@@ -200,7 +202,7 @@ export function BookHero({ book }: { book: BookDetail }) {
                 className="hidden sm:block h-20 opacity-30"
               />
 
-              <div className="flex flex-col gap-2 flex-1 max-w-md">
+              {/* <div className="flex flex-col gap-2 flex-1 max-w-md">
                 {book.ratingCounts?.map(({ stars, pct }) => (
                   <div key={stars} className="flex items-center gap-3">
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
@@ -221,13 +223,13 @@ export function BookHero({ book }: { book: BookDetail }) {
                     </span>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
 
             <Separator className="my-2 bg-border/50" />
 
             {/* Meta */}
-            {book.meta && book.meta.length > 0 && (
+            {/* {book.meta && book.meta.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 {book.meta.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-1.5">
@@ -240,11 +242,10 @@ export function BookHero({ book }: { book: BookDetail }) {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
-
       {/* Bottom fade for clean section end */}
       <div
         className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"

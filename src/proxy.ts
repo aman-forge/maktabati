@@ -1,12 +1,13 @@
-import { updateSession } from "@server/db/middleware";
-import type { NextRequest } from "next/server";
+import { auth } from "@/features/auth/lib/server";
 
-export async function proxy(request: NextRequest) {
-  return await updateSession(request);
-}
+export default auth.middleware({
+  // Redirects unauthenticated users to sign-in page
+  loginUrl: "/auth/sign-in",
+});
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Protected routes requiring authentication
+    "/account/:path*",
   ],
 };

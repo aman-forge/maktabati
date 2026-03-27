@@ -20,33 +20,28 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
-import { useUser } from "@features/auth/user-context";
+import { authClient } from "@features/auth/lib/client";
 import { UserIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
 
 export function HeaderActions() {
-  const { user, loading, logout } = useUser();
   const { openDialog } = useAuthDialog();
-
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const isLoggedIn = !!user;
+  const { data: session } = authClient.useSession();
+  const isLoggedIn = session!!;
 
   const handleLogout = async () => {
-    await logout();
+    await authClient.signOut();
     setLogoutOpen(false);
   };
 
-  if (loading) {
-    return <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />;
-  }
-
-  const email = user?.email;
-  const profileHref = `/u/${user?.id}`;
+  const email = session?.user.email;
+  const profileHref = `/u/${session?.user?.id}`;
 
   // ── حالة غير مسجل الدخول ─────────────────────────────────────────────
-  if (!isLoggedIn || !user) {
+  if (!isLoggedIn || !session?.user) {
     return (
       <Button
         onClick={() => openDialog("login")}

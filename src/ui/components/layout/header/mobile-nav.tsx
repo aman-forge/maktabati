@@ -11,19 +11,19 @@ import {
 } from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
 import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
-import { useUser } from "@features/auth/user-context";
 import { Menu01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
+import { authClient } from "@features/auth/lib/client";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
-  const { user, loading } = useUser();
   const { openDialog } = useAuthDialog();
 
-  const isLoggedIn = !!user;
+  const { data: session } = authClient.useSession();
+  const isLoggedIn = session!!;
 
   const close = () => setOpen(false);
 
@@ -51,9 +51,9 @@ export function MobileNav() {
         {/* ── Header ── */}
         <SheetHeader className="text-right">
           <SheetTitle>{isLoggedIn ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
-          {isLoggedIn && user?.email && (
+          {isLoggedIn && session?.user?.email && (
             <p className="truncate text-xs text-muted-foreground">
-              {user.email}
+              {session?.user.email}
             </p>
           )}
         </SheetHeader>
@@ -63,7 +63,7 @@ export function MobileNav() {
           <>
             <div className="flex flex-col gap-1">
               <NavSection label="حسابي">
-                <MobileNavLink href={`/u/${user?.id}`} onClick={close}>
+                <MobileNavLink href={`/u/${session?.user?.id}`} onClick={close}>
                   الملف الشخصي
                 </MobileNavLink>
                 <MobileNavLink href="/dashboard" onClick={close}>
@@ -101,7 +101,7 @@ export function MobileNav() {
         </NavSection>
 
         {/* ── Auth buttons (logged out only) — pinned to bottom ── */}
-        {!isLoggedIn && !loading && (
+        {!isLoggedIn && (
           <div className="mt-auto flex flex-col gap-2 border-t pt-4">
             <button
               type="button"

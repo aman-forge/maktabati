@@ -3,13 +3,13 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import type { Author } from "@features/books/types";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
+import { Author, Book } from "@server/db/schema/tables";
 import Image from "next/image";
 import Link from "next/link";
 
 interface AuthorCardProps {
-  author?: Author;
+  author?: Author & { books: Book[] | null };
 }
 
 export function AuthorCard({ author }: AuthorCardProps) {
@@ -41,7 +41,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
               <Image
-                src={author.image}
+                src={author.profileImage}
                 alt={author.name}
                 fill
                 className="object-cover"
@@ -66,11 +66,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
               >
                 {author.name}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.location}</p>
+              <p className="text-sm text-muted-foreground">{author.country}</p>
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-5">
+            {/* <div className="flex items-center gap-5">
               {author.stats.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center">
                   <span className="text-base font-bold text-foreground tabular-nums">
@@ -79,13 +79,13 @@ export function AuthorCard({ author }: AuthorCardProps) {
                   <span className="text-xs text-muted-foreground">{label}</span>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             <p className="text-sm leading-relaxed text-muted-foreground">
               {author.bio}
             </p>
 
-            <div className="flex flex-wrap gap-2 mt-1">
+            {/* <div className="flex flex-wrap gap-2 mt-1">
               {author.tags.map((tag) => (
                 <Badge
                   key={tag}
@@ -95,7 +95,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
                   {tag}
                 </Badge>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <Separator className="my-5 bg-border" />
@@ -107,7 +107,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
             </p>
 
             <div className="flex gap-3">
-              {author.books.map((b) => (
+              {author?.books?.map((b) => (
                 <Link
                   key={b.title}
                   href="/"
@@ -118,7 +118,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
                     style={{ aspectRatio: "2/3" }}
                   >
                     <Image
-                      src={b.cover}
+                      src={b.coverImageUrl}
                       alt={b.title}
                       fill
                       className="object-cover"

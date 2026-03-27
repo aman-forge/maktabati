@@ -10,10 +10,10 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { BookCardType } from "../types";
+import { BookWithAuthor } from "@server/db/schema/tables";
 
 interface BookCardProps {
-  book: BookCardType;
+  book: BookWithAuthor;
   size?: "sm" | "md" | "lg";
 }
 
@@ -37,7 +37,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
       )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      aria-label={`${book.title} بقلم ${book.authors?.name}`}
+      aria-label={`${book.title} بقلم ${book.author?.name}`}
     >
       {/* Cover */}
       <div
@@ -54,7 +54,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         }}
       >
         <Image
-          src={book.cover_image_url || "not_found.png"}
+          src={book.coverImageUrl || "not_found.png"}
           alt={`غلاف ${book.title}`}
           fill
           className="object-cover"
@@ -112,15 +112,6 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
             </Button>
           </div>
         </div>
-
-        {/* Static badge when idle */}
-        {/*{book.badge && !hovered && (
-          <div className="absolute top-2 inset-s-2">
-            <Badge className="text-[10px] px-2 py-0.5 font-medium shadow-sm bg-primary text-primary-foreground border-0">
-              {book.badge}
-            </Badge>
-          </div>
-        )}*/}
       </div>
 
       {/* Book info */}
@@ -129,25 +120,15 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           {book.title}
         </h3>
         <p className="text-xs leading-tight text-muted-foreground">
-          {book?.authors?.name}
+          {book?.author?.name}
         </p>
 
         <div className="flex items-center gap-1 mt-0.5">
           <StarIcon weight="fill" className="w-3 h-3 text-primary" />
           <span className="text-xs font-medium text-foreground">
-            {book.page_count}
+            {book.pageCount}
           </span>
-          {/*<span className="text-xs text-muted-foreground">
-            ({book.ratingCount})
-          </span>*/}
         </div>
-
-        {/* <Badge
-          variant="outline"
-          className="w-fit text-[10px] px-2 py-0 mt-0.5 rounded-full border-border text-muted-foreground"
-        >
-          {book.genre}
-        </Badge> */}
       </div>
     </article>
   );

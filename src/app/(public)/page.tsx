@@ -1,15 +1,16 @@
-import { bookcardQuery } from "@features/books/types";
 import { BookCarousel } from "@features/discovery/components/book-carousel";
 import { FeaturedBanner } from "@features/discovery/components/featured-banner";
 import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
+import { db } from "@server/db/schema";
 
 export default async function DiscoveryPage() {
-  const { data: books, error } = await bookcardQuery;
-
-  // TODO: Handle `error`
-  if (error) throw error;
+  const books = await db.query.books.findMany({
+    with: {
+      author: true,
+    },
+  });
 
   return (
     <main className="min-h-screen font-sans">

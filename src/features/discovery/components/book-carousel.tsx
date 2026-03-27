@@ -9,12 +9,13 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { BookCardArrayType } from "@features/books/types";
+import Link from "next/link";
+import { BookWithAuthor } from "@server/db/schema/tables";
 
 interface BookCarouselProps {
   title: string;
   subtitle?: string;
-  books?: BookCardArrayType;
+  books?: BookWithAuthor[];
   accentColor?: string;
   viewAllHref?: string;
 }
@@ -114,7 +115,7 @@ export function BookCarousel({
             <CaretLeftIcon className="w-4 h-4" />
           </Button>
 
-          <a
+          <Link
             href={viewAllHref}
             className="group hidden sm:flex items-center gap-1 text-sm font-medium me-2 transition-colors hover:opacity-80"
             style={{ color: accentColor ?? "hsl(var(--primary))" }}
@@ -122,7 +123,7 @@ export function BookCarousel({
             عرض الكل
             {/* Arrow points left (back) in RTL = "forward" */}
             <ArrowLeftIcon className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-          </a>
+          </Link>
         </div>
       </div>
 

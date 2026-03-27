@@ -1,6 +1,5 @@
 import "@/ui/style/globals.css";
 import LayoutProvider from "@components/layout";
-import { UserProvider } from "@features/auth/user-context";
 import type { Metadata } from "next";
 import { Noto_Sans_Arabic } from "next/font/google";
 
@@ -23,9 +22,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       className={fontSans.variable}
     >
       <body className={`antialiased pb-18 md:p-0`}>
-        <UserProvider>
-          <LayoutProvider>{children}</LayoutProvider>
-        </UserProvider>
+        <LayoutProvider>{children}</LayoutProvider>
       </body>
     </html>
   );

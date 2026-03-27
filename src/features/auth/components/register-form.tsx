@@ -2,13 +2,23 @@
 
 import { Button, buttonVariants } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@components/ui/field";
 import { Input } from "@components/ui/input";
-import { registerUser } from "@features/auth/actions";
-import { type RegisterFormData, registerFormSchema } from "@features/auth/types";
+import { signUpWithEmail } from "@features/auth/actions/sign-up";
+import {
+  type RegisterFormData,
+  registerFormSchema,
+} from "@features/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WarningCircleIcon } from "@phosphor-icons/react";
 import Link from "next/link";
+import { startTransition, useActionState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { cn } from "@/ui/lib/utils";
@@ -17,36 +27,41 @@ import { useAuthDialog } from "./auth-dialog-provider";
 function RegisterForm() {
   const { setView } = useAuthDialog();
 
+  // the new `useActionState` (formerly `useFormState`)
+  const [state, formAction, isPending] = useActionState(signUpWithEmail, null);
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: "",
+      name: "",
       password: "",
       confirmPassword: "",
       terms: false,
     },
   });
 
-  async function onSubmit(data: RegisterFormData) {
-    try {
-      form.clearErrors("root");
-
-      const result = await registerUser(data);
-
-      if (!result.success) {
-        form.setError("root", {
-          message: result.error || "حدث خطأ غير متوقع",
-        });
-        toast.error(result.error || "حدث خطأ غير متوقع");
-        return;
-      }
-
-      toast.success("تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.");
-      setView("login");
-    } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("حدث خطأ أثناء إنشاء الحساب");
+  // Sync server action errors back into react-hook-form + show toast
+  useEffect(() => {
+    if (state?.error) {
+      form.setError("root", {
+        message: state.error,
+      });
+      toast.error(state.error);
     }
+  }, [state, form]);
+
+  function onSubmit(data: RegisterFormData) {
+    // Clear previous root errors before new submission
+    form.clearErrors("root");
+
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("name", data.name);
+
+    startTransition(() => {
+      formAction(formData);
+    });
   }
 
   return (
@@ -54,7 +69,9 @@ function RegisterForm() {
       <FieldGroup className="gap-4">
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">إنشاء حساب جديد</h1>
-          <p className="text-muted-foreground text-balance">أنشئ حساباً للوصول إلى مكتبتي</p>
+          <p className="text-muted-foreground text-balance">
+            أنشئ حساباً للوصول إلى مكتبتي
+          </p>
         </div>
 
         {form.formState.errors.root?.message && (
@@ -62,13 +79,32 @@ function RegisterForm() {
             className="text-destructive text-sm text-center flex flex-row items-center! justify-center! gap-1 bg-destructive/10 border border-destructive p-2 rounded-lg"
             data-invalid
           >
-            <WarningCircleIcon size={18} className="inline w-min" />
-            <FieldError className="flex-inline p-0 m-0 w-fit">
+            <WarningCircleIcon size={18} className="inline w-min!" />
+            <FieldError className="flex-inline p-0 m-0 w-fit!">
               {form.formState.errors.root.message}
             </FieldError>
           </Field>
         )}
 
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field className="gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="name">اسم المستخدم</FieldLabel>
+              <Input
+                {...field}
+                id="name"
+                type="text"
+                placeholder="username_123"
+                className={cn("ltr", fieldState.error && "border-destructive")}
+              />
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
+            </Field>
+          )}
+        />
         <Controller
           name="email"
           control={form.control}
@@ -83,7 +119,9 @@ function RegisterForm() {
                 autoComplete="email"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
@@ -102,7 +140,9 @@ function RegisterForm() {
                 autoComplete="new-password"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
@@ -112,7 +152,9 @@ function RegisterForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field className="gap-1" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="confirm-password">تأكيد كلمة المرور</FieldLabel>
+              <FieldLabel htmlFor="confirm-password">
+                تأكيد كلمة المرور
+              </FieldLabel>
               <Input
                 {...field}
                 id="confirm-password"
@@ -121,7 +163,9 @@ function RegisterForm() {
                 autoComplete="new-password"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
@@ -132,8 +176,15 @@ function RegisterForm() {
           render={({ field, fieldState }) => (
             <Field className="gap-1" data-invalid={fieldState.invalid}>
               <div className="flex items-center gap-2 rtl">
-                <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
-                <FieldLabel htmlFor="terms" className="text-sm font-normal gap-0 flex items-center">
+                <Checkbox
+                  id="terms"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+                <FieldLabel
+                  htmlFor="terms"
+                  className="text-sm font-normal gap-0 flex items-center"
+                >
                   <span className="ml-1">أوافق على</span>
                   <Link
                     href="/"
@@ -156,21 +207,27 @@ function RegisterForm() {
                   </Link>
                 </FieldLabel>
               </div>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && (
+                <FieldError>{fieldState.error.message}</FieldError>
+              )}
             </Field>
           )}
         />
 
         <div className="flex flex-col gap-2">
           <Field>
-            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "جاري الإنشاء..." : "إنشاء حساب"}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? "جاري الإنشاء..." : "إنشاء حساب"}
             </Button>
           </Field>
 
           <FieldDescription className="text-center gap-1 flex items-center justify-center">
             لديك حساب بالفعل؟
-            <Button variant={"link"} onClick={() => setView("login")} className={"p-0! h-auto"}>
+            <Button
+              variant={"link"}
+              onClick={() => setView("login")}
+              className={"p-0! h-auto"}
+            >
               تسجيل الدخول
             </Button>
           </FieldDescription>
