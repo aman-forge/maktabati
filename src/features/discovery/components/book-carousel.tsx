@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/button";
-import { type Book, BookCard } from "@features/books/components/book-card";
+import { BookCard } from "@features/books/components/book-card";
 import {
   ArrowLeftIcon,
   CaretLeftIcon,
@@ -9,11 +9,12 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/ui/lib/utils";
+import { BookCardArrayType } from "@features/books/types";
 
 interface BookCarouselProps {
   title: string;
   subtitle?: string;
-  books: Book[];
+  books?: BookCardArrayType;
   accentColor?: string;
   viewAllHref?: string;
 }
@@ -49,6 +50,11 @@ export function BookCarousel({
     });
     setTimeout(checkScroll, 350);
   };
+
+  // TODO: Make this
+  if (!books) {
+    return <div>TEHRE IS NO BOOKS FOUND</div>;
+  }
 
   return (
     <section dir="rtl" className="flex flex-col gap-6">

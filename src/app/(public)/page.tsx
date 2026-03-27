@@ -1,17 +1,16 @@
-import {
-  NEW_RELEASES,
-  STAFF_PICKS,
-  TRENDING_BOOKS,
-} from "@features/books/types";
+import { bookcardQuery } from "@features/books/types";
 import { BookCarousel } from "@features/discovery/components/book-carousel";
 import { FeaturedBanner } from "@features/discovery/components/featured-banner";
 import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
 
-export { TRENDING_BOOKS, NEW_RELEASES, STAFF_PICKS };
+export default async function DiscoveryPage() {
+  const { data: books, error } = await bookcardQuery;
 
-export default function DiscoveryPage() {
+  // TODO: Handle `error`
+  if (error) throw error;
+
   return (
     <main className="min-h-screen font-sans">
       {/* Hero */}
@@ -23,7 +22,7 @@ export default function DiscoveryPage() {
         <BookCarousel
           title="الرائج الآن"
           subtitle="ما لا يستطيع القراء تركه هذا الأسبوع"
-          books={TRENDING_BOOKS}
+          books={books}
           accentColor="var(--badge-amber)"
         />
 
@@ -31,7 +30,7 @@ export default function DiscoveryPage() {
         <BookCarousel
           title="اختيارات الفريق"
           subtitle="تم اختيارها بعناية من قبل محررينا لرواية قصص استثنائية"
-          books={STAFF_PICKS}
+          books={books}
           accentColor="oklch(0.55 0.14 140)"
         />
 
@@ -42,7 +41,7 @@ export default function DiscoveryPage() {
         <BookCarousel
           title="الإصدارات الجديدة"
           subtitle="طازجة من المطبعة — تم نشرها للتو"
-          books={NEW_RELEASES}
+          books={books}
           accentColor="oklch(0.52 0.15 250)"
         />
 

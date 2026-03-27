@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import {
   BookOpenIcon,
@@ -11,23 +10,10 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
-
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  cover: string;
-  rating: number;
-  ratingCount: string;
-  genre: string;
-  pages: number;
-  year: number;
-  description: string;
-  badge?: string;
-}
+import { BookCardType } from "../types";
 
 interface BookCardProps {
-  book: Book;
+  book: BookCardType;
   size?: "sm" | "md" | "lg";
 }
 
@@ -51,7 +37,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
       )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      aria-label={`${book.title} بقلم ${book.author}`}
+      aria-label={`${book.title} بقلم ${book.authors?.name}`}
     >
       {/* Cover */}
       <div
@@ -68,7 +54,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         }}
       >
         <Image
-          src={book.cover}
+          src={book.cover_image_url || "not_found.png"}
           alt={`غلاف ${book.title}`}
           fill
           className="object-cover"
@@ -86,11 +72,11 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         >
           {/* Badge top-start (right in RTL) */}
           <div className="flex justify-start">
-            {book.badge && (
+            {/*{book.badge && (
               <Badge className="text-[10px] px-2 py-0.5 font-medium bg-primary text-primary-foreground border-0">
                 {book.badge}
               </Badge>
-            )}
+            )}*/}
           </div>
 
           {/* Bottom actions */}
@@ -108,7 +94,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
               className={cn(
                 "h-8 w-8 rounded-lg shrink-0 transition-colors",
                 saved &&
-                "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30",
+                  "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30",
               )}
               onClick={(e) => {
                 e.stopPropagation();
@@ -128,13 +114,13 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         </div>
 
         {/* Static badge when idle */}
-        {book.badge && !hovered && (
+        {/*{book.badge && !hovered && (
           <div className="absolute top-2 inset-s-2">
             <Badge className="text-[10px] px-2 py-0.5 font-medium shadow-sm bg-primary text-primary-foreground border-0">
               {book.badge}
             </Badge>
           </div>
-        )}
+        )}*/}
       </div>
 
       {/* Book info */}
@@ -143,17 +129,17 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           {book.title}
         </h3>
         <p className="text-xs leading-tight text-muted-foreground">
-          {book.author}
+          {book?.authors?.name}
         </p>
 
         <div className="flex items-center gap-1 mt-0.5">
           <StarIcon weight="fill" className="w-3 h-3 text-primary" />
           <span className="text-xs font-medium text-foreground">
-            {book.rating}
+            {book.page_count}
           </span>
-          <span className="text-xs text-muted-foreground">
+          {/*<span className="text-xs text-muted-foreground">
             ({book.ratingCount})
-          </span>
+          </span>*/}
         </div>
 
         {/* <Badge
