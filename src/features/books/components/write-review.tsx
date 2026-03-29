@@ -2,7 +2,7 @@
 
 import { Button } from "@components/ui/button";
 import { Textarea } from "@components/ui/textarea";
-import { Star } from "lucide-react";
+import { StarIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 export function WriteReview() {
@@ -10,14 +10,7 @@ export function WriteReview() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
-  const LABELS = [
-    "",
-    "لم يعجبني",
-    "كان عاديًا",
-    "أعجبني",
-    "أعجبني كثيرًا",
-    "كان مذهلاً",
-  ];
+  const LABELS = ["", "لم يعجبني", "كان عاديًا", "أعجبني", "أعجبني كثيرًا", "كان مذهلاً"];
 
   return (
     <section
@@ -53,17 +46,11 @@ export function WriteReview() {
               aria-label={`تقييم ${star} نجوم`}
               className="transition-transform hover:scale-110"
             >
-              <Star
+              <StarIcon
                 className="w-7 h-7 transition-colors"
                 style={{
-                  fill:
-                    star <= (hoverRating || rating)
-                      ? "var(--primary)"
-                      : "transparent",
-                  color:
-                    star <= (hoverRating || rating)
-                      ? "var(--primary)"
-                      : "var(--border)",
+                  fill: star <= (hoverRating || rating) ? "var(--primary)" : "transparent",
+                  color: star <= (hoverRating || rating) ? "var(--primary)" : "var(--border)",
                 }}
               />
             </button>
@@ -97,10 +84,7 @@ export function WriteReview() {
           <span
             className="text-xs"
             style={{
-              color:
-                review.length > 500
-                  ? "var(--destructive)"
-                  : "var(--muted-foreground)",
+              color: review.length > 500 ? "var(--destructive)" : "var(--muted-foreground)",
             }}
           >
             {review.length} / 2000

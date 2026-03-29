@@ -1,13 +1,12 @@
 "use client";
 
 import {
-  Chart03Icon,
-  DiscoverSquareIcon,
-  Home09Icon,
-  LibraryIcon,
-  Search02Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+  BooksIcon,
+  ChartLineIcon,
+  CompassIcon,
+  HouseIcon,
+  MagnifyingGlassIcon,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import { cn } from "@/ui/lib/utils";
 
@@ -27,35 +26,35 @@ function BottomBar() {
             "rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1",
           )}
         >
-          <HugeiconsIcon icon={Home09Icon} className="size-6.5 fill-current" />
+          <HouseIcon className="size-6.5 fill-current" />
           <span className="text-xs font-semibold">الرئيسية</span>
         </Link>
         <Link
           href={"/"}
           className="rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1"
         >
-          <HugeiconsIcon icon={LibraryIcon} className="size-6.5" />
+          <BooksIcon className="size-6.5" />
           <span className="text-xs font-semibold">المكتبة</span>
         </Link>
         <Link
           href={"/"}
           className="rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1"
         >
-          <HugeiconsIcon icon={Search02Icon} className="size-6.5" />
+          <MagnifyingGlassIcon className="size-6.5" />
           <span className="text-xs font-semibold">البحث</span>
         </Link>
         <Link
           href={"/"}
           className="rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1"
         >
-          <HugeiconsIcon icon={Chart03Icon} className="size-6.5" />
+          <ChartLineIcon className="size-6.5" />
           <span className="text-xs font-semibold">الاحصائيات</span>
         </Link>
         <Link
           href={"/"}
           className="rounded-lg hover:bg-accent h-full py-1 px-4 flex flex-col items-center justify-center gap-1"
         >
-          <HugeiconsIcon icon={DiscoverSquareIcon} className="size-6.5" />
+          <CompassIcon className="size-6.5" />
           <span className="text-xs font-semibold">تصفح</span>
         </Link>
       </div>
