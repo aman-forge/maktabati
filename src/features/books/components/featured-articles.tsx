@@ -1,7 +1,10 @@
 import { Badge } from "@components/ui/badge";
 import { Separator } from "@components/ui/separator";
-import { ArrowRightIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react/dist/ssr";
-import Image from "next/image";
+import {
+  ArrowRightIcon,
+  FileTextIcon,
+  ListIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 interface Article {
   id: string;
@@ -89,10 +92,9 @@ export function FeaturedArticles({
                   className="relative w-full overflow-hidden"
                   style={{ aspectRatio: "16/9" }}
                 >
-                  <Image
+                  <img
                     src={article.cover}
                     alt={article.title}
-                    fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div
@@ -202,12 +204,7 @@ export function FeaturedArticles({
                     className="relative w-14 rounded-xl overflow-hidden shadow-sm"
                     style={{ aspectRatio: "2/3" }}
                   >
-                    <Image
-                      src={cover}
-                      alt={title}
-                      fill
-                      className="object-cover"
-                    />
+                    <img src={cover} alt={title} className="object-cover" />
                   </div>
                   <div
                     className="absolute -top-2 -left-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"

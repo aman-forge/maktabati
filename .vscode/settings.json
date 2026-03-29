@@ -1,10 +1,8 @@
 {
   "files.exclude": {
-    ".next": true,
     ".vscode": true,
     ".cursor": true,
     ".agents": true,
     "node_modules": true,
-    "next-env.d.ts": true
-  }
+  },
 }

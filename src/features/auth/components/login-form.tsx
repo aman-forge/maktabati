@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@components/ui/button";
 import {
   Field,
@@ -20,7 +18,7 @@ import { startTransition, useActionState, useEffect } from "react";
 import { signInWithEmail } from "../actions/sign-in";
 
 function LoginForm() {
-  const { closeDialog, setView } = useAuthDialog();
+  const { setView } = useAuthDialog();
 
   // const [isPending, startTransition] = useTransition();
   const [state, formAction, isPending] = useActionState(signInWithEmail, null);

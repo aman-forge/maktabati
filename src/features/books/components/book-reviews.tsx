@@ -1,4 +1,4 @@
-// "use client";
+// ;
 
 // import { Badge } from "@components/ui/badge";
 // import { Button } from "@components/ui/button";
@@ -10,8 +10,7 @@
 //   StarIcon,
 //   ThumbsUpIcon,
 // } from "@phosphor-icons/react";
-// import Image from "next/image";
-// import { useState } from "react";
+// // import { useState } from "react";
 
 // const SORT_OPTIONS = [
 //   "الأكثر إعجابًا",

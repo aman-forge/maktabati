@@ -1,7 +1,7 @@
 // ====================== TABLES ======================
 
-import { crudPolicy, authUid } from "drizzle-orm/neon";
-import { pgTable, integer, serial, timestamp, text } from "drizzle-orm/pg-core";
+import { crudPolicy } from "drizzle-orm/neon";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { anonymousRole, authenticatedRole } from "./roles";
 
 export const authors = pgTable.withRLS(

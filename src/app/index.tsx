@@ -1,16 +1,25 @@
+import { db } from "@db/index";
 import { BookCarousel } from "@features/discovery/components/book-carousel";
 import { FeaturedBanner } from "@features/discovery/components/featured-banner";
 import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
-import { db } from "@server/db/schema";
+import { createFileRoute } from "@tanstack/react-router";
 
-export default async function DiscoveryPage() {
-  const books = await db.query.books.findMany({
-    with: {
-      author: true,
-    },
-  });
+export const Route = createFileRoute("/")({
+  loader: async () => {
+    const books = await db.query.books.findMany({
+      with: {
+        author: true,
+      },
+    });
+    return { books };
+  },
+  component: Home,
+});
+
+function Home() {
+  const { books } = Route.useLoaderData();
 
   return (
     <main className="min-h-screen font-sans">

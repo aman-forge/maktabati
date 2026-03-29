@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/rls#using-with-neon
 
 import { sql } from "drizzle-orm";
-import { pgRole, AnyPgColumn } from "drizzle-orm/pg-core";
+import { type AnyPgColumn, pgRole } from "drizzle-orm/pg-core";
 
 export const admin = pgRole("admin").existing();
 export const authenticatedRole = pgRole("authenticated").existing();

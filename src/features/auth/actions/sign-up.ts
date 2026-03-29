@@ -1,7 +1,5 @@
-"use server";
-
-import { auth } from "@features/auth/lib/server";
-import { redirect } from "next/navigation";
+import { authClient } from "@/auth";
+import { redirect } from "@tanstack/react-router";
 
 export async function signUpWithEmail(
   _prevState: { error: string } | null,
@@ -18,7 +16,7 @@ export async function signUpWithEmail(
   //  return { error: 'Email must be from my-company.com' };
   // }
 
-  const { error } = await auth.signUp.email({
+  const { error } = await authClient.signUp.email({
     email,
     name: formData.get("name") as string,
     password: formData.get("password") as string,
@@ -31,5 +29,5 @@ export async function signUpWithEmail(
   // Translate Error Messages to arabic:
   // - Password too short
 
-  redirect("/");
+  redirect({ to: "/" });
 }

@@ -1,5 +1,3 @@
-"use client";
-
 // import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
@@ -12,7 +10,6 @@ import {
   ShareNetworkIcon,
   // StarIcon,
 } from "@phosphor-icons/react";
-// import Image from "next/image";
 import { useState } from "react";
 
 const SHELF_OPTIONS = [
@@ -46,10 +43,9 @@ export function BookHero() {
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
             >
-              <Image
+              <img
                 src={book.cover}
                 alt={`غلاف كتاب ${book.title}`}
-                fill
                 className="object-cover"
                 priority
               />

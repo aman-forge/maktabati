@@ -1,13 +1,11 @@
-"use server";
-
-import { auth } from "@features/auth/lib/server";
-import { redirect } from "next/navigation";
+import { authClient } from "@/auth";
+import { redirect } from "@tanstack/react-router";
 
 export async function signInWithEmail(
   _prevState: { error: string } | null,
   formData: FormData,
 ) {
-  const { error } = await auth.signIn.email({
+  const { error } = await authClient.signIn.email({
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   });
@@ -16,5 +14,5 @@ export async function signInWithEmail(
     return { error: error.message || "Failed to sign in. Try again" };
   }
 
-  redirect("/");
+  redirect({ to: "/" });
 }

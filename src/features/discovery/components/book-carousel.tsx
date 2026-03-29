@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@components/ui/button";
 import { BookCard } from "@features/books/components/book-card";
 import {
@@ -9,8 +7,8 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import Link from "next/link";
-import { BookWithAuthor } from "@server/db/schema/tables";
+import { Link } from "@tanstack/react-router";
+import { BookWithAuthor } from "@db/tables";
 
 interface BookCarouselProps {
   title: string;
@@ -116,7 +114,7 @@ export function BookCarousel({
           </Button>
 
           <Link
-            href={viewAllHref}
+            to={viewAllHref}
             className="group hidden sm:flex items-center gap-1 text-sm font-medium me-2 transition-colors hover:opacity-80"
             style={{ color: accentColor ?? "hsl(var(--primary))" }}
           >

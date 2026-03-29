@@ -1,8 +1,11 @@
-"use client";
-
 import { Dialog, DialogContent } from "@components/ui/dialog";
-// import { usePathname } from "next/navigation";
-import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 
@@ -16,7 +19,9 @@ interface AuthDialogContextType {
   setView: (view: AuthView) => void;
 }
 
-const AuthDialogContext = createContext<AuthDialogContextType | undefined>(undefined);
+const AuthDialogContext = createContext<AuthDialogContextType | undefined>(
+  undefined,
+);
 
 export function AuthDialogProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +44,9 @@ export function AuthDialogProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthDialogContext.Provider value={{ isOpen, view, openDialog, closeDialog, setView }}>
+    <AuthDialogContext.Provider
+      value={{ isOpen, view, openDialog, closeDialog, setView }}
+    >
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent

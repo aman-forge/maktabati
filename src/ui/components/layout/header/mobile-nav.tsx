@@ -1,15 +1,19 @@
-"use client";
-
 import { Button, buttonVariants } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
 import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
-import { authClient } from "@features/auth/lib/client";
 import { ListIcon } from "@phosphor-icons/react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
+import { authClient } from "@/auth";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -45,7 +49,9 @@ export function MobileNav() {
         <SheetHeader className="text-right">
           <SheetTitle>{isLoggedIn ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
           {isLoggedIn && session?.user?.email && (
-            <p className="truncate text-xs text-muted-foreground">{session?.user.email}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {session?.user.email}
+            </p>
           )}
         </SheetHeader>
 
@@ -117,10 +123,18 @@ export function MobileNav() {
 
 // ─── Small helpers ────────────────────────────────────────────────────────────
 
-function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
+function NavSection({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">{label}</span>
+      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
+        {label}
+      </span>
       {children}
     </div>
   );
@@ -137,7 +151,7 @@ function MobileNavLink({
 }) {
   return (
     <Link
-      href={href}
+      to={href}
       onClick={onClick}
       className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-sm transition-colors hover:bg-accent"
     >

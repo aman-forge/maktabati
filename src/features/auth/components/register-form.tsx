@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, buttonVariants } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
 import {
@@ -17,7 +15,7 @@ import {
 } from "@features/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WarningCircleIcon } from "@phosphor-icons/react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { startTransition, useActionState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -187,7 +185,7 @@ function RegisterForm() {
                 >
                   <span className="ml-1">أوافق على</span>
                   <Link
-                    href="/"
+                    to="/"
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
                       "px-0 ml-1 bg-transparent hover:bg-transparent text-primary underline",
@@ -197,7 +195,7 @@ function RegisterForm() {
                   </Link>
                   <span className="mx-1">و</span>
                   <Link
-                    href="/"
+                    to="/"
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
                       "p-0 bg-transparent hover:bg-transparent text-primary underline",

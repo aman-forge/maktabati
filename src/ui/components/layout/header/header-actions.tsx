@@ -1,5 +1,4 @@
-"use client";
-
+import { authClient } from "@/auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,9 +19,8 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { useAuthDialog } from "@features/auth/components/auth-dialog-provider";
-import { authClient } from "@features/auth/lib/client";
 import { UserIcon } from "@phosphor-icons/react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 export function HeaderActions() {
@@ -73,13 +71,21 @@ export function HeaderActions() {
 
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <Link href={profileHref}>الملف الشخصي</Link>
+              <Link to={profileHref}>الملف الشخصي</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/dashboard">مكتبتي</Link>
+              <Link
+                to="/" // dashboard
+              >
+                مكتبتي
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/settings">الإعدادات</Link>
+              <Link
+                to="/" // settings
+              >
+                الإعدادات
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 

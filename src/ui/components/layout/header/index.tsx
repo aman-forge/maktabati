@@ -16,7 +16,7 @@ import {
   BookOpenIcon,
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react/ssr";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { HeaderActions } from "./header-actions";
 import { MobileNav } from "./mobile-nav";
 
@@ -26,7 +26,7 @@ function Header() {
       <div className="container mx-auto flex h-full items-center justify-between px-4">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5">
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
               <BookOpenIcon className="size-4 text-primary-foreground" />
             </div>
@@ -88,7 +88,7 @@ function DesktopNav() {
               <NavigationMenuLink
                 render={
                   <Link
-                    href="/library"
+                    to="/" // /library
                     className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10"
                   >
                     <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
@@ -156,7 +156,7 @@ function NavListItem({ item }: { item: NavItem }) {
       <NavigationMenuLink
         render={
           <Link
-            href={item.href}
+            to={item.href}
             className="group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent"
           >
             <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@components/ui/button";
 import {
   BookOpenIcon,
@@ -7,10 +5,9 @@ import {
   PlusIcon,
   StarIcon,
 } from "@phosphor-icons/react";
-import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { BookWithAuthor } from "@server/db/schema/tables";
+import { BookWithAuthor } from "@/db/tables";
 
 interface BookCardProps {
   book: BookWithAuthor;
@@ -53,10 +50,9 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           transition: "transform 0.25s ease, box-shadow 0.25s ease",
         }}
       >
-        <Image
+        <img
           src={book.coverImageUrl || "not_found.png"}
           alt={`غلاف ${book.title}`}
-          fill
           className="object-cover"
           sizes="(max-width: 768px) 144px, 176px"
         />

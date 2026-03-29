@@ -1,12 +1,8 @@
-"use client";
-
-import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
-import { Author, Book } from "@server/db/schema/tables";
-import Image from "next/image";
-import Link from "next/link";
+import { Author, Book } from "@db/tables";
+import { Link } from "@tanstack/react-router";
 
 interface AuthorCardProps {
   author?: Author & { books: Book[] | null };
@@ -40,10 +36,9 @@ export function AuthorCard({ author }: AuthorCardProps) {
           {/* Avatar + follow row */}
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <Image
+              <img
                 src={author.profileImage}
                 alt={author.name}
-                fill
                 className="object-cover"
               />
             </div>
@@ -110,17 +105,17 @@ export function AuthorCard({ author }: AuthorCardProps) {
               {author?.books?.map((b) => (
                 <Link
                   key={b.title}
-                  href="/"
+                  to="/"
                   className="group flex flex-col gap-1.5 shrink-0"
                 >
                   <div
                     className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
                     style={{ aspectRatio: "2/3" }}
                   >
-                    <Image
+                    <img
                       src={b.coverImageUrl}
                       alt={b.title}
-                      fill
+                      // fill
                       className="object-cover"
                     />
                   </div>
@@ -132,7 +127,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
 
               {/* "View all" slot */}
               <Link
-                href="/"
+                to="/"
                 className="flex flex-col items-center gap-1.5 w-14 shrink-0"
               >
                 <div
