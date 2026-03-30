@@ -8,146 +8,144 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './app/__root'
-import { Route as ProtectedRouteImport } from './app/_protected'
-import { Route as IndexRouteImport } from './app/index'
-import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
-import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
-import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
+import { Route as rootRouteImport } from "./app/__root";
+import { Route as ProtectedRouteImport } from "./app/_protected.tsx";
+import { Route as IndexRouteImport } from "./app/index";
+import { Route as ProtectedProfileIndexRouteImport } from "./app/_protected/profile/index";
+import { Route as MainAuthPathnameRouteImport } from "./app/_main/auth/$pathname";
+import { Route as MainAccountPathnameRouteImport } from "./app/_main/account.$pathname";
 
 const ProtectedRoute = ProtectedRouteImport.update({
-  id: '/_protected',
+  id: "/_protected",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
-  id: '/profile/',
-  path: '/profile/',
+  id: "/profile/",
+  path: "/profile/",
   getParentRoute: () => ProtectedRoute,
-} as any)
+} as any);
 const MainAuthPathnameRoute = MainAuthPathnameRouteImport.update({
-  id: '/_main/auth/$pathname',
-  path: '/auth/$pathname',
+  id: "/_main/auth/$pathname",
+  path: "/auth/$pathname",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const MainAccountPathnameRoute = MainAccountPathnameRouteImport.update({
-  id: '/_main/account/$pathname',
-  path: '/account/$pathname',
+  id: "/_main/account/$pathname",
+  path: "/account/$pathname",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/account/$pathname': typeof MainAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthPathnameRoute
-  '/profile/': typeof ProtectedProfileIndexRoute
+  "/": typeof IndexRoute;
+  "/account/$pathname": typeof MainAccountPathnameRoute;
+  "/auth/$pathname": typeof MainAuthPathnameRoute;
+  "/profile/": typeof ProtectedProfileIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/account/$pathname': typeof MainAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthPathnameRoute
-  '/profile': typeof ProtectedProfileIndexRoute
+  "/": typeof IndexRoute;
+  "/account/$pathname": typeof MainAccountPathnameRoute;
+  "/auth/$pathname": typeof MainAuthPathnameRoute;
+  "/profile": typeof ProtectedProfileIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_protected': typeof ProtectedRouteWithChildren
-  '/_main/account/$pathname': typeof MainAccountPathnameRoute
-  '/_main/auth/$pathname': typeof MainAuthPathnameRoute
-  '/_protected/profile/': typeof ProtectedProfileIndexRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/_protected": typeof ProtectedRouteWithChildren;
+  "/_main/account/$pathname": typeof MainAccountPathnameRoute;
+  "/_main/auth/$pathname": typeof MainAuthPathnameRoute;
+  "/_protected/profile/": typeof ProtectedProfileIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account/$pathname' | '/auth/$pathname' | '/profile/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account/$pathname' | '/auth/$pathname' | '/profile'
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/account/$pathname" | "/auth/$pathname" | "/profile/";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/account/$pathname" | "/auth/$pathname" | "/profile";
   id:
-    | '__root__'
-    | '/'
-    | '/_protected'
-    | '/_main/account/$pathname'
-    | '/_main/auth/$pathname'
-    | '/_protected/profile/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/_protected"
+    | "/_main/account/$pathname"
+    | "/_main/auth/$pathname"
+    | "/_protected/profile/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ProtectedRoute: typeof ProtectedRouteWithChildren
-  MainAccountPathnameRoute: typeof MainAccountPathnameRoute
-  MainAuthPathnameRoute: typeof MainAuthPathnameRoute
+  IndexRoute: typeof IndexRoute;
+  ProtectedRoute: typeof ProtectedRouteWithChildren;
+  MainAccountPathnameRoute: typeof MainAccountPathnameRoute;
+  MainAuthPathnameRoute: typeof MainAuthPathnameRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/_protected': {
-      id: '/_protected'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof ProtectedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_protected/profile/': {
-      id: '/_protected/profile/'
-      path: '/profile'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof ProtectedProfileIndexRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
-    '/_main/auth/$pathname': {
-      id: '/_main/auth/$pathname'
-      path: '/auth/$pathname'
-      fullPath: '/auth/$pathname'
-      preLoaderRoute: typeof MainAuthPathnameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_main/account/$pathname': {
-      id: '/_main/account/$pathname'
-      path: '/account/$pathname'
-      fullPath: '/account/$pathname'
-      preLoaderRoute: typeof MainAccountPathnameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/_protected": {
+      id: "/_protected";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof ProtectedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_protected/profile/": {
+      id: "/_protected/profile/";
+      path: "/profile";
+      fullPath: "/profile/";
+      preLoaderRoute: typeof ProtectedProfileIndexRouteImport;
+      parentRoute: typeof ProtectedRoute;
+    };
+    "/_main/auth/$pathname": {
+      id: "/_main/auth/$pathname";
+      path: "/auth/$pathname";
+      fullPath: "/auth/$pathname";
+      preLoaderRoute: typeof MainAuthPathnameRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_main/account/$pathname": {
+      id: "/_main/account/$pathname";
+      path: "/account/$pathname";
+      fullPath: "/account/$pathname";
+      preLoaderRoute: typeof MainAccountPathnameRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
 interface ProtectedRouteChildren {
-  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
+  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute;
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
-}
+};
 
-const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
-  ProtectedRouteChildren,
-)
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(ProtectedRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
   MainAccountPathnameRoute: MainAccountPathnameRoute,
   MainAuthPathnameRoute: MainAuthPathnameRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx";
+import type { createStart } from "@tanstack/react-start";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
   }
 }
