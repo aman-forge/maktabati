@@ -37,6 +37,7 @@
 - [x] **[Tailwind CSS v4](https://tailwindcss.com/docs)** — Utility-first CSS, RTL-first configuration.
 - [x] **[Shadcn/UI (Nova — Base UI)](https://ui.shadcn.com/docs)** — Component library built on Base UI primitives instead of Radix.
 - [x] **[Base UI](https://base-ui.com/react/overview/about)** — Unstyled, accessible primitives powering Shadcn Nova components.
+- [x] **[Dark Mode](https://lukonik.github.io/themer/docs/get-started)** - Shadcn's `next-themes` alternative for tanstack start
 - [x] **[Phosphor Icons](https://phosphoricons.com/)** — Consistent icon library with React package and SSR-safe imports.
 - [x] **[Sonner](https://sonner.emilkowal.ski/)** — Toast notifications.
 - [x] **[Fontsource (Arabic subsets)](https://fontsource.org/?subsets=arabic)** — Self-hosted Arabic fonts (Noto Naskh Arabic, Noto Sans Arabic).

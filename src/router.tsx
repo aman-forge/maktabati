@@ -5,10 +5,10 @@ import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
 export const getRouter = () => {
-	const router = createRouter({
-		routeTree,
-		scrollRestoration: true,
-	});
+  const router = createRouter({
+    routeTree,
+    scrollRestoration: true,
+  });
 
-	return router;
+  return router;
 };
