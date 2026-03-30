@@ -10,15 +10,10 @@ export default defineConfig({
     port: 3000,
   },
   resolve: {
-    // Enables Vite to resolve imports using path aliases.
     tsconfigPaths: true,
   },
   plugins: [
     devtools(),
-    // this is the plugin that enables path aliases
-    // viteTsConfigPaths({
-    //   projects: ["./tsconfig.json"],
-    // }),
     tailwindcss(),
     tanstackStart({
       srcDirectory: "src", // This is the default

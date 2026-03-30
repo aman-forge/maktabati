@@ -1,4 +1,4 @@
-import LayoutProvider from "@components/layout";
+import Providers from "@components/layout";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
@@ -33,7 +33,7 @@ function RootLayout() {
         <HeadContent />
       </head>
       <body>
-        <LayoutProvider>
+        <Providers>
           <Outlet />
           <TanStackDevtools
             config={{
@@ -47,7 +47,7 @@ function RootLayout() {
             ]}
           />
           <Scripts />
-        </LayoutProvider>
+        </Providers>
       </body>
     </html>
   );

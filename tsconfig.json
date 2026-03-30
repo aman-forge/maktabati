@@ -26,7 +26,6 @@
       "@shadcn/*": ["./src/ui/components/ui/*"],
       "@components/*": ["./src/ui/components/*"],
       "@features/*": ["./src/features/*"],
-      "@db/*": ["./src/db/*"],
       "@config/*": ["./src/config/*"],
     },
   },

@@ -10,6 +10,8 @@ import {
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
 import { browseItems, discoverItems, type NavItem } from "@config/nav";
+import { UserButton } from "@neondatabase/neon-js/auth/react";
+import { BooksIcon, UserIcon } from "@phosphor-icons/react";
 import {
   ArrowLeftIcon,
   BookIcon,
@@ -17,12 +19,11 @@ import {
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
-import { HeaderActions } from "./header-actions";
 import { MobileNav } from "./mobile-nav";
 
 function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-14 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/70">
       <div className="container mx-auto flex h-full items-center justify-between px-4">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
@@ -30,9 +31,7 @@ function Header() {
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
               <BookOpenIcon className="size-4 text-primary-foreground" />
             </div>
-            <span className="inline-block text-lg font-bold tracking-tight">
-              مكتبتي
-            </span>
+            <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
 
           <DesktopNav />
@@ -53,18 +52,36 @@ function Header() {
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden size-9 sm:flex lg:hidden"
-          >
+          <Button variant="ghost" size="icon" className="hidden size-9 sm:flex lg:hidden">
             <MagnifyingGlassIcon className="size-4.5" />
             <span className="sr-only">بحث</span>
           </Button>
 
           {/* User dropdown — desktop only */}
           <div className="hidden sm:flex">
-            <HeaderActions />
+            <UserButton
+              size="icon"
+              classNames={{
+                content: { base: "min-w-42 direction-rtl", user: { base: "direction-rtl" } },
+              }}
+              align="start"
+              side="bottom"
+              alignOffset={0}
+              additionalLinks={[
+                {
+                  href: "/dashboard",
+                  icon: <BooksIcon className="size-4" />,
+                  label: "مكتبتي",
+                  signedIn: true,
+                },
+                {
+                  href: "/profile",
+                  icon: <UserIcon className="size-4" />,
+                  label: "الملف الشخصي",
+                  signedIn: true,
+                },
+              ]}
+            />
           </div>
 
           <MobileNav />
@@ -164,9 +181,7 @@ function NavListItem({ item }: { item: NavItem }) {
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">
-                {item.description}
-              </p>
+              <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
             </div>
           </Link>
         }

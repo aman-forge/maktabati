@@ -1,13 +1,8 @@
 import { Button } from "@components/ui/button";
-import {
-  BookOpenIcon,
-  CheckIcon,
-  PlusIcon,
-  StarIcon,
-} from "@phosphor-icons/react";
+import { BookOpenIcon, CheckIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+import type { BookWithAuthor } from "@/db/tables";
 import { cn } from "@/ui/lib/utils";
-import { BookWithAuthor } from "@/db/tables";
 
 interface BookCardProps {
   book: BookWithAuthor;
@@ -28,25 +23,17 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
   return (
     <article
       dir="rtl"
-      className={cn(
-        "flex flex-col gap-3 shrink-0 group cursor-pointer",
-        dim.card,
-      )}
+      className={cn("flex flex-col gap-3 shrink-0 group cursor-pointer", dim.card)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       aria-label={`${book.title} بقلم ${book.author?.name}`}
     >
       {/* Cover */}
       <div
-        className={cn(
-          "relative rounded-xl overflow-hidden shadow-md",
-          dim.image,
-        )}
+        className={cn("relative rounded-xl overflow-hidden shadow-md", dim.image)}
         style={{
           transform: hovered ? "translateY(-4px)" : "translateY(0)",
-          boxShadow: hovered
-            ? "0 20px 40px hsl(var(--foreground) / 0.2)"
-            : undefined,
+          boxShadow: hovered ? "0 20px 40px hsl(var(--foreground) / 0.2)" : undefined,
           transition: "transform 0.25s ease, box-shadow 0.25s ease",
         }}
       >
@@ -89,16 +76,13 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
               variant="secondary"
               className={cn(
                 "h-8 w-8 rounded-lg shrink-0 transition-colors",
-                saved &&
-                  "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30",
+                saved && "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30",
               )}
               onClick={(e) => {
                 e.stopPropagation();
                 setSaved((s) => !s);
               }}
-              aria-label={
-                saved ? "إزالة من قائمة القراءة" : "إضافة إلى قائمة القراءة"
-              }
+              aria-label={saved ? "إزالة من قائمة القراءة" : "إضافة إلى قائمة القراءة"}
             >
               {saved ? (
                 <CheckIcon weight="bold" className="w-3.5 h-3.5" />
@@ -115,15 +99,11 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         <h3 className="text-sm font-semibold leading-tight line-clamp-2 text-balance text-foreground">
           {book.title}
         </h3>
-        <p className="text-xs leading-tight text-muted-foreground">
-          {book?.author?.name}
-        </p>
+        <p className="text-xs leading-tight text-muted-foreground">{book?.author?.name}</p>
 
         <div className="flex items-center gap-1 mt-0.5">
           <StarIcon weight="fill" className="w-3 h-3 text-primary" />
-          <span className="text-xs font-medium text-foreground">
-            {book.pageCount}
-          </span>
+          <span className="text-xs font-medium text-foreground">{book.pageCount}</span>
         </div>
       </div>
     </article>

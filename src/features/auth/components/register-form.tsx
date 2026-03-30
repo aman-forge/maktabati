@@ -1,18 +1,9 @@
 import { Button, buttonVariants } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@components/ui/field";
 import { Input } from "@components/ui/input";
 import { signUpWithEmail } from "@features/auth/actions/sign-up";
-import {
-  type RegisterFormData,
-  registerFormSchema,
-} from "@features/auth/types";
+import { type RegisterFormData, registerFormSchema } from "@features/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WarningCircleIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
@@ -67,9 +58,7 @@ function RegisterForm() {
       <FieldGroup className="gap-4">
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">إنشاء حساب جديد</h1>
-          <p className="text-muted-foreground text-balance">
-            أنشئ حساباً للوصول إلى مكتبتي
-          </p>
+          <p className="text-muted-foreground text-balance">أنشئ حساباً للوصول إلى مكتبتي</p>
         </div>
 
         {form.formState.errors.root?.message && (
@@ -97,9 +86,7 @@ function RegisterForm() {
                 placeholder="username_123"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
+              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -117,9 +104,7 @@ function RegisterForm() {
                 autoComplete="email"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
+              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -138,9 +123,7 @@ function RegisterForm() {
                 autoComplete="new-password"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
+              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -150,9 +133,7 @@ function RegisterForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field className="gap-1" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="confirm-password">
-                تأكيد كلمة المرور
-              </FieldLabel>
+              <FieldLabel htmlFor="confirm-password">تأكيد كلمة المرور</FieldLabel>
               <Input
                 {...field}
                 id="confirm-password"
@@ -161,9 +142,7 @@ function RegisterForm() {
                 autoComplete="new-password"
                 className={cn("ltr", fieldState.error && "border-destructive")}
               />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
+              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -173,16 +152,9 @@ function RegisterForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field className="gap-1" data-invalid={fieldState.invalid}>
-              <div className="flex items-center gap-2 rtl">
-                <Checkbox
-                  id="terms"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-                <FieldLabel
-                  htmlFor="terms"
-                  className="text-sm font-normal gap-0 flex items-center"
-                >
+              <div className="flex items-center gap-2 direction-rtl">
+                <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
+                <FieldLabel htmlFor="terms" className="text-sm font-normal gap-0 flex items-center">
                   <span className="ml-1">أوافق على</span>
                   <Link
                     to="/"
@@ -205,9 +177,7 @@ function RegisterForm() {
                   </Link>
                 </FieldLabel>
               </div>
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
+              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -221,11 +191,7 @@ function RegisterForm() {
 
           <FieldDescription className="text-center gap-1 flex items-center justify-center">
             لديك حساب بالفعل؟
-            <Button
-              variant={"link"}
-              onClick={() => setView("login")}
-              className={"p-0! h-auto"}
-            >
+            <Button variant={"link"} onClick={() => setView("login")} className={"p-0! h-auto"}>
               تسجيل الدخول
             </Button>
           </FieldDescription>

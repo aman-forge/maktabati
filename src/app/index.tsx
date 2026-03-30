@@ -1,18 +1,14 @@
-import { db } from "@db/index";
 import { BookCarousel } from "@features/discovery/components/book-carousel";
 import { FeaturedBanner } from "@features/discovery/components/featured-banner";
 import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { QuoteSection } from "@features/discovery/components/quote-section";
 import { createFileRoute } from "@tanstack/react-router";
+import { getBooks } from "@/features/books/server/get-books";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const books = await db.query.books.findMany({
-      with: {
-        author: true,
-      },
-    });
+    const books = await getBooks();
     return { books };
   },
   component: Home,

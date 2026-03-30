@@ -1,8 +1,8 @@
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
-import { Author, Book } from "@db/tables";
 import { Link } from "@tanstack/react-router";
+import type { Author, Book } from "@/db/tables";
 
 interface AuthorCardProps {
   author?: Author & { books: Book[] | null };
@@ -36,17 +36,9 @@ export function AuthorCard({ author }: AuthorCardProps) {
           {/* Avatar + follow row */}
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <img
-                src={author.profileImage}
-                alt={author.name}
-                className="object-cover"
-              />
+              <img src={author.profileImage} alt={author.name} className="object-cover" />
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 rounded-xl mb-1"
-            >
+            <Button variant="outline" size="sm" className="gap-1.5 rounded-xl mb-1">
               متابعة
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
@@ -76,9 +68,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               ))}
             </div> */}
 
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {author.bio}
-            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{author.bio}</p>
 
             {/* <div className="flex flex-wrap gap-2 mt-1">
               {author.tags.map((tag) => (
@@ -103,11 +93,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
 
             <div className="flex gap-3">
               {author?.books?.map((b) => (
-                <Link
-                  key={b.title}
-                  to="/"
-                  className="group flex flex-col gap-1.5 shrink-0"
-                >
+                <Link key={b.title} to="/" className="group flex flex-col gap-1.5 shrink-0">
                   <div
                     className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
                     style={{ aspectRatio: "2/3" }}
@@ -126,10 +112,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               ))}
 
               {/* "View all" slot */}
-              <Link
-                to="/"
-                className="flex flex-col items-center gap-1.5 w-14 shrink-0"
-              >
+              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}

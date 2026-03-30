@@ -1,14 +1,10 @@
 import { Button } from "@components/ui/button";
 import { BookCard } from "@features/books/components/book-card";
-import {
-  ArrowLeftIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-} from "@phosphor-icons/react";
-import { useCallback, useRef, useState } from "react";
-import { cn } from "@/ui/lib/utils";
+import { ArrowLeftIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import { BookWithAuthor } from "@db/tables";
+import { useCallback, useRef, useState } from "react";
+import type { BookWithAuthor } from "@/db/tables";
+import { cn } from "@/ui/lib/utils";
 
 interface BookCarouselProps {
   title: string;
@@ -75,11 +71,7 @@ export function BookCarousel({
               {title}
             </h2>
           </div>
-          {subtitle && (
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {subtitle}
-            </p>
-          )}
+          {subtitle && <p className="text-sm leading-relaxed text-muted-foreground">{subtitle}</p>}
         </div>
 
         <div className="flex items-center gap-2">
@@ -134,8 +126,7 @@ export function BookCarousel({
             canScrollLeft ? "opacity-100" : "opacity-0",
           )}
           style={{
-            background:
-              "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
+            background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
           }}
         />
 
@@ -146,8 +137,7 @@ export function BookCarousel({
             canScrollRight ? "opacity-100" : "opacity-0",
           )}
           style={{
-            background:
-              "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)",
+            background: "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)",
           }}
         />
 

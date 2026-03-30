@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './app/__root'
 import { Route as ProtectedRouteImport } from './app/_protected'
 import { Route as IndexRouteImport } from './app/index'
 import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
-import { Route as MainAuthAuthPathnameRouteImport } from './app/_main/_auth/auth.$pathname'
-import { Route as MainAuthAccountPathnameRouteImport } from './app/_main/_auth/account.$pathname'
+import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
+import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -29,56 +29,56 @@ const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
   path: '/profile/',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const MainAuthAuthPathnameRoute = MainAuthAuthPathnameRouteImport.update({
-  id: '/_main/_auth/auth/$pathname',
+const MainAuthPathnameRoute = MainAuthPathnameRouteImport.update({
+  id: '/_main/auth/$pathname',
   path: '/auth/$pathname',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainAuthAccountPathnameRoute = MainAuthAccountPathnameRouteImport.update({
-  id: '/_main/_auth/account/$pathname',
+const MainAccountPathnameRoute = MainAccountPathnameRouteImport.update({
+  id: '/_main/account/$pathname',
   path: '/account/$pathname',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account/$pathname': typeof MainAccountPathnameRoute
+  '/auth/$pathname': typeof MainAuthPathnameRoute
   '/profile/': typeof ProtectedProfileIndexRoute
-  '/account/$pathname': typeof MainAuthAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthAuthPathnameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account/$pathname': typeof MainAccountPathnameRoute
+  '/auth/$pathname': typeof MainAuthPathnameRoute
   '/profile': typeof ProtectedProfileIndexRoute
-  '/account/$pathname': typeof MainAuthAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthAuthPathnameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_main/account/$pathname': typeof MainAccountPathnameRoute
+  '/_main/auth/$pathname': typeof MainAuthPathnameRoute
   '/_protected/profile/': typeof ProtectedProfileIndexRoute
-  '/_main/_auth/account/$pathname': typeof MainAuthAccountPathnameRoute
-  '/_main/_auth/auth/$pathname': typeof MainAuthAuthPathnameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile/' | '/account/$pathname' | '/auth/$pathname'
+  fullPaths: '/' | '/account/$pathname' | '/auth/$pathname' | '/profile/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/account/$pathname' | '/auth/$pathname'
+  to: '/' | '/account/$pathname' | '/auth/$pathname' | '/profile'
   id:
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_main/account/$pathname'
+    | '/_main/auth/$pathname'
     | '/_protected/profile/'
-    | '/_main/_auth/account/$pathname'
-    | '/_main/_auth/auth/$pathname'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  MainAuthAccountPathnameRoute: typeof MainAuthAccountPathnameRoute
-  MainAuthAuthPathnameRoute: typeof MainAuthAuthPathnameRoute
+  MainAccountPathnameRoute: typeof MainAccountPathnameRoute
+  MainAuthPathnameRoute: typeof MainAuthPathnameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -104,18 +104,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_main/_auth/auth/$pathname': {
-      id: '/_main/_auth/auth/$pathname'
+    '/_main/auth/$pathname': {
+      id: '/_main/auth/$pathname'
       path: '/auth/$pathname'
       fullPath: '/auth/$pathname'
-      preLoaderRoute: typeof MainAuthAuthPathnameRouteImport
+      preLoaderRoute: typeof MainAuthPathnameRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/_auth/account/$pathname': {
-      id: '/_main/_auth/account/$pathname'
+    '/_main/account/$pathname': {
+      id: '/_main/account/$pathname'
       path: '/account/$pathname'
       fullPath: '/account/$pathname'
-      preLoaderRoute: typeof MainAuthAccountPathnameRouteImport
+      preLoaderRoute: typeof MainAccountPathnameRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -136,8 +136,8 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
-  MainAuthAccountPathnameRoute: MainAuthAccountPathnameRoute,
-  MainAuthAuthPathnameRoute: MainAuthAuthPathnameRoute,
+  MainAccountPathnameRoute: MainAccountPathnameRoute,
+  MainAuthPathnameRoute: MainAuthPathnameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
