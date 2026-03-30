@@ -1,6 +1,11 @@
 import Providers from "@components/layout";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import NotFound from "@/ui/components/not-found";
 import appCss from "../ui/styles.css?url";
