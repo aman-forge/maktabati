@@ -14,7 +14,7 @@ export const authors = pgTable.withRLS(
     country: text("country").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
-  (t: any) => [
+  (_t) => [
     // Policy for Logged-in users
     crudPolicy({ role: authenticatedRole, read: true, modify: false }),
     // Policy for Public (logged-out) users
@@ -35,7 +35,7 @@ export const books = pgTable.withRLS(
     pageCount: integer("page_count").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
-  (t: any) => [
+  (_t) => [
     crudPolicy({ role: authenticatedRole, read: true, modify: false }),
     crudPolicy({ role: anonymousRole, read: true, modify: false }),
   ],

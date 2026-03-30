@@ -7,58 +7,58 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getBooks } from "@/features/books/server/get-books";
 
 export const Route = createFileRoute("/")({
-  loader: async () => {
-    const books = await getBooks();
-    return { books };
-  },
-  component: Home,
+	loader: async () => {
+		const books = await getBooks();
+		return { books };
+	},
+	component: Home,
 });
 
 function Home() {
-  const { books } = Route.useLoaderData();
+	const { books } = Route.useLoaderData();
 
-  return (
-    <main className="min-h-screen font-sans">
-      {/* Hero */}
-      <HeroSection />
+	return (
+		<main className="min-h-screen font-sans">
+			{/* Hero */}
+			<HeroSection />
 
-      {/* Main content feed */}
-      <div className="flex flex-col gap-16 py-16">
-        {/* Trending Now */}
-        <BookCarousel
-          title="الرائج الآن"
-          subtitle="ما لا يستطيع القراء تركه هذا الأسبوع"
-          books={books}
-          accentColor="var(--badge-amber)"
-        />
+			{/* Main content feed */}
+			<div className="flex flex-col gap-16 py-16">
+				{/* Trending Now */}
+				<BookCarousel
+					title="الرائج الآن"
+					subtitle="ما لا يستطيع القراء تركه هذا الأسبوع"
+					books={books}
+					accentColor="var(--badge-amber)"
+				/>
 
-        {/* Staff Picks */}
-        <BookCarousel
-          title="اختيارات الفريق"
-          subtitle="تم اختيارها بعناية من قبل محررينا لرواية قصص استثنائية"
-          books={books}
-          accentColor="oklch(0.55 0.14 140)"
-        />
+				{/* Staff Picks */}
+				<BookCarousel
+					title="اختيارات الفريق"
+					subtitle="تم اختيارها بعناية من قبل محررينا لرواية قصص استثنائية"
+					books={books}
+					accentColor="oklch(0.55 0.14 140)"
+				/>
 
-        {/* Featured book of the month */}
-        <FeaturedBanner />
+				{/* Featured book of the month */}
+				<FeaturedBanner />
 
-        {/* New Releases */}
-        <BookCarousel
-          title="الإصدارات الجديدة"
-          subtitle="طازجة من المطبعة — تم نشرها للتو"
-          books={books}
-          accentColor="oklch(0.52 0.15 250)"
-        />
+				{/* New Releases */}
+				<BookCarousel
+					title="الإصدارات الجديدة"
+					subtitle="طازجة من المطبعة — تم نشرها للتو"
+					books={books}
+					accentColor="oklch(0.52 0.15 250)"
+				/>
 
-        {/* Quote break */}
-        <div className="px-2">
-          <QuoteSection />
-        </div>
+				{/* Quote break */}
+				<div className="px-2">
+					<QuoteSection />
+				</div>
 
-        {/* Browse by Genre */}
-        <GenreGrid />
-      </div>
-    </main>
-  );
+				{/* Browse by Genre */}
+				<GenreGrid />
+			</div>
+		</main>
+	);
 }

@@ -57,7 +57,7 @@
 - [x] **[Biome](https://biomejs.dev/)** — Replaces ESLint + Prettier. Single tool for linting and formatting.
 - [x] **[TypeScript (strict)](https://www.typescriptlang.org/)** — Full type safety across frontend, backend, DB schema, and router.
 - [x] **[Zed](https://zed.dev/)** — Primary high-performance IDE.
-- [ ] **[Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/)** — Unit, integration, and end-to-end testing.
+- [ ] **[Vitest](https://vitest.dev/guide/) + [Playwright](https://playwright.dev/)** — Unit, integration, and end-to-end testing.
 
 ---
 
