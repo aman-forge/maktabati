@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "f76901c1-22b0-498a-b04c-f3b0e94b40d3",
+  "id": "1f442590-c2fa-4a37-931b-f002444f5fae",
   "prevIds": [
-    "2138e744-6b5c-4f98-a819-537e7afe578b"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -53,6 +53,32 @@
       "generated": null,
       "identity": null,
       "name": "bio",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_image",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "country",
       "entityType": "columns",
       "schema": "public",
       "table": "authors"
