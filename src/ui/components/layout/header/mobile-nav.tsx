@@ -8,8 +8,8 @@ import {
   SheetTrigger,
 } from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
-import { UserButton } from "@neondatabase/neon-js/auth/react";
-import { ListIcon } from "@phosphor-icons/react";
+import { UserAvatar, UserButton } from "@neondatabase/neon-js/auth/react";
+
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/auth";
@@ -25,7 +25,14 @@ export function MobileNav() {
       <SheetTrigger
         render={
           <Button variant="ghost" size="icon" className="size-9 md:hidden">
-            <ListIcon className="size-5" />
+            <UserAvatar
+              user={session?.user}
+              className="size-10 border-2 border-destructive"
+              classNames={{
+                fallback: "bg-black text-white",
+              }}
+            />
+
             <span className="sr-only">القائمة</span>
           </Button>
         }
