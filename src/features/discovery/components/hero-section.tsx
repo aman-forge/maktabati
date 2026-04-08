@@ -8,13 +8,7 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 
-const TRENDING_TAGS = [
-  "روايات أدبية",
-  "خيال علمي",
-  "أكاديمية داكنة",
-  "فانتازيا",
-  "مذكرات",
-];
+const TRENDING_TAGS = ["روايات أدبية", "خيال علمي", "أكاديمية داكنة", "فانتازيا", "مذكرات"];
 
 export function HeroSection() {
   const [query, setQuery] = useState("");
@@ -25,25 +19,13 @@ export function HeroSection() {
       dir="rtl"
       className="relative h-[80vh] flex items-center overflow-hidden bg-linear-to-b from-primary/10 to-background max-h-210!"
     >
-      {/* Grain texture overlay */}
+      {/* Ambient glow — top-right */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04] blur-2xl"
+        className="pointer-events-none absolute -right-32 -top-40 h-125 w-125 rounded-full opacity-15"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px",
+          background: "radial-gradient(circle, var(--primary) 0%, transparent 70%)",
         }}
       />
-
-      {/* Warm ambient light top-right (mirrored for RTL) */}
-      <div
-        className="pointer-events-none absolute blur-2xl -top-32 -right-32 w-150 h-150 rounded-full opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, var(--primary) 0%, transparent 80%)",
-        }}
-      />
-
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Right (visually left in RTL): Copy + Search */}
@@ -62,15 +44,13 @@ export function HeroSection() {
                 className="text-5xl lg:text-7xl font-bold leading-[1.15] text-balance tracking-tight text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                اكتشف{" "}
-                <span className="italic font-normal text-primary">كتباً</span>
+                اكتشف <span className="italic font-normal text-primary">كتباً</span>
                 <br />
                 تبقى معك للأبد.
               </h1>
 
               <p className="text-lg leading-relaxed max-w-md text-muted-foreground">
-                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابحث عن إدمانك القادم — كل ذلك
-                في مكان واحد جميل.
+                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابحث عن إدمانك القادم — كل ذلك في مكان واحد جميل.
               </p>
             </div>
 
@@ -80,17 +60,13 @@ export function HeroSection() {
                 className="flex items-center gap-3 rounded-xl px-5 py-4 transition-all duration-200 bg-card"
                 style={{
                   border: `1.5px solid ${focused ? "hsl(var(--primary))" : "hsl(var(--border))"}`,
-                  boxShadow: focused
-                    ? "0 0 0 3px hsl(var(--primary) / 0.15)"
-                    : "none",
+                  boxShadow: focused ? "0 0 0 3px hsl(var(--primary) / 0.15)" : "none",
                 }}
               >
                 <MagnifyingGlassIcon
                   className="w-5 h-5 shrink-0 transition-colors"
                   style={{
-                    color: focused
-                      ? "hsl(var(--primary))"
-                      : "hsl(var(--muted-foreground))",
+                    color: focused ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))",
                   }}
                 />
                 <input
@@ -131,18 +107,14 @@ export function HeroSection() {
             <div className="flex items-center gap-6">
               <Button
                 variant="ghost"
-                className="group flex items-center gap-2 pl-4 font-medium text-muted-foreground hover:text-foreground"
+                className="group flex items-center gap-2 pr-4 font-medium text-muted-foreground hover:text-foreground"
               >
-                {/* Arrow flipped for RTL */}
-                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:-translate-x-1 rotate-180" />
                 تصفّح جميع الأنواع
+                <ArrowRightIcon className="w-4 h-4 transition-transform translate-x-0.5 group-hover:-translate-x-0.5 rotate-180" />
               </Button>
               <div className="w-px h-5 bg-border" />
               <span className="text-sm text-muted-foreground">
-                <strong className="font-semibold text-primary">
-                  +2.4 مليون
-                </strong>{" "}
-                كتاب مُفهرَس
+                <strong className="font-semibold text-primary">+2.4 مليون</strong> كتاب مُفهرَس
               </span>
             </div>
           </div>
@@ -192,13 +164,9 @@ export function HeroSection() {
             <div className="absolute bottom-16 -left-6 z-20 rounded-xl px-4 py-3 shadow-xl backdrop-blur-sm bg-primary/80 border border-primary">
               <div className="flex items-center gap-2 mb-1">
                 <TrophyIcon type="fill" className="size-4.5" />
-                <p className="text-xs text-primary-foreground/70">
-                  الأكثر رواجاً في دائرتك
-                </p>
+                <p className="text-xs text-primary-foreground/70">الأكثر رواجاً في دائرتك</p>
               </div>
-              <p className="text-sm font-semibold text-primary-foreground">
-                إنترميتسو
-              </p>
+              <p className="text-sm font-semibold text-primary-foreground">إنترميتسو</p>
               <p className="text-xs text-primary-foreground/80">
                 ★ 4.6 &nbsp;·&nbsp; 12 ألف قراءة هذا الأسبوع
               </p>
@@ -216,8 +184,7 @@ export function HeroSection() {
       <div
         className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
         style={{
-          background:
-            "linear-gradient(to bottom, transparent, hsl(var(--background)))",
+          background: "linear-gradient(to bottom, transparent, hsl(var(--background)))",
         }}
       />
     </section>

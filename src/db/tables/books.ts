@@ -10,12 +10,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import {
-  anonymousRole,
-  authenticatedRole,
-  authUid,
-  crudPolicy,
-} from "../roles";
+import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles";
 import { authors, publishers } from "./authors";
 
 // ─────────────────────────────────────────────────────────────
@@ -58,6 +53,9 @@ export const books = pgTable.withRLS(
     genres: text("genres")
       .array()
       .default(sql`'{}'::text[]`),
+    tags: text("tags")
+      .array()
+      .default(sql`'{}'::text[]`),
 
     isbn: text("isbn"),
     isbn13: text("isbn_13"),
@@ -74,9 +72,12 @@ export const books = pgTable.withRLS(
     crudPolicy({ role: anonymousRole, read: true, modify: false }),
 
     uniqueIndex("books_slug_idx").on(t.slug),
-    index("books_author_idx").on(t.authorId), // ✅ heavily queried
+    index("books_author_idx").on(t.authorId),
     index("books_series_idx").on(t.seriesId),
     index("books_publisher_idx").on(t.publisherId),
+
+    index("books_genres_gin_idx").using("gin", t.genres),
+    index("books_tags_gin_idx").using("gin", t.tags),
   ],
 );
 
