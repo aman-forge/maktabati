@@ -13,7 +13,8 @@ import { UserAvatar, UserButton } from "@neondatabase/neon-js/auth/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/auth";
-import { ThemeToggle } from "../../theme-toggle";
+import { BookOpenIcon, GearSixIcon } from "@phosphor-icons/react";
+import { SignOutIcon } from "@phosphor-icons/react/dist/ssr";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ export function MobileNav() {
             <span className="sr-only">القائمة</span>
           </Button>
         }
-      />{" "}
+      />
       <SheetContent
         side="left"
         className="flex w-80 flex-col overflow-y-auto rounded-r-2xl px-4 "
@@ -43,6 +44,7 @@ export function MobileNav() {
         {/* ── Header ── */}
         <SheetHeader className="text-right">
           <SheetTitle>{isPending ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
+
           {isPending && session?.user?.email && (
             <p className="truncate text-xs text-muted-foreground">
               {session?.user.email}
@@ -92,8 +94,21 @@ export function MobileNav() {
           ))}
         </NavSection>
 
+        <Separator />
+
+        <NavSection label="الحساب">
+          <MobileNavLink href="/account/settings" onClick={close}>
+            <GearSixIcon className="size-5 text-muted-foreground" />
+            الإعدادات
+          </MobileNavLink>
+          <MobileNavLink href="/auth/logout" onClick={close}>
+            <SignOutIcon className="size-5 text-muted-foreground" />
+            تسجيل الخروج
+          </MobileNavLink>
+        </NavSection>
+
         {/* ── Auth button ── */}
-        <UserButton size={"lg"} />
+        {/* <UserButton size={"lg"} /> */}
       </SheetContent>
     </Sheet>
   );
