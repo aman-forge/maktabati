@@ -37,7 +37,7 @@ export function MobileNav() {
       />{" "}
       <SheetContent
         side="left"
-        className="flex w-80 flex-col overflow-y-auto rounded-r-2xl px-4"
+        className="flex w-80 flex-col overflow-y-auto rounded-r-2xl px-4 "
         dir="rtl"
       >
         {/* ── Header ── */}
