@@ -13,6 +13,7 @@ import { UserAvatar, UserButton } from "@neondatabase/neon-js/auth/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/auth";
+import { ThemeToggle } from "../../theme-toggle";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -24,23 +25,19 @@ export function MobileNav() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          <Button variant="ghost" size="icon" className="size-9 md:hidden">
+          <Button variant="ghost" size="icon" className=" size-9 md:hidden  ">
             <UserAvatar
               user={session?.user}
-              className="size-10 border-2 border-destructive"
-              classNames={{
-                fallback: "bg-black text-white",
-              }}
+              className=" border-2 border-destructive absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 duration "
             />
 
             <span className="sr-only">القائمة</span>
           </Button>
         }
-      />
-
+      />{" "}
       <SheetContent
-        side="right"
-        className="flex w-80 flex-col overflow-y-auto rounded-l-2xl px-4"
+        side="left"
+        className="flex w-80 flex-col overflow-y-auto rounded-r-2xl px-4"
         dir="rtl"
       >
         {/* ── Header ── */}
@@ -113,7 +110,7 @@ function NavSection({
 }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
+      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground pt-4">
         {label}
       </span>
       {children}
