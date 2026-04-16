@@ -6,6 +6,7 @@ import AuthProvider from "@/features/auth/provider";
 import { TooltipProvider } from "../ui/tooltip";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
+import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
@@ -17,12 +18,14 @@ const Providers = ({ children }: { children: ReactNode }) => {
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            <Header />
-            <main className="pt-14">{children}</main>
-            <BottomBar />
-            <Toaster richColors />
-          </TooltipProvider>
+          <BookTrackingProvider>
+            <TooltipProvider>
+              <Header />
+              <main className="pt-14">{children}</main>
+              <BottomBar />
+              <Toaster richColors />
+            </TooltipProvider>
+          </BookTrackingProvider>
         </ThemeProvider>
       </DirectionProvider>
     </AuthProvider>

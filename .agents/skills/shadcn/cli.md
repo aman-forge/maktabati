@@ -196,7 +196,7 @@ Displays project info and `components.json` configuration. Run this first to dis
 | `iconLibrary`        | `string`  | Icon library — determines icon import package (e.g. `lucide-react`, `@tabler/icons-react`) |
 | `aliases.components` | `string`  | Component import alias (e.g. `@/components`)                                               |
 | `aliases.utils`      | `string`  | Utils import alias (e.g. `@/lib/utils`)                                                    |
-| `aliases.ui`         | `string`  | UI component alias (e.g. `@/components/ui`)                                                |
+| `aliases.ui`         | `string`  | UI component alias (e.g. `@shadcn`)                                                        |
 | `aliases.lib`        | `string`  | Lib alias (e.g. `@/lib`)                                                                   |
 | `aliases.hooks`      | `string`  | Hooks alias (e.g. `@/hooks`)                                                               |
 | `resolvedPaths`      | `object`  | Absolute file-system paths for each alias                                                  |
