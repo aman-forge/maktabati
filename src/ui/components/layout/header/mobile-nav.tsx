@@ -8,13 +8,19 @@ import {
   SheetTrigger,
 } from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
-import { UserAvatar, UserButton } from "@neondatabase/neon-js/auth/react";
+import { UserAvatar } from "@neondatabase/neon-js/auth/react";
 
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/auth";
-import { BookOpenIcon, GearSixIcon } from "@phosphor-icons/react";
-import { SignOutIcon } from "@phosphor-icons/react/dist/ssr";
+import { GearSixIcon, SignInIcon } from "@phosphor-icons/react";
+import {
+  BookBookmarkIcon,
+  BooksIcon,
+  SignOutIcon,
+  UserIcon,
+  UserPlusIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -36,6 +42,7 @@ export function MobileNav() {
           </Button>
         }
       />
+
       <SheetContent
         side="left"
         className="flex w-80 flex-col overflow-y-auto rounded-r-2xl px-4 "
@@ -43,9 +50,9 @@ export function MobileNav() {
       >
         {/* ── Header ── */}
         <SheetHeader className="text-right">
-          <SheetTitle>{isPending ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
+          <SheetTitle>{session?.user ? "مكتبتي" : "مرحباً بك"} </SheetTitle>
 
-          {isPending && session?.user?.email && (
+          {!isPending && session?.user?.email && (
             <p className="truncate text-xs text-muted-foreground">
               {session?.user.email}
             </p>
@@ -53,7 +60,7 @@ export function MobileNav() {
         </SheetHeader>
 
         {/* ── Profile links (logged in only) ── */}
-        {isPending && (
+        {/* {session?.user && (
           <>
             <div className="flex flex-col gap-1">
               <NavSection label="حسابي">
@@ -70,7 +77,7 @@ export function MobileNav() {
             </div>
             <Separator />
           </>
-        )}
+        )} */}
 
         {/* ── Browse ── */}
         <NavSection label="تصفح">
@@ -95,20 +102,41 @@ export function MobileNav() {
         </NavSection>
 
         <Separator />
-
         <NavSection label="الحساب">
-          <MobileNavLink href="/account/settings" onClick={close}>
-            <GearSixIcon className="size-5 text-muted-foreground" />
-            الإعدادات
-          </MobileNavLink>
-          <MobileNavLink href="/auth/logout" onClick={close}>
-            <SignOutIcon className="size-5 text-muted-foreground" />
-            تسجيل الخروج
-          </MobileNavLink>
+          {session?.user ? (
+            <>
+              <MobileNavLink href={`/u/${session?.user?.id}`} onClick={close}>
+                <UserIcon className="size-5 text-muted-foreground" />
+                الملف الشخصي
+              </MobileNavLink>
+              <MobileNavLink href="/dashboard" onClick={close}>
+                <BookBookmarkIcon className="size-5 text-muted-foreground" />
+                مكتبتي
+              </MobileNavLink>
+              <MobileNavLink href="/account/settings" onClick={close}>
+                <GearSixIcon className="size-5 text-muted-foreground" />
+                الإعدادات
+              </MobileNavLink>
+              <MobileNavLink href="/auth/logout" onClick={close}>
+                <SignOutIcon className="size-5 text-muted-foreground" />
+                تسجيل الخروج
+              </MobileNavLink>
+            </>
+          ) : (
+            <>
+              <MobileNavLink href="/auth/register" onClick={close}>
+                <UserPlusIcon className="size-5 text-muted-foreground" />
+                إنشاء حساب
+              </MobileNavLink>
+              <MobileNavLink href="/auth/login" onClick={close}>
+                <SignInIcon className="size-5 text-muted-foreground" />
+                تسجيل الدخول
+              </MobileNavLink>
+            </>
+          )}
         </NavSection>
 
         {/* ── Auth button ── */}
-        {/* <UserButton size={"lg"} /> */}
       </SheetContent>
     </Sheet>
   );
