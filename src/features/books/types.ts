@@ -4,7 +4,11 @@
 // 1. التصنيفات الرئيسية (Genres)
 // يفضّل إجبار المستخدم على اختيار 1 إلى 3 فقط
 // ─────────────────────────────────────────────────────────────
-export const BOOK_GENRES = [
+export interface BookGenre {
+  value: string;
+  label: string;
+}
+export const BOOK_GENRES: BookGenre[] = [
   // أدب / روايات / قصص
   { value: "fiction", label: "أدب قصصي / عام" },
   { value: "literary_fiction", label: "أدب أدبي / رفيع" },

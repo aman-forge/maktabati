@@ -1,15 +1,17 @@
-import { BookCarousel, BookCarouselSkeleton } from "@features/discovery/components/book-carousel";
-// import { FeaturedBanner } from "@features/discovery/components/featured-banner";
+import {
+  BookCarousel,
+  BookCarouselSkeleton,
+} from "@features/discovery/components/book-carousel";
 import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
-// import { QuoteSection } from "@features/discovery/components/quote-section";
 import { Await, createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { getBooks } from "@/features/books/server/get-books";
+// import { FeaturedBanner } from "@features/discovery/components/featured-banner";
+// import { QuoteSection } from "@features/discovery/components/quote-section";
 
 export const Route = createFileRoute("/")({
   loader: () => {
-    // DO NOT await here. We pass the promise directly to stream it to the client.
     const booksPromise = getBooks();
     return { booksPromise };
   },
