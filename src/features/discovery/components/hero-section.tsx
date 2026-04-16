@@ -25,25 +25,14 @@ export function HeroSection() {
       dir="rtl"
       className="relative h-[80vh] flex items-center overflow-hidden bg-linear-to-b from-primary/10 to-background max-h-210!"
     >
-      {/* Grain texture overlay */}
+      {/* Ambient glow — top-right */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04] blur-2xl"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px",
-        }}
-      />
-
-      {/* Warm ambient light top-right (mirrored for RTL) */}
-      <div
-        className="pointer-events-none absolute blur-2xl -top-32 -right-32 w-150 h-150 rounded-full opacity-20"
+        className="pointer-events-none absolute -right-32 -top-40 h-125 w-125 rounded-full opacity-15"
         style={{
           background:
-            "radial-gradient(circle, var(--primary) 0%, transparent 80%)",
+            "radial-gradient(circle, var(--primary) 0%, transparent 70%)",
         }}
       />
-
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Right (visually left in RTL): Copy + Search */}
@@ -131,11 +120,10 @@ export function HeroSection() {
             <div className="flex items-center gap-6">
               <Button
                 variant="ghost"
-                className="group flex items-center gap-2 pl-4 font-medium text-muted-foreground hover:text-foreground"
+                className="group flex items-center gap-2 pr-4 font-medium text-muted-foreground hover:text-foreground"
               >
-                {/* Arrow flipped for RTL */}
-                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:-translate-x-1 rotate-180" />
                 تصفّح جميع الأنواع
+                <ArrowRightIcon className="w-4 h-4 transition-transform translate-x-0.5 group-hover:-translate-x-0.5 rotate-180" />
               </Button>
               <div className="w-px h-5 bg-border" />
               <span className="text-sm text-muted-foreground">

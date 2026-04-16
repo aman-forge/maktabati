@@ -1,0 +1,2287 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "80d575e6-4dd3-46b7-ba9b-64ff970cc937",
+  "prevIds": [
+    "137b4b19-b954-4451-952f-09579d4ca4ea"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "want_to_read",
+        "currently_reading",
+        "read",
+        "did_not_finish"
+      ],
+      "name": "reading_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "authors",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "publishers",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "books",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "series",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "user_books",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "profiles",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": true,
+      "name": "reviews",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slug",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name_en",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "aliases",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "bio",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "birth_year",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "death_year",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "place_of_birth",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "place_of_death",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "nationality",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_image",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "wikipedia_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slug",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "logo_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "website",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slug",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "author_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "publisher_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "series_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "series_position",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "subtitle",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "cover_image_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "page_count",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "publication_year",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "publication_date",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "'ar'",
+      "generated": null,
+      "identity": null,
+      "name": "original_language",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "original_title",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "translator",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "name": "genres",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "name": "tags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "isbn",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "isbn_13",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "edition",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slug",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "book_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "reading_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "started_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "finished_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "display_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "avatar_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "bio",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "book_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "rating",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "body",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "slug",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "authors_slug_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "slug",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "publishers_slug_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "slug",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "books_slug_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "author_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "books_author_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "series_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "books_series_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "publisher_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "books_publisher_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "genres",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "gin",
+      "concurrently": false,
+      "name": "books_genres_gin_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "tags",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "gin",
+      "concurrently": false,
+      "name": "books_tags_gin_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "slug",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "series_slug_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "book_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "user_books_unique_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "user_books_user_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "book_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "user_books_book_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "book_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "reviews_unique_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "book_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "reviews_book_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "reviews_user_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "author_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "authors",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "books_author_id_authors_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "publisher_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "publishers",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "books_publisher_id_publishers_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "series_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "series",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "books_series_id_series_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "book_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "books",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "user_books_book_id_books_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profiles",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "reviews_user_id_profiles_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "book_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "books",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "reviews_book_id_books_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "authors_pkey",
+      "schema": "public",
+      "table": "authors",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "publishers_pkey",
+      "schema": "public",
+      "table": "publishers",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "books_pkey",
+      "schema": "public",
+      "table": "books",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "series_pkey",
+      "schema": "public",
+      "table": "series",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "user_books_pkey",
+      "schema": "public",
+      "table": "user_books",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "profiles_pkey",
+      "schema": "public",
+      "table": "profiles",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "reviews_pkey",
+      "schema": "public",
+      "table": "reviews",
+      "entityType": "pks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "slug"
+      ],
+      "nullsNotDistinct": false,
+      "name": "authors_slug_key",
+      "schema": "public",
+      "table": "authors",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "slug"
+      ],
+      "nullsNotDistinct": false,
+      "name": "publishers_slug_key",
+      "schema": "public",
+      "table": "publishers",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "slug"
+      ],
+      "nullsNotDistinct": false,
+      "name": "books_slug_key",
+      "schema": "public",
+      "table": "books",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "slug"
+      ],
+      "nullsNotDistinct": false,
+      "name": "series_slug_key",
+      "schema": "public",
+      "table": "series",
+      "entityType": "uniques"
+    },
+    {
+      "value": "\"rating\" IS NULL OR (\"rating\" >= 1 AND \"rating\" <= 5)",
+      "name": "rating_range",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "value": "\"rating\" IS NOT NULL OR \"body\" IS NOT NULL",
+      "name": "review_needs_rating_or_body",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "authors"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "publishers"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "series"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "(select auth.user_id() = \"user_books\".\"user_id\")",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"user_books\".\"user_id\")",
+      "withCheck": "(select auth.user_id() = \"user_books\".\"user_id\")",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"user_books\".\"user_id\")",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "user_books"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "(select auth.user_id() = \"profiles\".\"id\")",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"profiles\".\"id\")",
+      "withCheck": "(select auth.user_id() = \"profiles\".\"id\")",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"profiles\".\"id\")",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "(select auth.user_id() = \"reviews\".\"user_id\")",
+      "name": "crud-authenticated-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"reviews\".\"user_id\")",
+      "withCheck": "(select auth.user_id() = \"reviews\".\"user_id\")",
+      "name": "crud-authenticated-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(select auth.user_id() = \"reviews\".\"user_id\")",
+      "withCheck": null,
+      "name": "crud-authenticated-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "SELECT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-select",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "INSERT",
+      "roles": [
+        "anonymous"
+      ],
+      "using": null,
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-insert",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "UPDATE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": "false",
+      "name": "crud-anonymous-policy-update",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    },
+    {
+      "as": "PERMISSIVE",
+      "for": "DELETE",
+      "roles": [
+        "anonymous"
+      ],
+      "using": "false",
+      "withCheck": null,
+      "name": "crud-anonymous-policy-delete",
+      "entityType": "policies",
+      "schema": "public",
+      "table": "reviews"
+    }
+  ],
+  "renames": []
+}

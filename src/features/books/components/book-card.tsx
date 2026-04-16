@@ -1,11 +1,10 @@
-import { Button } from "@components/ui/button";
-import {
-  BookOpenIcon,
-  CheckIcon,
-  PlusIcon,
-  StarIcon,
-} from "@phosphor-icons/react";
-import { useState } from "react";
+"use client";
+
+import { useBookTracking } from "@features/books/context/book-tracking-context";
+import { PlusIcon, StarIcon } from "@phosphor-icons/react";
+import { Badge } from "@shadcn/badge";
+import { Button, buttonVariants } from "@shadcn/button";
+import { Link } from "@tanstack/react-router";
 import type { BookWithAuthor } from "@/db/tables";
 import { cn } from "@/ui/lib/utils";
 
@@ -21,110 +20,64 @@ const DIMENSIONS = {
 } as const;
 
 export function BookCard({ book, size = "md" }: BookCardProps) {
-  const [saved, setSaved] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
+  const rating = 4.5; // replace with book.rating when available
 
   return (
-    <article
-      dir="rtl"
-      className={cn(
-        "flex flex-col gap-3 shrink-0 group cursor-pointer",
-        dim.card,
-      )}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      aria-label={`${book.title} بقلم ${book.author?.name}`}
-    >
-      {/* Cover */}
+    <article className={cn("flex flex-col gap-2.5 shrink-0 group ", dim.card)}>
       <div
         className={cn(
-          "relative rounded-xl overflow-hidden shadow-md",
+          "relative rounded-xl overflow-hidden bg-muted cursor-pointer",
+          "transition-all duration-300 ease-out",
+          // "group-hover:-translate-y-0.5 group-hover:shadow-xl group-hover:shadow-black/20",
           dim.image,
         )}
-        style={{
-          transform: hovered ? "translateY(-4px)" : "translateY(0)",
-          boxShadow: hovered
-            ? "0 20px 40px hsl(var(--foreground) / 0.2)"
-            : undefined,
-          transition: "transform 0.25s ease, box-shadow 0.25s ease",
-        }}
       >
-        <img
-          src={book.coverImageUrl || "not_found.png"}
-          alt={`غلاف ${book.title}`}
-          className="object-cover"
-          sizes="(max-width: 768px) 144px, 176px"
-        />
+        <Link to="/profile">
+          <img
+            src={book.coverImageUrl ?? "/books/book.jpg"}
+            alt={`Cover of ${book.title}`}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-101"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+        </Link>
 
-        {/* Hover overlay */}
-        <div
-          className="absolute inset-0 flex flex-col justify-between p-3 transition-opacity duration-200"
-          style={{
-            background:
-              "linear-gradient(to top, hsl(var(--background) / 0.92) 0%, hsl(var(--background) / 0) 55%)",
-            opacity: hovered ? 1 : 0,
+        {rating != null && (
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <Badge className="text-[11px] px-2 py-0.5 font-semibold bg-black/60 backdrop-blur-md text-white border-0 gap-1 shadow-lg">
+              <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+              {rating.toFixed(1)}
+            </Badge>
+          </div>
+        )}
+
+        <Button
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            openTrackModal(book);
           }}
+          className={cn(
+            buttonVariants({ variant: "default", size: "icon-lg" }),
+            "absolute bottom-2 right-2 rounded-full w-10 h-10 shadow-none z-10 birder-0",
+            "transition-all duration-200 ease-in-out",
+            "opacity-0 translate-y-2 scale-90",
+            "group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 backdrop-blur-2xl",
+          )}
+          aria-label="Add to reading list"
         >
-          {/* Badge top-start (right in RTL) */}
-          <div className="flex justify-start">
-            {/*{book.badge && (
-              <Badge className="text-[10px] px-2 py-0.5 font-medium bg-primary text-primary-foreground border-0">
-                {book.badge}
-              </Badge>
-            )}*/}
-          </div>
-
-          {/* Bottom actions */}
-          <div className="flex items-center justify-between gap-2">
-            <Button
-              size="sm"
-              className="h-8 gap-1.5 text-xs rounded-lg flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              <BookOpenIcon weight="bold" className="w-3.5 h-3.5" />
-              التفاصيل
-            </Button>
-            <Button
-              size="icon"
-              variant="secondary"
-              className={cn(
-                "h-8 w-8 rounded-lg shrink-0 transition-colors",
-                saved &&
-                  "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30",
-              )}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSaved((s) => !s);
-              }}
-              aria-label={
-                saved ? "إزالة من قائمة القراءة" : "إضافة إلى قائمة القراءة"
-              }
-            >
-              {saved ? (
-                <CheckIcon weight="bold" className="w-3.5 h-3.5" />
-              ) : (
-                <PlusIcon weight="bold" className="w-3.5 h-3.5" />
-              )}
-            </Button>
-          </div>
-        </div>
+          <PlusIcon weight="bold" className="w-5 h-5" />
+        </Button>
       </div>
 
-      {/* Book info */}
       <div className="flex flex-col gap-1 px-0.5">
-        <h3 className="text-sm font-semibold leading-tight line-clamp-2 text-balance text-foreground">
+        <h3 className="text-sm font-medium leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200 cursor-pointer">
           {book.title}
         </h3>
-        <p className="text-xs leading-tight text-muted-foreground">
-          {book?.author?.name}
+        <p className="text-xs text-muted-foreground truncate">
+          {book.author?.name}
         </p>
-
-        <div className="flex items-center gap-1 mt-0.5">
-          <StarIcon weight="fill" className="w-3 h-3 text-primary" />
-          <span className="text-xs font-medium text-foreground">
-            {book.pageCount}
-          </span>
-        </div>
       </div>
     </article>
   );

@@ -1,11 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/db";
+import type { BookWithAuthor } from "@/db/tables";
 
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
-  const books = await db.query.books.findMany({
+  const books: BookWithAuthor[] = await db.query.books.findMany({
     with: {
       author: true,
     },
+    limit: 30,
   });
   return books;
 });

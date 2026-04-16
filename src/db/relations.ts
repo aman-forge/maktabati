@@ -2,14 +2,25 @@
 // https://orm.drizzle.team/docs/relations-v2
 
 import { defineRelations } from "drizzle-orm";
-import { authors, books, profiles, publishers, reviews, series, userBooks } from "./tables";
+import {
+  authors,
+  books,
+  profiles,
+  publishers,
+  reviews,
+  series,
+  userBooks,
+} from "./tables";
 
 export const relations = defineRelations(
   { authors, books, publishers, reviews, series, userBooks, profiles },
   (r) => ({
     books: {
       author: r.one.authors({ from: r.books.authorId, to: r.authors.id }),
-      publisher: r.one.publishers({ from: r.books.publisherId, to: r.publishers.id }),
+      publisher: r.one.publishers({
+        from: r.books.publisherId,
+        to: r.publishers.id,
+      }),
       series: r.one.series({ from: r.books.seriesId, to: r.series.id }),
       userBooks: r.many.userBooks({ from: r.books.id, to: r.userBooks.bookId }),
       reviews: r.many.reviews({ from: r.books.id, to: r.reviews.bookId }),
@@ -24,7 +35,10 @@ export const relations = defineRelations(
       books: r.many.books({ from: r.series.id, to: r.books.seriesId }),
     },
     profiles: {
-      userBooks: r.many.userBooks({ from: r.profiles.id, to: r.userBooks.userId }),
+      userBooks: r.many.userBooks({
+        from: r.profiles.id,
+        to: r.userBooks.userId,
+      }),
       reviews: r.many.reviews({ from: r.profiles.id, to: r.reviews.userId }),
     },
     userBooks: {
