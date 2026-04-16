@@ -9,18 +9,17 @@ import {
 } from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
 import { UserAvatar } from "@neondatabase/neon-js/auth/react";
-
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { authClient } from "@/auth";
-import { GearSixIcon, SignInIcon } from "@phosphor-icons/react";
 import {
   BookBookmarkIcon,
-  BooksIcon,
+  GearSixIcon,
+  SignInIcon,
   SignOutIcon,
   UserIcon,
   UserPlusIcon,
-} from "@phosphor-icons/react/dist/ssr";
+} from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { authClient } from "@/auth";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);

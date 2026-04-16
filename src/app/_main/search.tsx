@@ -1,14 +1,31 @@
 import { BookCard } from "@features/books/components/book-card";
 import { BookCardDetailed } from "@features/books/components/book-card-detailed";
 import { BookListItem } from "@features/books/components/book-list-item";
-import { FilterDialog, type FilterState } from "@features/books/components/filters-dialog";
+import {
+  FilterDialog,
+  type FilterState,
+} from "@features/books/components/filters-dialog";
 import { GenreCombobox } from "@features/books/components/genre-combobox";
-import { type ViewMode, ViewToggle } from "@features/books/components/view-toggle";
-import { MagnifyingGlassIcon, SortAscendingIcon, UserIcon, XIcon } from "@phosphor-icons/react";
+import {
+  type ViewMode,
+  ViewToggle,
+} from "@features/books/components/view-toggle";
+import {
+  MagnifyingGlassIcon,
+  SortAscendingIcon,
+  UserIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shadcn/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@shadcn/select";
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 import { getBooks } from "@/features/books/server/get-books";
@@ -132,7 +149,8 @@ function BooksSearchPage() {
       tags.push({
         key: `tag-${tag}`,
         label: `الوسم: ${tag}`,
-        onRemove: () => setFilters((f) => ({ ...f, tags: f.tags.filter((x) => x !== tag) })),
+        onRemove: () =>
+          setFilters((f) => ({ ...f, tags: f.tags.filter((x) => x !== tag) })),
       });
     }
 
@@ -169,25 +187,36 @@ function BooksSearchPage() {
 
   const filteredBooks = React.useMemo(() => {
     let result = books.filter((book) => {
-      if (searchQuery && !book.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      if (
+        searchQuery &&
+        !book.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
         return false;
       }
-      if (authorQuery && !book.author?.name.toLowerCase().includes(authorQuery.toLowerCase())) {
+      if (
+        authorQuery &&
+        !book.author?.name.toLowerCase().includes(authorQuery.toLowerCase())
+      ) {
         return false;
       }
       if (selectedGenres.length > 0) {
         const bookGenres = book.genres ?? [];
-        if (!selectedGenres.every((g: BookGenre) => bookGenres.includes(g.value))) return false;
+        if (
+          !selectedGenres.every((g: BookGenre) => bookGenres.includes(g.value))
+        )
+          return false;
       }
       if (
         book.publicationYear != null &&
-        (book.publicationYear < filters.yearRange[0] || book.publicationYear > filters.yearRange[1])
+        (book.publicationYear < filters.yearRange[0] ||
+          book.publicationYear > filters.yearRange[1])
       ) {
         return false;
       }
       if (
         book.pageCount != null &&
-        (book.pageCount < filters.pageRange[0] || book.pageCount > filters.pageRange[1])
+        (book.pageCount < filters.pageRange[0] ||
+          book.pageCount > filters.pageRange[1])
       ) {
         return false;
       }
@@ -196,16 +225,24 @@ function BooksSearchPage() {
 
     switch (sortBy) {
       case "newest":
-        result = [...result].sort((a, b) => (b.publicationYear ?? 0) - (a.publicationYear ?? 0));
+        result = [...result].sort(
+          (a, b) => (b.publicationYear ?? 0) - (a.publicationYear ?? 0),
+        );
         break;
       case "oldest":
-        result = [...result].sort((a, b) => (a.publicationYear ?? 0) - (b.publicationYear ?? 0));
+        result = [...result].sort(
+          (a, b) => (a.publicationYear ?? 0) - (b.publicationYear ?? 0),
+        );
         break;
       case "title-asc":
-        result = [...result].sort((a, b) => a.title.localeCompare(b.title, "ar"));
+        result = [...result].sort((a, b) =>
+          a.title.localeCompare(b.title, "ar"),
+        );
         break;
       case "title-desc":
-        result = [...result].sort((a, b) => b.title.localeCompare(a.title, "ar"));
+        result = [...result].sort((a, b) =>
+          b.title.localeCompare(a.title, "ar"),
+        );
         break;
     }
 
@@ -260,7 +297,10 @@ function BooksSearchPage() {
             )}
           </div>
 
-          <GenreCombobox selected={selectedGenres} onSelectionChange={setSelectedGenres} />
+          <GenreCombobox
+            selected={selectedGenres}
+            onSelectionChange={setSelectedGenres}
+          />
 
           <FilterDialog
             filters={filters}
@@ -272,7 +312,10 @@ function BooksSearchPage() {
 
           <div className="flex items-center gap-2">
             <SortAscendingIcon className="w-4 h-4 text-muted-foreground hidden sm:block" />
-            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortValue)}>
+            <Select
+              value={sortBy}
+              onValueChange={(v) => setSortBy(v as SortValue)}
+            >
               <SelectTrigger className="h-10 w-37.5 bg-muted/50 border-transparent">
                 <SelectValue />
               </SelectTrigger>
@@ -291,7 +334,9 @@ function BooksSearchPage() {
 
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border/40">
-            <span className="text-xs text-muted-foreground font-medium ml-1">التصفية:</span>
+            <span className="text-xs text-muted-foreground font-medium ml-1">
+              التصفية:
+            </span>
             {activeFilterTags.map((tag) => (
               <Badge
                 key={tag.key}
@@ -320,7 +365,9 @@ function BooksSearchPage() {
       <main className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-5">
           <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{filteredBooks.length}</span>{" "}
+            <span className="font-medium text-foreground">
+              {filteredBooks.length}
+            </span>{" "}
             {filteredBooks.length === 1 ? "كتاب واحد" : "كتاب"}
           </p>
         </div>

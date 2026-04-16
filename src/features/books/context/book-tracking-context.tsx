@@ -2,7 +2,10 @@
 
 import React from "react";
 import type { Book } from "@/db/tables";
-import { TrackBookModal, TrackingData } from "../components/track-book-modal";
+import {
+  TrackBookModal,
+  type TrackingData,
+} from "../components/track-book-modal";
 
 interface BookTrackingContextValue {
   openTrackModal: (book: Book) => void;

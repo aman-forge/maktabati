@@ -6,7 +6,6 @@ import {
   CheckIcon,
   ClockIcon,
   UserCircleIcon,
-  UserIcon,
   UsersIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react/ssr";
