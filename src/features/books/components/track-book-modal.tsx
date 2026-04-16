@@ -89,12 +89,19 @@ interface TrackBookModalProps {
   onSave?: (bookId: string, data: TrackingData) => void;
 }
 
-export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookModalProps) {
+export function TrackBookModal({
+  book,
+  open,
+  onOpenChange,
+  onSave,
+}: TrackBookModalProps) {
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [status, setStatus] = React.useState("plan-to-read");
   const [score, setScore] = React.useState(0);
   const [pagesProgress, setPagesProgress] = React.useState(0);
-  const [startDate, setStartDate] = React.useState(new Date().toISOString().split("T")[0]);
+  const [startDate, setStartDate] = React.useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [finishDate, setFinishDate] = React.useState("");
   const [notes, setNotes] = React.useState("");
   const [hoveredStar, setHoveredStar] = React.useState(0);
@@ -130,7 +137,8 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
 
   const showFinishDate = status === "completed";
   const totalPages = book.pageCount || 0;
-  const progressPercent = totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
+  const progressPercent =
+    totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
   const currentStatus = STATUSES.find((s) => s.value === status);
 
   return (
@@ -171,9 +179,14 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                       ? "bg-red-500 text-white border-red-400 scale-110"
                       : "bg-background/90 backdrop-blur-md text-muted-foreground border-border hover:text-red-500 hover:border-red-500/60 hover:scale-105",
                   )}
-                  aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+                  aria-label={
+                    isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"
+                  }
                 >
-                  <HeartIcon weight={isFavorite ? "fill" : "bold"} className="w-4 h-4" />
+                  <HeartIcon
+                    weight={isFavorite ? "fill" : "bold"}
+                    className="w-4 h-4"
+                  />
                 </button>
               </div>
 
@@ -232,7 +245,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                       !isActive && s.color,
                     )}
                   >
-                    <Icon weight={isActive ? "fill" : "bold"} className="w-4 h-4 shrink-0" />
+                    <Icon
+                      weight={isActive ? "fill" : "bold"}
+                      className="w-4 h-4 shrink-0"
+                    />
                     <span className="whitespace-nowrap">{s.label}</span>
                   </button>
                 );
@@ -264,7 +280,11 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                         className="p-1 transition-all hover:scale-110 active:scale-95"
                       >
                         <StarIcon
-                          weight={hoveredStar >= star || score >= star ? "fill" : "regular"}
+                          weight={
+                            hoveredStar >= star || score >= star
+                              ? "fill"
+                              : "regular"
+                          }
                           className={cn(
                             "w-7 h-7 transition-colors",
                             hoveredStar >= star || score >= star
@@ -296,7 +316,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                         max={totalPages || 9999}
                         value={pagesProgress}
                         onChange={(e) =>
-                          setPagesProgress(Math.max(0, parseInt(e.target.value) || 0))
+                          setPagesProgress(
+                            Math.max(0, parseInt(e.target.value, 10) || 0),
+                          )
                         }
                         className="h-11 text-lg font-medium bg-muted/50 border-border/60 focus:border-primary/50"
                         placeholder="0"
@@ -350,7 +372,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                 </Label>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="start-date" className="text-xs text-muted-foreground">
+                    <Label
+                      htmlFor="start-date"
+                      className="text-xs text-muted-foreground"
+                    >
                       بدأت القراءة
                     </Label>
                     <Input
@@ -362,7 +387,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="finish-date" className="text-xs text-muted-foreground">
+                    <Label
+                      htmlFor="finish-date"
+                      className="text-xs text-muted-foreground"
+                    >
                       انتهيت من القراءة
                     </Label>
                     <Input
@@ -406,7 +434,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
           <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
             {currentStatus && (
               <>
-                <currentStatus.icon weight="fill" className={cn("w-4 h-4", currentStatus.color)} />
+                <currentStatus.icon
+                  weight="fill"
+                  className={cn("w-4 h-4", currentStatus.color)}
+                />
                 <span className="font-medium">{currentStatus.label}</span>
               </>
             )}
@@ -420,7 +451,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
             >
               إلغاء
             </Button>
-            <Button onClick={handleSave} className="min-w-[110px] shadow-md font-semibold">
+            <Button
+              onClick={handleSave}
+              className="min-w-[110px] shadow-md font-semibold"
+            >
               حفظ التتبع
             </Button>
           </div>
