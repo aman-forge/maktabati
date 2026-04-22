@@ -17,7 +17,6 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@shadcn/dialog";
 import { Input } from "@shadcn/input";
-import { Label } from "@shadcn/label";
 import { Textarea } from "@shadcn/textarea";
 import React from "react";
 import type { BookWithAuthor } from "@/db/tables";
@@ -421,7 +420,7 @@ function SectionLabel({ icon, children }: { icon: React.ReactNode; children: Rea
 }
 
 function Divider() {
-  return <div className="h-px bg-white/6 -mx-0" />;
+  return <div className="h-px bg-white/6 mx-0" />;
 }
 
 function DateField({
@@ -451,7 +450,7 @@ function DateField({
         className={cn(
           "w-full h-10 bg-white/5 border border-white/10 rounded-xl px-3 text-sm /80",
           "focus:outline-none focus:border-white/20 focus:bg-white/8 transition-all",
-          "[color-scheme:dark]",
+          "scheme-dark",
           disabled && "opacity-30 cursor-not-allowed pointer-events-none",
         )}
       />

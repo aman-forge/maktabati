@@ -48,27 +48,21 @@ const GENRES: Genre[] = [
 
 export function GenreGrid() {
   return (
-    <section
-      dir="rtl"
-      className="flex flex-col gap-8 px-6 lg:px-12 container mx-auto"
-    >
+    <section dir="rtl" className="flex flex-col gap-8 px-6 lg:px-12 container mx-auto">
       {/* Section header */}
       <div className="flex items-end justify-between">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <span
-              className="w-1 h-5 rounded-full bg-primary shrink-0"
-              aria-hidden="true"
-            />
+            <span className="w-1 h-5 rounded-full bg-primary shrink-0" aria-hidden="true" />
             <h2
               className="text-2xl font-bold tracking-tight text-foreground"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              تصفح حسب النوع
+              تصفح حسب التصنيفات
             </h2>
           </div>
           <p className="text-sm text-muted-foreground pe-3">
-            ابحث عن قراءتك المثالية عبر مجموعات الأنواع المنتقاة بعناية.
+            ابحث عن قراءتك المثالية عبر مجموعات التصنيفات المنتقاة بعناية.
           </p>
         </div>
 
@@ -76,7 +70,7 @@ export function GenreGrid() {
           variant="secondary"
           className="shrink-0 text-xs px-3 py-1.5 rounded-full tabular-nums"
         >
-          {GENRES.length} أنواع
+          {GENRES.length} تصنيفات
         </Badge>
       </div>
 
@@ -118,9 +112,7 @@ export function GenreGrid() {
                 <h3 className="text-sm font-semibold leading-snug text-balance text-foreground">
                   {genre.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">
-                  {genre.count} كتاب
-                </p>
+                <p className="text-xs text-muted-foreground">{genre.count} كتاب</p>
               </div>
 
               {/* Explore arrow — slides in on hover */}
@@ -134,7 +126,7 @@ export function GenreGrid() {
 
               {/* Subtle bottom accent line */}
               <div
-                className="absolute bottom-0 inset-x-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                className="absolute bottom-0 inset-x-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 style={{
                   background: `linear-gradient(to left, ${color}, transparent)`,
                 }}

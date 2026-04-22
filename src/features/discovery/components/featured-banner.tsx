@@ -10,7 +10,7 @@ import {
 
 const BOOK_META = [
   { label: "الصفحات", value: "598" },
-  { label: "النوع", value: "فانتازيا" },
+  { label: "التصنيف", value: "فانتازيا" },
   { label: "النشر", value: "2024" },
 ] as const;
 
@@ -32,8 +32,7 @@ export function FeaturedBanner() {
         <div
           className="pointer-events-none absolute -right-24 -top-24 w-96 h-96 rounded-full opacity-20 z-0"
           style={{
-            background:
-              "radial-gradient(circle, hsl(var(--primary) / 0.6) 0%, transparent 70%)",
+            background: "radial-gradient(circle, hsl(var(--primary) / 0.6) 0%, transparent 70%)",
           }}
         />
 
@@ -51,30 +50,20 @@ export function FeaturedBanner() {
               >
                 بلاط الجمر
               </h2>
-              <p className="text-base font-medium text-primary">
-                بقلم سيرافينا فيل
-              </p>
+              <p className="text-base font-medium text-primary">بقلم سيرافينا فيل</p>
               <p className="text-sm leading-relaxed max-w-sm text-muted-foreground">
-                السحر، ودسائس البلاط، ونبوءة قديمة تتصادم في هذا الإصدار المذهل.
-                عالم بُني بتفاصيل آسرة، وشخصيات تبدو حقيقية بشكل مؤلم.
+                السحر، ودسائس البلاط، ونبوءة قديمة تتصادم في هذا الإصدار المذهل. عالم بُني بتفاصيل
+                آسرة، وشخصيات تبدو حقيقية بشكل مؤلم.
               </p>
             </div>
 
             {/* Rating stars */}
             <div className="flex items-center gap-1.5">
               {[1, 2, 3, 4, 5].map((star) => (
-                <StarIcon
-                  key={star}
-                  weight="fill"
-                  className="w-4 h-4 text-primary"
-                />
+                <StarIcon key={star} weight="fill" className="w-4 h-4 text-primary" />
               ))}
-              <span className="text-sm font-semibold text-foreground me-1">
-                4.8
-              </span>
-              <span className="text-sm text-muted-foreground">
-                · 34.5 ألف تقييم
-              </span>
+              <span className="text-sm font-semibold text-foreground me-1">4.8</span>
+              <span className="text-sm text-muted-foreground">· 34.5 ألف تقييم</span>
             </div>
 
             {/* Buttons */}
@@ -102,9 +91,7 @@ export function FeaturedBanner() {
                     <span className="text-xs uppercase tracking-wide text-muted-foreground">
                       {label}
                     </span>
-                    <span className="text-sm font-semibold text-foreground">
-                      {value}
-                    </span>
+                    <span className="text-sm font-semibold text-foreground">{value}</span>
                   </div>
                 ))}
               </div>
@@ -113,7 +100,7 @@ export function FeaturedBanner() {
 
           {/* Left column in RTL = book cover image – now proper book proportions */}
           <div className="relative flex items-center justify-center p-8 lg:p-12">
-            <div className="relative w-full max-w-[260px] md:max-w-[300px] aspect-2/3 rotate-[-4deg] shadow rounded-lg">
+            <div className="relative w-full max-w-65 md:max-w-75 aspect-2/3 rotate-[-4deg] shadow rounded-lg">
               <img
                 src="/books/شطرنج.png" // ← Replace with real path, e.g. "/covers/blat-al-jamar.jpg"
                 alt="غلاف كتاب بلاط الجمر"
@@ -125,8 +112,7 @@ export function FeaturedBanner() {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background:
-                    "linear-gradient(to left, hsl(var(--card)) 0%, transparent 35%)",
+                  background: "linear-gradient(to left, hsl(var(--card)) 0%, transparent 35%)",
                 }}
               />
             </div>
