@@ -7,7 +7,7 @@ export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
     with: {
       author: true,
     },
-    limit: 30,
+    limit: 15,
   });
   return books;
 });
