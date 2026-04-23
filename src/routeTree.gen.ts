@@ -13,6 +13,7 @@ import { Route as ProtectedRouteImport } from './app/_protected'
 import { Route as IndexRouteImport } from './app/index'
 import { Route as MainSearchRouteImport } from './app/_main/search'
 import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
+import { Route as MainBookIdRouteImport } from './app/_main/book/$id'
 import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
 import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
 
@@ -35,6 +36,11 @@ const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
   path: '/profile/',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const MainBookIdRoute = MainBookIdRouteImport.update({
+  id: '/_main/book/$id',
+  path: '/book/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MainAuthPathnameRoute = MainAuthPathnameRouteImport.update({
   id: '/_main/auth/$pathname',
   path: '/auth/$pathname',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof MainSearchRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
+  '/book/$id': typeof MainBookIdRoute
   '/profile/': typeof ProtectedProfileIndexRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/search': typeof MainSearchRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
+  '/book/$id': typeof MainBookIdRoute
   '/profile': typeof ProtectedProfileIndexRoute
 }
 export interface FileRoutesById {
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   '/_main/search': typeof MainSearchRoute
   '/_main/account/$pathname': typeof MainAccountPathnameRoute
   '/_main/auth/$pathname': typeof MainAuthPathnameRoute
+  '/_main/book/$id': typeof MainBookIdRoute
   '/_protected/profile/': typeof ProtectedProfileIndexRoute
 }
 export interface FileRouteTypes {
@@ -76,9 +85,16 @@ export interface FileRouteTypes {
     | '/search'
     | '/account/$pathname'
     | '/auth/$pathname'
+    | '/book/$id'
     | '/profile/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/search' | '/account/$pathname' | '/auth/$pathname' | '/profile'
+  to:
+    | '/'
+    | '/search'
+    | '/account/$pathname'
+    | '/auth/$pathname'
+    | '/book/$id'
+    | '/profile'
   id:
     | '__root__'
     | '/'
@@ -86,6 +102,7 @@ export interface FileRouteTypes {
     | '/_main/search'
     | '/_main/account/$pathname'
     | '/_main/auth/$pathname'
+    | '/_main/book/$id'
     | '/_protected/profile/'
   fileRoutesById: FileRoutesById
 }
@@ -95,6 +112,7 @@ export interface RootRouteChildren {
   MainSearchRoute: typeof MainSearchRoute
   MainAccountPathnameRoute: typeof MainAccountPathnameRoute
   MainAuthPathnameRoute: typeof MainAuthPathnameRoute
+  MainBookIdRoute: typeof MainBookIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -126,6 +144,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile/'
       preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRoute
+    }
+    '/_main/book/$id': {
+      id: '/_main/book/$id'
+      path: '/book/$id'
+      fullPath: '/book/$id'
+      preLoaderRoute: typeof MainBookIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_main/auth/$pathname': {
       id: '/_main/auth/$pathname'
@@ -162,6 +187,7 @@ const rootRouteChildren: RootRouteChildren = {
   MainSearchRoute: MainSearchRoute,
   MainAccountPathnameRoute: MainAccountPathnameRoute,
   MainAuthPathnameRoute: MainAuthPathnameRoute,
+  MainBookIdRoute: MainBookIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
