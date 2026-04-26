@@ -27,7 +27,7 @@ const SORT_OPTIONS = [
 
 type BookSortOptions = (typeof SORT_OPTIONS)[number]["value"];
 
-const bookSearchSchema = z.object({
+export const bookSearchSchema = z.object({
   q: z.string().optional(),
   author: z.string().optional(),
   genres: z.array(z.string()).optional(),
@@ -44,12 +44,20 @@ const bookSearchSchema = z.object({
   maxPages: z.number().optional(),
   minRating: z.number().optional(),
 });
-type BookSearch = z.infer<typeof bookSearchSchema>;
+export type BookSearch = z.infer<typeof bookSearchSchema>;
 
 export const Route = createFileRoute("/_main/search")({
-  loader: () => getBooks(),
   validateSearch: bookSearchSchema,
   component: BooksSearchPage,
+  loaderDeps: ({ search: { q, author, genres, sort, minYear, maxYear } }) => ({
+    q,
+    author,
+    genres,
+    sort,
+    minYear,
+    maxYear,
+  }),
+  loader: ({ deps }) => getBooks({data: deps}),
 });
 
 function BooksSearchPage() {
@@ -133,7 +141,7 @@ function BooksSearchPage() {
             {search.q && (
               <button
                 type="button"
-                onChange={() => setParams(() => ({ q: undefined }))}
+                onClick={() => setParams(() => ({ q: undefined }))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <XIcon className="h-4 w-4" />
@@ -154,7 +162,7 @@ function BooksSearchPage() {
             {search.author && (
               <button
                 type="button"
-                onChange={() => setParams(() => ({ author: undefined }))}
+                onClick={() => setParams(() => ({ author: undefined }))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <XIcon className="h-4 w-4" />
