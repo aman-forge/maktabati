@@ -1,7 +1,7 @@
 import { BookCard } from "@features/books/components/book-card";
 import { BookCardDetailed } from "@features/books/components/book-card-detailed";
 import { BookListItem } from "@features/books/components/book-list-item";
-// import { FilterDialog, type FilterState } from "@features/books/components/filters-dialog";
+// import { FilterDialog } from "@features/books/components/filters-dialog";
 import { GenreCombobox } from "@features/books/components/genre-combobox";
 import { ViewToggle } from "@features/books/components/view-toggle";
 import { MagnifyingGlassIcon, SortAscendingIcon, UserIcon, XIcon } from "@phosphor-icons/react";
@@ -13,116 +13,137 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import * as React from "react";
 import z from "zod";
 import { BOOK_GENRES, type BookGenre } from "@/db/constants/books";
-import { getBooks } from "@/features/books/server/get-books";
+import { searchBooks } from "@/features/books/server/get-books";
 
 const SORT_OPTIONS = [
-  { value: "trending", label: "رائج" },
-  { value: "popular", label: "الأكثر شعبية" },
-  { value: "top-rated", label: "الأعلى تقييماً" },
+  // { value: "trending", label: "رائج" },
+  // { value: "popular", label: "الأكثر شعبية" },
+  // { value: "top-rated", label: "الأعلى تقييماً" },
   { value: "newest", label: "الأحدث" },
   { value: "oldest", label: "الأقدم" },
   { value: "title-asc", label: "العنوان أ-ي" },
   { value: "title-desc", label: "العنوان ي-أ" },
 ] as const;
 
-type BookSortOptions = (typeof SORT_OPTIONS)[number]["value"];
+type BookSortOption = (typeof SORT_OPTIONS)[number]["value"];
 
 export const bookSearchSchema = z.object({
-  q: z.string().optional(),
-  author: z.string().optional(),
-  genres: z.array(z.string()).optional(),
-  tags: z.array(z.string()).optional(),
-  sort: z
-    .enum(["trending", "popular", "top-rated", "newest", "oldest", "title-asc", "title-desc"])
-    .default("trending"),
+  q: z.string().max(100).optional(),
+  author: z.string().max(100).optional(),
+  genres: z.array(z.string()).max(4).optional(),
+  sort: z.enum(["newest", "oldest", "title-asc", "title-desc"]).default("newest"),
   view: z.enum(["grid", "detailed", "list"]).default("grid"),
   // readingStatus: z.enum([""]).default(""),
-  // Flattened Filters
   minYear: z.number().optional(),
   maxYear: z.number().optional(),
   minPages: z.number().optional(),
   maxPages: z.number().optional(),
-  minRating: z.number().optional(),
+  page: z.number().int().min(1).default(1),
 });
+
 export type BookSearch = z.infer<typeof bookSearchSchema>;
 
 export const Route = createFileRoute("/_main/search")({
   validateSearch: bookSearchSchema,
   component: BooksSearchPage,
-  loaderDeps: ({ search: { q, author, genres, sort, minYear, maxYear } }) => ({
-    q,
-    author,
-    genres,
-    sort,
-    minYear,
-    maxYear,
-  }),
-  loader: ({ deps }) => getBooks({data: deps}),
+  loaderDeps: ({ search: { view: _view, ...rest } }) => rest, // exlude view from deps - client only
+  loader: ({ deps }) => searchBooks({ data: deps }),
 });
 
 function BooksSearchPage() {
-  const books = Route.useLoaderData();
+  const { books } = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
 
   const setParams = React.useCallback(
     (updater: (prev: BookSearch) => Partial<BookSearch>) => {
       navigate({
-        search: (prev) => ({ ...prev, ...updater(prev as BookSearch) }),
+        search: (prev) => ({ ...prev, ...updater(prev as BookSearch), page: 1 }), // reset page on filter change
         replace: true,
       });
     },
     [navigate],
   );
 
-  const selectedGenres = React.useMemo(() => {
-    return BOOK_GENRES.filter((g) => search?.genres?.includes(g.value));
-  }, [search.genres]);
+  const selectedGenres = React.useMemo(
+    () => BOOK_GENRES.filter((g) => search.genres?.includes(g.value)),
+    [search.genres],
+  );
 
   const activeFilterTags = React.useMemo(() => {
     const tags: { key: string; label: string; onRemove: () => void }[] = [];
 
     if (search.q) {
       tags.push({
-        key: "search",
+        key: "q",
         label: `العنوان: "${search.q}"`,
         onRemove: () => setParams(() => ({ q: undefined })),
       });
     }
-
     if (search.author) {
       tags.push({
-        key: "search",
+        key: "author",
         label: `المؤلف: "${search.author}"`,
         onRemove: () => setParams(() => ({ author: undefined })),
       });
     }
-
     if (search.minYear || search.maxYear) {
       tags.push({
         key: "year",
-        label: `السنة: ${search.minYear}-${search.maxYear}`,
+        label: `السنة: ${search.minYear ?? "؟"} - ${search.maxYear ?? "؟"}`,
         onRemove: () => setParams(() => ({ minYear: undefined, maxYear: undefined })),
       });
     }
-
-    if (search.genres) {
+    if (search.minPages || search.maxPages) {
+      tags.push({
+        key: "pages",
+        label: `الصفحات: ${search.minPages ?? "؟"} - ${search.maxPages ?? "؟"}`,
+        onRemove: () => setParams(() => ({ minPages: undefined, maxPages: undefined })),
+      });
+    }
+    if (search.genres?.length) {
+      const genreLabels = BOOK_GENRES.filter((g) => search.genres?.includes(g.value))
+        .map((g) => g.label)
+        .join("، ");
       tags.push({
         key: "genres",
-        label: `التصنيف: ${BOOK_GENRES.filter((genre) => search.genres?.includes(genre.value)).map((genre) => `"${genre.label}" `)}`,
+        label: `التصنيف: ${genreLabels}`,
         onRemove: () => setParams(() => ({ genres: undefined })),
       });
     }
-    // ... repeat for other tags using search.paramName
 
     return tags;
   }, [search, setParams]);
 
-  const clearAllFilters = () => {
-    navigate({ search: {} }); // Resets to defaults defined in Zod
-  };
-
   const hasActiveFilters = activeFilterTags.length > 0;
+  const clearAllFilters = () => navigate({ search: {} });
+
+  // Note: Delay for Inputs (Title and Author's Name)
+  function useDebounce<T>(value: T, delay = 500): T {
+    const [debounced, setDebounced] = React.useState(value);
+    React.useEffect(() => {
+      const timer = setTimeout(() => setDebounced(value), delay);
+      return () => clearTimeout(timer);
+    }, [value, delay]);
+    return debounced;
+  }
+
+  // Local state — instant UI response
+  const [qInput, setQInput] = React.useState(search.q ?? "");
+  const [authorInput, setAuthorInput] = React.useState(search.author ?? "");
+
+  // Debounced values — only change after user stops typing
+  const debouncedQ = useDebounce(qInput, 600);
+  const debouncedAuthor = useDebounce(authorInput, 600);
+
+  // Push to URL (and trigger loader) only when debounced value settles
+  React.useEffect(() => {
+    setParams(() => ({ q: debouncedQ || undefined }));
+  }, [debouncedQ, setParams]);
+
+  React.useEffect(() => {
+    setParams(() => ({ author: debouncedAuthor || undefined }));
+  }, [debouncedAuthor, setParams]);
 
   return (
     <div className="min-h-screen bg-background my-6 gap-6 flex flex-col">
@@ -134,14 +155,17 @@ function BooksSearchPage() {
             <Input
               type="search"
               placeholder="ابحث عن كتاب..."
-              value={search.q}
-              onChange={(e) => setParams(() => ({ q: e.target.value }))}
+              value={qInput}
+              onChange={(e) => setQInput(e.target.value)}
               className="pr-9"
             />
-            {search.q && (
+            {qInput && (
               <button
                 type="button"
-                onClick={() => setParams(() => ({ q: undefined }))}
+                onClick={() => {
+                  setQInput("");
+                  setParams(() => ({ q: undefined }));
+                }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <XIcon className="h-4 w-4" />
@@ -155,14 +179,15 @@ function BooksSearchPage() {
             <Input
               type="search"
               placeholder="ابحث عن مؤلف..."
-              value={search.author}
-              onChange={(e) => setParams(() => ({ author: e.target.value }))}
+              value={authorInput}
+              onChange={(e) => setAuthorInput(e.target.value)}
               className="pr-9"
             />
-            {search.author && (
+            {authorInput && (
               <button
                 type="button"
-                onClick={() => setParams(() => ({ author: undefined }))}
+                value={authorInput}
+                onChange={(e) => setAuthorInput(e.target.value)}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <XIcon className="h-4 w-4" />
@@ -173,17 +198,11 @@ function BooksSearchPage() {
           <GenreCombobox
             selected={selectedGenres}
             onSelectionChange={(newGenres: BookGenre[]) => {
-              navigate({
-                search: (prev) => ({
-                  ...prev,
-                  genres: newGenres.map((g) => g.value),
-                }),
-                replace: true,
-              });
+              setParams(() => ({ genres: newGenres.map((g) => g.value) }));
             }}
           />
-          {/*
-          <FilterDialog
+
+          {/*<FilterDialog
             filters={filters}
             onFiltersChange={setFilters}
             onReset={() => setFilters(DEFAULT_FILTERS)}
@@ -195,12 +214,10 @@ function BooksSearchPage() {
             <SortAscendingIcon className="w-4 h-4 text-muted-foreground hidden sm:block" />
             <Select
               value={search.sort}
-              onValueChange={(v) => {
-                setParams(() => ({ sort: v as BookSortOptions }));
-              }}
+              onValueChange={(v) => setParams(() => ({ sort: v as BookSortOption }))}
             >
               <SelectTrigger className="h-10 w-37.5 bg-muted/50 border-transparent">
-                {SORT_OPTIONS.filter((option) => option.value === search.sort)[0].label}
+                {SORT_OPTIONS.find((o) => o.value === search.sort)?.label}
               </SelectTrigger>
               <SelectContent alignItemWithTrigger={false}>
                 {SORT_OPTIONS.map((option) => (
@@ -212,7 +229,7 @@ function BooksSearchPage() {
             </Select>
           </div>
 
-          <ViewToggle value={search.view} onValueChange={(e) => setParams(() => ({ view: e }))} />
+          <ViewToggle value={search.view} onValueChange={(v) => setParams(() => ({ view: v }))} />
         </div>
 
         {hasActiveFilters && (
@@ -225,7 +242,7 @@ function BooksSearchPage() {
                 className="gap-1 pl-1 bg-primary/10 text-primary hover:bg-primary/20 transition-colors cursor-pointer"
                 onClick={tag.onRemove}
               >
-                {tag.label.toString()}
+                {tag.label}
                 <span className="hover:text-destructive transition-colors mr-0.5 rounded-full hover:bg-destructive/10 p-0.5">
                   <XIcon className="h-3 w-3" />
                 </span>
@@ -251,41 +268,7 @@ function BooksSearchPage() {
           </p>
         </div>
 
-        {search.view === "grid" && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-6">
-            {books.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-        )}
-
-        {search.view === "detailed" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {books.map((book) => (
-              <BookCardDetailed key={book.id} book={book} />
-            ))}
-          </div>
-        )}
-
-        {search.view === "list" && (
-          <div className="bg-card rounded-xl border overflow-hidden">
-            <div className="flex items-center gap-4 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
-              <div className="w-10" />
-              <div className="flex-1">العنوان</div>
-              <div className="hidden md:block w-36">التصنيفات</div>
-              <div className="hidden sm:block w-12 text-center">السنة</div>
-              <div className="w-14 text-center">التقييم</div>
-              <div className="w-8" />
-            </div>
-            <div className="divide-y divide-border/50">
-              {books.map((book) => (
-                <BookListItem key={book.id} book={book} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {books.length === 0 && (
+        {books.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-20 h-20 rounded-2xl bg-muted/50 flex items-center justify-center mb-5">
               <MagnifyingGlassIcon className="w-10 h-10 text-muted-foreground/50" />
@@ -298,6 +281,42 @@ function BooksSearchPage() {
               مسح جميع التصفيات
             </Button>
           </div>
+        ) : (
+          <>
+            {search.view === "grid" && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-6">
+                {books.map((book) => (
+                  <BookCard key={book.id} book={book} />
+                ))}
+              </div>
+            )}
+
+            {search.view === "detailed" && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {books.map((book) => (
+                  <BookCardDetailed key={book.id} book={book} />
+                ))}
+              </div>
+            )}
+
+            {search.view === "list" && (
+              <div className="bg-card rounded-xl border overflow-hidden">
+                <div className="flex items-center gap-4 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
+                  <div className="w-10" />
+                  <div className="flex-1">العنوان</div>
+                  <div className="hidden md:block w-36">التصنيفات</div>
+                  <div className="hidden sm:block w-12 text-center">السنة</div>
+                  <div className="w-14 text-center">التقييم</div>
+                  <div className="w-8" />
+                </div>
+                <div className="divide-y divide-border/50">
+                  {books.map((book) => (
+                    <BookListItem key={book.id} book={book} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
