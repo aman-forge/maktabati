@@ -47,7 +47,7 @@ export function BookDescription({
         {paragraphs.length > 1 || paragraphs[0].length > PREVIEW_LENGTH ? (
           <Button
             variant="ghost"
-            className="self-start gap-1.5 px-0 text-sm font-medium text-primary hover:text-primary/80 hover:bg-transparent"
+            className="self-start gap-1 px-1 text-sm font-medium hover:text-primary/80 bg-primary hover:bg-transparent"
             onClick={() => setExpanded((e) => !e)}
           >
             {expanded ? "عرض أقل" : "اقرأ المزيد"}

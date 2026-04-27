@@ -1,43 +1,56 @@
-// import { BookHero } from "@/components/book/book-hero"
-// import { BookDescription } from "@/components/book/book-description"
+import { BookDescription } from "@/features/book/components/book-description";
 // import { BookEditions } from "@/components/book/book-editions"
-// import { BookReviews } from "@/components/book/book-reviews"
+
 // import { AuthorCard } from "@/components/book/author-card"
 // import { ReadingActivity } from "@/components/book/reading-activity"
-// import { WriteReview } from "@/components/book/write-review"
+import { WriteReview } from "@/features/books/components/write-review";
 
 import { Separator } from "@shadcn/separator";
 import { createFileRoute } from "@tanstack/react-router";
 import { BookHero } from "@/features/books/components/book-hero";
 import { BookCarousel } from "@/features/discovery/components/book-carousel"; // Neon ()
-
+import { BookReviews } from "@/features/book/components/book-reviews";
+import { BookEditions } from "@/features/books/components/book-editions";
+import { AuthorCard } from "@/features/books/components/author-card";
+import { TrackBookModal } from "@/features/books/components/track-book-modal";
 export const Route = createFileRoute("/_main/book/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { id } = Route.useParams();
+
   return (
-    <main className="min-h-screen font-sans" style={{ backgroundColor: "var(--background)" }}>
+    <main
+      className="min-h-screen font-sans"
+      style={{ backgroundColor: "var(--background)" }}
+    >
       {/* Hero: cover, title, rating, meta */}
       <BookHero />
-      HELLLOOO
+
       {/* Body */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14">
         <div className="grid lg:grid-cols-[1fr_340px] gap-14">
           {/* Left column: description, reviews, write-review */}
           <div className="flex flex-col gap-12 min-w-0">
-            {/*<BookDescription />*/}
+            <BookDescription
+              paragraphs={[
+                "هذا كتاب يتحدث عن ...",
+                "فقرة ثانية عن تفاصيل القصة...",
+              ]}
+              tags={["رواية", "تشويق"]}
+            />
             <Separator style={{ backgroundColor: "var(--border)" }} />
-            {/*<WriteReview />*/}
+            <WriteReview />
             <Separator style={{ backgroundColor: "var(--border)" }} />
-            {/*<BookReviews />*/}
+            {/* <BookReviews /> */}
           </div>
 
           {/* Right sidebar: editions, author, activity */}
           <aside className="flex flex-col gap-10">
-            {/*<BookEditions />
+            <BookEditions />
             <AuthorCard />
-            <ReadingActivity />*/}
+            {/* <TrackBookModal /> */}
           </aside>
         </div>
       </div>

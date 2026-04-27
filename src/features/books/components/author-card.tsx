@@ -2,15 +2,20 @@ import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
-import type { Author, Book } from "@/db/tables";
+import { books, type Author, type Book } from "@/db/tables";
 
 interface AuthorCardProps {
   author?: Author & { books: Book[] | null };
 }
-
-export function AuthorCard({ author }: AuthorCardProps) {
-  if (!author) return null;
-
+const author = {
+  name: "lklk",
+  country: "سوريا",
+  bio: "لقد عاش في",
+  books: "gfg",
+};
+// export function AuthorCard({ author }: AuthorCardProps) {
+// if (!author) return null;
+export function AuthorCard() {
   return (
     <section id="author" dir="rtl" className="flex flex-col gap-6">
       <h2
@@ -37,7 +42,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
               <img
-                src={author.profileImage}
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sara"
                 alt={author.name}
                 className="object-cover"
               />
@@ -102,7 +107,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
             </p>
 
             <div className="flex gap-3">
-              {author?.books?.map((b) => (
+              {/* {author?.books?.map((b) => (
                 <Link
                   key={b.title}
                   to="/"
@@ -113,7 +118,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
                     style={{ aspectRatio: "2/3" }}
                   >
                     <img
-                      src={b.coverImageUrl}
+                      src="public/books/شطرنج.png"
                       alt={b.title}
                       // fill
                       className="object-cover"
@@ -123,7 +128,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
                     {b.title}
                   </p>
                 </Link>
-              ))}
+              ))} */}
 
               {/* "View all" slot */}
               <Link
