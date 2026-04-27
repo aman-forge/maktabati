@@ -54,10 +54,10 @@ export function WriteReview() {
               <StarIcon
                 className="w-7 h-7 transition-colors"
                 style={{
-                  fill:
-                    star <= (hoverRating || rating)
-                      ? "var(--primary)"
-                      : "transparent",
+                  // fill:
+                  //   star <= (hoverRating || rating)
+                  //     ? "var(--primary)"
+                  //     : "transparent",
                   color:
                     star <= (hoverRating || rating)
                       ? "var(--primary)"

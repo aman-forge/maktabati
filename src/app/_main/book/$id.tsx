@@ -43,7 +43,7 @@ function RouteComponent() {
             <Separator style={{ backgroundColor: "var(--border)" }} />
             <WriteReview />
             <Separator style={{ backgroundColor: "var(--border)" }} />
-            {/* <BookReviews /> */}
+            <BookReviews />
           </div>
 
           {/* Right sidebar: editions, author, activity */}

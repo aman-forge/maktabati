@@ -3,6 +3,7 @@ import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
 import { books, type Author, type Book } from "@/db/tables";
+import { Badge } from "@/ui/components/ui/badge";
 
 interface AuthorCardProps {
   author?: Author & { books: Book[] | null };
@@ -10,8 +11,11 @@ interface AuthorCardProps {
 const author = {
   name: "lklk",
   country: "سوريا",
-  bio: "لقد عاش في",
+  bio: " لقد عاش في لالا   اللالاال  السس لالبساال اسببابافبا ايفشففب",
   books: "gfg",
+  b: "شطرنج",
+  tags: ["الأكثر مبيعًا", "جديد"],
+  stats: [{ label: "عدد الكتب المكتوبه", value: "320" }],
 };
 // export function AuthorCard({ author }: AuthorCardProps) {
 // if (!author) return null;
@@ -50,7 +54,7 @@ export function AuthorCard() {
             <Button
               variant="outline"
               size="sm"
-              className="gap-1.5 rounded-xl mb-1"
+              className="gap-1.5 rounded-xl mb-0.5"
             >
               متابعة
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
@@ -70,7 +74,7 @@ export function AuthorCard() {
             </div>
 
             {/* Stats */}
-            {/* <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5">
               {author.stats.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center">
                   <span className="text-base font-bold text-foreground tabular-nums">
@@ -79,13 +83,13 @@ export function AuthorCard() {
                   <span className="text-xs text-muted-foreground">{label}</span>
                 </div>
               ))}
-            </div> */}
+            </div>
 
             <p className="text-sm leading-relaxed text-muted-foreground">
               {author.bio}
             </p>
 
-            {/* <div className="flex flex-wrap gap-2 mt-1">
+            <div className="flex flex-wrap gap-2 mt-1">
               {author.tags.map((tag) => (
                 <Badge
                   key={tag}
@@ -95,7 +99,7 @@ export function AuthorCard() {
                   {tag}
                 </Badge>
               ))}
-            </div> */}
+            </div>
           </div>
 
           <Separator className="my-5 bg-border" />
@@ -107,28 +111,28 @@ export function AuthorCard() {
             </p>
 
             <div className="flex gap-3">
-              {/* {author?.books?.map((b) => (
-                <Link
-                  key={b.title}
-                  to="/"
-                  className="group flex flex-col gap-1.5 shrink-0"
+              {/* {author?.books?.map((b) => ( */}
+              <Link
+                key={"شطرنج"}
+                to="/"
+                className="group flex flex-col gap-1.5 shrink-0"
+              >
+                <div
+                  className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
+                  style={{ aspectRatio: "2/3" }}
                 >
-                  <div
-                    className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                    style={{ aspectRatio: "2/3" }}
-                  >
-                    <img
-                      src="public/books/شطرنج.png"
-                      alt={b.title}
-                      // fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                    {b.title}
-                  </p>
-                </Link>
-              ))} */}
+                  <img
+                    src="/hero-book.png"
+                    alt={`شرنج`}
+                    // fill
+                    className="object-cover"
+                  />
+                </div>
+                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
+                  {"شرنج"}
+                </p>
+              </Link>
+              {/* ))} */}
 
               {/* "View all" slot */}
               <Link
