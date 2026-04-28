@@ -6,8 +6,8 @@ import {
   CheckIcon,
   ClockIcon,
   UserCircleIcon,
-  UserIcon,
   UsersIcon,
+  UsersThreeIcon,
 } from "@phosphor-icons/react/ssr";
 
 export type NavItem = {
@@ -61,7 +61,7 @@ export const discoverItems: NavItem[] = [
     title: "القراء",
     href: "/discover/readers",
     description: "تواصل مع محبي الكتب",
-    icon: UserIcon,
+    icon: UsersThreeIcon,
   },
   {
     title: "القوائم المنسقة",

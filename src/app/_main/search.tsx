@@ -209,7 +209,9 @@ function BooksSearchPage() {
 
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border/40">
-            <span className="text-xs text-muted-foreground font-medium ml-1">التصفية:</span>
+            <span className="text-xs text-muted-foreground font-medium ml-1">
+              التصفية:
+            </span>
             {activeFilterTags.map((tag) => (
               <Badge
                 key={tag.key}

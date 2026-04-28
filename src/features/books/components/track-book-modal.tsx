@@ -90,7 +90,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
   const [status, setStatus] = React.useState("plan-to-read");
   const [score, setScore] = React.useState(0);
   const [pagesProgress, setPagesProgress] = React.useState(0);
-  const [startDate, setStartDate] = React.useState(new Date().toISOString().split("T")[0]);
+  const [startDate, setStartDate] = React.useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [finishDate, setFinishDate] = React.useState("");
   const [notes, setNotes] = React.useState("");
   const [hoveredStar, setHoveredStar] = React.useState(0);

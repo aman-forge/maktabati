@@ -110,7 +110,11 @@ interface FilterDialogProps {
 
 type ArrayFilterKey = "formats" | "publishers" | "tags" | "readingStatus";
 
-export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialogProps) {
+export function FilterDialog({
+  filters,
+  onFiltersChange,
+  onReset,
+}: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
   const [publisherOpen, setPublisherOpen] = React.useState(false);
@@ -133,14 +137,17 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
     setOpen(false);
   };
 
-  const toggleArrayFilter = React.useCallback((key: ArrayFilterKey, value: string) => {
-    setLocalFilters((prev) => ({
-      ...prev,
-      [key]: prev[key].includes(value)
-        ? prev[key].filter((v) => v !== value)
-        : [...prev[key], value],
-    }));
-  }, []);
+  const toggleArrayFilter = React.useCallback(
+    (key: ArrayFilterKey, value: string) => {
+      setLocalFilters((prev) => ({
+        ...prev,
+        [key]: prev[key].includes(value)
+          ? prev[key].filter((v) => v !== value)
+          : [...prev[key], value],
+      }));
+    },
+    [],
+  );
 
   const activeFiltersCount = React.useMemo(() => {
     let count = 0;
@@ -249,19 +256,28 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
             {/* Minimum rating */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">الحد الأدنى للتقييم</Label>
+                <Label className="text-sm font-medium">
+                  الحد الأدنى للتقييم
+                </Label>
                 {localFilters.ratingMin > 0 ? (
                   <span className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded-md">
-                    <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+                    <StarIcon
+                      weight="fill"
+                      className="w-3 h-3 text-amber-400"
+                    />
                     {localFilters.ratingMin}+
                   </span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">أي تقييم</span>
+                  <span className="text-xs text-muted-foreground">
+                    أي تقييم
+                  </span>
                 )}
               </div>
               <Slider
                 value={[localFilters.ratingMin]}
-                onValueChange={([v]) => setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))}
+                onValueChange={([v]) =>
+                  setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))
+                }
                 min={0}
                 max={5}
                 step={0.5}
@@ -287,7 +303,10 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
                     </Button>
                   }
                 />
-                <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                <PopoverContent
+                  className="w-(--radix-popover-trigger-width) p-0"
+                  align="start"
+                >
                   <Command>
                     <CommandInput placeholder="ابحث عن ناشر..." />
                     <CommandList>
@@ -297,7 +316,9 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
                           <CommandItem
                             key={publisher}
                             value={publisher}
-                            onSelect={() => toggleArrayFilter("publishers", publisher)}
+                            onSelect={() =>
+                              toggleArrayFilter("publishers", publisher)
+                            }
                           >
                             <CheckIcon
                               className={cn(
