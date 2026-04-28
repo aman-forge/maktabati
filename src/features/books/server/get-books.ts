@@ -12,7 +12,7 @@ import {
   or,
   type SQL,
 } from "drizzle-orm";
-import { bookSearchSchema } from "@/app/_main/search";
+import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
 import type { BookWithAuthor } from "@/db/tables";
 import { authors, books } from "@/db/tables";

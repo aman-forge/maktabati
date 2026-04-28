@@ -77,7 +77,7 @@ export type BookSearch = z.infer<typeof bookSearchSchema>;
 // Route
 // ---------------------------------------------------------------------------
 
-export const Route = createFileRoute("/_main/search")({
+export const Route = createFileRoute("/_main/discover/books")({
   validateSearch: bookSearchSchema,
   component: BooksSearchPage,
   loaderDeps: ({ search: { view: _view, ...rest } }) => rest,
