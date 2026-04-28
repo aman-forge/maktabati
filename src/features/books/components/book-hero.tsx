@@ -33,7 +33,7 @@ export function BookHero() {
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
   const book = {
-    title: "توتو",
+    title: "الشطرنج",
     badges: ["الأكثر مبيعًا", "جديد"],
     rating: 4.6,
     ratingTotal: 4,
@@ -74,7 +74,7 @@ export function BookHero() {
               style={{ aspectRatio: "2/3" }}
             >
               <img
-                src="/hero-book.png"
+                src="/books/شطرنج.png"
                 alt={`غلاف كتاب توتو`}
                 className="object-cover"
               />

@@ -50,7 +50,7 @@ export function AuthorCard() {
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
               <img
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sara"
+                src="/authors/sanderson.png"
                 alt={author.name}
                 className="object-cover"
               />
