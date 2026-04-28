@@ -9,13 +9,17 @@ interface AuthorCardProps {
   author?: Author & { books: Book[] | null };
 }
 const author = {
-  name: "lklk",
+  name: "محمد الشاعر",
   country: "سوريا",
-  bio: " لقد عاش في لالا   اللالاال  السس لالبساال اسببابافبا ايفشففب",
+  bio: " لقد عاش في بلد لكن لم يكن ما اراد كان يلعب ويمرح وكان مكان",
   books: "gfg",
   b: "شطرنج",
   tags: ["الأكثر مبيعًا", "جديد"],
-  stats: [{ label: "عدد الكتب المكتوبه", value: "320" }],
+  stats: [
+    { label: "عدد الكتب المكتوبه", value: "320" },
+    { label: "عمره", value: "55" },
+    { label: "تقيم", value: "4.6" },
+  ],
 };
 // export function AuthorCard({ author }: AuthorCardProps) {
 // if (!author) return null;
@@ -31,7 +35,7 @@ export function AuthorCard() {
 
       <div className="rounded-2xl overflow-hidden bg-card border border-border">
         {/* Banner */}
-        <div className="h-20 relative bg-secondary overflow-hidden">
+        <div className="h-20 relative bg-primary overflow-hidden">
           <div
             className="pointer-events-none absolute inset-0 opacity-20"
             style={{
@@ -54,7 +58,7 @@ export function AuthorCard() {
             <Button
               variant="outline"
               size="sm"
-              className="gap-1.5 rounded-xl mb-0.5"
+              className="gap-1.5 rounded-xl mb-0.5 bg-primary"
             >
               متابعة
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
@@ -62,7 +66,7 @@ export function AuthorCard() {
           </div>
 
           {/* Name, location, stats, bio, tags */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <div>
               <h3
                 className="text-lg font-bold text-foreground"
@@ -74,13 +78,15 @@ export function AuthorCard() {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-6">
               {author.stats.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center">
-                  <span className="text-base font-bold text-foreground tabular-nums">
+                  <span className="text-lg font-extrabold text-foreground tabular-nums  ">
                     {value}
                   </span>
-                  <span className="text-xs text-muted-foreground">{label}</span>
+                  <span className="text-[12px] tracking-wider font-semibold text-muted-foreground/80">
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>

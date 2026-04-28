@@ -1,18 +1,14 @@
 import { BookDescription } from "@/features/book/components/book-description";
-// import { BookEditions } from "@/components/book/book-editions"
-
-// import { AuthorCard } from "@/components/book/author-card"
-// import { ReadingActivity } from "@/components/book/reading-activity"
 import { WriteReview } from "@/features/books/components/write-review";
-
 import { Separator } from "@shadcn/separator";
 import { createFileRoute } from "@tanstack/react-router";
 import { BookHero } from "@/features/books/components/book-hero";
 import { BookCarousel } from "@/features/discovery/components/book-carousel"; // Neon ()
 import { BookReviews } from "@/features/book/components/book-reviews";
-import { BookEditions } from "@/features/books/components/book-editions";
 import { AuthorCard } from "@/features/books/components/author-card";
 import { TrackBookModal } from "@/features/books/components/track-book-modal";
+// import { BookEditions } from "@/features/books/components/book-editions";
+
 export const Route = createFileRoute("/_main/book/$id")({
   component: RouteComponent,
 });
@@ -22,7 +18,7 @@ function RouteComponent() {
 
   return (
     <main
-      className="min-h-screen font-sans"
+      className="min-h-screen font-sans md:overflow-hidden"
       style={{ backgroundColor: "var(--background)" }}
     >
       {/* Hero: cover, title, rating, meta */}
@@ -48,7 +44,7 @@ function RouteComponent() {
 
           {/* Right sidebar: editions, author, activity */}
           <aside className="flex flex-col gap-10">
-            <BookEditions />
+            {/* <BookEditions /> */}
             <AuthorCard />
             {/* <TrackBookModal /> */}
           </aside>
