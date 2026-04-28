@@ -3,7 +3,8 @@ import { GenreGrid } from "@features/discovery/components/genre-grid";
 import { HeroSection } from "@features/discovery/components/hero-section";
 import { Await, createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { getBooks } from "@/features/books/server/get-books"; // import { FeaturedBanner } from "@features/discovery/components/featured-banner";
+import { getBooks } from "@/features/books/server/get-books";
+// import { FeaturedBanner } from "@features/discovery/components/featured-banner";
 // import { QuoteSection } from "@features/discovery/components/quote-section";
 
 export const Route = createFileRoute("/")({

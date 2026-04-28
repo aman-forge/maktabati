@@ -25,7 +25,7 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
       >
         <div
           className={cn(
-            "relative flex gap-4 p-0 rounded-xl bg-card border border-border/50 transition-all duration-200",
+            "relative flex gap-4 p-0 rounded-xl h-full bg-card border border-border/50 transition-all duration-200",
             hovered && "border-primary/30 shadow-lg shadow-primary/5",
           )}
         >
@@ -34,7 +34,7 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
             <img
               src={book.coverImageUrl ?? "/books/book.jpg"}
               alt={`Cover of ${book.title}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain rounded-lg overflow-hidden"
             />
           </div>
 

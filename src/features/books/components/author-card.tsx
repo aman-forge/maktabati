@@ -37,16 +37,12 @@ export function AuthorCard({ author }: AuthorCardProps) {
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
               <img
-                src={author.profileImage}
+                src={author.profileImage ?? "not-found.png"} // TODO: CHANGE
                 alt={author.name}
                 className="object-cover"
               />
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 rounded-xl mb-1"
-            >
+            <Button variant="outline" size="sm" className="gap-1.5 rounded-xl mb-1">
               متابعة
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
@@ -61,7 +57,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               >
                 {author.name}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.country}</p>
+              <p className="text-sm text-muted-foreground">{author.nationality}</p>
             </div>
 
             {/* Stats */}
@@ -76,9 +72,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               ))}
             </div> */}
 
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {author.bio}
-            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{author.bio}</p>
 
             {/* <div className="flex flex-wrap gap-2 mt-1">
               {author.tags.map((tag) => (
@@ -103,17 +97,13 @@ export function AuthorCard({ author }: AuthorCardProps) {
 
             <div className="flex gap-3">
               {author?.books?.map((b) => (
-                <Link
-                  key={b.title}
-                  to="/"
-                  className="group flex flex-col gap-1.5 shrink-0"
-                >
+                <Link key={b.title} to="/" className="group flex flex-col gap-1.5 shrink-0">
                   <div
                     className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
                     style={{ aspectRatio: "2/3" }}
                   >
                     <img
-                      src={b.coverImageUrl}
+                      src={b.coverImageUrl ?? "not-found.png"} // TODO: CHANGE
                       alt={b.title}
                       // fill
                       className="object-cover"
@@ -126,10 +116,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
               ))}
 
               {/* "View all" slot */}
-              <Link
-                to="/"
-                className="flex flex-col items-center gap-1.5 w-14 shrink-0"
-              >
+              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}

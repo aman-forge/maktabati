@@ -30,7 +30,7 @@ type BookInput = {
   pageCount: number | null;
   publicationYear: number | null;
   genres: string[];
-  tags: string[];
+  topics: string[];
 };
 
 const BOOKS: BookInput[] = [
@@ -41,7 +41,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: 2017,
     genres: ["tafsir", "fiqh"],
-    tags: [
+    topics: [
       "tafsir_themes",
       "quranic_sciences",
       "fiqh_ibadat",
@@ -57,7 +57,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: 2011,
     genres: ["tafsir", "fiqh"],
-    tags: ["tafsir_themes", "usul_al_tafsir", "fiqh_ibadat", "original_arabic"],
+    topics: ["tafsir_themes", "usul_al_tafsir", "fiqh_ibadat", "original_arabic"],
   },
   {
     title: "التقرير في أسانيد التفسير",
@@ -66,7 +66,7 @@ const BOOKS: BookInput[] = [
     pageCount: 96,
     publicationYear: 2013,
     genres: ["ulum_al_quran", "mustalah_hadith"],
-    tags: [
+    topics: [
       "usul_al_tafsir",
       "quranic_sciences",
       "mustalah",
@@ -82,7 +82,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: 2014,
     genres: ["aqidah", "philosophy"],
-    tags: ["tawhid", "philosophical", "research", "original_arabic"],
+    topics: ["tawhid", "philosophical", "research", "original_arabic"],
   },
   {
     title: "الخرسانية في شرح عقيدة الرازيين",
@@ -91,7 +91,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["aqidah"],
-    tags: ["tawhid", "asma_wa_sifat", "annotated", "original_arabic"],
+    topics: ["tawhid", "asma_wa_sifat", "annotated", "original_arabic"],
   },
   {
     title: "صفة وضوء النبي صلى الله عليه وسلم",
@@ -99,7 +99,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["fiqh", "hadith"],
-    tags: ["fiqh_ibadat", "hadith_studies", "original_arabic", "abridged"],
+    topics: ["fiqh_ibadat", "hadith_studies", "original_arabic", "abridged"],
   },
   {
     title: "العقيدة المغربية",
@@ -108,7 +108,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["aqidah"],
-    tags: ["tawhid", "iman", "annotated", "original_arabic"],
+    topics: ["tawhid", "iman", "annotated", "original_arabic"],
   },
   {
     title: "صفة صلاة النبي صلى الله عليه وسلم",
@@ -117,7 +117,7 @@ const BOOKS: BookInput[] = [
     pageCount: 167,
     publicationYear: 2012,
     genres: ["fiqh", "hadith"],
-    tags: ["fiqh_salah", "fiqh_ibadat", "hadith_studies", "original_arabic"],
+    topics: ["fiqh_salah", "fiqh_ibadat", "hadith_studies", "original_arabic"],
   },
   {
     title: "صفة الحج",
@@ -126,7 +126,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["fiqh", "hadith"],
-    tags: ["fiqh_hajj", "fiqh_ibadat", "hadith_studies", "original_arabic"],
+    topics: ["fiqh_hajj", "fiqh_ibadat", "hadith_studies", "original_arabic"],
   },
   {
     title: "التحجيل في تخريج ما لم يخرج من الأحاديث والآثار في إرواء الغليل",
@@ -135,7 +135,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: 2001,
     genres: ["hadith"],
-    tags: [
+    topics: [
       "hadith_studies",
       "jarh_tadil",
       "rijal_al_hadith",
@@ -151,7 +151,7 @@ const BOOKS: BookInput[] = [
     pageCount: 176,
     publicationYear: 2015,
     genres: ["fiqh"],
-    tags: ["fiqh_family", "halal_haram", "dawah", "original_arabic"],
+    topics: ["fiqh_family", "halal_haram", "dawah", "original_arabic"],
   },
   {
     title: "تعظيم الله تعالى وحكم شاتمه",
@@ -160,7 +160,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["aqidah", "fiqh"],
-    tags: ["tawhid", "asma_wa_sifat", "research", "original_arabic"],
+    topics: ["tawhid", "asma_wa_sifat", "research", "original_arabic"],
   },
   {
     title: "مختصر صحيح أذكار الصباح والمساء",
@@ -169,7 +169,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["hadith"],
-    tags: ["hadith_studies", "adab_islami", "akhlaq_tazkiyah", "abridged", "original_arabic"],
+    topics: ["hadith_studies", "adab_islami", "akhlaq_tazkiyah", "abridged", "original_arabic"],
   },
   {
     title: "المسائل المهمة في الأذان والإقامة",
@@ -178,7 +178,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: null,
     genres: ["fiqh", "hadith"],
-    tags: ["fiqh_ibadat", "fiqh_salah", "hadith_studies", "original_arabic"],
+    topics: ["fiqh_ibadat", "fiqh_salah", "hadith_studies", "original_arabic"],
   },
   {
     title: "الاختلاط تحرير وتقرير وتعقيب",
@@ -187,7 +187,7 @@ const BOOKS: BookInput[] = [
     pageCount: null,
     publicationYear: 2010,
     genres: ["fiqh"],
-    tags: ["fiqh_family", "halal_haram", "dawah", "award_winning", "original_arabic"],
+    topics: ["fiqh_family", "halal_haram", "dawah", "award_winning", "original_arabic"],
   },
 ];
 
@@ -232,7 +232,7 @@ async function seedAltarifiBooks() {
     pageCount: b.pageCount,
     publicationYear: b.publicationYear,
     genres: b.genres,
-    tags: b.tags,
+    topics: b.topics,
     originalLanguage: "ar",
   }));
 

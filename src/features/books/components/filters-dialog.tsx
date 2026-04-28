@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  CaretUpDownIcon,
-  CheckIcon,
-  FadersIcon,
-  MagnifyingGlassIcon,
-  StarIcon,
-  XIcon,
-} from "@phosphor-icons/react";
+import { CaretUpDownIcon, CheckIcon, FunnelIcon, StarIcon, XIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import {
@@ -33,50 +26,18 @@ import {
 } from "@shadcn/sheet";
 import { Slider } from "@shadcn/slider";
 import * as React from "react";
+import { BOOK_TOPICS, PUBLISHERS } from "@/db/constants/books";
 import { cn } from "@/ui/lib/utils";
 
-const FORMATS = [
-  { value: "Hardcover", label: "غلاف صلب" },
-  { value: "Paperback", label: "غلاف ورقي" },
-  { value: "Manuscript", label: "مخطوطة" },
-  { value: "Digital", label: "رقمي" },
-] as const;
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
 
-const PUBLISHERS = [
-  "دار الكتب العلمية",
-  "دار الفكر",
-  "دار السلام",
-  "دار ابن حزم",
-  "دار المنهاج",
-  "دار التقوى",
-  "دار الحديث",
-  "مؤسسة الرسالة",
-  "دار المعارف",
-  "دار القلم",
-];
-
-const TAGS = [
-  "كلاسيكي",
-  "قراءة أساسية",
-  "مناسب للمبتدئين",
-  "متقدم",
-  "علمي",
-  "شرح",
-  "مختصر",
-  "كامل",
-  "موثق",
-  "نادر",
-  "شائع",
-  "موصى به",
-  "إضافة جديدة",
-  "متاح صوتياً",
-  "محشّى",
-  "مترجم",
-  "أصلي",
-  "متعدد الأجزاء",
-];
-
-const READING_STATUS = [
+interface StatusType {
+  value: string;
+  label: string;
+}
+const READING_STATUS: StatusType[] = [
   { value: "Unread", label: "غير مقروء" },
   { value: "Reading", label: "يُقرأ الآن" },
   { value: "Completed", label: "مكتمل" },
@@ -84,22 +45,22 @@ const READING_STATUS = [
   { value: "Dropped", label: "متروك" },
 ] as const;
 
-const AVAILABILITY_OPTIONS = [
-  { value: null, label: "الكل" },
-  { value: true, label: "نسخة رقمية" },
-  { value: false, label: "ورقي فقط" },
-] as const;
+const YEAR_MIN = 700;
+const YEAR_MAX = 2026;
+const PAGE_MIN = 0;
+const PAGE_MAX = 5000;
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
 export interface FilterState {
   yearRange: [number, number];
   pageRange: [number, number];
   ratingMin: number;
-  formats: string[];
   publishers: string[];
-  tags: string[];
+  topics: string[];
   readingStatus: string[];
-  hasDigitalVersion: boolean | null;
-  sortBy: string;
 }
 
 interface FilterDialogProps {
@@ -108,57 +69,82 @@ interface FilterDialogProps {
   onReset: () => void;
 }
 
-type ArrayFilterKey = "formats" | "publishers" | "tags" | "readingStatus";
+type ArrayFilterKey = "publishers" | "topics" | "readingStatus";
+type RangeValue = [number, number];
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
   const [publisherOpen, setPublisherOpen] = React.useState(false);
-  const [tagSearch, setTagSearch] = React.useState("");
+  const [topicSearch, setTopicSearch] = React.useState("");
 
   React.useEffect(() => {
     if (open) {
       setLocalFilters(filters);
-      setTagSearch("");
+      setTopicSearch("");
+      setPublisherOpen(false);
     }
   }, [open, filters]);
 
-  const handleApply = () => {
+  const handleApply = React.useCallback(() => {
     onFiltersChange(localFilters);
     setOpen(false);
-  };
+  }, [localFilters, onFiltersChange]);
 
-  const handleReset = () => {
+  const handleReset = React.useCallback(() => {
     onReset();
     setOpen(false);
-  };
+  }, [onReset]);
 
   const toggleArrayFilter = React.useCallback((key: ArrayFilterKey, value: string) => {
-    setLocalFilters((prev) => ({
-      ...prev,
-      [key]: prev[key].includes(value)
-        ? prev[key].filter((v) => v !== value)
-        : [...prev[key], value],
-    }));
+    setLocalFilters((prev) => {
+      const exists = prev[key].includes(value);
+
+      return {
+        ...prev,
+        [key]: exists ? prev[key].filter((v) => v !== value) : [...prev[key], value],
+      };
+    });
   }, []);
+
+  const setRangeValue = React.useCallback(
+    (key: "yearRange" | "pageRange", value: number | readonly number[]) => {
+      if (!Array.isArray(value) || value.length < 2) return;
+
+      const nextValue: RangeValue = [value[0] ?? 0, value[1] ?? 0];
+
+      setLocalFilters((prev) => ({
+        ...prev,
+        [key]: nextValue,
+      }));
+    },
+    [],
+  );
 
   const activeFiltersCount = React.useMemo(() => {
     let count = 0;
-    if (filters.yearRange[0] !== 700 || filters.yearRange[1] !== 2026) count++;
-    if (filters.pageRange[0] !== 0 || filters.pageRange[1] !== 5000) count++;
+    if (filters.yearRange[0] !== YEAR_MIN || filters.yearRange[1] !== YEAR_MAX) count++;
+    if (filters.pageRange[0] !== PAGE_MIN || filters.pageRange[1] !== PAGE_MAX) count++;
     if (filters.ratingMin > 0) count++;
-    if (filters.formats.length > 0) count++;
     if (filters.publishers.length > 0) count++;
-    if (filters.tags.length > 0) count++;
+    if (filters.topics.length > 0) count++;
     if (filters.readingStatus.length > 0) count++;
-    if (filters.hasDigitalVersion !== null) count++;
     return count;
   }, [filters]);
 
-  const filteredTags = React.useMemo(
-    () => (tagSearch ? TAGS.filter((tag) => tag.includes(tagSearch)) : TAGS),
-    [tagSearch],
-  );
+  const filteredTopics = React.useMemo(() => {
+    if (!topicSearch) return BOOK_TOPICS;
+
+    const q = topicSearch.toLowerCase();
+
+    return BOOK_TOPICS.filter(
+      (topic) => topic.label.toLowerCase().includes(q) || topic.value.toLowerCase().includes(q),
+    );
+  }, [topicSearch]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -167,14 +153,15 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
           <Button
             variant="outline"
             className={cn(
-              "h-10 gap-2 relative bg-muted/50 border-transparent hover:bg-muted",
+              "h-9 gap-1 relative",
               activeFiltersCount > 0 && "text-primary border-primary/30",
             )}
           >
-            <FadersIcon weight="bold" className="w-4 h-4" />
+            <FunnelIcon weight="bold" className="w-4 h-4" />
             <span className="hidden sm:inline">تصفية</span>
+
             {activeFiltersCount > 0 && (
-              <Badge className="absolute -top-1.5 -right-1.5 h-5 w-5 p-0 text-[10px] justify-center bg-primary text-primary-foreground">
+              <Badge className="absolute -top-1.5 -right-1.5 h-5 w-5 p-0 text-[10px] justify-center">
                 {activeFiltersCount}
               </Badge>
             )}
@@ -184,147 +171,146 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
 
       <SheetContent
         side="right"
-        className="w-full sm:max-w-md p-0 flex flex-col rounded-2xl m-4 max-h-[calc(100vh-2rem)]"
+        className="w-full sm:max-w-md p-0 flex flex-col rounded-2xl m-4 max-h-[calc(100vh-2rem)] overflow-hidden"
         dir="rtl"
       >
         <SheetHeader className="px-6 pt-6 pb-4 border-b shrink-0">
-          <SheetTitle className="text-lg">تصفية متقدمة</SheetTitle>
-          <SheetDescription>حسّن بحثك باستخدام فلاتر تفصيلية</SheetDescription>
+          <SheetTitle>تصفية متقدمة</SheetTitle>
+          <SheetDescription>حسّن بحثك باستخدام فلاتر دقيقة</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex-1 max-h-[calc(100vh-11.25rem)]">
-          <div className="px-6 py-5 space-y-7">
-            {/* Year range */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">سنة النشر</Label>
-                <span className="text-xs text-primary font-medium tabular-nums bg-primary/10 px-2 py-1 rounded-md">
-                  {localFilters.yearRange[0]} - {localFilters.yearRange[1]} هـ/م
-                </span>
-              </div>
-              <Slider
-                value={localFilters.yearRange}
-                onValueChange={(value) =>
-                  setLocalFilters((prev) => ({
-                    ...prev,
-                    yearRange: value as [number, number],
-                  }))
-                }
-                min={700}
-                max={2026}
-                step={1}
-              />
-              <div className="flex justify-between text-[10px] text-muted-foreground">
-                <span>700</span>
-                <span>2026</span>
-              </div>
-            </div>
+        <ScrollArea className="flex-1 max-h-[calc(100vh-11rem)]">
+          <div className="px-6 pt-5 space-y-7">
+            <RangeSection
+              label="سنة النشر"
+              value={localFilters.yearRange}
+              min={YEAR_MIN}
+              max={YEAR_MAX}
+              step={1}
+              suffix="م"
+              onChange={(v) => setRangeValue("yearRange", v)}
+            />
 
-            {/* Page range */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">عدد الصفحات</Label>
-                <span className="text-xs text-primary font-medium tabular-nums bg-primary/10 px-2 py-1 rounded-md">
-                  {localFilters.pageRange[0]} - {localFilters.pageRange[1]}+
-                </span>
-              </div>
-              <Slider
-                value={localFilters.pageRange}
-                onValueChange={(value) =>
-                  setLocalFilters((prev) => ({
-                    ...prev,
-                    pageRange: value as [number, number],
-                  }))
-                }
-                min={0}
-                max={5000}
-                step={50}
-              />
-              <div className="flex justify-between text-[10px] text-muted-foreground">
-                <span>0</span>
-                <span>5000+</span>
-              </div>
-            </div>
+            <RangeSection
+              label="عدد الصفحات"
+              value={localFilters.pageRange}
+              min={PAGE_MIN}
+              max={PAGE_MAX}
+              step={50}
+              suffix="+"
+              onChange={(v) => setRangeValue("pageRange", v)}
+            />
 
-            {/* Minimum rating */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <Label className="text-sm font-medium">الحد الأدنى للتقييم</Label>
-                {localFilters.ratingMin > 0 ? (
-                  <span className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded-md">
-                    <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
-                    {localFilters.ratingMin}+
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">
+                    {localFilters.ratingMin > 0 ? `${localFilters.ratingMin}+` : "أي تقييم"}
                   </span>
-                ) : (
-                  <span className="text-xs text-muted-foreground">أي تقييم</span>
-                )}
+                </div>
               </div>
-              <Slider
-                value={[localFilters.ratingMin]}
-                onValueChange={([v]) => setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))}
-                min={0}
-                max={5}
-                step={0.5}
-              />
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-1">
+                  {Array.from({ length: 5 }, (_, index) => {
+                    const starValue = index + 1;
+                    const filled = localFilters.ratingMin >= starValue;
+
+                    return (
+                      <button
+                        key={starValue}
+                        type="button"
+                        onClick={() =>
+                          setLocalFilters((prev) => ({
+                            ...prev,
+                            ratingMin: starValue,
+                          }))
+                        }
+                        className={cn(
+                          "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
+                          filled
+                            ? "text-amber-400 bg-amber-400/10"
+                            : "text-muted-foreground hover:text-amber-400 hover:bg-amber-400/10",
+                        )}
+                        aria-label={`تقييم ${starValue} نجوم`}
+                      >
+                        <StarIcon weight={filled ? "fill" : "regular"} className="w-5 h-5" />
+                      </button>
+                    );
+                  })}
+
+                  <button
+                    type="button"
+                    onClick={() => setLocalFilters((prev) => ({ ...prev, ratingMin: 0 }))}
+                    className="ml-2 text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    مسح
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* Publisher */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium">الناشر</Label>
+              <Label>الناشر</Label>
+
               <Popover open={publisherOpen} onOpenChange={setPublisherOpen}>
                 <PopoverTrigger
                   render={
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={publisherOpen}
-                      className="w-full justify-between h-10 bg-muted/50 border-border/50 hover:bg-muted font-normal"
-                    >
+                    <Button variant="outline" className="w-full justify-between">
                       {localFilters.publishers.length > 0
                         ? `${localFilters.publishers.length} محدد`
                         : "اختر الناشرين..."}
-                      <CaretUpDownIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                      <CaretUpDownIcon className="w-4 h-4 opacity-50" />
                     </Button>
                   }
                 />
-                <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                <PopoverContent align="center" dir="rtl" side="left" className="p-0">
                   <Command>
-                    <CommandInput placeholder="ابحث عن ناشر..." />
+                    <CommandInput placeholder="ابحث..." />
                     <CommandList>
-                      <CommandEmpty>لا يوجد ناشر.</CommandEmpty>
+                      <CommandEmpty>لا يوجد</CommandEmpty>
                       <CommandGroup>
-                        {PUBLISHERS.map((publisher) => (
-                          <CommandItem
-                            key={publisher}
-                            value={publisher}
-                            onSelect={() => toggleArrayFilter("publishers", publisher)}
-                          >
-                            <CheckIcon
-                              className={cn(
-                                "ml-2 h-4 w-4",
-                                localFilters.publishers.includes(publisher)
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {publisher}
-                          </CommandItem>
-                        ))}
+                        {PUBLISHERS.map((publisher) => {
+                          const isSelected = localFilters.publishers.includes(publisher);
+
+                          return (
+                            <CommandItem
+                              key={publisher}
+                              value={publisher}
+                              onSelect={() => toggleArrayFilter("publishers", publisher)}
+                              className="cursor-pointer rounded-2xl px-0"
+                            >
+                              <div
+                                className={cn(
+                                  "mr-2 flex size-5 items-center justify-center rounded-md border transition-colors",
+                                  isSelected
+                                    ? "bg-primary border-primary text-primary-foreground"
+                                    : "border-muted-foreground/30",
+                                )}
+                              >
+                                {isSelected && <CheckIcon className="size-3" />}
+                              </div>
+                              {publisher}
+                            </CommandItem>
+                          );
+                        })}
                       </CommandGroup>
                     </CommandList>
                   </Command>
                 </PopoverContent>
               </Popover>
+
               {localFilters.publishers.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {localFilters.publishers.map((pub) => (
+                <div className="flex flex-wrap gap-1">
+                  {localFilters.publishers.map((publisher) => (
                     <Badge
-                      key={pub}
-                      variant="secondary"
-                      className="gap-1 text-xs bg-primary/10 text-primary cursor-pointer hover:bg-primary/20"
-                      onClick={() => toggleArrayFilter("publishers", pub)}
+                      key={publisher}
+                      onClick={() => toggleArrayFilter("publishers", publisher)}
+                      className="cursor-pointer"
                     >
-                      {pub}
+                      {publisher}
                       <XIcon className="w-3 h-3" />
                     </Badge>
                   ))}
@@ -332,155 +318,129 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
               )}
             </div>
 
-            {/* Format */}
+            <ChipSection
+              label="حالة القراءة"
+              items={READING_STATUS}
+              selected={localFilters.readingStatus}
+              onToggle={(v) => toggleArrayFilter("readingStatus", v)}
+            />
+
             <div className="space-y-3">
-              <Label className="text-sm font-medium">التنسيق</Label>
-              <div className="flex flex-wrap gap-2">
-                {FORMATS.map(({ value, label }) => (
+              <Label>الوسوم</Label>
+
+              <Input
+                placeholder="ابحث..."
+                value={topicSearch}
+                onChange={(e) => setTopicSearch(e.target.value)}
+              />
+
+              <div className="flex flex-wrap gap-2 max-h-48 pb-2 overflow-y-scroll">
+                {filteredTopics.map((tag) => (
                   <button
-                    key={value}
                     type="button"
-                    onClick={() => toggleArrayFilter("formats", value)}
+                    key={tag.value}
+                    onClick={() => toggleArrayFilter("topics", tag.value)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm transition-all duration-150",
-                      localFilters.formats.includes(value)
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted hover:bg-muted/80 text-foreground",
+                      "px-3 py-1.5 rounded-full text-sm transition-colors",
+                      localFilters.topics.includes(tag.value)
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted hover:bg-muted/80",
                     )}
                   >
-                    {label}
+                    {tag.label}
                   </button>
                 ))}
               </div>
-            </div>
-
-            {/* Reading status */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">حالة القراءة</Label>
-              <div className="flex flex-wrap gap-2">
-                {READING_STATUS.map(({ value, label }) => (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => toggleArrayFilter("readingStatus", value)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-sm transition-all duration-150",
-                      localFilters.readingStatus.includes(value)
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted hover:bg-muted/80 text-foreground",
-                    )}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Availability */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">التوفر</Label>
-              <div className="flex flex-wrap gap-2">
-                {AVAILABILITY_OPTIONS.map(({ value, label }) => (
-                  <button
-                    key={String(value)}
-                    type="button"
-                    onClick={() =>
-                      setLocalFilters((prev) => ({
-                        ...prev,
-                        hasDigitalVersion: value,
-                      }))
-                    }
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-sm transition-all duration-150",
-                      localFilters.hasDigitalVersion === value
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-muted hover:bg-muted/80 text-foreground",
-                    )}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Tags */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">الوسوم</Label>
-              <div className="relative">
-                <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="ابحث عن وسم..."
-                  value={tagSearch}
-                  onChange={(e) => setTagSearch(e.target.value)}
-                  className="pr-9 h-9 bg-muted/50 border-border/50"
-                />
-                {tagSearch && (
-                  <button
-                    type="button"
-                    onClick={() => setTagSearch("")}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    <XIcon className="h-3.5 w-3.5" />
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2 max-h-45 overflow-y-auto pl-1">
-                {filteredTags.length > 0 ? (
-                  filteredTags.map((tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => toggleArrayFilter("tags", tag)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-sm transition-all duration-150",
-                        localFilters.tags.includes(tag)
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "bg-muted hover:bg-muted/80 text-foreground",
-                      )}
-                    >
-                      {tag}
-                    </button>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground py-2">
-                    لا توجد وسوم لـ &quot;{tagSearch}&quot;
-                  </p>
-                )}
-              </div>
-              {localFilters.tags.length > 0 && (
-                <div className="pt-2 border-t border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">
-                    الوسوم المختارة ({localFilters.tags.length}):
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {localFilters.tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="gap-1 text-xs bg-primary/10 text-primary cursor-pointer hover:bg-primary/20"
-                        onClick={() => toggleArrayFilter("tags", tag)}
-                      >
-                        {tag}
-                        <XIcon className="w-3 h-3" />
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </ScrollArea>
 
-        <SheetFooter className="flex-row gap-1 p-2 border-t shrink-0">
+        <SheetFooter className="flex gap-2 p-2 border-t h-13 flex-row shrink-0">
           <Button variant="outline" onClick={handleReset} className="flex-1">
             إعادة تعيين
           </Button>
           <Button onClick={handleApply} className="flex-1">
-            تطبيق التصفية
+            تطبيق
           </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Small reusable components
+// ---------------------------------------------------------------------------
+
+function RangeSection({
+  label,
+  value,
+  min,
+  max,
+  step,
+  suffix = "",
+  onChange,
+}: {
+  label: string;
+  value: [number, number];
+  min: number;
+  max: number;
+  step: number;
+  suffix?: string;
+  onChange: (v: number | readonly number[]) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <Label className="text-sm font-medium">{label}</Label>
+        <span className="text-xs text-primary font-medium tabular-nums bg-primary/10 px-2 py-1 rounded-md">
+          {value[0]} - {value[1]}
+          {suffix}
+        </span>
+      </div>
+
+      <Slider value={value} onValueChange={onChange} min={min} max={max} step={step} />
+
+      <div className="flex justify-between text-[10px] text-muted-foreground">
+        <span>{min}</span>
+        <span>
+          {max}
+          {suffix}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ChipSection({
+  label,
+  items,
+  selected,
+  onToggle,
+}: {
+  label: string;
+  items: StatusType[];
+  selected: string[];
+  onToggle: (v: string) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <Label>{label}</Label>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <button
+            type="button"
+            key={item.value}
+            onClick={() => onToggle(item.value)}
+            className={cn(
+              "px-3 py-1.5 rounded-full text-sm transition-colors",
+              selected.includes(item.value) ? "bg-primary text-primary-foreground" : "bg-muted",
+            )}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
