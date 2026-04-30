@@ -11,8 +11,8 @@
 import { Route as rootRouteImport } from './app/__root'
 import { Route as ProtectedRouteImport } from './app/_protected'
 import { Route as IndexRouteImport } from './app/index'
-import { Route as MainSearchRouteImport } from './app/_main/search'
 import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
+import { Route as MainDiscoverBooksRouteImport } from './app/_main/discover/books'
 import { Route as MainBookIdRouteImport } from './app/_main/book/$id'
 import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
 import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
@@ -26,15 +26,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainSearchRoute = MainSearchRouteImport.update({
-  id: '/_main/search',
-  path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
   getParentRoute: () => ProtectedRoute,
+} as any)
+const MainDiscoverBooksRoute = MainDiscoverBooksRouteImport.update({
+  id: '/_main/discover/books',
+  path: '/discover/books',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MainBookIdRoute = MainBookIdRouteImport.update({
   id: '/_main/book/$id',
@@ -54,65 +54,65 @@ const MainAccountPathnameRoute = MainAccountPathnameRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/search': typeof MainSearchRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
   '/book/$id': typeof MainBookIdRoute
+  '/discover/books': typeof MainDiscoverBooksRoute
   '/profile/': typeof ProtectedProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/search': typeof MainSearchRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
   '/book/$id': typeof MainBookIdRoute
+  '/discover/books': typeof MainDiscoverBooksRoute
   '/profile': typeof ProtectedProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_main/search': typeof MainSearchRoute
   '/_main/account/$pathname': typeof MainAccountPathnameRoute
   '/_main/auth/$pathname': typeof MainAuthPathnameRoute
   '/_main/book/$id': typeof MainBookIdRoute
+  '/_main/discover/books': typeof MainDiscoverBooksRoute
   '/_protected/profile/': typeof ProtectedProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/search'
     | '/account/$pathname'
     | '/auth/$pathname'
     | '/book/$id'
+    | '/discover/books'
     | '/profile/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/search'
     | '/account/$pathname'
     | '/auth/$pathname'
     | '/book/$id'
+    | '/discover/books'
     | '/profile'
   id:
     | '__root__'
     | '/'
     | '/_protected'
-    | '/_main/search'
     | '/_main/account/$pathname'
     | '/_main/auth/$pathname'
     | '/_main/book/$id'
+    | '/_main/discover/books'
     | '/_protected/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  MainSearchRoute: typeof MainSearchRoute
   MainAccountPathnameRoute: typeof MainAccountPathnameRoute
   MainAuthPathnameRoute: typeof MainAuthPathnameRoute
   MainBookIdRoute: typeof MainBookIdRoute
+  MainDiscoverBooksRoute: typeof MainDiscoverBooksRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,19 +131,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/search': {
-      id: '/_main/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof MainSearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_protected/profile/': {
       id: '/_protected/profile/'
       path: '/profile'
       fullPath: '/profile/'
       preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRoute
+    }
+    '/_main/discover/books': {
+      id: '/_main/discover/books'
+      path: '/discover/books'
+      fullPath: '/discover/books'
+      preLoaderRoute: typeof MainDiscoverBooksRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_main/book/$id': {
       id: '/_main/book/$id'
@@ -184,10 +184,10 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
-  MainSearchRoute: MainSearchRoute,
   MainAccountPathnameRoute: MainAccountPathnameRoute,
   MainAuthPathnameRoute: MainAuthPathnameRoute,
   MainBookIdRoute: MainBookIdRoute,
+  MainDiscoverBooksRoute: MainDiscoverBooksRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,7 +1,7 @@
 // db/constants/books.ts
 
 // ─────────────────────────────────────────────────────────────
-// 1. Main Genres
+// 1. Main Genres (تصنيفات)
 // ─────────────────────────────────────────────────────────────
 export interface BookGenre {
   value: string;
@@ -9,11 +9,10 @@ export interface BookGenre {
 }
 
 export const BOOK_GENRES: BookGenre[] = [
-  // ── أدب قصصي ──
-  { value: "fiction", label: "أدب قصصي / عام" },
-  { value: "literary_fiction", label: "أدب أدبي / رفيع" },
+  // ── الأدب والروايات ──
+  { value: "fiction", label: "أدب عام" },
+  { value: "literary_fiction", label: "أدب رفيع" },
   { value: "historical_fiction", label: "رواية تاريخية" },
-  { value: "islamic_fiction", label: "رواية إسلامية" }, // ← added: growing Arabic genre
   { value: "mystery_thriller", label: "غموض وإثارة" },
   { value: "crime", label: "جريمة وتحقيق" },
   { value: "horror", label: "رعب" },
@@ -22,16 +21,15 @@ export const BOOK_GENRES: BookGenre[] = [
   { value: "fantasy", label: "فنتازيا" },
   { value: "adventure", label: "مغامرات" },
   { value: "drama", label: "دراما" },
-  { value: "satire", label: "سخرية / تهكم" },
-  { value: "poetry", label: "شعر" },
+  { value: "satire", label: "سخرية" },
   { value: "short_stories", label: "قصص قصيرة" },
   { value: "novella", label: "رواية قصيرة" },
   { value: "young_adult", label: "يافعين / ناشئة" },
   { value: "children", label: "أدب أطفال" },
-  { value: "translated_literature", label: "أدب مترجم" },
-  { value: "folklore", label: "تراث شعبي وأساطير" }, // ← added: Arabic folklore is significant
+  { value: "folklore", label: "فولكلور وأساطير" },
+  { value: "poetry", label: "شعر" },
 
-  // ── غير قصصي / معرفي ──
+  // ── غير قصصي ──
   { value: "biography", label: "سيرة ذاتية" },
   { value: "memoir", label: "مذكرات" },
   { value: "history", label: "تاريخ" },
@@ -46,12 +44,11 @@ export const BOOK_GENRES: BookGenre[] = [
   { value: "arts_culture", label: "فنون وثقافة" },
   { value: "travel", label: "سفر ورحلات" },
   { value: "health_medicine", label: "صحة وطب" },
-  { value: "narrative_nonfiction", label: "غير قصصي سردي" }, // ← added: covers creative nonfiction
-  { value: "literary_criticism", label: "نقد أدبي" }, // ← added: important Arabic academic genre
+  { value: "literary_criticism", label: "نقد أدبي" },
   { value: "reference", label: "مراجع وموسوعات" },
-  { value: "academic", label: "أكاديمي / دراسي" },
+  { value: "academic", label: "دراسات أكاديمية" },
 
-  // ── إسلاميات وعلوم شرعية ──
+  // ── إسلاميات ──
   { value: "islamic_studies", label: "دراسات إسلامية" },
   { value: "aqidah", label: "عقيدة" },
   { value: "fiqh", label: "فقه" },
@@ -69,210 +66,93 @@ export const BOOK_GENRES: BookGenre[] = [
   { value: "shamaail", label: "الشمائل" },
   { value: "tazkiyah", label: "تزكية النفس" },
   { value: "akhlaq", label: "الأخلاق والآداب" },
-  { value: "islamic_finance", label: "الاقتصاد والمالية الإسلامية" },
+  { value: "islamic_finance", label: "الاقتصاد الإسلامي" },
   { value: "comparative_religion", label: "مقارنة الأديان" },
-] as const;
+];
 
 // ─────────────────────────────────────────────────────────────
-// 2. Tags / Tropes / Topics
+// 2. Tags / Topics (وسام؟)
 // ─────────────────────────────────────────────────────────────
-export const BOOK_TAGS = [
-  // ── إعدادات وعوالم القصة ──
+export const BOOK_TOPICS = [
+  // ── البيئة والعالم ──
   { value: "space", label: "فضاء" },
   { value: "dystopia", label: "ديستوبيا" },
-  // removed: utopia — extremely rare in Arabic, redundant with dystopia pair
-  // removed: steampunk / cyberpunk — near-absent in Arabic publishing, confusing for users
   { value: "post_apocalyptic", label: "ما بعد الكارثة" },
   { value: "alternate_history", label: "تاريخ بديل" },
   { value: "medieval", label: "عصور وسطى" },
-  { value: "school_life", label: "حياة مدرسية / جامعية" },
   { value: "virtual_reality", label: "واقع افتراضي" },
   { value: "multiverse", label: "عوالم متعددة" },
   { value: "time_travel", label: "سفر عبر الزمن" },
-  { value: "prison", label: "سجن / معتقل" },
   { value: "desert", label: "صحراء" },
   { value: "city_life", label: "حياة مدينة" },
-  { value: "village_life", label: "حياة ريفية / قروية" },
-  // removed: royal_court — fully covered by medieval + fantasy combination
-  // removed: interstellar — redundant with space
+  { value: "village_life", label: "حياة ريفية" },
 
-  // ── الحبكات والموضوعات العامة ──
-  { value: "survival", label: "بقاء على قيد الحياة" },
+  // ── الحبكات والموضوعات ──
+  { value: "survival", label: "بقاء" },
   { value: "revenge", label: "انتقام" },
-  { value: "redemption", label: "خلاص / توبة / فداء" },
+  { value: "redemption", label: "خلاص" },
   { value: "sacrifice", label: "تضحية" },
-  { value: "rebellion", label: "تمرد / ثورة" },
-  { value: "war_military", label: "حروب ومعارك" },
+  { value: "rebellion", label: "تمرد" },
+  { value: "war", label: "حروب" },
   { value: "conspiracy", label: "مؤامرة" },
   { value: "prophecy", label: "نبوءة" },
-  { value: "secret_society", label: "جمعيات سرية" },
   { value: "investigation", label: "تحقيق" },
   { value: "mystery", label: "ألغاز" },
-  { value: "quest", label: "مهمة / رحلة" },
   { value: "journey", label: "رحلة" },
-  { value: "trial", label: "محاكمة / ابتلاء" },
-  { value: "competition", label: "منافسة / بطولة" },
-  { value: "coming_of_age", label: "نضوج وبلوغ" },
-  { value: "family_drama", label: "دراما عائلية" },
+  { value: "coming_of_age", label: "نضوج" },
+  { value: "family", label: "عائلة" },
   { value: "friendship", label: "صداقة" },
   { value: "betrayal", label: "خيانة" },
-  { value: "amnesia", label: "فقدان الذاكرة" },
-  { value: "identity_secret", label: "هوية سرية" },
-  { value: "destiny", label: "قدر / مصير" },
+  { value: "destiny", label: "قدر" },
   { value: "moral_dilemma", label: "مأزق أخلاقي" },
-  { value: "found_family", label: "عائلة مكتسبة" },
-  { value: "chosen_one", label: "المختار" },
-  { value: "under_dog", label: "بطل من الهامش" },
-  { value: "slice_of_life", label: "حياة يومية" },
-  { value: "dark_comedy", label: "كوميديا سوداء" },
-  { value: "philosophical", label: "فلسفي / تأملي" },
-  { value: "plot_twist", label: "حبكة صادمة" },
-  { value: "fast_paced", label: "إيقاع سريع" },
-  { value: "slow_paced", label: "إيقاع هادئ" },
-  { value: "tragic", label: "تراجيدي" },
-  { value: "cozy", label: "دافئ / مريح" },
-  { value: "suspense", label: "تشويق" },
-  { value: "multiple_pov", label: "تعدد وجهات النظر" },
-  { value: "first_person", label: "سرد بضمير المتكلم" },
-  { value: "third_person", label: "سرد بضمير الغائب" },
-  { value: "epistolary", label: "سرد بالرسائل / المذكرات" },
-  { value: "anthology", label: "مجموعة / أنطولوجيا" },
-  { value: "based_on_true_story", label: "مبني على قصة حقيقية" }, // ← added
-  { value: "award_winning", label: "حائز على جائزة" }, // ← added: very useful filter
-  { value: "debut_novel", label: "رواية أولى" }, // ← added
-
-  // ── شخصيات وأنماط ──
-  { value: "villain_protagonist", label: "بطل شرير" },
-  { value: "anti_hero", label: "بطل غير مثالي" },
-  { value: "strong_female_lead", label: "بطلة قوية" },
-  { value: "detective", label: "محقق ذكي" },
-  { value: "scholar_protagonist", label: "بطل من أهل العلم" },
-  { value: "warrior", label: "محارب" },
-  { value: "ruler", label: "حاكم / ملك" },
-  { value: "orphan", label: "يتيم" },
-  { value: "unreliable_narrator", label: "راوٍ غير موثوق" },
-  { value: "mentor", label: "مرشد / معلّم" },
-  { value: "child_protagonist", label: "بطل طفل" },
-  { value: "outcast", label: "منبوذ / معزول" },
-  { value: "female_protagonist", label: "بطلة رئيسية" },
-  { value: "male_protagonist", label: "بطل رئيسي" },
-  // removed: assassin, prince_princess, genius — too granular, covered by broader tags
-  // removed: treasure_hunt, betrayal_and_loyalty, forbidden_knowledge, secret_society — overlapping
 
   // ── عناصر خيالية ──
-  { value: "magic", label: "سحر وقوى خارقة" },
-  { value: "mythology", label: "أساطير وميثولوجيا" },
-  { value: "vampires", label: "مصاصو دماء" },
-  { value: "demons", label: "شياطين" },
-  { value: "jinn", label: "جن" },
-  { value: "angels", label: "ملائكة" },
+  { value: "magic", label: "سحر" },
+  { value: "mythology", label: "أساطير" },
   { value: "aliens", label: "كائنات فضائية" },
 
-  // ── رومانسية ──
-  { value: "enemies_to_lovers", label: "من أعداء إلى عشاق" },
-  { value: "friends_to_lovers", label: "من أصدقاء إلى عشاق" },
-  { value: "love_triangle", label: "مثلث حب" },
-  { value: "slow_burn", label: "حب بطيء الاشتعال" },
-  { value: "arranged_marriage", label: "زواج مدبّر" },
-  { value: "second_chance", label: "فرصة ثانية" },
-  { value: "childhood_friends", label: "أصدقاء الطفولة" },
-  { value: "opposites_attract", label: "الأضداد تتجاذب" },
-  // removed: fake_dating, contract_marriage, protective_mc — uncommon in Arabic literature context
-
-  // ── إسلاميات وموضوعات شرعية ──
+  // ── إسلاميات ──
   { value: "tawhid", label: "توحيد" },
-  { value: "asma_wa_sifat", label: "الأسماء والصفات" },
   { value: "iman", label: "الإيمان" },
   { value: "qadar", label: "القدر" },
-  { value: "usul_al_tafsir", label: "أصول التفسير" },
-  { value: "tafsir_themes", label: "موضوعات قرآنية" },
-  { value: "quranic_sciences", label: "علوم قرآنية" },
-  { value: "hadith_studies", label: "دراسات حديثية" },
-  { value: "mustalah", label: "مصطلح الحديث" },
-  { value: "jarh_tadil", label: "الجرح والتعديل" },
-  { value: "rijal_al_hadith", label: "رجال الحديث" },
   { value: "sirah_nabawiyyah", label: "السيرة النبوية" },
-  { value: "shamaail_nabawiyyah", label: "الشمائل النبوية" },
-  { value: "sahaba", label: "الصحابة" },
-  { value: "tabiun", label: "التابعون" },
   { value: "fiqh_ibadat", label: "فقه العبادات" },
-  { value: "fiqh_muamalat", label: "فقه المعاملات" },
-  { value: "fiqh_family", label: "فقه الأسرة" },
-  { value: "fiqh_zakat", label: "فقه الزكاة" },
-  { value: "fiqh_salah", label: "فقه الصلاة" },
-  { value: "fiqh_sawm", label: "فقه الصيام" },
-  { value: "fiqh_hajj", label: "فقه الحج" },
-  { value: "halal_haram", label: "حلال وحرام" },
-  { value: "adab_islami", label: "آداب إسلامية" },
-  { value: "akhlaq_tazkiyah", label: "أخلاق وتزكية" },
-  { value: "spirituality", label: "روحانيات" },
+  { value: "akhlaq_tazkiyah", label: "تزكية وأخلاق" },
   { value: "dawah", label: "دعوة" },
-  { value: "comparative_fiqh", label: "فقه مقارن" },
-  { value: "madhahib", label: "المذاهب الفقهية" },
-  { value: "aqeedah_deviant_sects", label: "فرق ومذاهب عقدية" },
-  { value: "islamic_history", label: "تاريخ إسلامي" },
-  { value: "islamic_civilization", label: "حضارة إسلامية" },
-  { value: "waqf", label: "الوقف والأوقاف" }, // merged endowments → waqf
-  // removed: endowments — duplicate of waqf
-  // removed: islamic_finance (tag) — already a genre, no need for both
-  // removed: imaniyyat — overlaps with iman
 
-  // ── اللغة العربية والأدب ──
-  { value: "grammar", label: "قواعد" },
+  // ── اللغة العربية ──
+  { value: "grammar", label: "نحو" },
   { value: "morphology", label: "صرف" },
   { value: "rhetoric", label: "بلاغة" },
-  { value: "prosody", label: "عَروض" },
-  { value: "philology", label: "فقه اللغة" },
-  { value: "semantics", label: "دلالة ومعنى" },
-  { value: "classical_arabic", label: "عربية تراثية" },
-  { value: "modern_arabic", label: "عربية معاصرة" },
-  { value: "poetry_classical", label: "شعر عربي كلاسيكي" },
-  { value: "poetry_modern", label: "شعر حديث" },
-  // removed: vocabulary, writing_skills, reading_skills — course/worksheet material, not book tags
+  { value: "classical_arabic", label: "لغة تراثية" },
+  { value: "modern_arabic", label: "لغة معاصرة" },
+];
 
-  // ── هيئة الكتاب وصفاته ──
-  { value: "classic", label: "كلاسيكي" },
-  { value: "contemporary", label: "معاصر" },
-  { value: "translated", label: "مترجم" },
-  { value: "original_arabic", label: "مؤلف عربي أصلي" },
-  { value: "abridged", label: "مختصر" },
-  { value: "annotated", label: "مشروح / معلّق" },
-  { value: "standalone", label: "كتاب مستقل" },
-  { value: "series", label: "سلسلة" },
-  { value: "essay_collection", label: "مجموعة مقالات" },
-  { value: "research", label: "بحث علمي" },
-  { value: "reference_work", label: "مرجع" },
-  { value: "encyclopedia", label: "موسوعة" },
-  // removed: illustrated — rarely a searchable filter for Arabic books
-  // removed: omnibus — too publishing-specific
-  // removed: guide, manual, textbook, workbook, interview, case_study, review — either too academic or not book-browsing filters
+// TODO: DELETE
+export const PUBLISHERS = [
+  "دار الكتب العلمية",
+  "دار الفكر",
+  "دار السلام",
+  "دار ابن حزم",
+  "دار المنهاج",
+  "دار التقوى",
+  "دار الحديث",
+  "مؤسسة الرسالة",
+  "دار المعارف",
+  "دار القلم",
 ] as const;
 
 // ─────────────────────────────────────────────────────────────
 // 3. TypeScript Utility Types
 // ─────────────────────────────────────────────────────────────
 export type GenreValue = (typeof BOOK_GENRES)[number]["value"];
-export type TagValue = (typeof BOOK_TAGS)[number]["value"];
+export type TopicValue = (typeof BOOK_TOPICS)[number]["value"];
 
 export interface GenreOption {
   value: GenreValue;
   label: string;
 }
-export interface TagOption {
-  value: TagValue;
+export interface TopicOption {
+  value: TopicValue;
   label: string;
 }
-
-// ─────────────────────────────────────────────────────────────
-// BOOKS seed data — عبدالعزيز الطريفي
-// (Only the const — paste into your seed script)
-// ─────────────────────────────────────────────────────────────
-
-type BookInput = {
-  title: string;
-  description: string | null;
-  pageCount: number | null;
-  publicationYear: number | null;
-  genres: GenreValue[];
-  tags: TagValue[];
-};
