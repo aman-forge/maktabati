@@ -1,20 +1,22 @@
 import { Separator } from "@shadcn/separator";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { BookDescription } from "@/features/book/components/book-description";
 import { BookReviews } from "@/features/book/components/book-reviews";
 import { AuthorCard } from "@/features/books/components/author-card";
 import { BookHero } from "@/features/books/components/book-hero";
-import { TrackBookModal } from "@/features/books/components/track-book-modal";
+//import { TrackBookModal } from "@/features/books/components/track-book-modal";
 import { WriteReview } from "@/features/books/components/write-review";
 import { BookCarousel } from "@/features/discovery/components/book-carousel"; // Neon ()
+import { getBookById } from "@/features/books/server/get-books";
 // import { BookEditions } from "@/features/books/components/book-editions";
 
 export const Route = createFileRoute("/_main/book/$id")({
   component: RouteComponent,
+  loader: ({ params }) => getBookById({ data: params.id }),
 });
 
 function RouteComponent() {
-  const { id } = Route.useParams();
+  const book = Route.useLoaderData();
 
   return (
     <main className="min-h-screen font-sans" style={{ backgroundColor: "var(--background)" }}>
