@@ -3,10 +3,10 @@ import { DirectionProvider } from "@components/ui/direction";
 import { Toaster } from "@components/ui/sonner";
 import type { ReactNode } from "react";
 import AuthProvider from "@/features/auth/provider";
+import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 import { TooltipProvider } from "../ui/tooltip";
 import BottomBar from "./bottom-bar";
 import Header from "./header";
-import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (

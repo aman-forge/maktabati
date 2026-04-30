@@ -76,7 +76,11 @@ type RangeValue = [number, number];
 // Component
 // ---------------------------------------------------------------------------
 
-export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialogProps) {
+export function FilterDialog({
+  filters,
+  onFiltersChange,
+  onReset,
+}: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
   const [publisherOpen, setPublisherOpen] = React.useState(false);
@@ -202,54 +206,26 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
             />
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between">
                 <Label className="text-sm font-medium">الحد الأدنى للتقييم</Label>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">
-                    {localFilters.ratingMin > 0 ? `${localFilters.ratingMin}+` : "أي تقييم"}
+                {localFilters.ratingMin > 0 ? (
+                  <span className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded-md">
+                    <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+                    {localFilters.ratingMin}+
                   </span>
-                </div>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    أي تقييم
+                  </span>
+                )}
               </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-1">
-                  {Array.from({ length: 5 }, (_, index) => {
-                    const starValue = index + 1;
-                    const filled = localFilters.ratingMin >= starValue;
-
-                    return (
-                      <button
-                        key={starValue}
-                        type="button"
-                        onClick={() =>
-                          setLocalFilters((prev) => ({
-                            ...prev,
-                            ratingMin: starValue,
-                          }))
-                        }
-                        className={cn(
-                          "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
-                          filled
-                            ? "text-amber-400 bg-amber-400/10"
-                            : "text-muted-foreground hover:text-amber-400 hover:bg-amber-400/10",
-                        )}
-                        aria-label={`تقييم ${starValue} نجوم`}
-                      >
-                        <StarIcon weight={filled ? "fill" : "regular"} className="w-5 h-5" />
-                      </button>
-                    );
-                  })}
-
-                  <button
-                    type="button"
-                    onClick={() => setLocalFilters((prev) => ({ ...prev, ratingMin: 0 }))}
-                    className="ml-2 text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    مسح
-                  </button>
-                </div>
-              </div>
+              <Slider
+                value={[localFilters.ratingMin]}
+                onValueChange={([v]) => setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))}
+                min={0}
+                max={5}
+                step={0.5}
+              />
             </div>
 
             <div className="space-y-3">

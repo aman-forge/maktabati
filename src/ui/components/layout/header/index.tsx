@@ -23,17 +23,15 @@ import { MobileNav } from "./mobile-nav";
 
 function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/70">
-      <div className="container mx-auto flex h-full items-center justify-between px-4">
+    <header className="fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/80">
+      <div className="container mx-auto flex h-full items-center justify-between">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
               <BookOpenIcon className="size-4 text-primary-foreground" />
             </div>
-            <span className="inline-block text-lg font-bold tracking-tight">
-              مكتبتي
-            </span>
+            <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
 
           <DesktopNav />
@@ -54,17 +52,13 @@ function Header() {
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden size-9 sm:flex lg:hidden"
-          >
+          <Button variant="ghost" size="icon" className="hidden size-9 sm:flex lg:hidden">
             <MagnifyingGlassIcon className="size-4.5" />
             <span className="sr-only">بحث</span>
           </Button>
 
           {/* User dropdown — desktop only */}
-          <div className="hidden sm:flex">
+          <div className="hidden md:flex">
             <UserButton
               size="icon"
               classNames={{
@@ -190,9 +184,7 @@ function NavListItem({ item }: { item: NavItem }) {
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">
-                {item.description}
-              </p>
+              <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
             </div>
           </Link>
         }
