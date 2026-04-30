@@ -2,23 +2,22 @@ import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
-import { books, type Author, type Book } from "@/db/tables";
+// import { type Author, type Book } from "@/db/tables";
 import { Badge } from "@/ui/components/ui/badge";
 
-interface AuthorCardProps {
-  author?: Author & { books: Book[] | null };
-}
+// interface AuthorCardProps {
+//   author?: Author & { books: Book[] | null };
+// }
 const author = {
-  name: "محمد الشاعر",
-  country: "سوريا",
-  bio: " لقد عاش في بلد لكن لم يكن ما اراد كان يلعب ويمرح وكان مكان",
-  books: "gfg",
+  name: "براندون ساندرسون",
+  country: "الولايات المتحدة",
+  bio: `براندون وين ساندرسون هو كاتب فانتازيا وخيال علمي أمريكي، اشتهر بتخيّله لعالم أو مجموعة أو كون يدعى كوزمير، دارت أحداث أغلب رواياته الخيالية فيه. واشتهر أيضًا بختمه لسلسة مؤلفات فانتازيا عليا تسمى «عجلة الزمن» لكاتبها روبرت جوردان. وضع براندون «قوانين ساندرسون في السحر» وعمّم مصطلحي نظام السحر القاسي واللين.`,
+  books: "1",
   b: "شطرنج",
-  tags: ["الأكثر مبيعًا", "جديد"],
   stats: [
-    { label: "عدد الكتب المكتوبه", value: "320" },
-    { label: "عمره", value: "55" },
-    { label: "تقيم", value: "4.6" },
+    { label: "عدد الكتب", value: "24" },
+    { label: "مواليد", value: "1977" },
+    { label: "المتابعين", value: "403.609" },
   ],
 };
 // export function AuthorCard({ author }: AuthorCardProps) {
@@ -45,22 +44,14 @@ export function AuthorCard() {
           />
         </div>
 
-        <div className="px-6 pb-6">
+        <div className="px-2 pb-6">
           {/* Avatar + follow row */}
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <img
-                src="/authors/sanderson.png"
-                alt={author.name}
-                className="object-cover"
-              />
+              <img src="/authors/sanderson.png" alt={author.name} className="object-cover" />
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 rounded-xl mb-0.5 bg-primary"
-            >
-              متابعة
+            <Button variant="outline" size="sm" className="gap-1.5 rounded-xl mt-0.5 bg-primary">
+              معرفة المزيد
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
           </div>
@@ -91,11 +82,11 @@ export function AuthorCard() {
               ))}
             </div>
 
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-xs leading-relaxed text-muted-foreground text-justify line-clamp-6">
               {author.bio}
             </p>
 
-            <div className="flex flex-wrap gap-2 mt-1">
+            {/*<div className="flex flex-wrap gap-2 mt-1">
               {author.tags.map((tag) => (
                 <Badge
                   key={tag}
@@ -105,7 +96,7 @@ export function AuthorCard() {
                   {tag}
                 </Badge>
               ))}
-            </div>
+            </div>*/}
           </div>
 
           <Separator className="my-5 bg-border" />
@@ -116,35 +107,42 @@ export function AuthorCard() {
               أعمال أخرى للمؤلف
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-full justify-between">
               {/* {author?.books?.map((b) => ( */}
-              <Link
-                key={"شطرنج"}
-                to="/"
-                className="group flex flex-col gap-1.5 shrink-0"
-              >
-                <div
-                  className="relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                  style={{ aspectRatio: "2/3" }}
-                >
-                  <img
-                    src="/hero-book.png"
-                    alt={`شرنج`}
-                    // fill
-                    className="object-cover"
-                  />
-                </div>
+              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
+                <img
+                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
+                  src="/books/book.jpg"
+                  alt={`شرنج`}
+                />
                 <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                  {"شرنج"}
+                  أسم الكتاب يجب ان يكون هنا{" "}
+                </p>
+              </Link>
+              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
+                <img
+                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
+                  src="/books/book.jpg"
+                  alt={`شرنج`}
+                />
+                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
+                  أسم الكتاب يجب ان يكون هنا{" "}
+                </p>
+              </Link>
+              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
+                <img
+                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
+                  src="/books/book.jpg"
+                  alt={`شرنج`}
+                />
+                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
+                  أسم الكتاب يجب ان يكون هنا{" "}
                 </p>
               </Link>
               {/* ))} */}
 
               {/* "View all" slot */}
-              <Link
-                to="/"
-                className="flex flex-col items-center gap-1.5 w-14 shrink-0"
-              >
+              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}
