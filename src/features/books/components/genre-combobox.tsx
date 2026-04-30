@@ -20,10 +20,7 @@ interface GenreComboboxProps {
   onSelectionChange: (genres: BookGenre[]) => void;
 }
 
-export function GenreCombobox({
-  selected,
-  onSelectionChange,
-}: GenreComboboxProps) {
+export function GenreCombobox({ selected, onSelectionChange }: GenreComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleGenre = (genre: BookGenre) => {
@@ -78,7 +75,6 @@ export function GenreCombobox({
                       onSelect={() => toggleGenre(genre)}
                       className="cursor-pointer rounded-2xl px-0"
                     >
-<<<<<<< HEAD
                       <div
                         className={cn(
                           "mr-2 flex size-4 items-center justify-center rounded-md border transition-colors",
@@ -93,16 +89,6 @@ export function GenreCombobox({
                     </CommandItem>
                   );
                 })}
-=======
-                      {isSelected && <CheckIcon className="size-3" />}
-                    </div>
-                    <span className={cn(isSelected && "font-medium")}>
-                      {genre.label}
-                    </span>
-                  </CommandItem>
-                );
-              })}
->>>>>>> dev
             </CommandGroup>
           </CommandList>
         </Command>

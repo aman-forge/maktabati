@@ -76,11 +76,7 @@ type RangeValue = [number, number];
 // Component
 // ---------------------------------------------------------------------------
 
-export function FilterDialog({
-  filters,
-  onFiltersChange,
-  onReset,
-}: FilterDialogProps) {
+export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
   const [publisherOpen, setPublisherOpen] = React.useState(false);
@@ -214,9 +210,7 @@ export function FilterDialog({
                     {localFilters.ratingMin}+
                   </span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">
-                    أي تقييم
-                  </span>
+                  <span className="text-xs text-muted-foreground">أي تقييم</span>
                 )}
               </div>
               <Slider
