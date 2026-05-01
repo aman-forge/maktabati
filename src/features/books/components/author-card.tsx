@@ -65,7 +65,7 @@ export function AuthorCard() {
               >
                 {author.name}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.country}</p>
+              <p className="text-sm text-muted-foreground">{author.nationality}</p>
             </div>
 
             {/* Stats */}

@@ -3,6 +3,7 @@
 import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { useState } from "react";
+import { BOOK_GENRES } from "@/db/constants/books";
 import type { BookWithAuthor } from "@/db/tables";
 import { Button } from "@/ui/components/ui/button";
 import { cn } from "@/ui/lib/utils";
@@ -44,9 +45,7 @@ export function BookListItem({ book }: BookListItemProps) {
             <h3 className="text-sm font-medium leading-tight truncate text-foreground group-hover:text-primary transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-muted-foreground truncate mt-0.5">
-              {book.author?.name}
-            </p>
+            <p className="text-xs text-muted-foreground truncate mt-0.5">{book.author?.name}</p>
           </div>
 
           {/* Genres - hidden on mobile */}
@@ -57,7 +56,7 @@ export function BookListItem({ book }: BookListItemProps) {
                 variant="secondary"
                 className="text-[10px] px-2 py-0.5 font-normal bg-secondary/50"
               >
-                {genre}
+                {BOOK_GENRES.filter((g) => g.value === genre).at(0)?.label}
               </Badge>
             ))}
           </div>
@@ -97,11 +96,7 @@ export function BookListItem({ book }: BookListItemProps) {
           </Button>
         </div>
       </article>
-      <TrackBookModal
-        book={book}
-        open={isTracking}
-        onOpenChange={setIsTracking}
-      />
+      <TrackBookModal book={book} open={isTracking} onOpenChange={setIsTracking} />
     </>
   );
 }

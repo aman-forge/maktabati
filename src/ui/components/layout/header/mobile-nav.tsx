@@ -1,15 +1,17 @@
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@components/ui/sheet";
 import { browseItems, discoverItems } from "@config/nav";
-import { UserButton } from "@neondatabase/neon-js/auth/react";
-import { ListIcon } from "@phosphor-icons/react";
+import { UserAvatar } from "@neondatabase/neon-js/auth/react";
+import {
+  BookBookmarkIcon,
+  BookOpenIcon,
+  GearSixIcon,
+  SignInIcon,
+  SignOutIcon,
+  UserIcon,
+  UserPlusIcon,
+} from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/auth";
@@ -24,8 +26,8 @@ export function MobileNav() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          <Button variant="ghost" size="icon" className="size-9 md:hidden">
-            <ListIcon className="size-5" />
+          <Button variant="ghost" size="icon" className="md:hidden border-0!">
+            <UserAvatar className="border-0!" user={session?.user} />
             <span className="sr-only">القائمة</span>
           </Button>
         }
@@ -33,38 +35,24 @@ export function MobileNav() {
 
       <SheetContent
         side="right"
-        className="flex w-80 flex-col overflow-y-auto rounded-l-2xl px-4"
+        className="flex w-64! flex-col overflow-y-auto rounded-l-2xl px-2"
         dir="rtl"
       >
         {/* ── Header ── */}
-        <SheetHeader className="text-right">
-          <SheetTitle>{isPending ? "مرحباً بك" : "مكتبتي"}</SheetTitle>
-          {isPending && session?.user?.email && (
-            <p className="truncate text-xs text-muted-foreground">
-              {session?.user.email}
-            </p>
-          )}
-        </SheetHeader>
+        <SheetHeader className="text-right flex flex-row items-center p-2 pt-4!">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
+            <BookOpenIcon className="size-4 text-primary-foreground" />
+          </div>
+          <div className="flex flex-col">
+            <SheetTitle className={"text-base"}>مشروع مكتبتي</SheetTitle>
 
-        {/* ── Profile links (logged in only) ── */}
-        {isPending && (
-          <>
-            <div className="flex flex-col gap-1">
-              <NavSection label="حسابي">
-                <MobileNavLink href={`/u/${session?.user?.id}`} onClick={close}>
-                  الملف الشخصي
-                </MobileNavLink>
-                <MobileNavLink href="/dashboard" onClick={close}>
-                  مكتبتي
-                </MobileNavLink>
-                <MobileNavLink href="/settings" onClick={close}>
-                  الإعدادات
-                </MobileNavLink>
-              </NavSection>
-            </div>
-            <Separator />
-          </>
-        )}
+            {!isPending && session?.user?.email ? (
+              <p className="truncate text-xs text-muted-foreground">{session?.user.email}</p>
+            ) : (
+              <p className="truncate text-xs text-muted-foreground">ليست أول مكتبة عربية</p>
+            )}
+          </div>
+        </SheetHeader>
 
         {/* ── Browse ── */}
         <NavSection label="تصفح">
@@ -76,7 +64,7 @@ export function MobileNav() {
           ))}
         </NavSection>
 
-        <Separator />
+        <Separator className={"mt-2! -mb-1!"} />
 
         {/* ── Discover ── */}
         <NavSection label="اكتشف">
@@ -88,8 +76,43 @@ export function MobileNav() {
           ))}
         </NavSection>
 
+        <Separator className={"mt-2! -mb-1!"} />
+
+        <NavSection label="الحساب">
+          {session?.user ? (
+            <>
+              <MobileNavLink href={`/u/${session?.user?.id}`} onClick={close}>
+                <UserIcon className="size-5 text-muted-foreground" />
+                الملف الشخصي
+              </MobileNavLink>
+              <MobileNavLink href="/dashboard" onClick={close}>
+                <BookBookmarkIcon className="size-5 text-muted-foreground" />
+                مكتبتي
+              </MobileNavLink>
+              <MobileNavLink href="/account/settings" onClick={close}>
+                <GearSixIcon className="size-5 text-muted-foreground" />
+                الإعدادات
+              </MobileNavLink>
+              <MobileNavLink href="/auth/logout" onClick={close}>
+                <SignOutIcon className="size-5 text-muted-foreground" />
+                تسجيل الخروج
+              </MobileNavLink>
+            </>
+          ) : (
+            <>
+              <MobileNavLink href="/auth/register" onClick={close}>
+                <UserPlusIcon className="size-5 text-muted-foreground" />
+                إنشاء حساب
+              </MobileNavLink>
+              <MobileNavLink href="/auth/login" onClick={close}>
+                <SignInIcon className="size-5 text-muted-foreground" />
+                تسجيل الدخول
+              </MobileNavLink>
+            </>
+          )}
+        </NavSection>
+
         {/* ── Auth button ── */}
-        <UserButton size={"lg"} />
       </SheetContent>
     </Sheet>
   );
@@ -97,18 +120,10 @@ export function MobileNav() {
 
 // ─── Small helpers ────────────────────────────────────────────────────────────
 
-function NavSection({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground">
-        {label}
-      </span>
+      <span className="mb-1 px-2 text-xs font-semibold text-muted-foreground pt-4">{label}</span>
       {children}
     </div>
   );

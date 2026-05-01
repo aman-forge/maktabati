@@ -6,8 +6,8 @@ import { AuthorCard } from "@/features/books/components/author-card";
 import { BookHero } from "@/features/books/components/book-hero";
 //import { TrackBookModal } from "@/features/books/components/track-book-modal";
 import { WriteReview } from "@/features/books/components/write-review";
-import { BookCarousel } from "@/features/discovery/components/book-carousel"; // Neon ()
 import { getBookById } from "@/features/books/server/get-books";
+import { BookCarousel } from "@/features/marketing/components/book-carousel";
 // import { BookEditions } from "@/features/books/components/book-editions";
 
 export const Route = createFileRoute("/_main/book/$id")({

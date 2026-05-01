@@ -75,7 +75,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         <h3 className="text-sm font-medium leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200 cursor-pointer">
           {book.title}
         </h3>
-        <p className="text-xs text-muted-foreground truncate">{book.author?.name}</p>
+        <p className="text-xs text-muted-foreground truncate">{book.author?.name ?? "NO AUHTOR"}</p>
       </div>
     </article>
   );
