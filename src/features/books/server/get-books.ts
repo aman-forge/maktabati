@@ -1,3 +1,4 @@
+import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
   and,
@@ -14,7 +15,7 @@ import {
 } from "drizzle-orm";
 import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
-import type { BookWithAuthor, BookWithAuthorWithReviews } from "@/db/tables";
+import type { BookWithAuthor } from "@/db/tables";
 import { authors, books } from "@/db/tables";
 
 // ==== Home/Browse Page ==== //
@@ -111,15 +112,16 @@ export const searchBooks = createServerFn({ method: "GET" })
 
 export const getBookById = createServerFn({ method: "GET" })
   .inputValidator((data: string) => data)
-  .handler(async ({ data: id }) => {
-    const book: BookWithAuthorWithReviews = (await db.query.books.findFirst({
-      where: {
-        id: id,
-      },
+  .handler(async ({ data }) => {
+    const book = await db.query.books.findFirst({
+      where: { id: data },
       with: {
         author: true,
         reviews: true,
       },
-    }))!;
+    });
+
+    if (!book) throw notFound();
+
     return book;
   });

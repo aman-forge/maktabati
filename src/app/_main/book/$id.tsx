@@ -1,5 +1,5 @@
 import { Separator } from "@shadcn/separator";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { BookDescription } from "@/features/book/components/book-description";
 import { BookReviews } from "@/features/book/components/book-reviews";
 import { AuthorCard } from "@/features/books/components/author-card";
@@ -20,6 +20,9 @@ function RouteComponent() {
 
   return (
     <main className="min-h-screen font-sans" style={{ backgroundColor: "var(--background)" }}>
+      {/*TODO: REMOVE - FOR TESTING ONLY!*/}
+      {book.title}
+
       {/* Hero: cover, title, rating, meta */}
       <BookHero />
 
