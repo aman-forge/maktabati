@@ -4,7 +4,7 @@ import { BookDescription } from "@/features/book/components/book-description";
 import { BookReviews } from "@/features/book/components/book-reviews";
 import { AuthorCard } from "@/features/books/components/author-card";
 import { BookHero } from "@/features/books/components/book-hero";
-//import { TrackBookModal } from "@/features/books/components/track-book-modal";
+import { TrackBookModal } from "@/features/books/components/track-book-modal";
 import { WriteReview } from "@/features/books/components/write-review";
 import { getBookById } from "@/features/books/server/get-books";
 import { BookCarousel } from "@/features/marketing/components/book-carousel";
@@ -12,14 +12,17 @@ import { BookCarousel } from "@/features/marketing/components/book-carousel";
 
 export const Route = createFileRoute("/_main/book/$id")({
   component: RouteComponent,
-  loader: ({ params }) => getBookById({ data: params.id }),
+  // loader: ({ params }) => getBookById({ data: params.id }),
 });
 
 function RouteComponent() {
   const book = Route.useLoaderData();
 
   return (
-    <main className="min-h-screen font-sans" style={{ backgroundColor: "var(--background)" }}>
+    <main
+      className="min-h-screen font-sans"
+      style={{ backgroundColor: "var(--background)" }}
+    >
       {/* Hero: cover, title, rating, meta */}
       <BookHero />
 
@@ -49,7 +52,6 @@ function RouteComponent() {
           <aside className="flex flex-col gap-10">
             {/* <BookEditions /> */}
             <AuthorCard />
-            {/*<TrackBookModal />*/}
           </aside>
         </div>
       </div>

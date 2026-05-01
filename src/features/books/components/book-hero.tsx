@@ -1,18 +1,20 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-
 // import type { BookDetail } from "@features/books/types";
 // import { BookDetailed } from "./book-detail";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
+  CaretDownIcon,
   CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
+import { ButtonGroup } from "@/ui/components/ui/button-group";
+import { TrackBookModal } from "./track-book-modal";
 
 // import { BookWithAuthor } from "@/db/tables";
 // // interface BookDetailed {
@@ -32,6 +34,7 @@ export function BookHero() {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
+  const [Trackbookopen, settrackbookopen] = useState(false);
   const book = {
     title: "الإمبراطورية الأخيرة",
     badges: ["الأكثر مبيعًا", "جديد"],
@@ -79,22 +82,34 @@ export function BookHero() {
             {/* Shelf & Actions */}
             <div className="w-full max-w-70 flex flex-col gap-3">
               <div className="relative">
-                <Button
-                  className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
-                  onClick={() => setShelfOpen((o) => !o)}
-                >
-                  {shelf ? (
-                    <>
-                      <CheckIcon weight="bold" className="w-5 h-5" />
-                      {shelf}
-                    </>
-                  ) : (
-                    <>
-                      <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
-                      أضف إلى الرف
-                    </>
-                  )}
-                </Button>
+                <ButtonGroup className="flex w-60">
+                  <Button
+                    className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
+                    onClick={() => setShelfOpen((o) => !o)}
+                  >
+                    {shelf ? (
+                      <>
+                        <CheckIcon weight="bold" className="w-5 h-5" />
+                        {shelf}
+                      </>
+                    ) : (
+                      <>
+                        <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
+                        أضف إلى الرف
+                      </>
+                    )}
+                  </Button>
+                  <Button onClick={() => settrackbookopen(!Trackbookopen)}>
+                    <CaretDownIcon />
+                  </Button>
+                  <TrackBookModal
+                    // book={}
+                    open={Trackbookopen}
+                    onOpenChange={(o: boolean) => {
+                      settrackbookopen(o);
+                    }}
+                  />
+                </ButtonGroup>
 
                 {shelfOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 z-30 rounded-xl overflow-hidden shadow-2xl border border-border bg-popover/95 backdrop-blur-sm">
@@ -104,7 +119,8 @@ export function BookHero() {
                         type="button"
                         className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
                         style={{
-                          color: shelf === label ? "hsl(var(--primary))" : undefined,
+                          color:
+                            shelf === label ? "hsl(var(--primary))" : undefined,
                         }}
                         onClick={() => {
                           setShelf(label);
@@ -157,7 +173,9 @@ export function BookHero() {
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
                     className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0 ? "bg-primary text-primary-foreground border-0 shadow-sm" : ""
+                      i === 0
+                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
+                        : ""
                     }`}
                   >
                     {b}
@@ -201,7 +219,9 @@ export function BookHero() {
                       key={star}
                       weight="fill"
                       className={`w-6 h-6 ${
-                        star <= Math.round(book.rating) ? "text-yellow-400" : "text-muted/30"
+                        star <= Math.round(book.rating)
+                          ? "text-yellow-400"
+                          : "text-muted/30"
                       }`}
                     />
                   ))}
@@ -212,7 +232,10 @@ export function BookHero() {
                 </p>
               </div>
 
-              <Separator orientation="vertical" className="hidden sm:block h-20 opacity-30" />
+              <Separator
+                orientation="vertical"
+                className="hidden sm:block h-20 opacity-30"
+              />
 
               <div className="flex flex-col gap-2 flex-1 max-w-md">
                 {book.ratingCounts?.map(({ stars, pct }) => (
@@ -220,7 +243,10 @@ export function BookHero() {
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
                     </span>
-                    <StarIcon weight="fill" className="w-4 h-4 shrink-0 text-yellow-400/80" />
+                    <StarIcon
+                      weight="fill"
+                      className="w-4 h-4 shrink-0 text-yellow-400/80"
+                    />
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
                       <div
                         className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"
@@ -243,7 +269,9 @@ export function BookHero() {
                     <span className="text-xs uppercase tracking-widest font-medium text-muted-foreground">
                       {label}
                     </span>
-                    <span className="text-base font-semibold text-foreground">{value}</span>
+                    <span className="text-base font-semibold text-foreground">
+                      {value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -255,7 +283,8 @@ export function BookHero() {
       <div
         className="absolute inset-x-0 bottom-0 h-54 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
+          background:
+            "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
         }}
       />
     </section>
