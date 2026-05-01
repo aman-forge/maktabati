@@ -1,16 +1,25 @@
-// import { Badge } from "@components/ui/badge";
+import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
+
 // import type { BookDetail } from "@features/books/types";
+// import { BookDetailed } from "./book-detail";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
   CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
-  // StarIcon,
+  StarIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
+
+// import { BookWithAuthor } from "@/db/tables";
+// // interface BookDetailed {
+// //   cover: string | undefined;
+// //   title: any;
+// //   book: BookWithAuthor;
+// // }
 
 const SHELF_OPTIONS = [
   { label: "أريد القراءة", icon: BookmarkSimpleIcon },
@@ -18,17 +27,38 @@ const SHELF_OPTIONS = [
   { label: "قرأتُه", icon: CheckIcon },
 ] as const;
 
-// export function BookHero({ book }: { book: BookDetail }) {
 export function BookHero() {
+  // export function BookHero() {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
+  const book = {
+    title: "الإمبراطورية الأخيرة",
+    badges: ["الأكثر مبيعًا", "جديد"],
+    rating: 4.6,
+    ratingTotal: 4,
+    reviewCountTotal: 1200,
+    series: "وليدو الضباب",
+    ratingCounts: [
+      { stars: 5, pct: 80 },
+      { stars: 4, pct: 15 },
+      { stars: 3, pct: 3 },
+      { stars: 2, pct: 1 },
+      { stars: 1, pct: 1 },
+    ],
+    meta: [
+      { label: "عدد الصفحات", value: "1004" },
+      { label: "اللغة", value: "العربية" },
+      { label: "سنة النشر", value: "2024" },
+      { label: "التصنيف", value: "رواية" },
+    ],
+  };
 
   return (
-    <section className="relative overflow-hidden hidden">
+    <section className="relative border-b">
       {/* Subtle ash/mist background glow */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-10"
+        className="pointer-events-none absolute inset-0 opacity-25"
         style={{
           background:
             "radial-gradient(circle at 20% 80%, hsl(200 40% 20% / 0.4) 0%, transparent 60%)",
@@ -39,17 +69,12 @@ export function BookHero() {
         <div className="grid lg:grid-cols-[minmax(0,auto)_1fr] gap-10 lg:gap-16 items-start">
           {/* Cover + Actions */}
           <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
-            {/* <div
+            <img
+              src="/books/شطرنج.png"
+              alt={`غلاف كتاب توتو`}
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
-            >
-              <img
-                src={book.cover}
-                alt={`غلاف كتاب ${book.title}`}
-                className="object-cover"
-                priority
-              />
-            </div> */}
+            />
 
             {/* Shelf & Actions */}
             <div className="w-full max-w-70 flex flex-col gap-3">
@@ -79,8 +104,7 @@ export function BookHero() {
                         type="button"
                         className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
                         style={{
-                          color:
-                            shelf === label ? "hsl(var(--primary))" : undefined,
+                          color: shelf === label ? "hsl(var(--primary))" : undefined,
                         }}
                         onClick={() => {
                           setShelf(label);
@@ -126,46 +150,43 @@ export function BookHero() {
           {/* Details */}
           <div className="flex flex-col gap-8">
             {/* Badges */}
-            {/* {book.badges && book.badges.length > 0 && (
+            {book.badges && book.badges.length > 0 && (
               <div className="flex flex-wrap gap-2.5">
                 {book.badges.map((b, i) => (
                   <Badge
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
                     className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0
-                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
-                        : ""
+                      i === 0 ? "bg-primary text-primary-foreground border-0 shadow-sm" : ""
                     }`}
                   >
                     {b}
                   </Badge>
                 ))}
               </div>
-            )} */}
-
+            )}
             {/* Title & Author */}
-            {/* <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
+              {/* Series info*/}
+              {book.series && (
+                <p className="text-base text-muted-foreground font-medium hover:underline cursor-pointer">
+                  #1 من سلسلة {book.series}
+                </p>
+              )}
               <h1
-                className="text-xxl lg:text-3xl font-extrabold leading-[1.05] text-balance tracking-tight text-foreground"
+                className="mt-0.5 text-xl lg:text-3xl font-extrabold leading-[1.05] text-balance tracking-tight text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 {book.title}
               </h1>
-              <p className="text-xl text-primary font-medium">{book.author}</p>
-            </div> */}
-
-            {/* Series info */}
-            {/* {book.series && (
-              <p className="text-base text-muted-foreground font-medium">
-                {book.series}
+              <p className="text-xl text-primary font-medium hover:underline ">
+                {"براندون ساندرسون"}
               </p>
-            )} */}
-
+            </div>
             {/* Rating */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-8">
               <div className="flex flex-col items-start gap-2">
-                {/* <div className="flex items-baseline gap-3">
+                <div className="flex items-baseline gap-3">
                   <span
                     className="text-6xl lg:text-7xl font-black text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
@@ -173,41 +194,33 @@ export function BookHero() {
                     {book.rating}
                   </span>
                   <span className="text-xl text-muted-foreground">/5</span>
-                </div> */}
-                {/* <div className="flex items-center gap-1">
+                </div>
+                <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <StarIcon
                       key={star}
                       weight="fill"
                       className={`w-6 h-6 ${
-                        star <= Math.round(book.rating)
-                          ? "text-yellow-400"
-                          : "text-muted/30"
+                        star <= Math.round(book.rating) ? "text-yellow-400" : "text-muted/30"
                       }`}
                     />
                   ))}
-                </div> */}
-                {/* <p className="text-sm text-muted-foreground">
+                </div>
+                <p className="text-sm text-muted-foreground">
                   {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
                   {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
-                </p> */}
+                </p>
               </div>
 
-              <Separator
-                orientation="vertical"
-                className="hidden sm:block h-20 opacity-30"
-              />
+              <Separator orientation="vertical" className="hidden sm:block h-20 opacity-30" />
 
-              {/* <div className="flex flex-col gap-2 flex-1 max-w-md">
+              <div className="flex flex-col gap-2 flex-1 max-w-md">
                 {book.ratingCounts?.map(({ stars, pct }) => (
                   <div key={stars} className="flex items-center gap-3">
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
                     </span>
-                    <StarIcon
-                      weight="fill"
-                      className="w-4 h-4 shrink-0 text-yellow-400/80"
-                    />
+                    <StarIcon weight="fill" className="w-4 h-4 shrink-0 text-yellow-400/80" />
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
                       <div
                         className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"
@@ -219,35 +232,30 @@ export function BookHero() {
                     </span>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
-
             <Separator className="my-2 bg-border/50" />
-
             {/* Meta */}
-            {/* {book.meta && book.meta.length > 0 && (
+            {book.meta && book.meta.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 {book.meta.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-1.5">
                     <span className="text-xs uppercase tracking-widest font-medium text-muted-foreground">
                       {label}
                     </span>
-                    <span className="text-base font-semibold text-foreground">
-                      {value}
-                    </span>
+                    <span className="text-base font-semibold text-foreground">{value}</span>
                   </div>
                 ))}
               </div>
-            )} */}
+            )}
           </div>
         </div>
       </div>
       {/* Bottom fade for clean section end */}
       <div
-        className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-54 pointer-events-none"
         style={{
-          background:
-            "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
+          background: "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
         }}
       />
     </section>

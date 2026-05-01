@@ -1,76 +1,68 @@
-import { Badge } from "@components/ui/badge";
-import { Button } from "@components/ui/button";
 import { CaretDownIcon } from "@phosphor-icons/react";
+import { Badge } from "@shadcn/badge";
+import { Button } from "@shadcn/button";
 import { useState } from "react";
-
-const PREVIEW_LENGTH = 280;
+import { cn } from "@/ui/lib/utils";
 
 interface BookDescriptionProps {
-  paragraphs?: string[];
+  paragraphs?: string;
   tags?: string[];
 }
 
-export function BookDescription({
-  paragraphs = [],
-  tags = [],
-}: BookDescriptionProps) {
+export function BookDescription({ paragraphs = "", tags = [] }: BookDescriptionProps) {
   const [expanded, setExpanded] = useState(false);
 
-  if (paragraphs.length === 0) return null;
+  if (!paragraphs) return null;
 
-  const previewText =
-    paragraphs[0].slice(0, PREVIEW_LENGTH) +
-    (paragraphs[0].length > PREVIEW_LENGTH ? "…" : "");
+  // Split string into array by new lines to render actual paragraphs
+  const contentParagraphs = paragraphs.split("\n").filter((p) => p.trim() !== "");
 
   return (
     <section dir="rtl" className="flex flex-col gap-6">
       <h2
-        className="text-xl font-bold text-foreground"
+        className="text-2xl font-bold text-foreground tracking-tight"
         style={{ fontFamily: "var(--font-display)" }}
       >
         عن هذا الكتاب
       </h2>
 
-      <div className="flex flex-col gap-4">
-        <div className="text-base leading-relaxed text-foreground/85">
-          {expanded ? (
-            paragraphs.map((para, i) => (
-              <p key={para} className={i > 0 ? "mt-4" : ""}>
-                {para}
-              </p>
-            ))
-          ) : (
-            <p>{previewText}</p>
+      <div className="relative flex flex-col gap-2">
+        <div
+          className={cn(
+            "transition-all duration-500 ease-in-out overflow-hidden text-base leading-relaxed text-foreground/85",
+            !expanded ? "max-h-60 relative" : "max-h-500",
+          )}
+        >
+          <div className="flex flex-col gap-4">
+            {contentParagraphs.map((para, index) => (
+              <p key={index.toString()}>{para}</p>
+            ))}
+          </div>
+
+          {/* Fade overlay when collapsed */}
+          {!expanded && (
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent" />
           )}
         </div>
 
-        {paragraphs.length > 1 || paragraphs[0].length > PREVIEW_LENGTH ? (
-          <Button
-            variant="ghost"
-            className="self-start gap-1.5 px-0 text-sm font-medium text-primary hover:text-primary/80 hover:bg-transparent"
-            onClick={() => setExpanded((e) => !e)}
-          >
-            {expanded ? "عرض أقل" : "اقرأ المزيد"}
-            <CaretDownIcon
-              weight="bold"
-              className="w-4 h-4 transition-transform duration-200"
-              style={{
-                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-              }}
-            />
-          </Button>
-        ) : null}
+        <Button
+          variant="ghost"
+          className="self-start mt-2 gap-2 "
+          onClick={() => setExpanded(!expanded)}
+        >
+          <span className="font-bold">{expanded ? "عرض أقل" : "اقرأ المزيد"}</span>
+          <CaretDownIcon
+            weight="bold"
+            className={cn("w-4 h-4 transition-transform duration-300", expanded && "rotate-180")}
+          />
+        </Button>
       </div>
 
       {/* Tags */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-1">
+        <div className="flex flex-wrap gap-2 pt-2">
           {tags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="outline"
-              className="text-xs px-3 py-1 rounded-full cursor-pointer border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-            >
+            <Badge key={tag} variant="secondary" className="text-lg h-8 px-3">
               {tag}
             </Badge>
           ))}

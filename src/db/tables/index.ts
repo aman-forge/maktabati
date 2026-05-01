@@ -17,3 +17,7 @@ export type BookWithRelations = Book & {
   series: Series | null;
 };
 export type ReviewWithUser = Review & { user: User };
+export type BookWithAuthorWithReviews = Book & {
+  author: Author | null;
+  reviews: Review[];
+};

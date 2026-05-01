@@ -14,7 +14,7 @@ import {
 } from "drizzle-orm";
 import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
-import type { BookWithAuthor } from "@/db/tables";
+import type { BookWithAuthor, BookWithAuthorWithReviews } from "@/db/tables";
 import { authors, books } from "@/db/tables";
 
 // ==== Home/Browse Page ==== //
@@ -30,7 +30,7 @@ export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
   });
 });
 
-// ==== Search Page ==== //
+// ==== Discovery Page ==== //
 
 const PAGE_SIZE = 10 as const;
 
@@ -106,3 +106,20 @@ export const searchBooks = createServerFn({ method: "GET" })
       };
     },
   );
+
+// ==== Book Page ==== //
+
+export const getBookById = createServerFn({ method: "GET" })
+  .inputValidator((data: string) => data)
+  .handler(async ({ data: id }) => {
+    const book: BookWithAuthorWithReviews = (await db.query.books.findFirst({
+      where: {
+        id: id,
+      },
+      with: {
+        author: true,
+        reviews: true,
+      },
+    }))!;
+    return book;
+  });
