@@ -9,7 +9,7 @@
 import { Separator } from "@shadcn/separator";
 import { createFileRoute } from "@tanstack/react-router";
 import { BookHero } from "@/features/books/components/book-hero";
-import { BookCarousel } from "@/features/discovery/components/book-carousel"; // Neon ()
+import { BookCarousel } from "@/features/marketing/components/book-carousel"; // Neon ()
 
 export const Route = createFileRoute("/_main/book/$id")({
   component: RouteComponent,
