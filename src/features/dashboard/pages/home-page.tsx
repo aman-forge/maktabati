@@ -195,7 +195,7 @@ const activityConfig = {
 
 export default function DashboardHome() {
   return (
-    <main className="min-h-screen container mx-auto pb-24 pt-6 md:py-6 px-4 ">
+    <main className="min-h-screen container mx-auto py-6 px-4 ">
       {/* Mobile */}
       <div className="space-y-6 xl:hidden">
         <StreakCard streak={streak} />

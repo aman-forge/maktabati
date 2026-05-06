@@ -207,8 +207,8 @@ export function BookHero() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
-                  {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
+                  {book.ratingTotal?.toLocaleString("ar-US")} تقييم ·{" "}
+                  {book.reviewCountTotal?.toLocaleString("ar-US")} مراجعة
                 </p>
               </div>
 

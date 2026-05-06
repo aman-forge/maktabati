@@ -4,13 +4,13 @@ import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { useState } from "react";
 import { BOOK_GENRES } from "@/db/constants/books";
-import type { BookWithAuthor } from "@/db/tables";
 import { Button } from "@/ui/components/ui/button";
 import { cn } from "@/ui/lib/utils";
+import type { BookCardBook } from "../server/get-books";
 import { TrackBookModal } from "./track-book-modal";
 
 interface BookListItemProps {
-  book: BookWithAuthor;
+  book: BookCardBook;
 }
 
 export function BookListItem({ book }: BookListItemProps) {
@@ -34,7 +34,7 @@ export function BookListItem({ book }: BookListItemProps) {
           {/* Cover */}
           <div className="w-10 h-14 rounded overflow-hidden shrink-0 bg-muted shadow-sm">
             <img
-              src={book.coverImageUrl || "/books/book.jpg"}
+              src={book.coverImageUrl ?? "/books/book.jpg"}
               alt={`Cover of ${book.title}`}
               className="w-full h-full object-cover"
             />

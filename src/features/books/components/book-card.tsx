@@ -5,11 +5,11 @@ import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button, buttonVariants } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
-import type { BookWithAuthor } from "@/db/tables";
 import { cn } from "@/ui/lib/utils";
+import type { BookCardBook } from "../server/get-books";
 
 interface BookCardProps {
-  book: BookWithAuthor;
+  book: BookCardBook;
   size?: "sm" | "md" | "lg";
 }
 
