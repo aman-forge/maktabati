@@ -1,3 +1,5 @@
+// TODO: DELETE File
+
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@components/ui/sheet";
@@ -5,7 +7,6 @@ import { browseItems, discoverItems } from "@config/nav";
 import { UserAvatar } from "@neondatabase/neon-js/auth/react";
 import {
   BookBookmarkIcon,
-  BookOpenIcon,
   GearSixIcon,
   SignInIcon,
   SignOutIcon,
@@ -40,11 +41,9 @@ export function MobileNav() {
       >
         {/* ── Header ── */}
         <SheetHeader className="text-right flex flex-row items-center p-2 pt-4!">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-            <BookOpenIcon className="size-4 text-primary-foreground" />
-          </div>
+          <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
           <div className="flex flex-col">
-            <SheetTitle className={"text-base"}>مشروع مكتبتي</SheetTitle>
+            <SheetTitle className={"text-base"}>مكتبتي</SheetTitle>
 
             {!isPending && session?.user?.email ? (
               <p className="truncate text-xs text-muted-foreground">{session?.user.email}</p>

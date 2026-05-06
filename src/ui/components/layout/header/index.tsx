@@ -12,82 +12,55 @@ import {
 import { browseItems, discoverItems, type NavItem } from "@config/nav";
 import { UserButton } from "@neondatabase/neon-js/auth/react";
 import { BooksIcon, UserIcon } from "@phosphor-icons/react";
-import {
-  ArrowLeftIcon,
-  BookIcon,
-  BookOpenIcon,
-  MagnifyingGlassIcon,
-} from "@phosphor-icons/react/ssr";
+import { ArrowLeftIcon, BookIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
-import { MobileNav } from "./mobile-nav";
 
 function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/80">
-      <div className="container mx-auto flex h-full items-center justify-between">
+    <header className="hidden md:flex fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/80">
+      <div className="container mx-auto px-4 flex h-full items-center justify-between">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-              <BookOpenIcon className="size-4 text-primary-foreground" />
-            </div>
+            <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
             <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
 
           <DesktopNav />
         </div>
 
-        {/* ── Right: Search + Theme + User + Mobile ── */}
+        {/* ── Right: Search + Theme + User  ── */}
         <div className="flex items-center gap-1">
           <ThemeToggle />
-
-          {/* Search — full on lg, icon-only on sm/md */}
-          <Button
-            variant="outline"
-            className="hidden h-9 gap-2 pl-2 pr-3 text-muted-foreground lg:flex"
-          >
+          <Button variant="outline" className="h-9 gap-2 pl-2 pr-3 text-muted-foreground">
             <MagnifyingGlassIcon className="size-4" />
             <span className="text-sm">بحث...</span>
-            <kbd className="pointer-events-none mr-2 hidden h-5 select-none items-center gap-0.5 rounded-full border bg-muted px-1.5 font-mono text-[10px] font-medium lg:flex">
+            <kbd className="pointer-events-none mr-2 h-5 select-none items-center gap-0.5 rounded-full border bg-muted px-1.5 font-mono text-[10px] font-medium flex">
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
-          <Button variant="ghost" size="icon" className="hidden size-9 sm:flex lg:hidden">
-            <MagnifyingGlassIcon className="size-4.5" />
-            <span className="sr-only">بحث</span>
-          </Button>
-
-          {/* User dropdown — desktop only */}
-          <div className="hidden md:flex">
-            <UserButton
-              size="icon"
-              classNames={{
-                content: {
-                  base: "min-w-42 direction-rtl",
-                  user: { base: "direction-rtl" },
-                },
-              }}
-              align="start"
-              side="bottom"
-              alignOffset={0}
-              additionalLinks={[
-                {
-                  href: "/dashboard",
-                  icon: <BooksIcon className="size-4" />,
-                  label: "مكتبتي",
-                  signedIn: true,
-                },
-                {
-                  href: "/profile",
-                  icon: <UserIcon className="size-4" />,
-                  label: "الملف الشخصي",
-                  signedIn: true,
-                },
-              ]}
-            />
-          </div>
-
-          <MobileNav />
+          <UserButton
+            size="icon"
+            classNames={{
+              content: { base: "min-w-42 direction-rtl", user: { base: "direction-rtl" } },
+            }}
+            align="start"
+            side="bottom"
+            additionalLinks={[
+              {
+                href: "/dashboard",
+                icon: <BooksIcon className="size-4" />,
+                label: "مكتبتي",
+                signedIn: true,
+              },
+              {
+                href: "/profile",
+                icon: <UserIcon className="size-4" />,
+                label: "الملف الشخصي",
+                signedIn: true,
+              },
+            ]}
+          />
         </div>
       </div>
     </header>
