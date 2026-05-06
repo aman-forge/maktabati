@@ -1,4 +1,4 @@
-import { authClient } from "@/auth";
+import { authClient } from "@features/auth/lib";
 
 export function useUser() {
   const { data, isPending } = authClient.useSession();

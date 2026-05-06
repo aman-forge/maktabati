@@ -10,13 +10,13 @@ import {
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
 import { communityItems, discoverItems, type NavItem } from "@config/nav";
-import { UserButton } from "@neondatabase/neon-js/auth/react";
+import { UserButton } from "@neondatabase/auth/react/ui";
 import { BooksIcon, UserIcon } from "@phosphor-icons/react";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
-import { Skeleton } from "../../ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 function Header() {
   const { isLoggedIn, isLoading } = useUser();

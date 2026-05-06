@@ -1,4 +1,5 @@
-import { UserAvatar } from "@neondatabase/neon-js/auth/react";
+import { authClient } from "@features/auth/lib";
+import { UserAvatar } from "@neondatabase/auth/react/ui";
 import {
   BookmarkSimpleIcon,
   CompassIcon,
@@ -7,7 +8,6 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
-import { authClient } from "@/auth";
 import { cn } from "@/ui/lib/utils";
 
 const navItems = [

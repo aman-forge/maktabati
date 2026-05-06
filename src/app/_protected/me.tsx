@@ -1,7 +1,7 @@
+import { authClient } from "@features/auth/lib";
 import { SpinnerGapIcon } from "@phosphor-icons/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { authClient } from "@/auth";
 
 export const Route = createFileRoute("/_protected/me")({
   component: MeRoute,

@@ -1,6 +1,6 @@
-import { SignedIn, UserButton } from "@neondatabase/neon-js/auth/react";
+import { authClient } from "@features/auth/lib";
+import { SignedIn, UserButton } from "@neondatabase/auth/react/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import { authClient } from "@/auth";
 
 export const Route = createFileRoute("/_protected/library")({
   component: RouteComponent,
