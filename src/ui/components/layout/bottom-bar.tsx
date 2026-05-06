@@ -19,13 +19,13 @@ const navItems = [
     isProfile: false,
   },
   {
-    href: linkOptions({ to: "/" }), // library
+    href: linkOptions({ to: "/library" }), // library
     icon: BookmarkSimpleIcon,
     label: "مكتبتي",
     isProfile: false,
   },
   { href: linkOptions({ to: "/" }), icon: PulseIcon, label: "النشاط", isProfile: false }, // activity
-  { href: linkOptions({ to: "/settings" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
+  { href: linkOptions({ to: "/me" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
 ] as const;
 
 function BottomBar() {
@@ -45,14 +45,18 @@ function BottomBar() {
               ? linkOptions({ to: "/auth/$pathname", params: { pathname: "/login" } })
               : item.href;
           const isActive =
-            item.href.to === "/" ? pathname === "/" : pathname.startsWith(item.href.to);
+            item.href.to === "/"
+              ? pathname === "/"
+              : item.isProfile
+                ? pathname.startsWith("/u/")
+                : pathname.startsWith(item.href.to);
 
           return (
             <Link
               key={item.href.to}
               to={href.to}
               className={cn(
-                "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-colors",
+                "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-all duration-200",
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -63,14 +67,17 @@ function BottomBar() {
               {item.isProfile && session?.user ? (
                 <div
                   className={cn(
-                    "h-7 w-7 rounded-full ring-2 transition-all overflow-hidden flex items-center justify-center bg-primary/10",
+                    "h-7 w-7 rounded-full ring-2  transition-all duration-200 overflow-hidden flex items-center justify-center bg-primary/10",
                     isActive ? "ring-primary" : "ring-transparent",
                   )}
                 >
                   <UserAvatar />
                 </div>
               ) : (
-                <item.icon className="size-6" weight={isActive ? "fill" : "regular"} />
+                <item.icon
+                  className="size-6 transition-all duration-200"
+                  weight={isActive ? "fill" : "regular"}
+                />
               )}
 
               <span className="text-[10px] font-medium leading-none">{item.label}</span>

@@ -14,11 +14,11 @@ import { Route as IndexRouteImport } from './app/index'
 import { Route as ProtectedNotificationsRouteImport } from './app/_protected/notifications'
 import { Route as ProtectedMeRouteImport } from './app/_protected/me'
 import { Route as ProtectedLibraryRouteImport } from './app/_protected/library'
+import { Route as ProtectedDashboardRouteImport } from './app/_protected/dashboard'
 import { Route as MarketingTermsRouteImport } from './app/_marketing/terms'
 import { Route as MarketingPrivacyRouteImport } from './app/_marketing/privacy'
 import { Route as MarketingAboutRouteImport } from './app/_marketing/about'
 import { Route as ProtectedSettingsIndexRouteImport } from './app/_protected/settings/index'
-import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
 import { Route as ProtectedSettingsProfileRouteImport } from './app/_protected/settings/profile'
 import { Route as ProtectedSettingsPrivacyRouteImport } from './app/_protected/settings/privacy'
 import { Route as ProtectedSettingsImportExportRouteImport } from './app/_protected/settings/import-export'
@@ -64,6 +64,11 @@ const ProtectedLibraryRoute = ProtectedLibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const MarketingTermsRoute = MarketingTermsRouteImport.update({
   id: '/_marketing/terms',
   path: '/terms',
@@ -82,11 +87,6 @@ const MarketingAboutRoute = MarketingAboutRouteImport.update({
 const ProtectedSettingsIndexRoute = ProtectedSettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
-  id: '/profile/',
-  path: '/profile/',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedSettingsProfileRoute =
@@ -200,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/library': typeof ProtectedLibraryRoute
   '/me': typeof ProtectedMeRoute
   '/notifications': typeof ProtectedNotificationsRoute
@@ -219,7 +220,6 @@ export interface FileRoutesByFullPath {
   '/settings/import-export': typeof ProtectedSettingsImportExportRoute
   '/settings/privacy': typeof ProtectedSettingsPrivacyRoute
   '/settings/profile': typeof ProtectedSettingsProfileRoute
-  '/profile/': typeof ProtectedProfileIndexRoute
   '/settings/': typeof ProtectedSettingsIndexRoute
   '/author/$id/books': typeof MainAuthorIdBooksRoute
   '/author/$id/series': typeof MainAuthorIdSeriesRoute
@@ -231,6 +231,7 @@ export interface FileRoutesByTo {
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/library': typeof ProtectedLibraryRoute
   '/me': typeof ProtectedMeRoute
   '/notifications': typeof ProtectedNotificationsRoute
@@ -250,7 +251,6 @@ export interface FileRoutesByTo {
   '/settings/import-export': typeof ProtectedSettingsImportExportRoute
   '/settings/privacy': typeof ProtectedSettingsPrivacyRoute
   '/settings/profile': typeof ProtectedSettingsProfileRoute
-  '/profile': typeof ProtectedProfileIndexRoute
   '/settings': typeof ProtectedSettingsIndexRoute
   '/author/$id/books': typeof MainAuthorIdBooksRoute
   '/author/$id/series': typeof MainAuthorIdSeriesRoute
@@ -264,6 +264,7 @@ export interface FileRoutesById {
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
   '/_marketing/terms': typeof MarketingTermsRoute
+  '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/library': typeof ProtectedLibraryRoute
   '/_protected/me': typeof ProtectedMeRoute
   '/_protected/notifications': typeof ProtectedNotificationsRoute
@@ -283,7 +284,6 @@ export interface FileRoutesById {
   '/_protected/settings/import-export': typeof ProtectedSettingsImportExportRoute
   '/_protected/settings/privacy': typeof ProtectedSettingsPrivacyRoute
   '/_protected/settings/profile': typeof ProtectedSettingsProfileRoute
-  '/_protected/profile/': typeof ProtectedProfileIndexRoute
   '/_protected/settings/': typeof ProtectedSettingsIndexRoute
   '/_main/author/$id/books': typeof MainAuthorIdBooksRoute
   '/_main/author/$id/series': typeof MainAuthorIdSeriesRoute
@@ -297,6 +297,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy'
     | '/terms'
+    | '/dashboard'
     | '/library'
     | '/me'
     | '/notifications'
@@ -316,7 +317,6 @@ export interface FileRouteTypes {
     | '/settings/import-export'
     | '/settings/privacy'
     | '/settings/profile'
-    | '/profile/'
     | '/settings/'
     | '/author/$id/books'
     | '/author/$id/series'
@@ -328,6 +328,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy'
     | '/terms'
+    | '/dashboard'
     | '/library'
     | '/me'
     | '/notifications'
@@ -347,7 +348,6 @@ export interface FileRouteTypes {
     | '/settings/import-export'
     | '/settings/privacy'
     | '/settings/profile'
-    | '/profile'
     | '/settings'
     | '/author/$id/books'
     | '/author/$id/series'
@@ -360,6 +360,7 @@ export interface FileRouteTypes {
     | '/_marketing/about'
     | '/_marketing/privacy'
     | '/_marketing/terms'
+    | '/_protected/dashboard'
     | '/_protected/library'
     | '/_protected/me'
     | '/_protected/notifications'
@@ -379,7 +380,6 @@ export interface FileRouteTypes {
     | '/_protected/settings/import-export'
     | '/_protected/settings/privacy'
     | '/_protected/settings/profile'
-    | '/_protected/profile/'
     | '/_protected/settings/'
     | '/_main/author/$id/books'
     | '/_main/author/$id/series'
@@ -444,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedLibraryRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_marketing/terms': {
       id: '/_marketing/terms'
       path: '/terms'
@@ -470,13 +477,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings/'
       preLoaderRoute: typeof ProtectedSettingsIndexRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
-    '/_protected/profile/': {
-      id: '/_protected/profile/'
-      path: '/profile'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/settings/profile': {
@@ -623,6 +623,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteChildren {
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedLibraryRoute: typeof ProtectedLibraryRoute
   ProtectedMeRoute: typeof ProtectedMeRoute
   ProtectedNotificationsRoute: typeof ProtectedNotificationsRoute
@@ -630,11 +631,11 @@ interface ProtectedRouteChildren {
   ProtectedSettingsImportExportRoute: typeof ProtectedSettingsImportExportRoute
   ProtectedSettingsPrivacyRoute: typeof ProtectedSettingsPrivacyRoute
   ProtectedSettingsProfileRoute: typeof ProtectedSettingsProfileRoute
-  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
   ProtectedSettingsIndexRoute: typeof ProtectedSettingsIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedLibraryRoute: ProtectedLibraryRoute,
   ProtectedMeRoute: ProtectedMeRoute,
   ProtectedNotificationsRoute: ProtectedNotificationsRoute,
@@ -642,7 +643,6 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedSettingsImportExportRoute: ProtectedSettingsImportExportRoute,
   ProtectedSettingsPrivacyRoute: ProtectedSettingsPrivacyRoute,
   ProtectedSettingsProfileRoute: ProtectedSettingsProfileRoute,
-  ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
   ProtectedSettingsIndexRoute: ProtectedSettingsIndexRoute,
 }
 

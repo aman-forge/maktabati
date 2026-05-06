@@ -10,19 +10,23 @@ import {
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
 import { communityItems, discoverItems, type NavItem } from "@config/nav";
-import { SignedIn, SignedOut, UserButton } from "@neondatabase/neon-js/auth/react";
+import { UserButton } from "@neondatabase/neon-js/auth/react";
 import { BooksIcon, UserIcon } from "@phosphor-icons/react";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
+import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
+import { Skeleton } from "../../ui/skeleton";
 
 function Header() {
+  const { isLoggedIn, isLoading } = useUser();
+
   return (
     <header className="hidden md:flex fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/80">
       <div className="container mx-auto px-4 flex h-full items-center justify-between">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex items-center gap-2.5">
             <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
             <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
@@ -40,12 +44,9 @@ function Header() {
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
-          <SignedOut>
-            <Button render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}>
-              تسجيل الدخول
-            </Button>
-          </SignedOut>
-          <SignedIn>
+          {isLoading ? (
+            <Skeleton></Skeleton>
+          ) : isLoggedIn ? (
             <UserButton
               size="icon"
               classNames={{
@@ -61,14 +62,18 @@ function Header() {
                   signedIn: true,
                 },
                 {
-                  href: "/profile",
+                  href: "/me",
                   icon: <UserIcon className="size-4" />,
                   label: "الملف الشخصي",
                   signedIn: true,
                 },
               ]}
             />
-          </SignedIn>
+          ) : (
+            <Button render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}>
+              تسجيل الدخول
+            </Button>
+          )}
         </div>
       </div>
     </header>
@@ -81,11 +86,14 @@ function DesktopNav() {
   return (
     <NavigationMenu dir="rtl" align="start" className="hidden md:flex">
       <NavigationMenuList className="gap-1">
-        <NavigationMenuItem className={cn(buttonVariants({ variant: "ghost" }), "border-0 px-4")}>
-          <Link to="/library" className="nav-link">
-            مكتبتي
-          </Link>
-        </NavigationMenuItem>
+        <NavigationMenuItem
+          className={cn(buttonVariants({ variant: "ghost" }), "border-0 px-4")}
+          render={
+            <Link to="/library" className="nav-link">
+              مكتبتي
+            </Link>
+          }
+        />
 
         {/* Discover */}
         <NavigationMenuItem>
