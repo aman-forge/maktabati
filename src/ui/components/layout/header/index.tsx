@@ -10,7 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
 import { browseItems, discoverItems, type NavItem } from "@config/nav";
-import { UserButton } from "@neondatabase/neon-js/auth/react";
+import { SignedIn, SignedOut, UserButton } from "@neondatabase/neon-js/auth/react";
 import { BooksIcon, UserIcon } from "@phosphor-icons/react";
 import { ArrowLeftIcon, BookIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
@@ -39,28 +39,35 @@ function Header() {
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
-          <UserButton
-            size="icon"
-            classNames={{
-              content: { base: "min-w-42 direction-rtl", user: { base: "direction-rtl" } },
-            }}
-            align="start"
-            side="bottom"
-            additionalLinks={[
-              {
-                href: "/dashboard",
-                icon: <BooksIcon className="size-4" />,
-                label: "مكتبتي",
-                signedIn: true,
-              },
-              {
-                href: "/profile",
-                icon: <UserIcon className="size-4" />,
-                label: "الملف الشخصي",
-                signedIn: true,
-              },
-            ]}
-          />
+          <SignedOut>
+            <Button render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}>
+              تسجيل الدخول
+            </Button>
+          </SignedOut>
+          <SignedIn>
+            <UserButton
+              size="icon"
+              classNames={{
+                content: { base: "min-w-42 direction-rtl", user: { base: "direction-rtl" } },
+              }}
+              align="start"
+              side="bottom"
+              additionalLinks={[
+                {
+                  href: "/dashboard",
+                  icon: <BooksIcon className="size-4" />,
+                  label: "مكتبتي",
+                  signedIn: true,
+                },
+                {
+                  href: "/profile",
+                  icon: <UserIcon className="size-4" />,
+                  label: "الملف الشخصي",
+                  signedIn: true,
+                },
+              ]}
+            />
+          </SignedIn>
         </div>
       </div>
     </header>

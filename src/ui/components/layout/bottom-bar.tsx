@@ -1,3 +1,4 @@
+import { UserAvatar } from "@neondatabase/neon-js/auth/react";
 import {
   BookmarkSimpleIcon,
   CompassIcon,
@@ -5,16 +6,26 @@ import {
   PulseIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
 import { authClient } from "@/auth";
 import { cn } from "@/ui/lib/utils";
 
 const navItems = [
-  { href: "/", icon: HouseIcon, label: "الرئيسية", isProfile: false },
-  { href: "/discover", icon: CompassIcon, label: "اكتشف", isProfile: false },
-  { href: "/library", icon: BookmarkSimpleIcon, label: "مكتبتي", isProfile: false },
-  { href: "/activity", icon: PulseIcon, label: "النشاط", isProfile: false },
-  { href: "/profile", icon: UserCircleIcon, label: "حسابي", isProfile: true },
+  { href: linkOptions({ to: "/" }), icon: HouseIcon, label: "الرئيسية", isProfile: false },
+  {
+    href: linkOptions({ to: "/discover/books" }),
+    icon: CompassIcon,
+    label: "اكتشف",
+    isProfile: false,
+  },
+  {
+    href: linkOptions({ to: "/" }), // library
+    icon: BookmarkSimpleIcon,
+    label: "مكتبتي",
+    isProfile: false,
+  },
+  { href: linkOptions({ to: "/" }), icon: PulseIcon, label: "النشاط", isProfile: false }, // activity
+  { href: linkOptions({ to: "/profile" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
 ] as const;
 
 function BottomBar() {
@@ -29,13 +40,17 @@ function BottomBar() {
     >
       <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-1">
         {navItems.map((item) => {
-          const href = item.isProfile && !session?.user ? "/auth/login" : item.href;
-          const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const href =
+            item.isProfile && !session?.user
+              ? linkOptions({ to: "/auth/$pathname", params: { pathname: "/login" } })
+              : item.href;
+          const isActive =
+            item.href.to === "/" ? pathname === "/" : pathname.startsWith(item.href.to);
 
           return (
             <Link
-              key={item.href}
-              to={href}
+              key={item.href.to}
+              to={href.to}
               className={cn(
                 "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-colors",
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
@@ -52,13 +67,7 @@ function BottomBar() {
                     isActive ? "ring-primary" : "ring-transparent",
                   )}
                 >
-                  {session.user.image ? (
-                    <img src={session.user.image} alt="" className="h-full w-full object-cover" />
-                  ) : (
-                    <span className="text-xs font-semibold text-primary">
-                      {(session.user.name ?? session.user.email ?? "؟")[0]}
-                    </span>
-                  )}
+                  <UserAvatar />
                 </div>
               ) : (
                 <item.icon className="size-6" weight={isActive ? "fill" : "regular"} />
