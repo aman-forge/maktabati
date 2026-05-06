@@ -1,18 +1,19 @@
-import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-
-// import type { BookDetail } from "@features/books/types";
-// import { BookDetailed } from "./book-detail";
+//import { BookDetailed } from "./book-detail";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
+  CaretDownIcon,
   CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
+import { BookType } from "../server/get-books";
+import { ButtonGroup } from "@/ui/components/ui/button-group";
+import { TrackBookModal } from "./track-book-modal";
 
 // import { BookWithAuthor } from "@/db/tables";
 // // interface BookDetailed {
@@ -27,32 +28,37 @@ const SHELF_OPTIONS = [
   { label: "قرأتُه", icon: CheckIcon },
 ] as const;
 
-export function BookHero() {
-  // export function BookHero() {
+export function BookHero({ book }: { book: BookType }) {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
-  const book = {
-    title: "الإمبراطورية الأخيرة",
-    badges: ["الأكثر مبيعًا", "جديد"],
-    rating: 4.6,
-    ratingTotal: 4,
-    reviewCountTotal: 1200,
-    series: "وليدو الضباب",
-    ratingCounts: [
-      { stars: 5, pct: 80 },
-      { stars: 4, pct: 15 },
-      { stars: 3, pct: 3 },
-      { stars: 2, pct: 1 },
-      { stars: 1, pct: 1 },
-    ],
-    meta: [
-      { label: "عدد الصفحات", value: "1004" },
-      { label: "اللغة", value: "العربية" },
-      { label: "سنة النشر", value: "2024" },
-      { label: "التصنيف", value: "رواية" },
-    ],
-  };
+  const [Trackbookopen, settrackbookopen] = useState(false);
+  // const book = {
+  //   title: "الإمبراطورية الأخيرة",
+  //   badges: ["الأكثر مبيعًا", "جديد"],
+  //   rating: 4.6,
+  //   ratingTotal: 4,
+  //   reviewCountTotal: 1200,
+  //   series: "وليدو الضباب",
+    const ratingCounts = [
+      { stars: 5, pct: 0 },
+      { stars: 4, pct: 0 },
+      { stars: 3, pct: 0 },
+      { stars: 2, pct: 0 },
+      { stars: 1, pct: 0 },
+    ];
+  let lang = "لا يوجد";
+  if (book.originalLanguage === "ar") {
+    lang = "العربية";
+  } else if (book.originalLanguage === "eng") {
+    lang = "الانجليزية";
+  }
+  const meta = [
+    { label: "عدد الصفحات", value: book.pageCount || "لا يوجد" },
+    { label: "اللغة", value: lang },
+    { label: "سنة النشر", value: book.publicationYear  || "لا يوجد" },
+    { label: "التصنيف", value: book.genres?.join("، ") || "لا يوجد" },
+  ];
 
   return (
     <section className="relative border-b">
@@ -70,8 +76,8 @@ export function BookHero() {
           {/* Cover + Actions */}
           <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
             <img
-              src="/books/شطرنج.png"
-              alt={`غلاف كتاب توتو`}
+              src={book.coverImageUrl || "/books/نهج الملوك.png"}
+              alt={`غلاف كتاب` + `${book.title || "لا يوجد"}`}
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
             />
@@ -79,22 +85,34 @@ export function BookHero() {
             {/* Shelf & Actions */}
             <div className="w-full max-w-70 flex flex-col gap-3">
               <div className="relative">
-                <Button
-                  className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
-                  onClick={() => setShelfOpen((o) => !o)}
-                >
-                  {shelf ? (
-                    <>
-                      <CheckIcon weight="bold" className="w-5 h-5" />
-                      {shelf}
-                    </>
-                  ) : (
-                    <>
-                      <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
-                      أضف إلى الرف
-                    </>
-                  )}
-                </Button>
+                <ButtonGroup className="flex w-60">
+                  <Button
+                    className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
+                    onClick={() => setShelfOpen((o) => !o)}
+                  >
+                    {shelf ? (
+                      <>
+                        <CheckIcon weight="bold" className="w-5 h-5" />
+                        {shelf}
+                      </>
+                    ) : (
+                      <>
+                        <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
+                        أضف إلى الرف
+                      </>
+                    )}
+                  </Button>
+                  <Button onClick={() => settrackbookopen(!Trackbookopen)}>
+                    <CaretDownIcon />
+                  </Button>
+                  <TrackBookModal
+                    // book={}
+                    open={Trackbookopen}
+                    onOpenChange={(o: boolean) => {
+                      settrackbookopen(o);
+                    }}
+                  />
+                </ButtonGroup>
 
                 {shelfOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 z-30 rounded-xl overflow-hidden shadow-2xl border border-border bg-popover/95 backdrop-blur-sm">
@@ -104,7 +122,8 @@ export function BookHero() {
                         type="button"
                         className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
                         style={{
-                          color: shelf === label ? "hsl(var(--primary))" : undefined,
+                          color:
+                            shelf === label ? "hsl(var(--primary))" : undefined,
                         }}
                         onClick={() => {
                           setShelf(label);
@@ -150,27 +169,30 @@ export function BookHero() {
           {/* Details */}
           <div className="flex flex-col gap-8">
             {/* Badges */}
-            {book.badges && book.badges.length > 0 && (
+            {/* TODO: must add badges to database. */}
+            {/* {book.badges && book.badges.length > 0 && (
               <div className="flex flex-wrap gap-2.5">
                 {book.badges.map((b, i) => (
                   <Badge
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
                     className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0 ? "bg-primary text-primary-foreground border-0 shadow-sm" : ""
+                      i === 0
+                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
+                        : ""
                     }`}
                   >
                     {b}
                   </Badge>
                 ))}
               </div>
-            )}
+            )} */}
             {/* Title & Author */}
             <div className="flex flex-col gap-3">
               {/* Series info*/}
               {book.series && (
                 <p className="text-base text-muted-foreground font-medium hover:underline cursor-pointer">
-                  #1 من سلسلة {book.series}
+                  #1 من سلسلة {book.series.name || "لا يوجد"}
                 </p>
               )}
               <h1
@@ -180,10 +202,11 @@ export function BookHero() {
                 {book.title}
               </h1>
               <p className="text-xl text-primary font-medium hover:underline ">
-                {"براندون ساندرسون"}
+                {book.author?.name || "لا يوجد"}
               </p>
             </div>
             {/* Rating */}
+            {/* TODO: must activate the rating section in website. */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-8">
               <div className="flex flex-col items-start gap-2">
                 <div className="flex items-baseline gap-3">
@@ -191,7 +214,7 @@ export function BookHero() {
                     className="text-6xl lg:text-7xl font-black text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    {book.rating}
+                    {0/*book.rating*/}
                   </span>
                   <span className="text-xl text-muted-foreground">/5</span>
                 </div>
@@ -201,7 +224,7 @@ export function BookHero() {
                       key={star}
                       weight="fill"
                       className={`w-6 h-6 ${
-                        star <= Math.round(book.rating) ? "text-yellow-400" : "text-muted/30"
+                        star <= Math.round(/*book.rating*/0) ? "text-yellow-400" : "text-muted/30"
                       }`}
                     />
                   ))}
@@ -212,15 +235,21 @@ export function BookHero() {
                 </p>
               </div>
 
-              <Separator orientation="vertical" className="hidden sm:block h-20 opacity-30" />
+              <Separator
+                orientation="vertical"
+                className="hidden sm:block h-20 opacity-30"
+              />
 
               <div className="flex flex-col gap-2 flex-1 max-w-md">
-                {book.ratingCounts?.map(({ stars, pct }) => (
+                {ratingCounts.map(({ stars, pct }) => (
                   <div key={stars} className="flex items-center gap-3">
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
                     </span>
-                    <StarIcon weight="fill" className="w-4 h-4 shrink-0 text-yellow-400/80" />
+                    <StarIcon
+                      weight="fill"
+                      className="w-4 h-4 shrink-0 text-yellow-400/80"
+                    />
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
                       <div
                         className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"
@@ -236,14 +265,16 @@ export function BookHero() {
             </div>
             <Separator className="my-2 bg-border/50" />
             {/* Meta */}
-            {book.meta && book.meta.length > 0 && (
+            {meta && meta.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                {book.meta.map(({ label, value }) => (
+                {meta.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-1.5">
                     <span className="text-xs uppercase tracking-widest font-medium text-muted-foreground">
                       {label}
                     </span>
-                    <span className="text-base font-semibold text-foreground">{value}</span>
+                    <span className="text-base font-semibold text-foreground">
+                      {value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -255,7 +286,8 @@ export function BookHero() {
       <div
         className="absolute inset-x-0 bottom-0 h-54 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
+          background:
+            "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
         }}
       />
     </section>

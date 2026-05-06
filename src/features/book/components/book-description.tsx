@@ -5,11 +5,12 @@ import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
 
 interface BookDescriptionProps {
-  paragraphs?: string;
-  tags?: string[];
+  paragraphs: string | null;
+  tags: string[] | null;
 }
 
-export function BookDescription({ paragraphs = "", tags = [] }: BookDescriptionProps) {
+export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
+  const safeTags = tags || [];
   const [expanded, setExpanded] = useState(false);
 
   if (!paragraphs) return null;
@@ -59,9 +60,9 @@ export function BookDescription({ paragraphs = "", tags = [] }: BookDescriptionP
       </div>
 
       {/* Tags */}
-      {tags.length > 0 && (
+      {safeTags.length > 0 && (
         <div className="flex flex-wrap gap-2 pt-2">
-          {tags.map((tag) => (
+          {safeTags.map((tag) => (
             <Badge key={tag} variant="secondary" className="text-lg h-8 px-3">
               {tag}
             </Badge>

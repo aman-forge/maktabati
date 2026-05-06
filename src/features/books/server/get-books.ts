@@ -10,6 +10,7 @@ import {
   ilike,
   inArray,
   lte,
+  ne,
   or,
   type SQL,
   sql,
@@ -17,6 +18,7 @@ import {
 import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
 import { authors, books } from "@/db/tables";
+import { notFound } from "@tanstack/react-router";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
@@ -143,16 +145,42 @@ export type BookCardBook = SearchBooksResult["books"][number];
 
 export const getBookById = createServerFn({ method: "GET" })
   .inputValidator((data: string) => data)
-  .handler(async ({ data }) => {
+  .handler(async ({ data: requestedBookId }) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(requestedBookId)) return null;
+
     const book = await db.query.books.findFirst({
-      where: { id: data },
+      where: {
+        id: requestedBookId,
+      },
       with: {
-        author: true,
-        reviews: true,
+        author: {
+          extras: {
+            totalBooks: (author) => db.$count(books, eq(books.authorId, author.id)),
+          },
+
+          with: {
+            books: {
+              limit: 3,
+              columns: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+              where: {
+                NOT: {
+                  id: requestedBookId,
+                },
+              },
+            },
+          },
+        },
+        series: true,
       },
     });
 
-    if (!book) throw notFound();
+    if (!book) return null;
 
     return book;
   });
+export type BookType = NonNullable<Awaited<ReturnType<typeof getBookById>>>;
