@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import type { BookWithAuthor } from "@/db/tables";
 import { TrackBookModal, type TrackingData } from "../components/track-book-modal";
+import type { BookCardBook } from "../server/get-books";
 
 interface BookTrackingContextValue {
-  openTrackModal: (book: BookWithAuthor) => void;
+  openTrackModal: (book: BookCardBook) => void;
 }
 
 const BookTrackingContext = React.createContext<BookTrackingContextValue | null>(null);
@@ -22,10 +22,10 @@ interface BookTrackingProviderProps {
 }
 
 export function BookTrackingProvider({ children, onSave }: BookTrackingProviderProps) {
-  const [selectedBook, setSelectedBook] = React.useState<BookWithAuthor | null>(null);
+  const [selectedBook, setSelectedBook] = React.useState<BookCardBook | null>(null);
   const [open, setOpen] = React.useState(false);
 
-  const openTrackModal = React.useCallback((book: BookWithAuthor) => {
+  const openTrackModal = React.useCallback((book: BookCardBook) => {
     setSelectedBook(book);
     setOpen(true);
   }, []);

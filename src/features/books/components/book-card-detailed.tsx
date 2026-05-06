@@ -4,12 +4,12 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { useState } from "react";
-import type { BookWithAuthor } from "@/db/tables";
 import { cn } from "@/ui/lib/utils";
+import type { BookCardBook } from "../server/get-books";
 import { TrackBookModal } from "./track-book-modal";
 
 interface BookCardDetailedProps {
-  book: BookWithAuthor;
+  book: BookCardBook;
 }
 
 export function BookCardDetailed({ book }: BookCardDetailedProps) {
@@ -62,9 +62,7 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
                 <h3 className="text-base font-semibold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors">
                   {book.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  {book.author?.name}
-                </p>
+                <p className="text-sm text-muted-foreground mt-0.5">{book.author?.name}</p>
               </div>
               {/*{book.rating && (
               <div className="flex items-center gap-1 shrink-0 px-2 py-1 rounded-md bg-primary/10">
@@ -111,11 +109,7 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
           </div>
         </div>
       </article>
-      <TrackBookModal
-        book={book}
-        open={isTracking}
-        onOpenChange={setIsTracking}
-      />
+      <TrackBookModal book={book} open={isTracking} onOpenChange={setIsTracking} />
     </>
   );
 }
