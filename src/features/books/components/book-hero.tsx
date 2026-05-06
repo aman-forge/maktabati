@@ -1,9 +1,6 @@
-import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-
-// import type { BookDetail } from "@features/books/types";
-// import { BookDetailed } from "./book-detail";
+//import { BookDetailed } from "./book-detail";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
@@ -13,6 +10,7 @@ import {
   StarIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
+import { BookType } from "../server/get-books";
 
 // import { BookWithAuthor } from "@/db/tables";
 // // interface BookDetailed {
@@ -27,32 +25,36 @@ const SHELF_OPTIONS = [
   { label: "قرأتُه", icon: CheckIcon },
 ] as const;
 
-export function BookHero() {
-  // export function BookHero() {
+export function BookHero({ book }: { book: BookType }) {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
-  const book = {
-    title: "الإمبراطورية الأخيرة",
-    badges: ["الأكثر مبيعًا", "جديد"],
-    rating: 4.6,
-    ratingTotal: 4,
-    reviewCountTotal: 1200,
-    series: "وليدو الضباب",
-    ratingCounts: [
-      { stars: 5, pct: 80 },
-      { stars: 4, pct: 15 },
-      { stars: 3, pct: 3 },
-      { stars: 2, pct: 1 },
-      { stars: 1, pct: 1 },
-    ],
-    meta: [
-      { label: "عدد الصفحات", value: "1004" },
-      { label: "اللغة", value: "العربية" },
-      { label: "سنة النشر", value: "2024" },
-      { label: "التصنيف", value: "رواية" },
-    ],
-  };
+  // const book = {
+  //   title: "الإمبراطورية الأخيرة",
+  //   badges: ["الأكثر مبيعًا", "جديد"],
+  //   rating: 4.6,
+  //   ratingTotal: 4,
+  //   reviewCountTotal: 1200,
+  //   series: "وليدو الضباب",
+    const ratingCounts = [
+      { stars: 5, pct: 0 },
+      { stars: 4, pct: 0 },
+      { stars: 3, pct: 0 },
+      { stars: 2, pct: 0 },
+      { stars: 1, pct: 0 },
+    ];
+  let lang = "لا يوجد";
+  if (book.originalLanguage === "ar") {
+    lang = "العربية";
+  } else if (book.originalLanguage === "eng") {
+    lang = "الانجليزية";
+  }
+  const meta = [
+    { label: "عدد الصفحات", value: book.pageCount || "لا يوجد" },
+    { label: "اللغة", value: lang },
+    { label: "سنة النشر", value: book.publicationYear  || "لا يوجد" },
+    { label: "التصنيف", value: book.genres?.join("، ") || "لا يوجد" },
+  ];
 
   return (
     <section className="relative border-b">
@@ -70,8 +72,8 @@ export function BookHero() {
           {/* Cover + Actions */}
           <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
             <img
-              src="/books/شطرنج.png"
-              alt={`غلاف كتاب توتو`}
+              src={book.coverImageUrl || "/books/نهج الملوك.png"}
+              alt={`غلاف كتاب` + `${book.title || "لا يوجد"}`}
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
             />
@@ -104,7 +106,8 @@ export function BookHero() {
                         type="button"
                         className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
                         style={{
-                          color: shelf === label ? "hsl(var(--primary))" : undefined,
+                          color:
+                            shelf === label ? "hsl(var(--primary))" : undefined,
                         }}
                         onClick={() => {
                           setShelf(label);
@@ -150,7 +153,8 @@ export function BookHero() {
           {/* Details */}
           <div className="flex flex-col gap-8">
             {/* Badges */}
-            {book.badges && book.badges.length > 0 && (
+            {/* TODO: must add badges to database. */}
+            {/* {book.badges && book.badges.length > 0 && (
               <div className="flex flex-wrap gap-2.5">
                 {book.badges.map((b, i) => (
                   <Badge
@@ -164,13 +168,13 @@ export function BookHero() {
                   </Badge>
                 ))}
               </div>
-            )}
+            )} */}
             {/* Title & Author */}
             <div className="flex flex-col gap-3">
               {/* Series info*/}
               {book.series && (
                 <p className="text-base text-muted-foreground font-medium hover:underline cursor-pointer">
-                  #1 من سلسلة {book.series}
+                  #1 من سلسلة {book.series.name || "لا يوجد"}
                 </p>
               )}
               <h1
@@ -180,10 +184,11 @@ export function BookHero() {
                 {book.title}
               </h1>
               <p className="text-xl text-primary font-medium hover:underline ">
-                {"براندون ساندرسون"}
+                {book.author?.name || "لا يوجد"}
               </p>
             </div>
             {/* Rating */}
+            {/* TODO: must activate the rating section in website. */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-8">
               <div className="flex flex-col items-start gap-2">
                 <div className="flex items-baseline gap-3">
@@ -191,7 +196,7 @@ export function BookHero() {
                     className="text-6xl lg:text-7xl font-black text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    {book.rating}
+                    {0/*book.rating*/}
                   </span>
                   <span className="text-xl text-muted-foreground">/5</span>
                 </div>
@@ -201,21 +206,21 @@ export function BookHero() {
                       key={star}
                       weight="fill"
                       className={`w-6 h-6 ${
-                        star <= Math.round(book.rating) ? "text-yellow-400" : "text-muted/30"
+                        star <= Math.round(/*book.rating*/0) ? "text-yellow-400" : "text-muted/30"
                       }`}
                     />
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
-                  {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
+                  {/*book.ratingTotal?.toLocaleString("ar-EG")*/}0 تقييم ·{" "}
+                  {/*book.reviewCountTotal?.toLocaleString("ar-EG")*/}0 مراجعة
                 </p>
               </div>
 
               <Separator orientation="vertical" className="hidden sm:block h-20 opacity-30" />
 
               <div className="flex flex-col gap-2 flex-1 max-w-md">
-                {book.ratingCounts?.map(({ stars, pct }) => (
+                {ratingCounts.map(({ stars, pct }) => (
                   <div key={stars} className="flex items-center gap-3">
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
@@ -236,14 +241,16 @@ export function BookHero() {
             </div>
             <Separator className="my-2 bg-border/50" />
             {/* Meta */}
-            {book.meta && book.meta.length > 0 && (
+            {meta && meta.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                {book.meta.map(({ label, value }) => (
+                {meta.map(({ label, value }) => (
                   <div key={label} className="flex flex-col gap-1.5">
                     <span className="text-xs uppercase tracking-widest font-medium text-muted-foreground">
                       {label}
                     </span>
-                    <span className="text-base font-semibold text-foreground">{value}</span>
+                    <span className="text-base font-semibold text-foreground">
+                      {value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -255,7 +262,8 @@ export function BookHero() {
       <div
         className="absolute inset-x-0 bottom-0 h-54 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
+          background:
+            "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
         }}
       />
     </section>

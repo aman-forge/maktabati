@@ -2,27 +2,32 @@ import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
-// import { type Author, type Book } from "@/db/tables";
 import { Badge } from "@/ui/components/ui/badge";
+import { BookType } from "../server/get-books";
 
-// interface AuthorCardProps {
-//   author?: Author & { books: Book[] | null };
-// }
-const author = {
-  name: "براندون ساندرسون",
-  country: "الولايات المتحدة",
-  bio: `براندون وين ساندرسون هو كاتب فانتازيا وخيال علمي أمريكي، اشتهر بتخيّله لعالم أو مجموعة أو كون يدعى كوزمير، دارت أحداث أغلب رواياته الخيالية فيه. واشتهر أيضًا بختمه لسلسة مؤلفات فانتازيا عليا تسمى «عجلة الزمن» لكاتبها روبرت جوردان. وضع براندون «قوانين ساندرسون في السحر» وعمّم مصطلحي نظام السحر القاسي واللين.`,
-  books: "1",
-  b: "شطرنج",
-  stats: [
-    { label: "عدد الكتب", value: "24" },
-    { label: "مواليد", value: "1977" },
+interface AuthorCardProps {
+  author?: NonNullable<BookType>["author"];
+}
+// const author = {
+//   name: "براندون ساندرسون",
+//   country: "الولايات المتحدة",
+//   bio: `براندون وين ساندرسون هو كاتب فانتازيا وخيال علمي أمريكي، اشتهر بتخيّله لعالم أو مجموعة أو كون يدعى كوزمير، دارت أحداث أغلب رواياته الخيالية فيه. واشتهر أيضًا بختمه لسلسة مؤلفات فانتازيا عليا تسمى «عجلة الزمن» لكاتبها روبرت جوردان. وضع براندون «قوانين ساندرسون في السحر» وعمّم مصطلحي نظام السحر القاسي واللين.`,
+//   books: "1",
+//   b: "شطرنج",
+//   stats: [
+//     { label: "عدد الكتب", value: "24" },
+//     { label: "مواليد", value: "1977" },
+//     { label: "المتابعين", value: "403.609" },
+//   ],
+// };
+export function AuthorCard({ author }: AuthorCardProps) {
+  if (!author) return null;
+  const stats = [
+    { label: "مواليد", value: author.birthYear || "لا يوجد"},
+    { label: "عدد الكتب", value: author.totalBooks },
+    // TODO: must add followers number in database.
     { label: "المتابعين", value: "403.609" },
-  ],
-};
-// export function AuthorCard({ author }: AuthorCardProps) {
-// if (!author) return null;
-export function AuthorCard() {
+  ];
   return (
     <section id="author" dir="rtl" className="flex flex-col gap-6">
       <h2
@@ -48,9 +53,17 @@ export function AuthorCard() {
           {/* Avatar + follow row */}
           <div className="flex items-end justify-between -mt-10 mb-5">
             <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <img src="/authors/sanderson.png" alt={author.name} className="object-cover" />
+              <img
+                src={author.profileImage || "/books/نهج الملوك.png"}
+                alt={author.name || "لا يوجد"}
+                className="object-cover"
+              />
             </div>
-            <Button variant="outline" size="sm" className="gap-1.5 rounded-xl mt-0.5 bg-primary">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 rounded-xl mt-0.5 bg-primary"
+            >
               معرفة المزيد
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
@@ -63,14 +76,16 @@ export function AuthorCard() {
                 className="text-lg font-bold text-foreground"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                {author.name}
+                {author.name || "لا يوجد"}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.nationality}</p>
+              <p className="text-sm text-muted-foreground">
+                {author.nationality || "لا يوجد"}
+              </p>
             </div>
 
             {/* Stats */}
             <div className="flex items-center gap-6">
-              {author.stats.map(({ label, value }) => (
+              {stats.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center">
                   <span className="text-lg font-extrabold text-foreground tabular-nums  ">
                     {value}
@@ -83,7 +98,7 @@ export function AuthorCard() {
             </div>
 
             <p className="text-xs leading-relaxed text-muted-foreground text-justify line-clamp-6">
-              {author.bio}
+              {author.bio || "لا يوجد"}
             </p>
 
             {/*<div className="flex flex-wrap gap-2 mt-1">
@@ -108,41 +123,30 @@ export function AuthorCard() {
             </p>
 
             <div className="flex gap-3 w-full justify-between">
-              {/* {author?.books?.map((b) => ( */}
-              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
-                <img
-                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                  src="/books/book.jpg"
-                  alt={`شرنج`}
-                />
-                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                  أسم الكتاب يجب ان يكون هنا{" "}
-                </p>
-              </Link>
-              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
-                <img
-                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                  src="/books/book.jpg"
-                  alt={`شرنج`}
-                />
-                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                  أسم الكتاب يجب ان يكون هنا{" "}
-                </p>
-              </Link>
-              <Link key={"شطرنج"} to="/" className="group flex flex-col gap-1.5 shrink-0">
-                <img
-                  className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                  src="/books/book.jpg"
-                  alt={`شرنج`}
-                />
-                <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                  أسم الكتاب يجب ان يكون هنا{" "}
-                </p>
-              </Link>
-              {/* ))} */}
-
+              {author?.books?.map((b) => {
+                return (
+                  <Link
+                    key={b.id}
+                    to={"/book/" + b.id}
+                    className="group flex flex-col gap-1.5 shrink-0"
+                  >
+                    <img
+                      className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
+                      src={b.coverImageUrl || "/books/نهج الملوك.png"}
+                      alt={b.title || "لا يوجد"}
+                    />
+                    <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
+                      {b.title || "لا يوجد"}
+                    </p>
+                  </Link>
+                );
+              })}
               {/* "View all" slot */}
-              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
+              {/* TODO: we should make author`s book page */}
+              <Link
+                to="/"
+                className="flex flex-col items-center gap-1.5 w-14 shrink-0"
+              >
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}

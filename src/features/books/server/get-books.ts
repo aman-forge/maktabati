@@ -9,13 +9,16 @@ import {
   gte,
   ilike,
   lte,
+  ne,
   or,
-  type SQL,
+  sql,
+  SQL,
 } from "drizzle-orm";
 import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
-import type { BookWithAuthor, BookWithAuthorWithReviews } from "@/db/tables";
+import type { BookWithAuthor } from "@/db/tables";
 import { authors, books } from "@/db/tables";
+import { notFound } from "@tanstack/react-router";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
@@ -37,22 +40,34 @@ const PAGE_SIZE = 10 as const;
 export const searchBooks = createServerFn({ method: "GET" })
   .inputValidator(bookSearchSchema)
   .handler(
-    async ({ data }): Promise<{ books: BookWithAuthor[]; total: number; hasMore: boolean }> => {
+    async ({
+      data,
+    }): Promise<{
+      books: BookWithAuthor[];
+      total: number;
+      hasMore: boolean;
+    }> => {
       const conditions: SQL[] = [];
 
       if (data.q) {
         conditions.push(
-          or(ilike(books.title, `%${data.q}%`), ilike(books.originalTitle, `%${data.q}%`))!,
+          or(
+            ilike(books.title, `%${data.q}%`),
+            ilike(books.originalTitle, `%${data.q}%`),
+          )!,
         );
       }
       if (data.author) {
         conditions.push(ilike(authors.name, `%${data.author}%`));
       }
-      if (data.minYear) conditions.push(gte(books.publicationYear, data.minYear));
-      if (data.maxYear) conditions.push(lte(books.publicationYear, data.maxYear));
+      if (data.minYear)
+        conditions.push(gte(books.publicationYear, data.minYear));
+      if (data.maxYear)
+        conditions.push(lte(books.publicationYear, data.maxYear));
       if (data.minPages) conditions.push(gte(books.pageCount, data.minPages));
       if (data.maxPages) conditions.push(lte(books.pageCount, data.maxPages));
-      if (data.genres?.length) conditions.push(arrayOverlaps(books.genres, data.genres));
+      if (data.genres?.length)
+        conditions.push(arrayOverlaps(books.genres, data.genres));
 
       const orderBy = {
         newest: desc(books.publicationYear),
@@ -111,15 +126,42 @@ export const searchBooks = createServerFn({ method: "GET" })
 
 export const getBookById = createServerFn({ method: "GET" })
   .inputValidator((data: string) => data)
-  .handler(async ({ data: id }) => {
-    const book: BookWithAuthorWithReviews = (await db.query.books.findFirst({
+  .handler(async ({ data: requestedBookId }) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(requestedBookId)) return null;
+
+    const book = await db.query.books.findFirst({
       where: {
-        id: id,
+        id: requestedBookId,
       },
       with: {
-        author: true,
-        reviews: true,
+        author: {
+          extras: {
+            totalBooks: (author) => db.$count(books, eq(books.authorId, author.id)),
+          },
+
+          with: {
+            books: {
+              limit: 3,
+              columns: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+              where: {
+                NOT: {
+                  id: requestedBookId,
+                },
+              },
+            },
+          },
+        },
+        series: true,
       },
-    }))!;
+    });
+
+    if (!book) return null;
+
     return book;
   });
+export type BookType = NonNullable<Awaited<ReturnType<typeof getBookById>>>;
