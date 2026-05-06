@@ -4,6 +4,7 @@ import { Separator } from "@components/ui/separator";
 import {
   BookmarkSimpleIcon,
   BookOpenIcon,
+  CaretDownIcon,
   CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
@@ -11,6 +12,8 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { BookType } from "../server/get-books";
+import { ButtonGroup } from "@/ui/components/ui/button-group";
+import { TrackBookModal } from "./track-book-modal";
 
 // import { BookWithAuthor } from "@/db/tables";
 // // interface BookDetailed {
@@ -29,6 +32,7 @@ export function BookHero({ book }: { book: BookType }) {
   const [shelf, setShelf] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
+  const [Trackbookopen, settrackbookopen] = useState(false);
   // const book = {
   //   title: "الإمبراطورية الأخيرة",
   //   badges: ["الأكثر مبيعًا", "جديد"],
@@ -81,22 +85,34 @@ export function BookHero({ book }: { book: BookType }) {
             {/* Shelf & Actions */}
             <div className="w-full max-w-70 flex flex-col gap-3">
               <div className="relative">
-                <Button
-                  className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
-                  onClick={() => setShelfOpen((o) => !o)}
-                >
-                  {shelf ? (
-                    <>
-                      <CheckIcon weight="bold" className="w-5 h-5" />
-                      {shelf}
-                    </>
-                  ) : (
-                    <>
-                      <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
-                      أضف إلى الرف
-                    </>
-                  )}
-                </Button>
+                <ButtonGroup className="flex w-60">
+                  <Button
+                    className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
+                    onClick={() => setShelfOpen((o) => !o)}
+                  >
+                    {shelf ? (
+                      <>
+                        <CheckIcon weight="bold" className="w-5 h-5" />
+                        {shelf}
+                      </>
+                    ) : (
+                      <>
+                        <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
+                        أضف إلى الرف
+                      </>
+                    )}
+                  </Button>
+                  <Button onClick={() => settrackbookopen(!Trackbookopen)}>
+                    <CaretDownIcon />
+                  </Button>
+                  <TrackBookModal
+                    // book={}
+                    open={Trackbookopen}
+                    onOpenChange={(o: boolean) => {
+                      settrackbookopen(o);
+                    }}
+                  />
+                </ButtonGroup>
 
                 {shelfOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 z-30 rounded-xl overflow-hidden shadow-2xl border border-border bg-popover/95 backdrop-blur-sm">
@@ -161,7 +177,9 @@ export function BookHero({ book }: { book: BookType }) {
                     key={b}
                     variant={i === 0 ? "default" : "secondary"}
                     className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0 ? "bg-primary text-primary-foreground border-0 shadow-sm" : ""
+                      i === 0
+                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
+                        : ""
                     }`}
                   >
                     {b}
@@ -217,7 +235,10 @@ export function BookHero({ book }: { book: BookType }) {
                 </p>
               </div>
 
-              <Separator orientation="vertical" className="hidden sm:block h-20 opacity-30" />
+              <Separator
+                orientation="vertical"
+                className="hidden sm:block h-20 opacity-30"
+              />
 
               <div className="flex flex-col gap-2 flex-1 max-w-md">
                 {ratingCounts.map(({ stars, pct }) => (
@@ -225,7 +246,10 @@ export function BookHero({ book }: { book: BookType }) {
                     <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
                       {stars}
                     </span>
-                    <StarIcon weight="fill" className="w-4 h-4 shrink-0 text-yellow-400/80" />
+                    <StarIcon
+                      weight="fill"
+                      className="w-4 h-4 shrink-0 text-yellow-400/80"
+                    />
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
                       <div
                         className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"

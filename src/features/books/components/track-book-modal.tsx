@@ -84,10 +84,23 @@ export interface TrackingData {
   finishDate: string;
   notes: string;
   isFavorite: boolean;
+
+  coverImageUrl: "/books/book.jpg";
+  author: { name: "الإمبراطور الأخير" };
+  publicationYear: 2024;
+  open: false;
+  pageCount: 1004;
+  id: "جديد";
+  title: "الإمبراطورية الأخيرة";
+
+  rating: 4.6;
+  ratingTotal: 4;
+  reviewCountTotal: 1200;
+  series: "وليدو الضباب";
 }
 
 interface TrackBookModalProps {
-  book: BookWithAuthor | null;
+  // book: BookWithAuthor | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave?: (bookId: string, data: TrackingData) => void;
@@ -95,11 +108,12 @@ interface TrackBookModalProps {
 
 /* ─── Component ───────────────────────────────────────────────────── */
 export function TrackBookModal({
-  book,
+  // book,
   open,
   onOpenChange,
   onSave,
 }: TrackBookModalProps) {
+  // export function TrackBookModal() {
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [status, setStatus] = React.useState("plan-to-read");
   const [score, setScore] = React.useState(0);
@@ -110,6 +124,20 @@ export function TrackBookModal({
   const [finishDate, setFinishDate] = React.useState("");
   const [notes, setNotes] = React.useState("");
   const [hoveredStar, setHoveredStar] = React.useState(0);
+  const book = {
+    coverImageUrl: "/books/book.jpg",
+    author: { name: "الإمبراطور الأخير" },
+    publicationYear: 2024,
+
+    pageCount: 1004,
+    id: "جديد",
+    title: "الإمبراطورية الأخيرة",
+    badges: ["الأكثر مبيعًا", "جديد"],
+    rating: 4.6,
+    ratingTotal: 4,
+    reviewCountTotal: 1200,
+    series: "وليدو الضباب",
+  };
 
   React.useEffect(() => {
     if (open && book) {
@@ -133,6 +161,19 @@ export function TrackBookModal({
         finishDate,
         notes,
         isFavorite,
+        coverImageUrl: "/books/book.jpg",
+        author: {
+          name: "الإمبراطور الأخير",
+        },
+        publicationYear: 2024,
+        open: false,
+        pageCount: 1004,
+        id: "جديد",
+        title: "الإمبراطورية الأخيرة",
+        rating: 4.6,
+        ratingTotal: 4,
+        reviewCountTotal: 1200,
+        series: "وليدو الضباب",
       });
     }
     onOpenChange(false);
@@ -147,6 +188,7 @@ export function TrackBookModal({
   const showFinishDate = status === "completed";
 
   return (
+    // <Dialog>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         dir="rtl"

@@ -4,7 +4,7 @@ import { BookDescription } from "@/features/book/components/book-description";
 import { BookReviews } from "@/features/book/components/book-reviews";
 import { AuthorCard } from "@/features/books/components/author-card";
 import { BookHero } from "@/features/books/components/book-hero";
-//import { TrackBookModal } from "@/features/books/components/track-book-modal";
+import { TrackBookModal } from "@/features/books/components/track-book-modal";
 import { WriteReview } from "@/features/books/components/write-review";
 import { getBookById } from "@/features/books/server/get-books";
 import { BookCarousel } from "@/features/marketing/components/book-carousel";
