@@ -1,10 +1,7 @@
+import { authClient } from "@features/auth/lib";
 import { redirect } from "@tanstack/react-router";
-import { authClient } from "@/auth";
 
-export async function signUpWithEmail(
-  _prevState: { error: string } | null,
-  formData: FormData,
-) {
+export async function signUpWithEmail(_prevState: { error: string } | null, formData: FormData) {
   const email = formData.get("email") as string;
 
   if (!email) {

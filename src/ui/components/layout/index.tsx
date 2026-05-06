@@ -21,7 +21,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
           <BookTrackingProvider>
             <TooltipProvider>
               <Header />
-              <main className="pt-14">{children}</main>
+              <main className="md:pt-14 md:pb-0 pb-16">{children}</main>
               <BottomBar />
               <Toaster richColors />
             </TooltipProvider>

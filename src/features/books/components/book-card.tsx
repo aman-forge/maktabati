@@ -5,11 +5,11 @@ import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button, buttonVariants } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
-import type { BookWithAuthor } from "@/db/tables";
 import { cn } from "@/ui/lib/utils";
+import type { BookCardBook } from "../server/get-books";
 
 interface BookCardProps {
-  book: BookWithAuthor;
+  book: BookCardBook;
   size?: "sm" | "md" | "lg";
 }
 
@@ -34,7 +34,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           dim.image,
         )}
       >
-        <Link to="/profile">
+        <Link to="/book/$id" params={{ id: book.id }}>
           <img
             src={book.coverImageUrl ?? "/books/book.jpg"}
             alt={`Cover of ${book.title}`}
