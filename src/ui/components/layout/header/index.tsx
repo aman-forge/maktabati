@@ -1,5 +1,5 @@
 import { ThemeToggle } from "@components/theme-toggle";
-import { Button } from "@components/ui/button";
+import { Button, buttonVariants } from "@components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,11 +9,12 @@ import {
   NavigationMenuPositioner,
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
-import { browseItems, discoverItems, type NavItem } from "@config/nav";
+import { communityItems, discoverItems, type NavItem } from "@config/nav";
 import { SignedIn, SignedOut, UserButton } from "@neondatabase/neon-js/auth/react";
 import { BooksIcon, UserIcon } from "@phosphor-icons/react";
-import { ArrowLeftIcon, BookIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
+import { cn } from "@/ui/lib/utils";
 
 function Header() {
   return (
@@ -78,42 +79,12 @@ function Header() {
 
 function DesktopNav() {
   return (
-    <NavigationMenu dir="rtl" align="center" className="hidden md:flex">
+    <NavigationMenu dir="rtl" align="start" className="hidden md:flex">
       <NavigationMenuList className="gap-1">
-        {/* Browse */}
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>تصفح</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <div className="grid w-100 grid-cols-[0.8fr_1fr] gap-1">
-              <NavigationMenuLink
-                render={
-                  <Link
-                    to="/" // /library
-                    className="group flex h-full flex-col justify-between rounded-xl bg-linear-to-b from-primary/10 to-primary/5 p-4 transition-colors hover:bg-primary/10"
-                  >
-                    <div className="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm transition-transform group-hover:scale-105">
-                      <BookIcon className="size-8 text-primary-foreground" />
-                    </div>
-                    <div className="mt-4 space-y-1">
-                      <div className="text-base font-semibold">مكتبتي</div>
-                      <p className="text-xs leading-relaxed text-muted-foreground">
-                        عرض وإدارة مجموعة كتبك الشخصية
-                      </p>
-                    </div>
-                    <div className="mt-3 flex items-center gap-1 text-xs font-medium text-primary">
-                      <span>الذهاب للمكتبة</span>
-                      <ArrowLeftIcon />
-                    </div>
-                  </Link>
-                }
-              />
-              <ul className="flex flex-col gap-0.5 p-1">
-                {browseItems.map((item) => (
-                  <NavListItem key={item.href} item={item} />
-                ))}
-              </ul>
-            </div>
-          </NavigationMenuContent>
+        <NavigationMenuItem className={cn(buttonVariants({ variant: "ghost" }), "border-0 px-4")}>
+          <Link to="/library" className="nav-link">
+            مكتبتي
+          </Link>
         </NavigationMenuItem>
 
         {/* Discover */}
@@ -123,6 +94,19 @@ function DesktopNav() {
             <div className="w-75">
               <ul className="grid gap-0.5">
                 {discoverItems.map((item) => (
+                  <NavListItem key={item.href} item={item} />
+                ))}
+              </ul>
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        {/* Community */}
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>المجتمع</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="w-75">
+              <ul className="grid gap-0.5">
+                {communityItems.map((item) => (
                   <NavListItem key={item.href} item={item} />
                 ))}
               </ul>
@@ -156,11 +140,15 @@ function NavListItem({ item }: { item: NavItem }) {
       <NavigationMenuLink
         render={
           <Link
+            disabled={item.disabled ?? false}
             to={item.href}
-            className="group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent"
+            className={cn(
+              "group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent",
+              item.disabled && "opacity-50 cursor-not-allowed",
+            )}
           >
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
-              <item.icon className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors">
+              <item.icon className="size-5 text-muted-foreground transition-all duration-200 group-hover:text-primary group-hover:scale-110 dark:group-hover:brightness-150" />
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>

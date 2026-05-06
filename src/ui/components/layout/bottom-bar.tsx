@@ -25,7 +25,7 @@ const navItems = [
     isProfile: false,
   },
   { href: linkOptions({ to: "/" }), icon: PulseIcon, label: "النشاط", isProfile: false }, // activity
-  { href: linkOptions({ to: "/profile" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
+  { href: linkOptions({ to: "/settings" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
 ] as const;
 
 function BottomBar() {

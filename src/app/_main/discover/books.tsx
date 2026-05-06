@@ -339,7 +339,7 @@ function BooksSearchPage() {
     },
   } as const;
 
-  const currentView = viewConfig[search.view];
+  const currentView = viewConfig[search.view] ?? viewConfig.grid;
   const Component = currentView.Component;
   const isSearching = isNavigating && search.page === 1;
 
@@ -380,7 +380,7 @@ function BooksSearchPage() {
           </div>
 
           {/* Filter row */}
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-4">
+          <div className="flex items-center gap-2 overflow-x-auto overflow-visible! scrollbar-none px-4">
             <GenreCombobox
               selected={selectedGenres}
               onSelectionChange={(newGenres: BookGenre[]) =>
@@ -395,11 +395,11 @@ function BooksSearchPage() {
                 onFiltersChange={handleFiltersChange}
                 onReset={handleResetFilters}
               />
-              {dialogFilterCount > 0 && (
+              {/*{dialogFilterCount > 0 && (
                 <span className="absolute -top-1.5 -left-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
                   {dialogFilterCount}
                 </span>
-              )}
+              )}*/}
             </div>
 
             <div className="h-5 w-px bg-border shrink-0" />
@@ -487,7 +487,7 @@ function BooksSearchPage() {
             )}
           </div>
         ) : search.view === "list" ? (
-          <div className="rounded-xl border bg-card overflow-hidden">
+          <div className="rounded-xl border bg-card overflow-visible">
             <div className="hidden sm:flex items-center gap-4 px-4 py-2.5 text-xs font-medium text-muted-foreground border-b bg-muted/40">
               <div className="w-10 shrink-0" />
               <div className="flex-1">العنوان</div>

@@ -34,7 +34,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           dim.image,
         )}
       >
-        <Link to="/profile">
+        <Link to="/book/$id" params={{ id: book.id }}>
           <img
             src={book.coverImageUrl ?? "/books/book.jpg"}
             alt={`Cover of ${book.title}`}

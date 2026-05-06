@@ -11,11 +11,34 @@
 import { Route as rootRouteImport } from './app/__root'
 import { Route as ProtectedRouteImport } from './app/_protected'
 import { Route as IndexRouteImport } from './app/index'
+import { Route as ProtectedNotificationsRouteImport } from './app/_protected/notifications'
+import { Route as ProtectedMeRouteImport } from './app/_protected/me'
+import { Route as ProtectedLibraryRouteImport } from './app/_protected/library'
+import { Route as MarketingTermsRouteImport } from './app/_marketing/terms'
+import { Route as MarketingPrivacyRouteImport } from './app/_marketing/privacy'
+import { Route as MarketingAboutRouteImport } from './app/_marketing/about'
+import { Route as ProtectedSettingsIndexRouteImport } from './app/_protected/settings/index'
 import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
+import { Route as ProtectedSettingsProfileRouteImport } from './app/_protected/settings/profile'
+import { Route as ProtectedSettingsPrivacyRouteImport } from './app/_protected/settings/privacy'
+import { Route as ProtectedSettingsImportExportRouteImport } from './app/_protected/settings/import-export'
+import { Route as ProtectedSettingsAccountRouteImport } from './app/_protected/settings/account'
+import { Route as MainUUserIdRouteImport } from './app/_main/u/$userId'
+import { Route as MainPublisherIdRouteImport } from './app/_main/publisher/$id'
+import { Route as MainDiscoverRecommendationsRouteImport } from './app/_main/discover/recommendations'
+import { Route as MainDiscoverPublishersRouteImport } from './app/_main/discover/publishers'
+import { Route as MainDiscoverGenresRouteImport } from './app/_main/discover/genres'
 import { Route as MainDiscoverBooksRouteImport } from './app/_main/discover/books'
+import { Route as MainDiscoverAuthorsRouteImport } from './app/_main/discover/authors'
 import { Route as MainBookIdRouteImport } from './app/_main/book/$id'
+import { Route as MainAuthorIdRouteImport } from './app/_main/author/$id'
+import { Route as MainAuthWelcomeRouteImport } from './app/_main/auth/welcome'
 import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
 import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
+import { Route as MainPublisherIdBooksRouteImport } from './app/_main/publisher/$id.books'
+import { Route as MainPublisherIdArticlesRouteImport } from './app/_main/publisher/$id.articles'
+import { Route as MainAuthorIdSeriesRouteImport } from './app/_main/author/$id.series'
+import { Route as MainAuthorIdBooksRouteImport } from './app/_main/author/$id.books'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -26,19 +49,119 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedNotificationsRoute = ProtectedNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedMeRoute = ProtectedMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedLibraryRoute = ProtectedLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const MarketingTermsRoute = MarketingTermsRouteImport.update({
+  id: '/_marketing/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingPrivacyRoute = MarketingPrivacyRouteImport.update({
+  id: '/_marketing/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/_marketing/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedSettingsIndexRoute = ProtectedSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
   getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedSettingsProfileRoute =
+  ProtectedSettingsProfileRouteImport.update({
+    id: '/settings/profile',
+    path: '/settings/profile',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedSettingsPrivacyRoute =
+  ProtectedSettingsPrivacyRouteImport.update({
+    id: '/settings/privacy',
+    path: '/settings/privacy',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedSettingsImportExportRoute =
+  ProtectedSettingsImportExportRouteImport.update({
+    id: '/settings/import-export',
+    path: '/settings/import-export',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedSettingsAccountRoute =
+  ProtectedSettingsAccountRouteImport.update({
+    id: '/settings/account',
+    path: '/settings/account',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const MainUUserIdRoute = MainUUserIdRouteImport.update({
+  id: '/_main/u/$userId',
+  path: '/u/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainPublisherIdRoute = MainPublisherIdRouteImport.update({
+  id: '/_main/publisher/$id',
+  path: '/publisher/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainDiscoverRecommendationsRoute =
+  MainDiscoverRecommendationsRouteImport.update({
+    id: '/_main/discover/recommendations',
+    path: '/discover/recommendations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MainDiscoverPublishersRoute = MainDiscoverPublishersRouteImport.update({
+  id: '/_main/discover/publishers',
+  path: '/discover/publishers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainDiscoverGenresRoute = MainDiscoverGenresRouteImport.update({
+  id: '/_main/discover/genres',
+  path: '/discover/genres',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MainDiscoverBooksRoute = MainDiscoverBooksRouteImport.update({
   id: '/_main/discover/books',
   path: '/discover/books',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MainDiscoverAuthorsRoute = MainDiscoverAuthorsRouteImport.update({
+  id: '/_main/discover/authors',
+  path: '/discover/authors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MainBookIdRoute = MainBookIdRouteImport.update({
   id: '/_main/book/$id',
   path: '/book/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainAuthorIdRoute = MainAuthorIdRouteImport.update({
+  id: '/_main/author/$id',
+  path: '/author/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MainAuthWelcomeRoute = MainAuthWelcomeRouteImport.update({
+  id: '/_main/auth/welcome',
+  path: '/auth/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MainAuthPathnameRoute = MainAuthPathnameRouteImport.update({
@@ -51,68 +174,237 @@ const MainAccountPathnameRoute = MainAccountPathnameRouteImport.update({
   path: '/account/$pathname',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MainPublisherIdBooksRoute = MainPublisherIdBooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => MainPublisherIdRoute,
+} as any)
+const MainPublisherIdArticlesRoute = MainPublisherIdArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => MainPublisherIdRoute,
+} as any)
+const MainAuthorIdSeriesRoute = MainAuthorIdSeriesRouteImport.update({
+  id: '/series',
+  path: '/series',
+  getParentRoute: () => MainAuthorIdRoute,
+} as any)
+const MainAuthorIdBooksRoute = MainAuthorIdBooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => MainAuthorIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof MarketingAboutRoute
+  '/privacy': typeof MarketingPrivacyRoute
+  '/terms': typeof MarketingTermsRoute
+  '/library': typeof ProtectedLibraryRoute
+  '/me': typeof ProtectedMeRoute
+  '/notifications': typeof ProtectedNotificationsRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
+  '/auth/welcome': typeof MainAuthWelcomeRoute
+  '/author/$id': typeof MainAuthorIdRouteWithChildren
   '/book/$id': typeof MainBookIdRoute
+  '/discover/authors': typeof MainDiscoverAuthorsRoute
   '/discover/books': typeof MainDiscoverBooksRoute
+  '/discover/genres': typeof MainDiscoverGenresRoute
+  '/discover/publishers': typeof MainDiscoverPublishersRoute
+  '/discover/recommendations': typeof MainDiscoverRecommendationsRoute
+  '/publisher/$id': typeof MainPublisherIdRouteWithChildren
+  '/u/$userId': typeof MainUUserIdRoute
+  '/settings/account': typeof ProtectedSettingsAccountRoute
+  '/settings/import-export': typeof ProtectedSettingsImportExportRoute
+  '/settings/privacy': typeof ProtectedSettingsPrivacyRoute
+  '/settings/profile': typeof ProtectedSettingsProfileRoute
   '/profile/': typeof ProtectedProfileIndexRoute
+  '/settings/': typeof ProtectedSettingsIndexRoute
+  '/author/$id/books': typeof MainAuthorIdBooksRoute
+  '/author/$id/series': typeof MainAuthorIdSeriesRoute
+  '/publisher/$id/articles': typeof MainPublisherIdArticlesRoute
+  '/publisher/$id/books': typeof MainPublisherIdBooksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof MarketingAboutRoute
+  '/privacy': typeof MarketingPrivacyRoute
+  '/terms': typeof MarketingTermsRoute
+  '/library': typeof ProtectedLibraryRoute
+  '/me': typeof ProtectedMeRoute
+  '/notifications': typeof ProtectedNotificationsRoute
   '/account/$pathname': typeof MainAccountPathnameRoute
   '/auth/$pathname': typeof MainAuthPathnameRoute
+  '/auth/welcome': typeof MainAuthWelcomeRoute
+  '/author/$id': typeof MainAuthorIdRouteWithChildren
   '/book/$id': typeof MainBookIdRoute
+  '/discover/authors': typeof MainDiscoverAuthorsRoute
   '/discover/books': typeof MainDiscoverBooksRoute
+  '/discover/genres': typeof MainDiscoverGenresRoute
+  '/discover/publishers': typeof MainDiscoverPublishersRoute
+  '/discover/recommendations': typeof MainDiscoverRecommendationsRoute
+  '/publisher/$id': typeof MainPublisherIdRouteWithChildren
+  '/u/$userId': typeof MainUUserIdRoute
+  '/settings/account': typeof ProtectedSettingsAccountRoute
+  '/settings/import-export': typeof ProtectedSettingsImportExportRoute
+  '/settings/privacy': typeof ProtectedSettingsPrivacyRoute
+  '/settings/profile': typeof ProtectedSettingsProfileRoute
   '/profile': typeof ProtectedProfileIndexRoute
+  '/settings': typeof ProtectedSettingsIndexRoute
+  '/author/$id/books': typeof MainAuthorIdBooksRoute
+  '/author/$id/series': typeof MainAuthorIdSeriesRoute
+  '/publisher/$id/articles': typeof MainPublisherIdArticlesRoute
+  '/publisher/$id/books': typeof MainPublisherIdBooksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/privacy': typeof MarketingPrivacyRoute
+  '/_marketing/terms': typeof MarketingTermsRoute
+  '/_protected/library': typeof ProtectedLibraryRoute
+  '/_protected/me': typeof ProtectedMeRoute
+  '/_protected/notifications': typeof ProtectedNotificationsRoute
   '/_main/account/$pathname': typeof MainAccountPathnameRoute
   '/_main/auth/$pathname': typeof MainAuthPathnameRoute
+  '/_main/auth/welcome': typeof MainAuthWelcomeRoute
+  '/_main/author/$id': typeof MainAuthorIdRouteWithChildren
   '/_main/book/$id': typeof MainBookIdRoute
+  '/_main/discover/authors': typeof MainDiscoverAuthorsRoute
   '/_main/discover/books': typeof MainDiscoverBooksRoute
+  '/_main/discover/genres': typeof MainDiscoverGenresRoute
+  '/_main/discover/publishers': typeof MainDiscoverPublishersRoute
+  '/_main/discover/recommendations': typeof MainDiscoverRecommendationsRoute
+  '/_main/publisher/$id': typeof MainPublisherIdRouteWithChildren
+  '/_main/u/$userId': typeof MainUUserIdRoute
+  '/_protected/settings/account': typeof ProtectedSettingsAccountRoute
+  '/_protected/settings/import-export': typeof ProtectedSettingsImportExportRoute
+  '/_protected/settings/privacy': typeof ProtectedSettingsPrivacyRoute
+  '/_protected/settings/profile': typeof ProtectedSettingsProfileRoute
   '/_protected/profile/': typeof ProtectedProfileIndexRoute
+  '/_protected/settings/': typeof ProtectedSettingsIndexRoute
+  '/_main/author/$id/books': typeof MainAuthorIdBooksRoute
+  '/_main/author/$id/series': typeof MainAuthorIdSeriesRoute
+  '/_main/publisher/$id/articles': typeof MainPublisherIdArticlesRoute
+  '/_main/publisher/$id/books': typeof MainPublisherIdBooksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/privacy'
+    | '/terms'
+    | '/library'
+    | '/me'
+    | '/notifications'
     | '/account/$pathname'
     | '/auth/$pathname'
+    | '/auth/welcome'
+    | '/author/$id'
     | '/book/$id'
+    | '/discover/authors'
     | '/discover/books'
+    | '/discover/genres'
+    | '/discover/publishers'
+    | '/discover/recommendations'
+    | '/publisher/$id'
+    | '/u/$userId'
+    | '/settings/account'
+    | '/settings/import-export'
+    | '/settings/privacy'
+    | '/settings/profile'
     | '/profile/'
+    | '/settings/'
+    | '/author/$id/books'
+    | '/author/$id/series'
+    | '/publisher/$id/articles'
+    | '/publisher/$id/books'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/privacy'
+    | '/terms'
+    | '/library'
+    | '/me'
+    | '/notifications'
     | '/account/$pathname'
     | '/auth/$pathname'
+    | '/auth/welcome'
+    | '/author/$id'
     | '/book/$id'
+    | '/discover/authors'
     | '/discover/books'
+    | '/discover/genres'
+    | '/discover/publishers'
+    | '/discover/recommendations'
+    | '/publisher/$id'
+    | '/u/$userId'
+    | '/settings/account'
+    | '/settings/import-export'
+    | '/settings/privacy'
+    | '/settings/profile'
     | '/profile'
+    | '/settings'
+    | '/author/$id/books'
+    | '/author/$id/series'
+    | '/publisher/$id/articles'
+    | '/publisher/$id/books'
   id:
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_marketing/about'
+    | '/_marketing/privacy'
+    | '/_marketing/terms'
+    | '/_protected/library'
+    | '/_protected/me'
+    | '/_protected/notifications'
     | '/_main/account/$pathname'
     | '/_main/auth/$pathname'
+    | '/_main/auth/welcome'
+    | '/_main/author/$id'
     | '/_main/book/$id'
+    | '/_main/discover/authors'
     | '/_main/discover/books'
+    | '/_main/discover/genres'
+    | '/_main/discover/publishers'
+    | '/_main/discover/recommendations'
+    | '/_main/publisher/$id'
+    | '/_main/u/$userId'
+    | '/_protected/settings/account'
+    | '/_protected/settings/import-export'
+    | '/_protected/settings/privacy'
+    | '/_protected/settings/profile'
     | '/_protected/profile/'
+    | '/_protected/settings/'
+    | '/_main/author/$id/books'
+    | '/_main/author/$id/series'
+    | '/_main/publisher/$id/articles'
+    | '/_main/publisher/$id/books'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingPrivacyRoute: typeof MarketingPrivacyRoute
+  MarketingTermsRoute: typeof MarketingTermsRoute
   MainAccountPathnameRoute: typeof MainAccountPathnameRoute
   MainAuthPathnameRoute: typeof MainAuthPathnameRoute
+  MainAuthWelcomeRoute: typeof MainAuthWelcomeRoute
+  MainAuthorIdRoute: typeof MainAuthorIdRouteWithChildren
   MainBookIdRoute: typeof MainBookIdRoute
+  MainDiscoverAuthorsRoute: typeof MainDiscoverAuthorsRoute
   MainDiscoverBooksRoute: typeof MainDiscoverBooksRoute
+  MainDiscoverGenresRoute: typeof MainDiscoverGenresRoute
+  MainDiscoverPublishersRoute: typeof MainDiscoverPublishersRoute
+  MainDiscoverRecommendationsRoute: typeof MainDiscoverRecommendationsRoute
+  MainPublisherIdRoute: typeof MainPublisherIdRouteWithChildren
+  MainUUserIdRoute: typeof MainUUserIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,12 +423,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/notifications': {
+      id: '/_protected/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof ProtectedNotificationsRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/me': {
+      id: '/_protected/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof ProtectedMeRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/library': {
+      id: '/_protected/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof ProtectedLibraryRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_marketing/terms': {
+      id: '/_marketing/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof MarketingTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/privacy': {
+      id: '/_marketing/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof MarketingPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_protected/settings/': {
+      id: '/_protected/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof ProtectedSettingsIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_protected/profile/': {
       id: '/_protected/profile/'
       path: '/profile'
       fullPath: '/profile/'
       preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/settings/profile': {
+      id: '/_protected/settings/profile'
+      path: '/settings/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof ProtectedSettingsProfileRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/settings/privacy': {
+      id: '/_protected/settings/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof ProtectedSettingsPrivacyRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/settings/import-export': {
+      id: '/_protected/settings/import-export'
+      path: '/settings/import-export'
+      fullPath: '/settings/import-export'
+      preLoaderRoute: typeof ProtectedSettingsImportExportRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/settings/account': {
+      id: '/_protected/settings/account'
+      path: '/settings/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof ProtectedSettingsAccountRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_main/u/$userId': {
+      id: '/_main/u/$userId'
+      path: '/u/$userId'
+      fullPath: '/u/$userId'
+      preLoaderRoute: typeof MainUUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/publisher/$id': {
+      id: '/_main/publisher/$id'
+      path: '/publisher/$id'
+      fullPath: '/publisher/$id'
+      preLoaderRoute: typeof MainPublisherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/discover/recommendations': {
+      id: '/_main/discover/recommendations'
+      path: '/discover/recommendations'
+      fullPath: '/discover/recommendations'
+      preLoaderRoute: typeof MainDiscoverRecommendationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/discover/publishers': {
+      id: '/_main/discover/publishers'
+      path: '/discover/publishers'
+      fullPath: '/discover/publishers'
+      preLoaderRoute: typeof MainDiscoverPublishersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/discover/genres': {
+      id: '/_main/discover/genres'
+      path: '/discover/genres'
+      fullPath: '/discover/genres'
+      preLoaderRoute: typeof MainDiscoverGenresRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_main/discover/books': {
       id: '/_main/discover/books'
@@ -145,11 +549,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainDiscoverBooksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_main/discover/authors': {
+      id: '/_main/discover/authors'
+      path: '/discover/authors'
+      fullPath: '/discover/authors'
+      preLoaderRoute: typeof MainDiscoverAuthorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_main/book/$id': {
       id: '/_main/book/$id'
       path: '/book/$id'
       fullPath: '/book/$id'
       preLoaderRoute: typeof MainBookIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/author/$id': {
+      id: '/_main/author/$id'
+      path: '/author/$id'
+      fullPath: '/author/$id'
+      preLoaderRoute: typeof MainAuthorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_main/auth/welcome': {
+      id: '/_main/auth/welcome'
+      path: '/auth/welcome'
+      fullPath: '/auth/welcome'
+      preLoaderRoute: typeof MainAuthWelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_main/auth/$pathname': {
@@ -166,28 +591,111 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainAccountPathnameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_main/publisher/$id/books': {
+      id: '/_main/publisher/$id/books'
+      path: '/books'
+      fullPath: '/publisher/$id/books'
+      preLoaderRoute: typeof MainPublisherIdBooksRouteImport
+      parentRoute: typeof MainPublisherIdRoute
+    }
+    '/_main/publisher/$id/articles': {
+      id: '/_main/publisher/$id/articles'
+      path: '/articles'
+      fullPath: '/publisher/$id/articles'
+      preLoaderRoute: typeof MainPublisherIdArticlesRouteImport
+      parentRoute: typeof MainPublisherIdRoute
+    }
+    '/_main/author/$id/series': {
+      id: '/_main/author/$id/series'
+      path: '/series'
+      fullPath: '/author/$id/series'
+      preLoaderRoute: typeof MainAuthorIdSeriesRouteImport
+      parentRoute: typeof MainAuthorIdRoute
+    }
+    '/_main/author/$id/books': {
+      id: '/_main/author/$id/books'
+      path: '/books'
+      fullPath: '/author/$id/books'
+      preLoaderRoute: typeof MainAuthorIdBooksRouteImport
+      parentRoute: typeof MainAuthorIdRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
+  ProtectedLibraryRoute: typeof ProtectedLibraryRoute
+  ProtectedMeRoute: typeof ProtectedMeRoute
+  ProtectedNotificationsRoute: typeof ProtectedNotificationsRoute
+  ProtectedSettingsAccountRoute: typeof ProtectedSettingsAccountRoute
+  ProtectedSettingsImportExportRoute: typeof ProtectedSettingsImportExportRoute
+  ProtectedSettingsPrivacyRoute: typeof ProtectedSettingsPrivacyRoute
+  ProtectedSettingsProfileRoute: typeof ProtectedSettingsProfileRoute
   ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
+  ProtectedSettingsIndexRoute: typeof ProtectedSettingsIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedLibraryRoute: ProtectedLibraryRoute,
+  ProtectedMeRoute: ProtectedMeRoute,
+  ProtectedNotificationsRoute: ProtectedNotificationsRoute,
+  ProtectedSettingsAccountRoute: ProtectedSettingsAccountRoute,
+  ProtectedSettingsImportExportRoute: ProtectedSettingsImportExportRoute,
+  ProtectedSettingsPrivacyRoute: ProtectedSettingsPrivacyRoute,
+  ProtectedSettingsProfileRoute: ProtectedSettingsProfileRoute,
   ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
+  ProtectedSettingsIndexRoute: ProtectedSettingsIndexRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
   ProtectedRouteChildren,
 )
 
+interface MainAuthorIdRouteChildren {
+  MainAuthorIdBooksRoute: typeof MainAuthorIdBooksRoute
+  MainAuthorIdSeriesRoute: typeof MainAuthorIdSeriesRoute
+}
+
+const MainAuthorIdRouteChildren: MainAuthorIdRouteChildren = {
+  MainAuthorIdBooksRoute: MainAuthorIdBooksRoute,
+  MainAuthorIdSeriesRoute: MainAuthorIdSeriesRoute,
+}
+
+const MainAuthorIdRouteWithChildren = MainAuthorIdRoute._addFileChildren(
+  MainAuthorIdRouteChildren,
+)
+
+interface MainPublisherIdRouteChildren {
+  MainPublisherIdArticlesRoute: typeof MainPublisherIdArticlesRoute
+  MainPublisherIdBooksRoute: typeof MainPublisherIdBooksRoute
+}
+
+const MainPublisherIdRouteChildren: MainPublisherIdRouteChildren = {
+  MainPublisherIdArticlesRoute: MainPublisherIdArticlesRoute,
+  MainPublisherIdBooksRoute: MainPublisherIdBooksRoute,
+}
+
+const MainPublisherIdRouteWithChildren = MainPublisherIdRoute._addFileChildren(
+  MainPublisherIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingPrivacyRoute: MarketingPrivacyRoute,
+  MarketingTermsRoute: MarketingTermsRoute,
   MainAccountPathnameRoute: MainAccountPathnameRoute,
   MainAuthPathnameRoute: MainAuthPathnameRoute,
+  MainAuthWelcomeRoute: MainAuthWelcomeRoute,
+  MainAuthorIdRoute: MainAuthorIdRouteWithChildren,
   MainBookIdRoute: MainBookIdRoute,
+  MainDiscoverAuthorsRoute: MainDiscoverAuthorsRoute,
   MainDiscoverBooksRoute: MainDiscoverBooksRoute,
+  MainDiscoverGenresRoute: MainDiscoverGenresRoute,
+  MainDiscoverPublishersRoute: MainDiscoverPublishersRoute,
+  MainDiscoverRecommendationsRoute: MainDiscoverRecommendationsRoute,
+  MainPublisherIdRoute: MainPublisherIdRouteWithChildren,
+  MainUUserIdRoute: MainUUserIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

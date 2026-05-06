@@ -1,3 +1,5 @@
+// TODO: DELETE (moved to /settings/account)
+
 import { AccountView } from "@neondatabase/neon-js/auth/react/ui";
 import { createFileRoute } from "@tanstack/react-router";
 
