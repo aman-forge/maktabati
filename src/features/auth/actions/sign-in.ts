@@ -1,7 +1,10 @@
 import { authClient } from "@features/auth/lib";
 import { redirect } from "@tanstack/react-router";
 
-export async function signInWithEmail(_prevState: { error: string } | null, formData: FormData) {
+export async function signInWithEmail(
+  _prevState: { error: string } | null,
+  formData: FormData,
+) {
   const { error } = await authClient.signIn.email({
     email: formData.get("email") as string,
     password: formData.get("password") as string,

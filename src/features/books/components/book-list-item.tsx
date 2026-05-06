@@ -45,7 +45,9 @@ export function BookListItem({ book }: BookListItemProps) {
             <h3 className="text-sm font-medium leading-tight truncate text-foreground group-hover:text-primary transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-muted-foreground truncate mt-0.5">{book.author?.name}</p>
+            <p className="text-xs text-muted-foreground truncate mt-0.5">
+              {book.author?.name}
+            </p>
           </div>
 
           {/* Genres - hidden on mobile */}
@@ -96,7 +98,11 @@ export function BookListItem({ book }: BookListItemProps) {
           </Button>
         </div>
       </article>
-      <TrackBookModal book={book} open={isTracking} onOpenChange={setIsTracking} />
+      <TrackBookModal
+        book={book}
+        open={isTracking}
+        onOpenChange={setIsTracking}
+      />
     </>
   );
 }

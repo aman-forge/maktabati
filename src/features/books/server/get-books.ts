@@ -1,4 +1,3 @@
-import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
   and,
@@ -10,7 +9,6 @@ import {
   ilike,
   inArray,
   lte,
-  ne,
   or,
   type SQL,
   sql,
@@ -18,7 +16,6 @@ import {
 import { bookSearchSchema } from "@/app/_main/discover/books";
 import { db } from "@/db";
 import { authors, books } from "@/db/tables";
-import { notFound } from "@tanstack/react-router";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
@@ -49,7 +46,7 @@ export const searchBooks = createServerFn({ method: "GET" })
         or(
           ilike(books.title, pattern),
           ilike(books.originalTitle, pattern),
-          ilike(authors.name, pattern), // ← was missing
+          ilike(authors.name, pattern),
         )!,
       );
     }
@@ -146,7 +143,8 @@ export type BookCardBook = SearchBooksResult["books"][number];
 export const getBookById = createServerFn({ method: "GET" })
   .inputValidator((data: string) => data)
   .handler(async ({ data: requestedBookId }) => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(requestedBookId)) return null;
 
     const book = await db.query.books.findFirst({
@@ -156,7 +154,8 @@ export const getBookById = createServerFn({ method: "GET" })
       with: {
         author: {
           extras: {
-            totalBooks: (author) => db.$count(books, eq(books.authorId, author.id)),
+            totalBooks: (author) =>
+              db.$count(books, eq(books.authorId, author.id)),
           },
 
           with: {

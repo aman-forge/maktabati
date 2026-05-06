@@ -1,11 +1,18 @@
 import { Await } from "@tanstack/react-router";
 import { Suspense } from "react";
 import type { getBooks } from "@/features/books/server/get-books";
-import { BookCarousel, BookCarouselSkeleton } from "@/features/marketing/components/book-carousel";
+import {
+  BookCarousel,
+  BookCarouselSkeleton,
+} from "@/features/marketing/components/book-carousel";
 import { GenreGrid } from "@/features/marketing/components/genre-grid";
 import { HeroSection } from "@/features/marketing/components/hero-section";
 
-function MarketingHome({ booksPromise }: { booksPromise: ReturnType<typeof getBooks> }) {
+function MarketingHome({
+  booksPromise,
+}: {
+  booksPromise: ReturnType<typeof getBooks>;
+}) {
   return (
     <main className="min-h-screen font-sans">
       <HeroSection />

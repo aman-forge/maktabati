@@ -20,7 +20,10 @@ interface GenreComboboxProps {
   onSelectionChange: (genres: BookGenre[]) => void;
 }
 
-export function GenreCombobox({ selected, onSelectionChange }: GenreComboboxProps) {
+export function GenreCombobox({
+  selected,
+  onSelectionChange,
+}: GenreComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleGenre = (genre: BookGenre) => {
@@ -46,7 +49,9 @@ export function GenreCombobox({ selected, onSelectionChange }: GenreComboboxProp
           >
             <TagIcon className="size-4 shrink-0 opacity-50 group-hover:opacity-100" />
             {selected.length === 0 ? (
-              <span className="text-muted-foreground group-hover:text-foreground">التصنيفات</span>
+              <span className="text-muted-foreground group-hover:text-foreground">
+                التصنيفات
+              </span>
             ) : selected.length === 1 ? (
               <span className="truncate">{selected[0].label}</span>
             ) : (
@@ -85,7 +90,9 @@ export function GenreCombobox({ selected, onSelectionChange }: GenreComboboxProp
                       >
                         {isSelected && <CheckIcon className="size-3" />}
                       </div>
-                      <span className={cn(isSelected && "font-medium")}>{genre.label}</span>
+                      <span className={cn(isSelected && "font-medium")}>
+                        {genre.label}
+                      </span>
                     </CommandItem>
                   );
                 })}

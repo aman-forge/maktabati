@@ -12,12 +12,24 @@ import {
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
-import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@shadcn/select";
+import {
+  createFileRoute,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";
 import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
-import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
+import {
+  FilterDialog,
+  type FilterState,
+} from "@/features/books/components/filters-dialog";
 import { searchBooks } from "@/features/books/server/get-books";
 
 // ---------------------------------------------------------------------------
@@ -56,7 +68,9 @@ export const bookSearchSchema = z.object({
   q: z.string().max(100).optional(),
   author: z.string().max(100).optional(),
   genres: z.array(z.string()).optional().catch(undefined),
-  sort: z.enum(["newest", "oldest", "title-asc", "title-desc"]).default("newest"),
+  sort: z
+    .enum(["newest", "oldest", "title-asc", "title-desc"])
+    .default("newest"),
   view: z.enum(["grid", "detailed", "list"]).default("grid"),
   minYear: z.number().optional(),
   maxYear: z.number().optional(),
@@ -129,7 +143,9 @@ function BooksSearchPage() {
 
   const [books, setBooks] = React.useState(loaderData.books);
   const newItemsRef = React.useRef<HTMLDivElement | null>(null);
-  const [lastAddedIndex, setLastAddedIndex] = React.useState<number | null>(null);
+  const [lastAddedIndex, setLastAddedIndex] = React.useState<number | null>(
+    null,
+  );
 
   React.useEffect(() => {
     if (search.page === 1 || search.page === undefined) {
@@ -147,14 +163,21 @@ function BooksSearchPage() {
 
   React.useEffect(() => {
     if (lastAddedIndex !== null && newItemsRef.current) {
-      newItemsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      newItemsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [lastAddedIndex]);
 
   const setParams = React.useCallback(
     (updater: (prev: BookSearch) => Partial<BookSearch>) => {
       navigate({
-        search: (prev) => ({ ...prev, ...updater(prev as BookSearch), page: 1 }),
+        search: (prev) => ({
+          ...prev,
+          ...updater(prev as BookSearch),
+          page: 1,
+        }),
         replace: true,
       });
     },
@@ -214,12 +237,15 @@ function BooksSearchPage() {
       setParams(() => ({
         minYear: next.yearRange[0] !== YEAR_MIN ? next.yearRange[0] : undefined,
         maxYear: next.yearRange[1] !== YEAR_MAX ? next.yearRange[1] : undefined,
-        minPages: next.pageRange[0] !== PAGE_MIN ? next.pageRange[0] : undefined,
-        maxPages: next.pageRange[1] !== PAGE_MAX ? next.pageRange[1] : undefined,
+        minPages:
+          next.pageRange[0] !== PAGE_MIN ? next.pageRange[0] : undefined,
+        maxPages:
+          next.pageRange[1] !== PAGE_MAX ? next.pageRange[1] : undefined,
         ratingMin: next.ratingMin > 0 ? next.ratingMin : undefined,
         publishers: next.publishers.length > 0 ? next.publishers : undefined,
         topics: next.topics.length > 0 ? next.topics : undefined,
-        readingStatus: next.readingStatus.length > 0 ? next.readingStatus : undefined,
+        readingStatus:
+          next.readingStatus.length > 0 ? next.readingStatus : undefined,
       }));
     },
     [setParams],
@@ -245,14 +271,16 @@ function BooksSearchPage() {
       tags.push({
         key: "year",
         label: `${search.minYear ?? "؟"} — ${search.maxYear ?? "؟"}`,
-        onRemove: () => setParams(() => ({ minYear: undefined, maxYear: undefined })),
+        onRemove: () =>
+          setParams(() => ({ minYear: undefined, maxYear: undefined })),
       });
 
     if (search.minPages !== undefined || search.maxPages !== undefined)
       tags.push({
         key: "pages",
         label: `${search.minPages ?? "؟"} — ${search.maxPages ?? "؟"} صفحة`,
-        onRemove: () => setParams(() => ({ minPages: undefined, maxPages: undefined })),
+        onRemove: () =>
+          setParams(() => ({ minPages: undefined, maxPages: undefined })),
       });
 
     if ((search.ratingMin ?? 0) > 0)
@@ -268,7 +296,10 @@ function BooksSearchPage() {
       tags.push({
         key: `genre-${value}`,
         label: genre.label,
-        onRemove: () => setParams((prev) => ({ genres: prev.genres?.filter((g) => g !== value) })),
+        onRemove: () =>
+          setParams((prev) => ({
+            genres: prev.genres?.filter((g) => g !== value),
+          })),
       });
     });
 
@@ -286,7 +317,10 @@ function BooksSearchPage() {
       tags.push({
         key: `topic-${value}`,
         label: topic?.label ?? value,
-        onRemove: () => setParams((prev) => ({ topics: prev.topics?.filter((t) => t !== value) })),
+        onRemove: () =>
+          setParams((prev) => ({
+            topics: prev.topics?.filter((t) => t !== value),
+          })),
       });
     });
 
@@ -306,20 +340,9 @@ function BooksSearchPage() {
 
   const hasActiveFilters = activeFilterTags.length > 0;
 
-  // Count active dialog filters (excludes genres which have their own chip)
-  const dialogFilterCount = [
-    search.minYear,
-    search.maxYear,
-    search.minPages,
-    search.maxPages,
-    search.ratingMin,
-    ...(search.publishers ?? []),
-    ...(search.topics ?? []),
-    ...(search.readingStatus ?? []),
-  ].filter(Boolean).length;
-
   const clearAllFilters = React.useCallback(
-    () => navigate({ search: (prev) => ({ view: prev.view, sort: prev.sort }) }),
+    () =>
+      navigate({ search: (prev) => ({ view: prev.view, sort: prev.sort }) }),
     [navigate],
   );
 
@@ -395,18 +418,15 @@ function BooksSearchPage() {
                 onFiltersChange={handleFiltersChange}
                 onReset={handleResetFilters}
               />
-              {/*{dialogFilterCount > 0 && (
-                <span className="absolute -top-1.5 -left-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
-                  {dialogFilterCount}
-                </span>
-              )}*/}
             </div>
 
             <div className="h-5 w-px bg-border shrink-0" />
 
             <Select
               value={search.sort}
-              onValueChange={(v) => setParams(() => ({ sort: v as BookSortOption }))}
+              onValueChange={(v) =>
+                setParams(() => ({ sort: v as BookSortOption }))
+              }
             >
               <SelectTrigger className="h-8 shrink-0 w-auto gap-1.5 border-dashed text-xs text-muted-foreground">
                 <SortAscendingIcon className="size-3.5 shrink-0" />
@@ -426,7 +446,10 @@ function BooksSearchPage() {
 
             <div className="flex-1" />
 
-            <ViewToggle value={search.view} onValueChange={(v) => setParams(() => ({ view: v }))} />
+            <ViewToggle
+              value={search.view}
+              onValueChange={(v) => setParams(() => ({ view: v }))}
+            />
           </div>
 
           {/* Active filter tags */}
@@ -460,9 +483,13 @@ function BooksSearchPage() {
         {/* Count */}
         {books.length > 0 && (
           <p className="text-sm text-muted-foreground mb-4">
-            <span className="font-medium text-foreground">{loaderData.total}</span>
+            <span className="font-medium text-foreground">
+              {loaderData.total}
+            </span>
             {" كتاب"}
-            {hasActiveFilters && <span className="text-muted-foreground/60"> · بتصفية نشطة</span>}
+            {hasActiveFilters && (
+              <span className="text-muted-foreground/60"> · بتصفية نشطة</span>
+            )}
           </p>
         )}
 
@@ -498,7 +525,10 @@ function BooksSearchPage() {
             </div>
             <div className={currentView.wrapper}>
               {books.map((book, i) => (
-                <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
+                <div
+                  key={book.id}
+                  ref={i === lastAddedIndex ? newItemsRef : null}
+                >
                   <Component book={book} />
                 </div>
               ))}
@@ -507,7 +537,10 @@ function BooksSearchPage() {
         ) : (
           <div className={currentView.wrapper}>
             {books.map((book, i) => (
-              <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
+              <div
+                key={book.id}
+                ref={i === lastAddedIndex ? newItemsRef : null}
+              >
                 <Component book={book} />
               </div>
             ))}

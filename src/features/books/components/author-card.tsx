@@ -2,30 +2,17 @@ import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
-import { Badge } from "@/ui/components/ui/badge";
-import { BookType } from "../server/get-books";
+import type { BookType } from "../server/get-books";
 
 interface AuthorCardProps {
   author?: NonNullable<BookType>["author"];
 }
-// const author = {
-//   name: "براندون ساندرسون",
-//   country: "الولايات المتحدة",
-//   bio: `براندون وين ساندرسون هو كاتب فانتازيا وخيال علمي أمريكي، اشتهر بتخيّله لعالم أو مجموعة أو كون يدعى كوزمير، دارت أحداث أغلب رواياته الخيالية فيه. واشتهر أيضًا بختمه لسلسة مؤلفات فانتازيا عليا تسمى «عجلة الزمن» لكاتبها روبرت جوردان. وضع براندون «قوانين ساندرسون في السحر» وعمّم مصطلحي نظام السحر القاسي واللين.`,
-//   books: "1",
-//   b: "شطرنج",
-//   stats: [
-//     { label: "عدد الكتب", value: "24" },
-//     { label: "مواليد", value: "1977" },
-//     { label: "المتابعين", value: "403.609" },
-//   ],
-// };
+
 export function AuthorCard({ author }: AuthorCardProps) {
   if (!author) return null;
   const stats = [
-    { label: "مواليد", value: author.birthYear || "لا يوجد"},
+    { label: "مواليد", value: author.birthYear || "لا يوجد" },
     { label: "عدد الكتب", value: author.totalBooks },
-    // TODO: must add followers number in database.
     { label: "المتابعين", value: "403.609" },
   ];
   return (
@@ -127,7 +114,8 @@ export function AuthorCard({ author }: AuthorCardProps) {
                 return (
                   <Link
                     key={b.id}
-                    to={"/book/" + b.id}
+                    to={"/book/$id"}
+                    params={{ id: b.id }}
                     className="group flex flex-col gap-1.5 shrink-0"
                   >
                     <img

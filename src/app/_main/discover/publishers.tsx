@@ -1,7 +1,16 @@
-import { MagnifyingGlassIcon, SortAscendingIcon, XIcon } from "@phosphor-icons/react";
+import {
+  MagnifyingGlassIcon,
+  SortAscendingIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@shadcn/select";
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 

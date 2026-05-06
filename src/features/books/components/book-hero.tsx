@@ -11,16 +11,10 @@ import {
   StarIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
-import { BookType } from "../server/get-books";
+// import { BOOK_GENRES } from "@/db/constants/books";
 import { ButtonGroup } from "@/ui/components/ui/button-group";
+import type { BookType } from "../server/get-books";
 import { TrackBookModal } from "./track-book-modal";
-
-// import { BookWithAuthor } from "@/db/tables";
-// // interface BookDetailed {
-// //   cover: string | undefined;
-// //   title: any;
-// //   book: BookWithAuthor;
-// // }
 
 const SHELF_OPTIONS = [
   { label: "أريد القراءة", icon: BookmarkSimpleIcon },
@@ -33,20 +27,14 @@ export function BookHero({ book }: { book: BookType }) {
   const [liked, setLiked] = useState(false);
   const [shelfOpen, setShelfOpen] = useState(false);
   const [Trackbookopen, settrackbookopen] = useState(false);
-  // const book = {
-  //   title: "الإمبراطورية الأخيرة",
-  //   badges: ["الأكثر مبيعًا", "جديد"],
-  //   rating: 4.6,
-  //   ratingTotal: 4,
-  //   reviewCountTotal: 1200,
-  //   series: "وليدو الضباب",
-    const ratingCounts = [
-      { stars: 5, pct: 0 },
-      { stars: 4, pct: 0 },
-      { stars: 3, pct: 0 },
-      { stars: 2, pct: 0 },
-      { stars: 1, pct: 0 },
-    ];
+
+  const ratingCounts = [
+    { stars: 5, pct: 0 },
+    { stars: 4, pct: 0 },
+    { stars: 3, pct: 0 },
+    { stars: 2, pct: 0 },
+    { stars: 1, pct: 0 },
+  ];
   let lang = "لا يوجد";
   if (book.originalLanguage === "ar") {
     lang = "العربية";
@@ -56,8 +44,8 @@ export function BookHero({ book }: { book: BookType }) {
   const meta = [
     { label: "عدد الصفحات", value: book.pageCount || "لا يوجد" },
     { label: "اللغة", value: lang },
-    { label: "سنة النشر", value: book.publicationYear  || "لا يوجد" },
-    { label: "التصنيف", value: book.genres?.join("، ") || "لا يوجد" },
+    { label: "سنة النشر", value: book.publicationYear || "لا يوجد" },
+    { label: "التصنيف", value: book.genres?.join("، ") || "لا يوجد" }, // TODO: CHANGE
   ];
 
   return (
@@ -77,7 +65,7 @@ export function BookHero({ book }: { book: BookType }) {
           <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
             <img
               src={book.coverImageUrl || "/books/نهج الملوك.png"}
-              alt={`غلاف كتاب` + `${book.title || "لا يوجد"}`}
+              alt={`غلاف كتاب ${book.title || "لا يوجد"}`}
               className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
               style={{ aspectRatio: "2/3" }}
             />
@@ -106,7 +94,7 @@ export function BookHero({ book }: { book: BookType }) {
                     <CaretDownIcon />
                   </Button>
                   <TrackBookModal
-                    // book={}
+                    book={book}
                     open={Trackbookopen}
                     onOpenChange={(o: boolean) => {
                       settrackbookopen(o);
@@ -214,7 +202,7 @@ export function BookHero({ book }: { book: BookType }) {
                     className="text-6xl lg:text-7xl font-black text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    {0/*book.rating*/}
+                    {0 /*book.rating*/}
                   </span>
                   <span className="text-xl text-muted-foreground">/5</span>
                 </div>
@@ -224,14 +212,16 @@ export function BookHero({ book }: { book: BookType }) {
                       key={star}
                       weight="fill"
                       className={`w-6 h-6 ${
-                        star <= Math.round(/*book.rating*/0) ? "text-yellow-400" : "text-muted/30"
+                        star <= Math.round(/*book.rating*/ 0)
+                          ? "text-yellow-400"
+                          : "text-muted/30"
                       }`}
                     />
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {book.ratingTotal?.toLocaleString("ar-US")} تقييم ·{" "}
-                  {book.reviewCountTotal?.toLocaleString("ar-US")} مراجعة
+                  {/*{book.ratingTotal?.toLocaleString("ar-US")} تقييم ·{" "}
+                  {book.reviewCountTotal?.toLocaleString("ar-US")} مراجعة*/}
                 </p>
               </div>
 

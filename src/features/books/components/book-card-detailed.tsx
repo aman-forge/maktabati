@@ -62,7 +62,9 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
                 <h3 className="text-base font-semibold leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors">
                   {book.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-0.5">{book.author?.name}</p>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {book.author?.name}
+                </p>
               </div>
               {/*{book.rating && (
               <div className="flex items-center gap-1 shrink-0 px-2 py-1 rounded-md bg-primary/10">
@@ -109,7 +111,11 @@ export function BookCardDetailed({ book }: BookCardDetailedProps) {
           </div>
         </div>
       </article>
-      <TrackBookModal book={book} open={isTracking} onOpenChange={setIsTracking} />
+      <TrackBookModal
+        book={book}
+        open={isTracking}
+        onOpenChange={setIsTracking}
+      />
     </>
   );
 }

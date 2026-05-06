@@ -1,9 +1,7 @@
 import {
   BooksIcon,
   BuildingsIcon,
-  ChartLineIcon,
   ChatCircleIcon,
-  CheckIcon,
   ClockIcon,
   type Icon,
   SparkleIcon,

@@ -11,7 +11,12 @@ import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/ui/lib/utils";
 
 const navItems = [
-  { href: linkOptions({ to: "/" }), icon: HouseIcon, label: "الرئيسية", isProfile: false },
+  {
+    href: linkOptions({ to: "/" }),
+    icon: HouseIcon,
+    label: "الرئيسية",
+    isProfile: false,
+  },
   {
     href: linkOptions({ to: "/discover/books" }),
     icon: CompassIcon,
@@ -24,8 +29,18 @@ const navItems = [
     label: "مكتبتي",
     isProfile: false,
   },
-  { href: linkOptions({ to: "/" }), icon: PulseIcon, label: "النشاط", isProfile: false }, // activity
-  { href: linkOptions({ to: "/me" }), icon: UserCircleIcon, label: "حسابي", isProfile: true },
+  {
+    href: linkOptions({ to: "/" }),
+    icon: PulseIcon,
+    label: "النشاط",
+    isProfile: false,
+  }, // activity
+  {
+    href: linkOptions({ to: "/me" }),
+    icon: UserCircleIcon,
+    label: "حسابي",
+    isProfile: true,
+  },
 ] as const;
 
 function BottomBar() {
@@ -42,7 +57,10 @@ function BottomBar() {
         {navItems.map((item) => {
           const href =
             item.isProfile && !session?.user
-              ? linkOptions({ to: "/auth/$pathname", params: { pathname: "/login" } })
+              ? linkOptions({
+                  to: "/auth/$pathname",
+                  params: { pathname: "/login" },
+                })
               : item.href;
           const isActive =
             item.href.to === "/"
@@ -57,11 +75,15 @@ function BottomBar() {
               to={href.to}
               className={cn(
                 "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-all duration-200",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                isActive
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {/* Top indicator */}
-              {isActive && <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />}
+              {isActive && (
+                <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />
+              )}
 
               {/* Profile avatar when logged in */}
               {item.isProfile && session?.user ? (
@@ -80,7 +102,9 @@ function BottomBar() {
                 />
               )}
 
-              <span className="text-[10px] font-medium leading-none">{item.label}</span>
+              <span className="text-[10px] font-medium leading-none">
+                {item.label}
+              </span>
             </Link>
           );
         })}

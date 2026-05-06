@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getBooks } from "@/features/books/server/get-books";
 import MarketingHome from "@/features/marketing/pages/home-page";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_marketing/")({
   loader: () => {
     const booksPromise = getBooks();
     return { booksPromise };

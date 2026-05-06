@@ -15,12 +15,17 @@ import {
 } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@shadcn/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@shadcn/dialog";
 import { Input } from "@shadcn/input";
 import { Textarea } from "@shadcn/textarea";
 import React from "react";
 import { cn } from "@/ui/lib/utils";
-import type { BookCardBook } from "../server/get-books";
+import type { BookCardBook, BookType } from "../server/get-books";
 
 /* ─── Status Config ───────────────────────────────────────────────── */
 const STATUSES = [
@@ -29,7 +34,8 @@ const STATUSES = [
     label: "أخطط للقراءة",
     icon: BookmarkSimpleIcon,
     pill: "bg-slate-500/10 text-slate-400 border-slate-500/20",
-    active: "bg-slate-600  border-slate-600 shadow-slate-500/30 shadow-lg text-white",
+    active:
+      "bg-slate-600  border-slate-600 shadow-slate-500/30 shadow-lg text-white",
     dot: "bg-slate-400",
   },
   {
@@ -45,7 +51,8 @@ const STATUSES = [
     label: "مكتمل",
     icon: CheckCircleIcon,
     pill: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    active: "bg-emerald-500  border-emerald-500 shadow-emerald-500/30 shadow-lg text-white",
+    active:
+      "bg-emerald-500  border-emerald-500 shadow-emerald-500/30 shadow-lg text-white",
     dot: "bg-emerald-400",
   },
   {
@@ -53,7 +60,8 @@ const STATUSES = [
     label: "مؤجل",
     icon: PauseIcon,
     pill: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    active: "bg-amber-500  border-amber-500 shadow-amber-500/30 shadow-lg text-white",
+    active:
+      "bg-amber-500  border-amber-500 shadow-amber-500/30 shadow-lg text-white",
     dot: "bg-amber-400",
   },
   {
@@ -61,7 +69,8 @@ const STATUSES = [
     label: "متروك",
     icon: ProhibitIcon,
     pill: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    active: "bg-rose-500  border-rose-500 shadow-rose-500/30 shadow-lg text-white",
+    active:
+      "bg-rose-500  border-rose-500 shadow-rose-500/30 shadow-lg text-white",
     dot: "bg-rose-400",
   },
 ];
@@ -78,19 +87,26 @@ export interface TrackingData {
 }
 
 interface TrackBookModalProps {
-  book: BookCardBook | null;
+  book: BookCardBook | BookType | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave?: (bookId: string, data: TrackingData) => void;
 }
 
 /* ─── Component ───────────────────────────────────────────────────── */
-export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookModalProps) {
+export function TrackBookModal({
+  book,
+  open,
+  onOpenChange,
+  onSave,
+}: TrackBookModalProps) {
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [status, setStatus] = React.useState("plan-to-read");
   const [score, setScore] = React.useState(0);
   const [pagesProgress, setPagesProgress] = React.useState(0);
-  const [startDate, setStartDate] = React.useState(new Date().toISOString().split("T")[0]);
+  const [startDate, setStartDate] = React.useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [finishDate, setFinishDate] = React.useState("");
   const [notes, setNotes] = React.useState("");
   const [hoveredStar, setHoveredStar] = React.useState(0);
@@ -125,8 +141,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
   if (!book) return null;
 
   const totalPages = book.pageCount || 0;
-  const progressPercent = totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
-  const currentStatus = STATUSES.find((s) => s.value === status)!;
+  const progressPercent =
+    totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
+  const currentStatus = STATUSES.find((s) => s.value === status);
   const showFinishDate = status === "completed";
 
   return (
@@ -184,7 +201,10 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
             )}
             aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
           >
-            <HeartIcon weight={isFavorite ? "fill" : "bold"} className="w-4 h-4" />
+            <HeartIcon
+              weight={isFavorite ? "fill" : "bold"}
+              className="w-4 h-4"
+            />
           </Button>
 
           {/* Book info row */}
@@ -227,7 +247,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
           {/* Status pills */}
           <section className="space-y-3">
             <div className="pr-6">
-              <SectionLabel icon={<ClockIcon className="w-3.5 h-3.5" />}>حالة القراءة</SectionLabel>
+              <SectionLabel icon={<ClockIcon className="w-3.5 h-3.5" />}>
+                حالة القراءة
+              </SectionLabel>
             </div>
             <div className="flex flex-nowrap gap-2 no-scrollbar overflow-x-scroll px-4">
               {STATUSES.map((s) => {
@@ -242,10 +264,16 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                       "flex items-center gap-1.5 px-3.5 text-nowrap py-2 rounded-xl text-sm font-medium border transition-all duration-200 cursor-pointer",
                       isActive
                         ? s.active
-                        : cn(s.pill, "dark:hover:brightness-125 hover:brightness-75"),
+                        : cn(
+                            s.pill,
+                            "dark:hover:brightness-125 hover:brightness-75",
+                          ),
                     )}
                   >
-                    <Icon weight={isActive ? "fill" : "bold"} className="w-3.5 h-3.5 shrink-0" />
+                    <Icon
+                      weight={isActive ? "fill" : "bold"}
+                      className="w-3.5 h-3.5 shrink-0"
+                    />
                     {s.label}
                   </button>
                 );
@@ -268,7 +296,11 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                     min={0}
                     max={totalPages || 9999}
                     value={pagesProgress || ""}
-                    onChange={(e) => setPagesProgress(Math.max(0, parseInt(e.target.value) || 0))}
+                    onChange={(e) =>
+                      setPagesProgress(
+                        Math.max(0, parseInt(e.target.value, 10) || 0),
+                      )
+                    }
                     placeholder="0"
                   />
                   <span className="absolute right-16 top-1/2 -translate-y-1/2 text-sm /30 font-medium pointer-events-none">
@@ -338,7 +370,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
 
           {/* Rating */}
           <section className="space-y-3 px-6">
-            <SectionLabel icon={<StarIcon className="w-3.5 h-3.5" />}>تقييمك للكتاب</SectionLabel>
+            <SectionLabel icon={<StarIcon className="w-3.5 h-3.5" />}>
+              تقييمك للكتاب
+            </SectionLabel>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-0.5 bg-white/5 border border-white/8 rounded-xl px-3 py-2.5">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -351,10 +385,16 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
                     className="p-0.5 transition-transform hover:scale-110 active:scale-90"
                   >
                     <StarIcon
-                      weight={hoveredStar >= star || score >= star ? "fill" : "regular"}
+                      weight={
+                        hoveredStar >= star || score >= star
+                          ? "fill"
+                          : "regular"
+                      }
                       className={cn(
                         "w-7 h-7 transition-colors",
-                        hoveredStar >= star || score >= star ? "text-amber-400" : "/20",
+                        hoveredStar >= star || score >= star
+                          ? "text-amber-400"
+                          : "/20",
                       )}
                     />
                   </button>
@@ -377,7 +417,9 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
 
           {/* Notes */}
           <section className="space-y-3 px-6">
-            <SectionLabel icon={<NotePencilIcon className="w-3.5 h-3.5" />}>ملاحظاتي</SectionLabel>
+            <SectionLabel icon={<NotePencilIcon className="w-3.5 h-3.5" />}>
+              ملاحظاتي
+            </SectionLabel>
             <Textarea
               placeholder="اكتب انطباعاتك وملاحظاتك عن الكتاب..."
               value={notes}
@@ -392,18 +434,34 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
         <div className="shrink-0 flex items-center justify-between gap-3 px-6 py-4 border-t border-border/5 bg-secondary/50">
           {/* Status indicator */}
           <div className="flex items-center gap-2 text-sm /40">
-            <span className={cn("w-2 h-2 rounded-full shrink-0", currentStatus.dot)} />
-            <span>{currentStatus.label}</span>
+            {currentStatus && (
+              <>
+                <span
+                  className={cn(
+                    "w-2 h-2 rounded-full shrink-0",
+                    currentStatus.dot,
+                  )}
+                />
+                <span>{currentStatus.label}</span>
+              </>
+            )}
             {isFavorite && (
               <>
                 <span className="/20">·</span>
-                <HeartIcon weight="fill" className="w-3.5 h-3.5 text-rose-400" />
+                <HeartIcon
+                  weight="fill"
+                  className="w-3.5 h-3.5 text-rose-400"
+                />
               </>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="button" onClick={() => onOpenChange(false)} variant={"ghost"}>
+            <Button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              variant={"ghost"}
+            >
               إلغاء
             </Button>
             <Button type="button" onClick={handleSave}>
@@ -418,7 +476,13 @@ export function TrackBookModal({ book, open, onOpenChange, onSave }: TrackBookMo
 
 /* ─── Sub-components ──────────────────────────────────────────────── */
 
-function SectionLabel({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+function SectionLabel({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex items-center gap-2 text-xs font-semibold /40 uppercase tracking-widest">
       {icon}

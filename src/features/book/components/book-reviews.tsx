@@ -1,7 +1,6 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import type { Review } from "@/db/tables";
 import {
   CaretDownIcon,
   ChatCircleIcon,
@@ -9,8 +8,8 @@ import {
   ThumbsUpIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
-import { date } from "zod";
-const reviews: string | any[] = [];
+
+const reviews: string | any[] = []; // TODO: remove any!!!
 
 const SORT_OPTIONS = [
   "الأكثر إعجابًا",
@@ -24,17 +23,17 @@ const SORT_OPTIONS = [
 // }
 export function BookReviews() {
   // export function BookReviews({ reviews = [] }: BookReviewsProps) {
-  const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set());
+  // const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set()); // likedReviews not used
   const [sort, setSort] = useState<string>(SORT_OPTIONS[0]);
   const [showAll, setShowAll] = useState(false);
 
-  const toggleLike = (id: string) => {
-    setLikedReviews((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
+  // const toggleLike = (id: string) => {
+  //   setLikedReviews((prev) => {
+  //     const next = new Set(prev);
+  //     next.has(id) ? next.delete(id) : next.add(id);
+  //     return next;
+  //   });
+  // };
   const review = {
     id: "جديد",
     name: "lklk",
@@ -159,7 +158,7 @@ export function BookReviews() {
             {/* Actions */}
             <div className="flex items-center gap-4 pe-13">
               <Button
-                onClick={() => toggleLike(review.id)}
+                // onClick={() => toggleLike(review.id)}
                 variant={isLiked ? "default" : "ghost"}
                 aria-label={`إعجاب بمراجعة ${review.name}`}
                 aria-pressed={isLiked}

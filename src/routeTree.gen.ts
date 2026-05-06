@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './app/__root'
 import { Route as ProtectedRouteImport } from './app/_protected'
-import { Route as IndexRouteImport } from './app/index'
+import { Route as MarketingIndexRouteImport } from './app/_marketing/index'
 import { Route as ProtectedNotificationsRouteImport } from './app/_protected/notifications'
 import { Route as ProtectedMeRouteImport } from './app/_protected/me'
 import { Route as ProtectedLibraryRouteImport } from './app/_protected/library'
@@ -44,8 +44,8 @@ const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
+  id: '/_marketing/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -196,7 +196,7 @@ const MainAuthorIdBooksRoute = MainAuthorIdBooksRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
@@ -227,7 +227,7 @@ export interface FileRoutesByFullPath {
   '/publisher/$id/books': typeof MainPublisherIdBooksRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
@@ -259,7 +259,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
@@ -268,6 +267,7 @@ export interface FileRoutesById {
   '/_protected/library': typeof ProtectedLibraryRoute
   '/_protected/me': typeof ProtectedMeRoute
   '/_protected/notifications': typeof ProtectedNotificationsRoute
+  '/_marketing/': typeof MarketingIndexRoute
   '/_main/account/$pathname': typeof MainAccountPathnameRoute
   '/_main/auth/$pathname': typeof MainAuthPathnameRoute
   '/_main/auth/welcome': typeof MainAuthWelcomeRoute
@@ -355,7 +355,6 @@ export interface FileRouteTypes {
     | '/publisher/$id/books'
   id:
     | '__root__'
-    | '/'
     | '/_protected'
     | '/_marketing/about'
     | '/_marketing/privacy'
@@ -364,6 +363,7 @@ export interface FileRouteTypes {
     | '/_protected/library'
     | '/_protected/me'
     | '/_protected/notifications'
+    | '/_marketing/'
     | '/_main/account/$pathname'
     | '/_main/auth/$pathname'
     | '/_main/auth/welcome'
@@ -388,11 +388,11 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
   MarketingAboutRoute: typeof MarketingAboutRoute
   MarketingPrivacyRoute: typeof MarketingPrivacyRoute
   MarketingTermsRoute: typeof MarketingTermsRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
   MainAccountPathnameRoute: typeof MainAccountPathnameRoute
   MainAuthPathnameRoute: typeof MainAuthPathnameRoute
   MainAuthWelcomeRoute: typeof MainAuthWelcomeRoute
@@ -416,11 +416,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected/notifications': {
@@ -679,11 +679,11 @@ const MainPublisherIdRouteWithChildren = MainPublisherIdRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
   MarketingAboutRoute: MarketingAboutRoute,
   MarketingPrivacyRoute: MarketingPrivacyRoute,
   MarketingTermsRoute: MarketingTermsRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
   MainAccountPathnameRoute: MainAccountPathnameRoute,
   MainAuthPathnameRoute: MainAuthPathnameRoute,
   MainAuthWelcomeRoute: MainAuthWelcomeRoute,

@@ -234,7 +234,12 @@ export default function DashboardHome() {
         >
           <div className="mt-2 grid grid-cols-2 gap-3">
             {stats.map((item) => (
-              <StatCard key={item.label} label={item.label} value={item.value} icon={item.icon} />
+              <StatCard
+                key={item.label}
+                label={item.label}
+                value={item.value}
+                icon={item.icon}
+              />
             ))}
           </div>
         </PanelCard>
@@ -317,7 +322,12 @@ export default function DashboardHome() {
           >
             <div className="mt-2 grid grid-cols-2 gap-3">
               {stats.map((item) => (
-                <StatCard key={item.label} label={item.label} value={item.value} icon={item.icon} />
+                <StatCard
+                  key={item.label}
+                  label={item.label}
+                  value={item.value}
+                  icon={item.icon}
+                />
               ))}
             </div>
           </PanelCard>
@@ -345,11 +355,18 @@ function PanelCard({
   className?: string;
 }) {
   return (
-    <section className={["rounded-2xl border bg-card p-5 shadow-sm", className ?? ""].join(" ")}>
+    <section
+      className={[
+        "rounded-2xl border bg-card p-5 shadow-sm",
+        className ?? "",
+      ].join(" ")}
+    >
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold tracking-tight">{title}</h2>
-          {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
+          {subtitle && (
+            <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
+          )}
         </div>
         {actionLabel && actionHref && (
           <Link
@@ -401,7 +418,9 @@ function ReadingCard({ book }: { book: ReadingBook }) {
                 <span>
                   صفحة {book.currentPage} من {book.totalPages}
                 </span>
-                <span className="font-medium text-foreground">{book.progress}٪</span>
+                <span className="font-medium text-foreground">
+                  {book.progress}٪
+                </span>
               </div>
               <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                 <div
@@ -412,7 +431,12 @@ function ReadingCard({ book }: { book: ReadingBook }) {
             </div>
 
             <div className="flex justify-end mt-1">
-              <Button type="button" variant="ghost" size="xs" className="px-2 gap-0.5 text-xs">
+              <Button
+                type="button"
+                variant="ghost"
+                size="xs"
+                className="px-2 gap-0.5 text-xs"
+              >
                 <PlusIcon weight="bold" className="h-3 w-3 rotate-180" />
                 تحديث
               </Button>
@@ -426,14 +450,22 @@ function ReadingCard({ book }: { book: ReadingBook }) {
 
 // ─── Activity row ─────────────────────────────────────────────────────────────
 
-function ActivityRow({ item, isLast }: { item: ActivityItem; isLast: boolean }) {
+function ActivityRow({
+  item,
+  isLast,
+}: {
+  item: ActivityItem;
+  isLast: boolean;
+}) {
   const cfg = activityConfig[item.type];
   const isMe = item.userId === "me";
 
   return (
     <div className="relative flex gap-3 pb-4 last:pb-0">
       {/* Timeline line */}
-      {!isLast && <div className="absolute right-3 top-7 bottom-0 w-px bg-border" />}
+      {!isLast && (
+        <div className="absolute right-3 top-7 bottom-0 w-px bg-border" />
+      )}
 
       {/* Dot */}
       <div className="relative z-10 shrink-0">
@@ -450,7 +482,10 @@ function ActivityRow({ item, isLast }: { item: ActivityItem; isLast: boolean }) 
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary">
-              <UserIcon weight="duotone" className="size-4 text-muted-foreground" />
+              <UserIcon
+                weight="duotone"
+                className="size-4 text-muted-foreground"
+              />
             </div>
             {isMe ? (
               <span className="text-sm font-semibold">أنت</span>
@@ -471,7 +506,11 @@ function ActivityRow({ item, isLast }: { item: ActivityItem; isLast: boolean }) 
         {/* Content */}
         <div className="flex gap-3">
           {item.type !== "goal" && (
-            <Link to={`/book/$id`} params={{ id: item.bookId }} className="shrink-0">
+            <Link
+              to={`/book/$id`}
+              params={{ id: item.bookId }}
+              className="shrink-0"
+            >
               <img
                 src={"/books/book.jpg"}
                 alt={item.bookId}
@@ -526,8 +565,12 @@ function StreakCard({ streak }: { streak: StreakData }) {
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div>
-          <h2 className="text-base font-semibold tracking-tight">سلسلة القراءة</h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">حافظ على القراءة يومياً</p>
+          <h2 className="text-base font-semibold tracking-tight">
+            سلسلة القراءة
+          </h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            حافظ على القراءة يومياً
+          </p>
         </div>
         <Link
           to="/" // TODO: UPDATE URL
@@ -545,8 +588,12 @@ function StreakCard({ streak }: { streak: StreakData }) {
         </div>
         <div>
           <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-bold tracking-tight text-amber-500">{streak.days}</span>
-            <span className="text-sm font-medium text-muted-foreground">يوم</span>
+            <span className="text-4xl font-bold tracking-tight text-amber-500">
+              {streak.days}
+            </span>
+            <span className="text-sm font-medium text-muted-foreground">
+              يوم
+            </span>
           </div>
           <span
             className={[
@@ -556,7 +603,11 @@ function StreakCard({ streak }: { streak: StreakData }) {
                 : "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
             ].join(" ")}
           >
-            {streak.todayDone ? <>✓ أنجزت اليوم</> : <>اقرأ الليلة للحفاظ عليها</>}
+            {streak.todayDone ? (
+              <>✓ أنجزت اليوم</>
+            ) : (
+              <>اقرأ الليلة للحفاظ عليها</>
+            )}
           </span>
         </div>
       </div>
@@ -575,7 +626,11 @@ function StreakCard({ streak }: { streak: StreakData }) {
                     : "bg-muted text-muted-foreground",
               ].join(" ")}
             >
-              {streak.completedDays[i] ? <FireIcon weight="fill" className="size-3.5" /> : day}
+              {streak.completedDays[i] ? (
+                <FireIcon weight="fill" className="size-3.5" />
+              ) : (
+                day
+              )}
             </div>
             <span className="text-[10px] text-muted-foreground">{day}</span>
           </div>
@@ -632,7 +687,15 @@ function GoalCard({ goal }: { goal: GoalItem }) {
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
-function StatCard({ label, value, icon: Icon }: { label: string; value: string; icon: Icon }) {
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  icon: Icon;
+}) {
   return (
     <div className="rounded-xl border bg-background p-3">
       <div className="flex items-start justify-between gap-2">

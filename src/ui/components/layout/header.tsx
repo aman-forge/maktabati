@@ -26,9 +26,14 @@ function Header() {
       <div className="container mx-auto px-4 flex h-full items-center justify-between">
         {/* ── Left: Logo + Desktop Nav ── */}
         <div className="flex items-center gap-2 lg:gap-4">
-          <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex items-center gap-2.5">
+          <Link
+            to={isLoggedIn ? "/dashboard" : "/"}
+            className="flex items-center gap-2.5"
+          >
             <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
-            <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
+            <span className="inline-block text-lg font-bold tracking-tight">
+              مكتبتي
+            </span>
           </Link>
 
           <DesktopNav />
@@ -37,7 +42,10 @@ function Header() {
         {/* ── Right: Search + Theme + User  ── */}
         <div className="flex items-center gap-1">
           <ThemeToggle />
-          <Button variant="outline" className="h-9 gap-2 pl-2 pr-3 text-muted-foreground">
+          <Button
+            variant="outline"
+            className="h-9 gap-2 pl-2 pr-3 text-muted-foreground"
+          >
             <MagnifyingGlassIcon className="size-4" />
             <span className="text-sm">بحث...</span>
             <kbd className="pointer-events-none mr-2 h-5 select-none items-center gap-0.5 rounded-full border bg-muted px-1.5 font-mono text-[10px] font-medium flex">
@@ -50,7 +58,10 @@ function Header() {
             <UserButton
               size="icon"
               classNames={{
-                content: { base: "min-w-42 direction-rtl", user: { base: "direction-rtl" } },
+                content: {
+                  base: "min-w-42 direction-rtl",
+                  user: { base: "direction-rtl" },
+                },
               }}
               align="start"
               side="bottom"
@@ -70,7 +81,11 @@ function Header() {
               ]}
             />
           ) : (
-            <Button render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}>
+            <Button
+              render={
+                <Link to="/auth/$pathname" params={{ pathname: "login" }} />
+              }
+            >
               تسجيل الدخول
             </Button>
           )}
@@ -160,7 +175,9 @@ function NavListItem({ item }: { item: NavItem }) {
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
+              <p className="line-clamp-1 text-xs text-muted-foreground">
+                {item.description}
+              </p>
             </div>
           </Link>
         }

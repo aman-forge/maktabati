@@ -48,12 +48,18 @@ const GENRES: Genre[] = [
 
 export function GenreGrid() {
   return (
-    <section dir="rtl" className="flex flex-col gap-8 px-6 lg:px-12 container mx-auto">
+    <section
+      dir="rtl"
+      className="flex flex-col gap-8 px-6 lg:px-12 container mx-auto"
+    >
       {/* Section header */}
       <div className="flex items-end justify-between">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <span className="w-1 h-5 rounded-full bg-primary shrink-0" aria-hidden="true" />
+            <span
+              className="w-1 h-5 rounded-full bg-primary shrink-0"
+              aria-hidden="true"
+            />
             <h2
               className="text-2xl font-bold tracking-tight text-foreground"
               style={{ fontFamily: "var(--font-display)" }}
@@ -112,7 +118,9 @@ export function GenreGrid() {
                 <h3 className="text-sm font-semibold leading-snug text-balance text-foreground">
                   {genre.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">{genre.count} كتاب</p>
+                <p className="text-xs text-muted-foreground">
+                  {genre.count} كتاب
+                </p>
               </div>
 
               {/* Explore arrow — slides in on hover */}

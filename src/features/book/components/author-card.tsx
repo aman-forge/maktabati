@@ -35,13 +35,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
         <div className="px-6 pb-6">
           {/* Avatar + follow row */}
           <div className="flex items-end justify-between -mt-10 mb-5">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <img
-                src={author.profileImage || ""}
-                alt={author.name}
-                className="object-cover"
-              />
-            </div>
+            <img
+              src={author.profileImage || ""}
+              alt={author.name}
+              className="object-cover relative w-20 h-20 rounded-full overflow-hidden bg-red-500 ring-[3px] ring-card shadow-md"
+            />
             <Button
               variant="outline"
               size="sm"
