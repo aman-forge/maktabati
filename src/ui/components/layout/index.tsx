@@ -5,8 +5,6 @@ import type { ReactNode } from "react";
 import AuthProvider from "@/features/auth/provider";
 import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 import { TooltipProvider } from "../ui/tooltip";
-import BottomBar from "./bottom-bar";
-import Header from "./header";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
@@ -20,9 +18,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
         >
           <BookTrackingProvider>
             <TooltipProvider>
-              <Header />
-              <main className="md:pt-14 md:pb-0 pb-16">{children}</main>
-              <BottomBar />
+              {children}
               <Toaster richColors />
             </TooltipProvider>
           </BookTrackingProvider>
