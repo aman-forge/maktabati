@@ -1,6 +1,6 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
-import { Badge } from "@shadcn/badge";
-import { Button } from "@shadcn/button";
+import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
 import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
 
@@ -21,7 +21,7 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
     .filter((p) => p.trim() !== "");
 
   return (
-    <section dir="rtl" className="flex flex-col gap-6">
+    <section dir="rtl" className="flex flex-col gap-5" id="about-book">
       <h2
         className="text-2xl font-bold text-foreground tracking-tight"
         style={{ fontFamily: "var(--font-display)" }}
@@ -29,7 +29,7 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
         عن هذا الكتاب
       </h2>
 
-      <div className="relative flex flex-col gap-2">
+      <div className="relative flex flex-col gap-3">
         <div
           className={cn(
             "transition-all duration-500 ease-in-out overflow-hidden text-base leading-relaxed text-foreground/85",
@@ -48,11 +48,7 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
           )}
         </div>
 
-        <Button
-          variant="ghost"
-          className="self-start mt-2 gap-2 "
-          onClick={() => setExpanded(!expanded)}
-        >
+        <Button variant="ghost" className="self-start mt-1 gap-2" onClick={() => setExpanded(!expanded)}>
           <span className="font-bold">
             {expanded ? "عرض أقل" : "اقرأ المزيد"}
           </span>
@@ -68,9 +64,9 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
 
       {/* Tags */}
       {safeTags.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-2">
+        <div className="flex flex-wrap gap-2 pt-1">
           {safeTags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-lg h-8 px-3">
+            <Badge key={tag} variant="secondary" className="text-sm h-7 px-3">
               {tag}
             </Badge>
           ))}

@@ -42,13 +42,14 @@ export const searchBooks = createServerFn({ method: "GET" })
     // Unified search — q searches title, original title, AND author name
     if (data.q) {
       const pattern = `%${data.q}%`;
-      conditions.push(
-        or(
-          ilike(books.title, pattern),
-          ilike(books.originalTitle, pattern),
-          ilike(authors.name, pattern),
-        )!,
+      const orCondition = or(
+        ilike(books.title, pattern),
+        ilike(books.originalTitle, pattern),
+        ilike(authors.name, pattern),
       );
+      if (orCondition) {
+        conditions.push(orCondition);
+      }
     }
 
     // Explicit author filter (from FilterDialog or future author chip)
@@ -175,6 +176,7 @@ export const getBookById = createServerFn({ method: "GET" })
           },
         },
         series: true,
+        publisher: true,
       },
     });
 

@@ -1,158 +1,96 @@
-import { ArrowRightIcon, ThumbsUpIcon, UsersIcon } from "@phosphor-icons/react";
-
-interface MemberList {
-  id: string;
-  title: string;
-  curator: string;
-  avatar: string;
-  votes: number;
-  bookCount: number;
-  covers: string[];
-  rank: number;
-}
+import { ArrowLeftIcon, ThumbsUpIcon, UsersIcon } from "@phosphor-icons/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import type { MemberListItem } from "@/features/book/book-page-mock";
 
 interface MemberListsProps {
-  lists?: MemberList[];
+  lists?: MemberListItem[];
 }
 
 export function MemberLists({ lists = [] }: MemberListsProps) {
   if (lists.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-7">
+    <section className="flex flex-col gap-7" dir="rtl" id="member-lists">
       <div className="flex items-end justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <UsersIcon
-              className="w-4 h-4"
-              style={{ color: "var(--muted-foreground)" }}
-            />
-            <span
-              className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "var(--muted-foreground)" }}
-            >
-              Community
+            <UsersIcon className="w-4 h-4 text-muted-foreground" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              المجتمع
             </span>
           </div>
           <h2
-            className="text-2xl font-bold"
-            style={{
-              fontFamily: "var(--font-display)",
-              color: "var(--foreground)",
-            }}
+            className="text-2xl font-bold text-foreground"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            Lists With This Book
+            قوائم القرّاء التي تضم هذا الكتاب
           </h2>
-          <p
-            className="text-sm mt-1"
-            style={{ color: "var(--muted-foreground)" }}
-          >
-            Curated by our members &mdash; voted for by the community
+          <p className="text-sm mt-1 text-muted-foreground">
+            اختيارات المستخدمين الأكثر تصويتًا
           </p>
         </div>
         <a
           href="/"
-          className="hidden sm:flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
-          style={{ color: "var(--accent)" }}
+          className="hidden sm:flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-70"
         >
-          Browse all lists <ArrowRightIcon className="w-4 h-4" />
+          عرض كل القوائم <ArrowLeftIcon className="w-4 h-4" />
         </a>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {lists.map(
           ({ id, title, curator, avatar, votes, bookCount, covers, rank }) => (
-            <a
-              key={id}
-              href="/"
-              className="group flex flex-col gap-4 rounded-2xl p-5 transition-all hover:-translate-y-0.5"
-              style={{
-                backgroundColor: "var(--card)",
-                border: "1px solid var(--border)",
-                boxShadow: "0 1px 4px oklch(0 0 0 / 0.04)",
-              }}
-            >
-              {/* Stacked covers */}
-              <div className="flex items-end gap-0 relative h-16">
-                {covers.map((src, i) => (
-                  <div
-                    key={src}
-                    className="absolute rounded-lg overflow-hidden shadow-md"
-                    style={{
-                      width: 36,
-                      aspectRatio: "2/3",
-                      left: i * 22,
-                      zIndex: i,
-                      transform: `rotate(${(i - 1) * 4}deg)`,
-                      boxShadow: "0 4px 12px oklch(0 0 0 / 0.15)",
-                    }}
-                  >
-                    <img src={src} alt="" className="object-cover" />
+            <a key={id} href="/" className="group">
+              <Card className="h-full rounded-2xl border-border transition-all group-hover:-translate-y-0.5">
+                <CardHeader className="pb-2">
+                  <div className="flex items-end gap-0 relative h-16">
+                    {covers.slice(0, 3).map((src, i) => (
+                      <div
+                        key={`${id}-${src}`}
+                        className="absolute rounded-lg overflow-hidden shadow-md w-9"
+                        style={{
+                          aspectRatio: "2/3",
+                          right: i * 18,
+                          zIndex: i + 1,
+                          transform: `rotate(${(1 - i) * 4}deg)`,
+                        }}
+                      >
+                        <img src={src} alt="" className="object-cover" />
+                      </div>
+                    ))}
+                    <div className="absolute left-0 bottom-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
+                      #{rank}
+                    </div>
                   </div>
-                ))}
-                {/* Rank pill */}
-                <div
-                  className="absolute right-0 bottom-0 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                  style={{
-                    backgroundColor: "var(--badge-amber)",
-                    color: "var(--badge-amber-fg)",
-                  }}
-                >
-                  #{rank} on list
-                </div>
-              </div>
-
-              {/* Info */}
-              <div className="flex flex-col gap-1.5 mt-2">
-                <h3
-                  className="text-sm font-bold leading-snug line-clamp-2 text-balance group-hover:underline underline-offset-2"
-                  style={{ color: "var(--foreground)" }}
-                >
-                  {title}
-                </h3>
-
-                {/* Curator row */}
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="relative w-5 h-5 rounded-full overflow-hidden shrink-0">
-                    <img src={avatar} alt={curator} className="object-cover" />
-                  </div>
-                  <span
-                    className="text-xs"
-                    style={{ color: "var(--muted-foreground)" }}
-                  >
-                    by{" "}
-                    <span
-                      className="font-semibold"
-                      style={{ color: "var(--foreground)" }}
-                    >
-                      @{curator}
+                  <CardTitle className="text-sm leading-snug line-clamp-2">
+                    {title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="relative size-5 rounded-full overflow-hidden shrink-0">
+                      <img
+                        src={avatar}
+                        alt={curator}
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      بواسطة{" "}
+                      <span className="text-foreground font-semibold">
+                        @{curator}
+                      </span>
                     </span>
-                  </span>
-                  <span
-                    className="text-xs ml-auto"
-                    style={{ color: "var(--muted-foreground)", opacity: 0.6 }}
-                  >
-                    {bookCount} books
-                  </span>
-                </div>
-              </div>
-
-              {/* Votes */}
-              <div
-                className="flex items-center gap-1.5 pt-3 border-t"
-                style={{ borderColor: "var(--border)" }}
-              >
-                <ThumbsUpIcon
-                  className="w-3.5 h-3.5"
-                  style={{ color: "var(--muted-foreground)" }}
-                />
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: "var(--muted-foreground)" }}
-                >
-                  {votes.toLocaleString()} votes
-                </span>
-              </div>
+                    <span className="text-xs text-muted-foreground mr-auto">
+                      {bookCount} كتاب
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground border-t border-border pt-2">
+                    <ThumbsUpIcon className="w-3.5 h-3.5" />
+                    {votes.toLocaleString("ar")} صوتًا
+                  </div>
+                </CardContent>
+              </Card>
             </a>
           ),
         )}

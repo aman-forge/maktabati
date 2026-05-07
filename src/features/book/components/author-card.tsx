@@ -16,7 +16,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
     { label: "المتابعين", value: "403.609" },
   ];
   return (
-    <section id="author" dir="rtl" className="flex flex-col gap-6">
+    <section id="author" dir="rtl" className="flex flex-col gap-6 sticky top-6">
       <h2
         className="text-xl font-bold text-foreground"
         style={{ fontFamily: "var(--font-display)" }}
@@ -46,7 +46,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
                 className="object-cover"
               />
             </div>
-            <Button variant="outline" size="sm" className="gap-1.5 rounded-xl mt-0.5 bg-primary">
+            <Button
+              variant="default"
+              size="default"
+              // className="gap-1.5 rounded-xl mt-0.5 bg-primary"
+            >
               معرفة المزيد
               <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
             </Button>
@@ -68,11 +72,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
             <div className="flex items-center gap-6">
               {stats.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center">
-                  <span className="text-lg font-extrabold text-foreground tabular-nums  ">
-                    {value}
-                  </span>
                   <span className="text-[12px] tracking-wider font-semibold text-muted-foreground/80">
                     {label}
+                  </span>
+                  <span className="text-lg font-semibold text-foreground tabular-nums  ">
+                    {value}
                   </span>
                 </div>
               ))}
