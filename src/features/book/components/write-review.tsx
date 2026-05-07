@@ -10,14 +10,7 @@ export function WriteReview() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
-  const LABELS = [
-    "",
-    "لم يعجبني",
-    "كان عاديًا",
-    "أعجبني",
-    "أعجبني كثيرًا",
-    "كان مذهلاً",
-  ];
+  const LABELS = ["", "لم يعجبني", "كان عاديًا", "أعجبني", "أعجبني كثيرًا", "كان مذهلاً"];
 
   return (
     <section dir="rtl" id="write-review">
@@ -45,7 +38,10 @@ export function WriteReview() {
                   >
                     <StarIcon
                       weight={active ? "fill" : "regular"}
-                      className={cn("w-7 h-7 transition-colors", active ? "text-primary" : "text-border")}
+                      className={cn(
+                        "w-7 h-7 transition-colors",
+                        active ? "text-primary" : "text-border",
+                      )}
                     />
                   </button>
                 );
@@ -67,10 +63,19 @@ export function WriteReview() {
               className="resize-none rounded-xl text-sm bg-secondary"
             />
             <div className="flex items-center justify-between">
-              <span className={cn("text-xs", review.length > 500 ? "text-destructive" : "text-muted-foreground")}>
+              <span
+                className={cn(
+                  "text-xs",
+                  review.length > 500 ? "text-destructive" : "text-muted-foreground",
+                )}
+              >
                 {review.length} / 2000
               </span>
-              <Button size="sm" className="rounded-xl px-5" disabled={!rating || review.trim().length < 10}>
+              <Button
+                size="sm"
+                className="rounded-xl px-5"
+                disabled={!rating || review.trim().length < 10}
+              >
                 نشر المراجعة
               </Button>
             </div>

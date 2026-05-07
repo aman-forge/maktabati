@@ -1,7 +1,7 @@
 import { Button } from "@components/ui/button";
-
 import {
   BookmarkSimpleIcon,
+  BooksIcon,
   CaretDownIcon,
   CaretLeftIcon,
   CheckIcon,
@@ -9,16 +9,15 @@ import {
   ShareNetworkIcon,
   StarIcon,
   TrophyIcon,
-  BooksIcon,
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { BOOK_GENRES } from "@/db/constants/books";
 import type { RatingSummary } from "@/features/book/book-page-mock";
 import { ButtonGroup } from "@/ui/components/ui/button-group";
-import type { BookType } from "../../books/server/get-books";
-import { TrackBookModal } from "../../books/components/track-book-modal";
-import { BOOK_GENRES } from "@/db/constants/books";
 import { cn } from "@/ui/lib/utils";
+import { TrackBookModal } from "../../books/components/track-book-modal";
+import type { BookType } from "../../books/server/get-books";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [

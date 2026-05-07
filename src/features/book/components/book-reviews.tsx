@@ -1,20 +1,11 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import {
-  CaretDownIcon,
-  ChatCircleIcon,
-  StarIcon,
-  ThumbsUpIcon,
-} from "@phosphor-icons/react";
+import { CaretDownIcon, ChatCircleIcon, StarIcon, ThumbsUpIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { BookReviewItem } from "@/features/book/book-page-mock";
 
-const SORT_OPTIONS = [
-  "الأكثر إعجابًا",
-  "الأحدث",
-  "الأعلى تقييمًا",
-] as const;
+const SORT_OPTIONS = ["الأكثر إعجابًا", "الأحدث", "الأعلى تقييمًا"] as const;
 
 interface BookReviewsProps {
   reviews?: BookReviewItem[];
@@ -77,7 +68,10 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-foreground">{review.name}</span>
                         {review.verified ? (
-                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 font-medium">
+                          <Badge
+                            variant="secondary"
+                            className="text-[10px] px-1.5 py-0 font-medium"
+                          >
                             موثّق
                           </Badge>
                         ) : null}
