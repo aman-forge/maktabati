@@ -37,13 +37,7 @@ type FeaturedBook = {
   accentGlow: string;
 };
 
-const TRENDING_TAGS = [
-  "روايات أدبية",
-  "خيال علمي",
-  "أكاديمية داكنة",
-  "فانتازيا",
-  "مذكرات",
-];
+const TRENDING_TAGS = ["روايات أدبية", "خيال علمي", "أكاديمية داكنة", "فانتازيا", "مذكرات"];
 
 const FEATURED: FeaturedBook[] = [
   {
@@ -144,11 +138,7 @@ interface CoverArtProps {
   showMeta?: boolean;
 }
 
-const CoverArt = memo(function CoverArt({
-  book,
-  className = "",
-  showMeta = true,
-}: CoverArtProps) {
+const CoverArt = memo(function CoverArt({ book, className = "", showMeta = true }: CoverArtProps) {
   return (
     <div
       className={`relative flex flex-col overflow-hidden rounded-xl ${className}`.trim()}
@@ -177,8 +167,7 @@ const CoverArt = memo(function CoverArt({
       <div
         className="absolute inset-x-0 top-0 h-1/3"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(255,255,255,0.06) 0%, transparent 100%)",
+          background: "linear-gradient(to bottom, rgba(255,255,255,0.06) 0%, transparent 100%)",
         }}
       />
 
@@ -257,10 +246,7 @@ export function HeroSection() {
   );
 
   return (
-    <section
-      dir="rtl"
-      className="relative w-full overflow-hidden bg-background"
-    >
+    <section dir="rtl" className="relative w-full overflow-hidden bg-background">
       {/* Ambient background */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 transition-all duration-700 ease-in-out"
@@ -327,8 +313,8 @@ export function HeroSection() {
               </div>
 
               <p className="mx-auto mt-2 max-w-100 text-[15px] leading-relaxed text-muted-foreground md:mx-0 sm:text-base">
-                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابنِ رفّاً رقمياً يعكس شخصيتك — مع
-                مجتمع من القراء العرب.
+                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابنِ رفّاً رقمياً يعكس شخصيتك — مع مجتمع من
+                القراء العرب.
               </p>
             </div>
 
@@ -369,9 +355,7 @@ export function HeroSection() {
               </div>
 
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="ml-0.5 shrink-0 text-[11px] text-muted-foreground/50">
-                  رائج:
-                </span>
+                <span className="ml-0.5 shrink-0 text-[11px] text-muted-foreground/50">رائج:</span>
                 {TRENDING_TAGS.map((tag) => (
                   <button
                     key={tag}
@@ -454,9 +438,7 @@ export function HeroSection() {
                         weight={filled ? "fill" : "regular"}
                         className="h-3.5 w-3.5"
                         style={{
-                          color: filled
-                            ? "#fbbf24"
-                            : "hsl(var(--muted-foreground))",
+                          color: filled ? "#fbbf24" : "hsl(var(--muted-foreground))",
                         }}
                       />
                     ))}
@@ -469,9 +451,7 @@ export function HeroSection() {
                     <span className="text-xs text-muted-foreground">/ 5</span>
                   </div>
 
-                  <p className="mt-1 text-[11px] text-muted-foreground">
-                    {book.reviews} مراجعة
-                  </p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{book.reviews} مراجعة</p>
                 </div>
               </div>
 
@@ -491,9 +471,7 @@ export function HeroSection() {
                 <p className="mb-0.5 line-clamp-2 text-sm font-bold leading-tight text-card-foreground">
                   {book.title}
                 </p>
-                <p className="mb-3 text-xs text-muted-foreground">
-                  {book.author}
-                </p>
+                <p className="mb-3 text-xs text-muted-foreground">{book.author}</p>
 
                 <div className="space-y-1.5">
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
@@ -507,9 +485,7 @@ export function HeroSection() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-muted-foreground">
-                      التقدم
-                    </span>
+                    <span className="text-[10px] text-muted-foreground">التقدم</span>
                     <span
                       className="text-[11px] font-bold tabular-nums"
                       style={{ color: book.accent }}
@@ -531,7 +507,7 @@ export function HeroSection() {
             </div>
 
             {/* Thumbnail selector filmstrip */}
-            <div
+            {/*<div
               className="flex items-end justify-center gap-3 overflow-visible pb-1 relative left-5"
               dir="ltr"
             >
@@ -595,7 +571,7 @@ export function HeroSection() {
                   </button>
                 );
               })}
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>
@@ -611,12 +587,7 @@ export function HeroSection() {
               { icon: SparkleIcon, text: "ابنِ رفّك الرقمي" },
             ].map(({ icon: Icon, text }, i) => (
               <div key={text} className="flex shrink-0 items-center">
-                {i > 0 ? (
-                  <Separator
-                    orientation="vertical"
-                    className="mx-5 h-3 shrink-0"
-                  />
-                ) : null}
+                {i > 0 ? <Separator orientation="vertical" className="mx-5 h-3 shrink-0" /> : null}
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
                   <span className="whitespace-nowrap text-xs">{text}</span>

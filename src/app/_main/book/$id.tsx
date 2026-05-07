@@ -1,10 +1,11 @@
 import { Separator } from "@shadcn/separator";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { AuthorCard } from "@/features/book/components/author-card";
 import { BookDescription } from "@/features/book/components/book-description";
+import { BookEditions } from "@/features/book/components/book-editions";
+import { BookHero } from "@/features/book/components/book-hero";
 import { BookReviews } from "@/features/book/components/book-reviews";
-import { AuthorCard } from "@/features/books/components/author-card";
-import { BookHero } from "@/features/books/components/book-hero";
-import { WriteReview } from "@/features/books/components/write-review";
+import { WriteReview } from "@/features/book/components/write-review";
 import { getBookById } from "@/features/books/server/get-books";
 import { BookCarousel } from "@/features/marketing/components/book-carousel";
 
@@ -21,10 +22,7 @@ function RouteComponent() {
   const book = Route.useLoaderData();
 
   return (
-    <main
-      className="min-h-screen font-sans"
-      style={{ backgroundColor: "var(--background)" }}
-    >
+    <main className="min-h-screen font-sans" style={{ backgroundColor: "var(--background)" }}>
       {/* Hero: cover, title, rating, meta */}
       <BookHero book={book ?? undefined} />
 
@@ -47,9 +45,8 @@ function RouteComponent() {
 
           {/* Right sidebar: editions, author, activity */}
           <aside className="flex flex-col gap-10">
-            {/* <BookEditions /> */}
+            <BookEditions />
             <AuthorCard author={book.author ?? undefined} />
-            {/*<TrackBookModal />*/}
           </aside>
         </div>
       </div>
