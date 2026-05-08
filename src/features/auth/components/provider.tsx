@@ -1,16 +1,30 @@
-import { authClient } from "@features/auth/lib";
 import { NeonAuthUIProvider } from "@neondatabase/auth/react/ui";
 import { Link, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { authClient } from "@/features/auth/client";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
+  const handleNavigate = (href: string) => {
+    if (!href.includes("/auth/")) {
+      localStorage.setItem("auth:hasSession", "1");
+    }
+    router.navigate({ href });
+  };
+
+  const handleReplace = (href: string) => {
+    if (href.includes("/auth/logout")) {
+      localStorage.removeItem("auth:hasSession");
+    }
+    router.navigate({ href, replace: true });
+  };
+
   return (
     <NeonAuthUIProvider
       authClient={authClient}
-      navigate={(href) => router.navigate({ href })}
-      replace={(href) => router.navigate({ href, replace: true })}
+      navigate={handleNavigate}
+      replace={handleReplace}
       Link={({ href, ...props }) => <Link to={href} {...props} />}
       // social={{ providers: ["google", "facebook", "microsoft"] }}
       // credentials={{ forgotPassword: true }}
@@ -38,10 +52,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         BACKUP_CODES_NOT_ENABLED: "أكواد النسخ الاحتياطي غير مفعلة",
         INVALID_BACKUP_CODE: "كود النسخ الاحتياطي غير صالح",
         INVALID_CODE: "الرمز غير صالح",
-        TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE:
-          "محاولات كثيرة جداً. يرجى الانتظار قبل طلب رمز جديد",
-        INVALID_TWO_FACTOR_COOKIE:
-          "ملف تعريف ارتباط المصادقة الثنائية غير صالح",
+        TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE: "محاولات كثيرة جداً. يرجى الانتظار قبل طلب رمز جديد",
+        INVALID_TWO_FACTOR_COOKIE: "ملف تعريف ارتباط المصادقة الثنائية غير صالح",
 
         // --- Subscriptions (Commented Out) ---
         /*
@@ -63,16 +75,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         INVALID_OTP: "رمز التحقق غير صالح",
         PHONE_NUMBER_NOT_VERIFIED: "رقم الهاتف غير مفعل",
         CHALLENGE_NOT_FOUND: "لم يتم العثور على تحدي الأمان",
-        YOU_ARE_NOT_ALLOWED_TO_REGISTER_THIS_PASSKEY:
-          "غير مسموح لك بتسجيل مفتاح المرور هذا",
+        YOU_ARE_NOT_ALLOWED_TO_REGISTER_THIS_PASSKEY: "غير مسموح لك بتسجيل مفتاح المرور هذا",
         FAILED_TO_VERIFY_REGISTRATION: "فشل التحقق من التسجيل",
         PASSKEY_NOT_FOUND: "مفتاح المرور غير موجود",
         AUTHENTICATION_FAILED: "فشلت عملية المصادقة",
         UNABLE_TO_CREATE_SESSION: "تعذر إنشاء جلسة عمل",
         FAILED_TO_UPDATE_PASSKEY: "فشل تحديث مفتاح المرور",
         INVALID_SESSION_TOKEN: "رمز الجلسة غير صالح",
-        PASSWORD_COMPROMISED:
-          "كلمة المرور هذه تم تسريبها سابقاً، يرجى اختيار كلمة أخرى",
+        PASSWORD_COMPROMISED: "كلمة المرور هذه تم تسريبها سابقاً، يرجى اختيار كلمة أخرى",
         INVALID_OAUTH_CONFIGURATION: "إعدادات تسجيل الدخول الخارجي غير صالحة",
         INVALID_EMAIL: "البريد الإلكتروني غير صالح",
         USER_NOT_FOUND: "المستخدم غير موجود",
@@ -83,10 +93,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         MISSING_RESPONSE: "الرد مفقود",
         UNKNOWN_ERROR: "خطأ غير معروف",
         INVALID_METADATA_TYPE: "نوع البيانات الوصفية غير صالح",
-        REFILL_AMOUNT_AND_INTERVAL_REQUIRED:
-          "مبلغ التعبئة والفترة الزمنية مطلوبان",
-        REFILL_INTERVAL_AND_AMOUNT_REQUIRED:
-          "الفترة الزمنية ومبلغ التعبئة مطلوبان",
+        REFILL_AMOUNT_AND_INTERVAL_REQUIRED: "مبلغ التعبئة والفترة الزمنية مطلوبان",
+        REFILL_INTERVAL_AND_AMOUNT_REQUIRED: "الفترة الزمنية ومبلغ التعبئة مطلوبان",
         USER_BANNED: "تم حظر هذا المستخدم",
         UNAUTHORIZED_SESSION: "جلسة غير مصرح بها",
         KEY_NOT_FOUND: "المفتاح غير موجود",
@@ -105,8 +113,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         KEY_DISABLED_EXPIRATION: "المفتاح معطل بسبب انتهاء الصلاحية",
         INVALID_API_KEY: "مفتاح API غير صالح",
         INVALID_USER_ID_FROM_API_KEY: "معرف مستخدم غير صالح من مفتاح API",
-        INVALID_API_KEY_GETTER_RETURN_TYPE:
-          "نوع الإرجاع لمستلم المفتاح غير صالح",
+        INVALID_API_KEY_GETTER_RETURN_TYPE: "نوع الإرجاع لمستلم المفتاح غير صالح",
         SERVER_ONLY_PROPERTY: "هذه الخاصية خاصة بالخادم فقط",
         FAILED_TO_CREATE_USER: "فشل إنشاء المستخدم",
         COULD_NOT_CREATE_SESSION: "تعذر إنشاء الجلسة",
@@ -114,29 +121,22 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           "المستخدمون المجهولون لا يمكنهم تسجيل الدخول مجهولين مرة أخرى",
         USER_ALREADY_EXISTS: "المستخدم موجود بالفعل",
         YOU_CANNOT_BAN_YOURSELF: "لا يمكنك حظر نفسك",
-        YOU_ARE_NOT_ALLOWED_TO_CHANGE_USERS_ROLE:
-          "غير مسموح لك بتغيير دور المستخدم",
+        YOU_ARE_NOT_ALLOWED_TO_CHANGE_USERS_ROLE: "غير مسموح لك بتغيير دور المستخدم",
         YOU_ARE_NOT_ALLOWED_TO_CREATE_USERS: "ليس لديك صلاحية لإنشاء مستخدمين",
-        YOU_ARE_NOT_ALLOWED_TO_LIST_USERS:
-          "ليس لديك صلاحية لعرض قائمة المستخدمين",
-        YOU_ARE_NOT_ALLOWED_TO_LIST_USERS_SESSIONS:
-          "ليس لديك صلاحية لعرض جلسات المستخدمين",
+        YOU_ARE_NOT_ALLOWED_TO_LIST_USERS: "ليس لديك صلاحية لعرض قائمة المستخدمين",
+        YOU_ARE_NOT_ALLOWED_TO_LIST_USERS_SESSIONS: "ليس لديك صلاحية لعرض جلسات المستخدمين",
         YOU_ARE_NOT_ALLOWED_TO_BAN_USERS: "ليس لديك صلاحية لحظر المستخدمين",
-        YOU_ARE_NOT_ALLOWED_TO_IMPERSONATE_USERS:
-          "ليس لديك صلاحية لتقمص هوية المستخدمين",
-        YOU_ARE_NOT_ALLOWED_TO_REVOKE_USERS_SESSIONS:
-          "ليس لديك صلاحية لإلغاء جلسات المستخدمين",
+        YOU_ARE_NOT_ALLOWED_TO_IMPERSONATE_USERS: "ليس لديك صلاحية لتقمص هوية المستخدمين",
+        YOU_ARE_NOT_ALLOWED_TO_REVOKE_USERS_SESSIONS: "ليس لديك صلاحية لإلغاء جلسات المستخدمين",
         YOU_ARE_NOT_ALLOWED_TO_DELETE_USERS: "ليس لديك صلاحية لحذف المستخدمين",
-        YOU_ARE_NOT_ALLOWED_TO_SET_USERS_PASSWORD:
-          "ليس لديك صلاحية لتعيين كلمة مرور للمستخدمين",
+        YOU_ARE_NOT_ALLOWED_TO_SET_USERS_PASSWORD: "ليس لديك صلاحية لتعيين كلمة مرور للمستخدمين",
         BANNED_USER: "مستخدم محظور",
         FAILED_TO_CREATE_SESSION: "فشل إنشاء الجلسة",
         FAILED_TO_UPDATE_USER: "فشل تحديث بيانات المستخدم",
         FAILED_TO_GET_SESSION: "فشل الحصول على بيانات الجلسة",
         INVALID_PASSWORD: "كلمة المرور غير صالحة",
         INVALID_EMAIL_OR_PASSWORD: "البريد الإلكتروني أو كلمة المرور غير صالحة",
-        SOCIAL_ACCOUNT_ALREADY_LINKED:
-          "هذا الحساب الاجتماعي مرتبط بالفعل بحساب آخر",
+        SOCIAL_ACCOUNT_ALREADY_LINKED: "هذا الحساب الاجتماعي مرتبط بالفعل بحساب آخر",
         PROVIDER_NOT_FOUND: "مزود الخدمة غير موجود",
         INVALID_TOKEN: "الرمز غير صالح",
         ID_TOKEN_NOT_SUPPORTED: "رمز المعرف غير مدعوم",
@@ -172,8 +172,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         BACKUP_CODE: "كود النسخ الاحتياطي",
         CANCEL: "إلغاء",
         CHANGE_PASSWORD: "تغيير كلمة المرور",
-        CHANGE_PASSWORD_DESCRIPTION:
-          "أدخل كلمة المرور الحالية وكلمة المرور الجديدة.",
+        CHANGE_PASSWORD_DESCRIPTION: "أدخل كلمة المرور الحالية وكلمة المرور الجديدة.",
         CHANGE_PASSWORD_INSTRUCTIONS: "يرجى استخدام 8 رموز على الأقل.",
         CHANGE_PASSWORD_SUCCESS: "تم تغيير كلمة المرور بنجاح.",
         CONFIRM_PASSWORD: "تأكيد كلمة المرور",
@@ -193,18 +192,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         DELETE_ACCOUNT: "حذف الحساب",
         DELETE_ACCOUNT_DESCRIPTION:
           "حذف حسابك وجميع محتوياته بشكل دائم. هذا الإجراء غير قابل للتراجع، يرجى المتابعة بحذر.",
-        DELETE_ACCOUNT_INSTRUCTIONS:
-          "يرجى تأكيد حذف حسابك. هذا الإجراء غير قابل للتراجع.",
-        DELETE_ACCOUNT_VERIFY:
-          "يرجى التحقق من بريدك الإلكتروني لتأكيد حذف الحساب.",
+        DELETE_ACCOUNT_INSTRUCTIONS: "يرجى تأكيد حذف حسابك. هذا الإجراء غير قابل للتراجع.",
+        DELETE_ACCOUNT_VERIFY: "يرجى التحقق من بريدك الإلكتروني لتأكيد حذف الحساب.",
         DELETE_ACCOUNT_SUCCESS: "تم حذف حسابك بنجاح.",
         DISABLE_TWO_FACTOR: "تعطيل المصادقة الثنائية",
         DISABLED_CREDENTIALS_DESCRIPTION: "اختر مزوداً لتسجيل الدخول إلى حسابك",
         DONT_HAVE_AN_ACCOUNT: "ليس لديك حساب؟",
         DONE: "تم",
         EMAIL: "البريد الإلكتروني",
-        EMAIL_DESCRIPTION:
-          "أدخل البريد الإلكتروني الذي تريد استخدامه لتسجيل الدخول.",
+        EMAIL_DESCRIPTION: "أدخل البريد الإلكتروني الذي تريد استخدامه لتسجيل الدخول.",
         EMAIL_INSTRUCTIONS: "يرجى إدخال بريد إلكتروني صحيح.",
         EMAIL_IS_THE_SAME: "البريد الإلكتروني هو نفسه الحالي",
         EMAIL_PLACEHOLDER: "m@example.com",
@@ -221,23 +217,19 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         FORGOT_AUTHENTICATOR: "فقدت تطبيق المصادقة؟",
         FORGOT_PASSWORD: "نسيت كلمة المرور",
         FORGOT_PASSWORD_ACTION: "إرسال رابط إعادة التعيين",
-        FORGOT_PASSWORD_DESCRIPTION:
-          "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
-        FORGOT_PASSWORD_EMAIL:
-          "تحقق من بريدك للحصول على رابط إعادة تعيين كلمة المرور.",
+        FORGOT_PASSWORD_DESCRIPTION: "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+        FORGOT_PASSWORD_EMAIL: "تحقق من بريدك للحصول على رابط إعادة تعيين كلمة المرور.",
         FORGOT_PASSWORD_LINK: "هل نسيت كلمة المرور؟",
         LINK: "ربط",
         MAGIC_LINK: "الرابط السحري",
         MAGIC_LINK_ACTION: "إرسال الرابط السحري",
-        MAGIC_LINK_DESCRIPTION:
-          "أدخل بريدك الإلكتروني لتلقي رابط تسجيل دخول مباشر",
+        MAGIC_LINK_DESCRIPTION: "أدخل بريدك الإلكتروني لتلقي رابط تسجيل دخول مباشر",
         MAGIC_LINK_EMAIL: "تحقق من بريدك الإلكتروني للحصول على الرابط السحري",
         EMAIL_OTP: "كود البريد الإلكتروني",
         EMAIL_OTP_SEND_ACTION: "إرسال الكود",
         EMAIL_OTP_VERIFY_ACTION: "تأكيد الكود",
         EMAIL_OTP_DESCRIPTION: "أدخل بريدك الإلكتروني لتلقي كود التحقق",
-        EMAIL_OTP_VERIFICATION_SENT:
-          "يرجى التحقق من بريدك للحصول على كود التفعيل.",
+        EMAIL_OTP_VERIFICATION_SENT: "يرجى التحقق من بريدك للحصول على كود التفعيل.",
         NAME: "الاسم",
         NAME_DESCRIPTION: "يرجى إدخال اسمك الكامل أو اسم العرض.",
         NAME_INSTRUCTIONS: "يرجى استخدام 32 رمزاً كحد أقصى.",
@@ -279,8 +271,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         PROVIDERS_DESCRIPTION: "ربط حسابك بخدمة خارجية.",
         RECOVER_ACCOUNT: "استعادة الحساب",
         RECOVER_ACCOUNT_ACTION: "استعادة الحساب",
-        RECOVER_ACCOUNT_DESCRIPTION:
-          "يرجى إدخال كود النسخ الاحتياطي للوصول إلى حسابك",
+        RECOVER_ACCOUNT_DESCRIPTION: "يرجى إدخال كود النسخ الاحتياطي للوصول إلى حسابك",
         REMEMBER_ME: "تذكرني",
         RESEND_CODE: "إعادة إرسال الكود",
         RESEND_VERIFICATION_EMAIL: "إعادة إرسال بريد التفعيل",
@@ -291,8 +282,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         SIGN_IN: "تسجيل الدخول",
         SIGN_IN_ACTION: "تسجيل الدخول",
         SIGN_IN_DESCRIPTION: "أدخل بريدك الإلكتروني أدناه لتسجيل الدخول",
-        SIGN_IN_USERNAME_DESCRIPTION:
-          "أدخل اسم المستخدم أو البريد الإلكتروني لتسجيل الدخول",
+        SIGN_IN_USERNAME_DESCRIPTION: "أدخل اسم المستخدم أو البريد الإلكتروني لتسجيل الدخول",
         SIGN_IN_WITH: "تسجيل الدخول بواسطة",
         SIGN_OUT: "تسجيل الخروج",
         SIGN_UP: "إنشاء حساب",
@@ -313,10 +303,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         TWO_FACTOR_ACTION: "تأكيد الكود",
         TWO_FACTOR_DESCRIPTION: "يرجى إدخال كلمة المرور لمرة واحدة للمتابعة",
         TWO_FACTOR_CARD_DESCRIPTION: "أضف طبقة حماية إضافية لحسابك.",
-        TWO_FACTOR_DISABLE_INSTRUCTIONS:
-          "يرجى إدخال كلمة المرور لتعطيل المصادقة الثنائية.",
-        TWO_FACTOR_ENABLE_INSTRUCTIONS:
-          "يرجى إدخال كلمة المرور لتفعيل المصادقة الثنائية.",
+        TWO_FACTOR_DISABLE_INSTRUCTIONS: "يرجى إدخال كلمة المرور لتعطيل المصادقة الثنائية.",
+        TWO_FACTOR_ENABLE_INSTRUCTIONS: "يرجى إدخال كلمة المرور لتفعيل المصادقة الثنائية.",
         TWO_FACTOR_ENABLED: "تم تفعيل المصادقة الثنائية بنجاح",
         TWO_FACTOR_DISABLED: "تم تعطيل المصادقة الثنائية",
         TWO_FACTOR_PROMPT: "المصادقة الثنائية",
@@ -334,8 +322,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         VERIFY_YOUR_EMAIL_DESCRIPTION:
           "يرجى تفعيل بريدك. تحقق من صندوق الوارد. إذا لم يصلك البريد، انقر على الزر أدناه لإعادة الإرسال.",
         GO_BACK: "الرجوع",
-        SESSION_NOT_FRESH:
-          "انتهت صلاحية الجلسة الأمنية. يرجى تسجيل الدخول مرة أخرى.",
+        SESSION_NOT_FRESH: "انتهت صلاحية الجلسة الأمنية. يرجى تسجيل الدخول مرة أخرى.",
         UPLOAD_AVATAR: "رفع صورة",
         LOGO: "الشعار",
         LOGO_DESCRIPTION: "انقر على الشعار لرفع شعار مخصص من ملفاتك.",

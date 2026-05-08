@@ -1,6 +1,6 @@
-import { authClient } from "@features/auth/lib";
 import { SignedIn, UserButton } from "@neondatabase/auth/react/ui";
 import { createFileRoute } from "@tanstack/react-router";
+import { authClient } from "@/features/auth/client";
 
 export const Route = createFileRoute("/_app/library")({
   component: RouteComponent,
@@ -29,13 +29,7 @@ function RouteComponent() {
             Session and User Data:
           </p>
           <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap wrap-break-word w-full max-w-full sm:max-w-2xl mx-auto text-left">
-            <code>
-              {JSON.stringify(
-                { session: data?.session, user: data?.user },
-                null,
-                2,
-              )}
-            </code>
+            <code>{JSON.stringify({ session: data?.session, user: data?.user }, null, 2)}</code>
           </pre>
         </div>
       </div>

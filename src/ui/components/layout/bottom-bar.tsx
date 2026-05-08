@@ -1,4 +1,3 @@
-import { authClient } from "@features/auth/lib";
 import { UserAvatar } from "@neondatabase/auth/react/ui";
 import {
   BookmarkSimpleIcon,
@@ -8,6 +7,7 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
+import { useUser } from "@/features/auth/utils";
 import { cn } from "@/ui/lib/utils";
 
 const navItems = [
@@ -44,7 +44,7 @@ const navItems = [
 ] as const;
 
 function BottomBar() {
-  const { data: session } = authClient.useSession();
+  const { user } = useUser();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
@@ -54,9 +54,9 @@ function BottomBar() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-1">
-        {navItems.map((item) => {
+        {navItems.map((item, index) => {
           const href =
-            item.isProfile && !session?.user
+            item.isProfile && !user
               ? linkOptions({
                   to: "/auth/$pathname",
                   params: { pathname: "/login" },
@@ -71,22 +71,18 @@ function BottomBar() {
 
           return (
             <Link
-              key={item.href.to}
+              key={`${item.href.to}-${index.toString()}`}
               to={href.to}
               className={cn(
                 "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-all duration-200",
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
               {/* Top indicator */}
-              {isActive && (
-                <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />
-              )}
+              {isActive && <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />}
 
               {/* Profile avatar when logged in */}
-              {item.isProfile && session?.user ? (
+              {item.isProfile && user ? (
                 <div
                   className={cn(
                     "h-7 w-7 rounded-full ring-2  transition-all duration-200 overflow-hidden flex items-center justify-center bg-primary/10",
@@ -102,9 +98,7 @@ function BottomBar() {
                 />
               )}
 
-              <span className="text-[10px] font-medium leading-none">
-                {item.label}
-              </span>
+              <span className="text-[10px] font-medium leading-none">{item.label}</span>
             </Link>
           );
         })}

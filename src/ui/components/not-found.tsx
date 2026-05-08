@@ -1,11 +1,12 @@
 import { ArrowRightIcon, HouseIcon } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 
 export default function NotFound() {
   return (
-    <div className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-background">
+    <div className="relative min-h-screen overflow-hidden bg-background">
       <Grid />
-      <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-3xl flex-col items-center justify-center px-6 text-center">
+      <div className="relative mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center">
         <div className="mb-6 font-mono text-[10px] text-muted-foreground uppercase tracking-[0.4em]">
           الحالة · 404
         </div>
@@ -16,8 +17,7 @@ export default function NotFound() {
           لم يتم العثور على الصفحة!
         </h1>
         <p className="mt-2 max-w-sm text-balance text-muted-foreground text-sm">
-          عذرًا، الصفحة التي تحاول الوصول إليها غير متوفرة أو ربما تم نقلها.
-          يمكنك العودة إلى الصفحة
+          عذرًا، الصفحة التي تحاول الوصول إليها غير متوفرة أو ربما تم نقلها. يمكنك العودة إلى الصفحة
         </p>
 
         <div className="mt-8 flex items-center gap-2">
@@ -25,7 +25,7 @@ export default function NotFound() {
             <ArrowRightIcon />
             العودة
           </Button>
-          <Button size="default">
+          <Button size="default" render={<Link to="/dashboard" />}>
             <HouseIcon />
             الصفحة الرئيسية
           </Button>
@@ -62,8 +62,7 @@ function Grid() {
         backgroundImage:
           "linear-gradient(to right, color-mix(in srgb, var(--foreground) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 8%, transparent) 1px, transparent 1px)",
         backgroundSize: "48px 48px",
-        maskImage:
-          "radial-gradient(ellipse at center, black 35%, transparent 75%)",
+        maskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
       }}
     />
   );
