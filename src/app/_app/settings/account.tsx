@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/settings/account")({
-  component: RouteComponent,
+	component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/_protected/settings/account"!</div>;
+	return <div>Hello "/_protected/settings/account"!</div>;
 }

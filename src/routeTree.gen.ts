@@ -33,6 +33,7 @@ import { Route as PublicAccountPathnameRouteImport } from './app/_public/account
 import { Route as PublicMarketingTermsRouteImport } from './app/_public/_marketing/terms'
 import { Route as PublicMarketingPrivacyRouteImport } from './app/_public/_marketing/privacy'
 import { Route as PublicMarketingAboutRouteImport } from './app/_public/_marketing/about'
+import { Route as AppSettingsSettingsRouteImport } from './app/_app/settings/settings'
 import { Route as AppSettingsProfileRouteImport } from './app/_app/settings/profile'
 import { Route as AppSettingsPrivacyRouteImport } from './app/_app/settings/privacy'
 import { Route as AppSettingsImportExportRouteImport } from './app/_app/settings/import-export'
@@ -162,6 +163,11 @@ const PublicMarketingAboutRoute = PublicMarketingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => PublicRoute,
 } as any)
+const AppSettingsSettingsRoute = AppSettingsSettingsRouteImport.update({
+  id: '/settings/settings',
+  path: '/settings/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsProfileRoute = AppSettingsProfileRouteImport.update({
   id: '/settings/profile',
   path: '/settings/profile',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/settings/import-export': typeof AppSettingsImportExportRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/settings': typeof AppSettingsSettingsRoute
   '/about': typeof PublicMarketingAboutRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/settings/import-export': typeof AppSettingsImportExportRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/settings': typeof AppSettingsSettingsRoute
   '/about': typeof PublicMarketingAboutRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/_app/settings/import-export': typeof AppSettingsImportExportRoute
   '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
   '/_app/settings/profile': typeof AppSettingsProfileRoute
+  '/_app/settings/settings': typeof AppSettingsSettingsRoute
   '/_public/_marketing/about': typeof PublicMarketingAboutRoute
   '/_public/_marketing/privacy': typeof PublicMarketingPrivacyRoute
   '/_public/_marketing/terms': typeof PublicMarketingTermsRoute
@@ -316,6 +325,7 @@ export interface FileRouteTypes {
     | '/settings/import-export'
     | '/settings/privacy'
     | '/settings/profile'
+    | '/settings/settings'
     | '/about'
     | '/privacy'
     | '/terms'
@@ -348,6 +358,7 @@ export interface FileRouteTypes {
     | '/settings/import-export'
     | '/settings/privacy'
     | '/settings/profile'
+    | '/settings/settings'
     | '/about'
     | '/privacy'
     | '/terms'
@@ -381,6 +392,7 @@ export interface FileRouteTypes {
     | '/_app/settings/import-export'
     | '/_app/settings/privacy'
     | '/_app/settings/profile'
+    | '/_app/settings/settings'
     | '/_public/_marketing/about'
     | '/_public/_marketing/privacy'
     | '/_public/_marketing/terms'
@@ -580,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicMarketingAboutRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_app/settings/settings': {
+      id: '/_app/settings/settings'
+      path: '/settings/settings'
+      fullPath: '/settings/settings'
+      preLoaderRoute: typeof AppSettingsSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings/profile': {
       id: '/_app/settings/profile'
       path: '/settings/profile'
@@ -648,6 +667,7 @@ interface AppRouteChildren {
   AppSettingsImportExportRoute: typeof AppSettingsImportExportRoute
   AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
   AppSettingsProfileRoute: typeof AppSettingsProfileRoute
+  AppSettingsSettingsRoute: typeof AppSettingsSettingsRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
@@ -660,6 +680,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsImportExportRoute: AppSettingsImportExportRoute,
   AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
   AppSettingsProfileRoute: AppSettingsProfileRoute,
+  AppSettingsSettingsRoute: AppSettingsSettingsRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 

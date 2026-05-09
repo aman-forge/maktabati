@@ -1,9 +1,9 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": false
+    "useIgnoreFile": true
   },
   "files": {
     "ignoreUnknown": false,
@@ -18,9 +18,7 @@
     ]
   },
   "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
+    "enabled": false
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
@@ -44,9 +42,7 @@
       "tailwindDirectives": true
     },
     "formatter": {
-      "enabled": true,
-      "indentStyle": "space",
-      "indentWidth": 2
+      "enabled": false
     }
   }
 }
