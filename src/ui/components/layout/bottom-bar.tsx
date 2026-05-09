@@ -3,102 +3,166 @@ import {
   BookmarkSimpleIcon,
   CompassIcon,
   HouseIcon,
-  PulseIcon,
+  MagnifyingGlassIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react";
-import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useUser } from "@/features/auth/utils";
 import { cn } from "@/ui/lib/utils";
 
-const navItems = [
+const unreadNotifications = 2;
+
+type NavItem = {
+  href: string;
+  icon: React.ComponentType<{
+    className?: string;
+    weight?: "regular" | "fill";
+  }>;
+  label: string;
+  kind: "home" | "discover" | "search" | "library" | "profile";
+};
+
+const navItems: NavItem[] = [
   {
-    href: linkOptions({ to: "/" }),
+    href: "/",
     icon: HouseIcon,
     label: "الرئيسية",
-    isProfile: false,
+    kind: "home",
   },
   {
-    href: linkOptions({ to: "/discover/books" }),
+    href: "/discover/books",
     icon: CompassIcon,
     label: "اكتشف",
-    isProfile: false,
+    kind: "discover",
   },
   {
-    href: linkOptions({ to: "/library" }), // library
+    href: "/search",
+    icon: MagnifyingGlassIcon,
+    label: "بحث",
+    kind: "search",
+  },
+  {
+    href: "/library",
     icon: BookmarkSimpleIcon,
     label: "مكتبتي",
-    isProfile: false,
+    kind: "library",
   },
   {
-    href: linkOptions({ to: "/" }),
-    icon: PulseIcon,
-    label: "النشاط",
-    isProfile: false,
-  }, // activity
-  {
-    href: linkOptions({ to: "/me" }),
+    href: "/me",
     icon: UserCircleIcon,
     label: "حسابي",
-    isProfile: true,
+    kind: "profile",
   },
-] as const;
+];
+
+function isActiveRoute(pathname: string, item: NavItem, isLoggedIn: boolean) {
+  switch (item.kind) {
+    case "home":
+      return isLoggedIn ? pathname === "/dashboard" : pathname === "/";
+    case "discover":
+      return pathname.startsWith("/discover");
+    case "search":
+      return pathname.startsWith("/search");
+    case "library":
+      return pathname.startsWith("/library");
+    case "profile":
+      return pathname.startsWith("/me") || pathname.startsWith("/u/");
+    default:
+      return false;
+  }
+}
 
 function BottomBar() {
   const { user } = useUser();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = useRouterState({
+    select: (s) => s.location.pathname,
+  });
+
+  const isLoggedIn = Boolean(user);
 
   return (
     <nav
-      className="fixed bottom-0 z-50 w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80  md:hidden"
+      className="fixed bottom-0 z-50 w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
       dir="rtl"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-1">
-        {navItems.map((item, index) => {
-          const href =
-            item.isProfile && !user
-              ? linkOptions({
-                  to: "/auth/$pathname",
-                  params: { pathname: "/login" },
-                })
-              : item.href;
-          const isActive =
-            item.href.to === "/"
-              ? pathname === "/"
-              : item.isProfile
-                ? pathname.startsWith("/u/")
-                : pathname.startsWith(item.href.to);
+        {navItems.map((item) => {
+          const to =
+            item.kind === "profile" && !isLoggedIn
+              ? "/auth/login"
+              : item.kind === "home" && isLoggedIn
+                ? "/dashboard"
+                : item.href;
+
+          const active = isActiveRoute(pathname, item, isLoggedIn);
+
+          if (item.kind === "search") {
+            return (
+              <Link
+                key={item.kind}
+                to={to}
+                aria-label={item.label}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "mx-3 relative flex h-10 w-14 items-center justify-center rounded-2xl transition-all duration-200",
+                  active
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                <item.icon
+                  className="size-5 transition-all duration-200"
+                  weight={active ? "fill" : "regular"}
+                />
+              </Link>
+            );
+          }
 
           return (
             <Link
-              key={`${item.href.to}-${index.toString()}`}
-              to={href.to}
+              key={item.kind}
+              to={to}
+              aria-label={item.label}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-all duration-200",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                active
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {/* Top indicator */}
-              {isActive && <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />}
+              {active && (
+                <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />
+              )}
 
-              {/* Profile avatar when logged in */}
-              {item.isProfile && user ? (
+              {item.kind === "profile" && isLoggedIn ? (
                 <div
                   className={cn(
-                    "h-7 w-7 rounded-full ring-2  transition-all duration-200 overflow-hidden flex items-center justify-center bg-primary/10",
-                    isActive ? "ring-primary" : "ring-transparent",
+                    "flex size-7 items-center justify-center overflow-hidden rounded-full bg-primary/10 ring-2 transition-all duration-200",
+                    active ? "ring-primary" : "ring-transparent",
                   )}
                 >
                   <UserAvatar />
                 </div>
               ) : (
-                <item.icon
-                  className="size-6 transition-all duration-200"
-                  weight={isActive ? "fill" : "regular"}
-                />
+                <div className="relative">
+                  <item.icon
+                    className="size-6 transition-all duration-200"
+                    weight={active ? "fill" : "regular"}
+                  />
+
+                  {item.kind === "profile" && unreadNotifications > 0 && (
+                    <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                      {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                    </span>
+                  )}
+                </div>
               )}
 
-              <span className="text-[10px] font-medium leading-none">{item.label}</span>
+              <span className="text-[10px] font-medium leading-none">
+                {item.label}
+              </span>
             </Link>
           );
         })}

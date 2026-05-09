@@ -3,8 +3,12 @@ import {
   BuildingsIcon,
   ChatCircleIcon,
   ClockIcon,
+  FireIcon,
   type Icon,
+  ListBulletsIcon,
   SparkleIcon,
+  StarIcon,
+  TrophyIcon,
   UserCircleIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
@@ -15,6 +19,7 @@ export type NavItem = {
   description: string;
   icon: Icon;
   disabled?: boolean;
+  badge?: string; // e.g. "جديد", "قريباً"
 };
 
 // export const libraryItems: NavItem[] = [
@@ -60,34 +65,61 @@ export const discoverItems: NavItem[] = [
     icon: BuildingsIcon,
   },
   {
+    title: "القوائم",
+    href: "/lists",
+    description: "قوائم القراءة المنتقاة من المجتمع",
+    icon: ListBulletsIcon,
+  },
+  {
+    title: "الجوائز",
+    href: "/awards-2026",
+    description: "أفضل الكتب لعام 2026 بالتصويت الشعبي",
+    icon: TrophyIcon,
+    badge: "2026",
+  },
+  {
     title: "التوصيات",
     href: "/discover/recommendations",
-    description: "اقتراحات مخصصة لك",
+    description: "اقتراحات مخصصة بناءً على ذوقك",
     icon: SparkleIcon,
-    disabled: true, // after MVP
+    disabled: true,
   },
 ];
 
 export const communityItems: NavItem[] = [
   {
+    title: "التحديات",
+    href: "/challenges",
+    description: "تحديات القراءة الشهرية والسنوية",
+    icon: FireIcon,
+    badge: "جديد",
+  },
+  {
     title: "الأصدقاء",
     href: "/friends",
-    description: "تابع نشاط أصدقائك",
+    description: "تابع نشاط أصدقائك القراء",
     icon: UsersIcon,
-    disabled: true, // coming soon
+    disabled: true,
   },
   {
     title: "التحديثات",
     href: "/feed",
     description: "آخر المراجعات والتقييمات",
     icon: ClockIcon,
-    disabled: true, // coming soon
+    disabled: true,
   },
   {
     title: "المراجعات",
     href: "/reviews",
     description: "آراء القراء حول الكتب",
     icon: ChatCircleIcon,
-    disabled: true, // coming soon
+    disabled: true,
+  },
+  {
+    title: "لوحة الصدارة",
+    href: "/leaderboard",
+    description: "أكثر القراء نشاطاً هذا الشهر",
+    icon: StarIcon,
+    disabled: true,
   },
 ];
