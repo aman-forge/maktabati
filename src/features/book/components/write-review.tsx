@@ -10,13 +10,23 @@ export function WriteReview() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
-  const LABELS = ["", "لم يعجبني", "كان عاديًا", "أعجبني", "أعجبني كثيرًا", "كان مذهلاً"];
+  const LABELS = [
+    "",
+    "لم يعجبني",
+    "كان عاديًا",
+    "أعجبني",
+    "أعجبني كثيرًا",
+    "كان مذهلاً",
+  ];
 
   return (
     <section dir="rtl" id="write-review">
       <Card className="rounded-2xl border-border">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg" style={{ fontFamily: "var(--font-display)" }}>
+          <CardTitle
+            className="text-lg"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             اكتب مراجعة
           </CardTitle>
         </CardHeader>
@@ -66,7 +76,9 @@ export function WriteReview() {
               <span
                 className={cn(
                   "text-xs",
-                  review.length > 500 ? "text-destructive" : "text-muted-foreground",
+                  review.length > 500
+                    ? "text-destructive"
+                    : "text-muted-foreground",
                 )}
               >
                 {review.length} / 2000

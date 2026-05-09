@@ -1,7 +1,12 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { CaretDownIcon, ChatCircleIcon, StarIcon, ThumbsUpIcon } from "@phosphor-icons/react";
+import {
+  CaretDownIcon,
+  ChatCircleIcon,
+  StarIcon,
+  ThumbsUpIcon,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import type { BookReviewItem } from "@/features/book/book-page-mock";
 
@@ -62,11 +67,17 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div className="relative size-10 rounded-full overflow-hidden shrink-0 bg-secondary">
-                      <img src={review.avatar} alt={review.name} className="object-cover" />
+                      <img
+                        src={review.avatar}
+                        alt={review.name}
+                        className="object-cover"
+                      />
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground">{review.name}</span>
+                        <span className="text-sm font-semibold text-foreground">
+                          {review.name}
+                        </span>
                         {review.verified ? (
                           <Badge
                             variant="secondary"
@@ -89,7 +100,9 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                             );
                           })}
                         </div>
-                        <span className="text-xs text-muted-foreground">{review.date}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {review.date}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -102,8 +115,12 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                 </div>
 
                 <div className="flex flex-col gap-2 pe-13">
-                  <h3 className="text-sm font-semibold text-foreground">{review.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{review.body}</p>
+                  <h3 className="text-sm font-semibold text-foreground">
+                    {review.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {review.body}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-4 pe-13">
@@ -113,7 +130,10 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                     aria-label={`إعجاب بمراجعة ${review.name}`}
                     aria-pressed={isLiked}
                   >
-                    <ThumbsUpIcon weight={isLiked ? "fill" : "regular"} className="w-3.5 h-3.5" />
+                    <ThumbsUpIcon
+                      weight={isLiked ? "fill" : "regular"}
+                      className="w-3.5 h-3.5"
+                    />
                     {review.likes + (isLiked ? 1 : 0)} مفيدة
                   </Button>
                   <button

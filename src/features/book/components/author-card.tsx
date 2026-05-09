@@ -65,7 +65,9 @@ export function AuthorCard({ author }: AuthorCardProps) {
               >
                 {author.name || "لا يوجد"}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.nationality || "لا يوجد"}</p>
+              <p className="text-sm text-muted-foreground">
+                {author.nationality || "لا يوجد"}
+              </p>
             </div>
 
             {/* Stats */}
@@ -129,7 +131,10 @@ export function AuthorCard({ author }: AuthorCardProps) {
               })}
               {/* "View all" slot */}
               {/* TODO: we should make author`s book page */}
-              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
+              <Link
+                to="/"
+                className="flex flex-col items-center gap-1.5 w-14 shrink-0"
+              >
                 <div
                   className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
                   style={{ aspectRatio: "2/3" }}

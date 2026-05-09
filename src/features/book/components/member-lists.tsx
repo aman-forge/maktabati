@@ -25,7 +25,9 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
           >
             قوائم القرّاء التي تضم هذا الكتاب
           </h2>
-          <p className="text-sm mt-1 text-muted-foreground">اختيارات المستخدمين الأكثر تصويتًا</p>
+          <p className="text-sm mt-1 text-muted-foreground">
+            اختيارات المستخدمين الأكثر تصويتًا
+          </p>
         </div>
         <a
           href="/"
@@ -36,49 +38,62 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {lists.map(({ id, title, curator, avatar, votes, bookCount, covers, rank }) => (
-          <a key={id} href="/" className="group">
-            <Card className="h-full rounded-2xl border-border transition-all group-hover:-translate-y-0.5">
-              <CardHeader className="pb-2">
-                <div className="flex items-end gap-0 relative h-16">
-                  {covers.slice(0, 3).map((src, i) => (
-                    <div
-                      key={`${id}-${src}`}
-                      className="absolute rounded-lg overflow-hidden shadow-md w-9"
-                      style={{
-                        aspectRatio: "2/3",
-                        right: i * 18,
-                        zIndex: i + 1,
-                        transform: `rotate(${(1 - i) * 4}deg)`,
-                      }}
-                    >
-                      <img src={src} alt="" className="object-cover" />
+        {lists.map(
+          ({ id, title, curator, avatar, votes, bookCount, covers, rank }) => (
+            <a key={id} href="/" className="group">
+              <Card className="h-full rounded-2xl border-border transition-all group-hover:-translate-y-0.5">
+                <CardHeader className="pb-2">
+                  <div className="flex items-end gap-0 relative h-16">
+                    {covers.slice(0, 3).map((src, i) => (
+                      <div
+                        key={`${id}-${src}`}
+                        className="absolute rounded-lg overflow-hidden shadow-md w-9"
+                        style={{
+                          aspectRatio: "2/3",
+                          right: i * 18,
+                          zIndex: i + 1,
+                          transform: `rotate(${(1 - i) * 4}deg)`,
+                        }}
+                      >
+                        <img src={src} alt="" className="object-cover" />
+                      </div>
+                    ))}
+                    <div className="absolute left-0 bottom-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
+                      #{rank}
                     </div>
-                  ))}
-                  <div className="absolute left-0 bottom-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">
-                    #{rank}
                   </div>
-                </div>
-                <CardTitle className="text-sm leading-snug line-clamp-2">{title}</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="relative size-5 rounded-full overflow-hidden shrink-0">
-                    <img src={avatar} alt={curator} className="object-cover" />
+                  <CardTitle className="text-sm leading-snug line-clamp-2">
+                    {title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="relative size-5 rounded-full overflow-hidden shrink-0">
+                      <img
+                        src={avatar}
+                        alt={curator}
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      بواسطة{" "}
+                      <span className="text-foreground font-semibold">
+                        @{curator}
+                      </span>
+                    </span>
+                    <span className="text-xs text-muted-foreground mr-auto">
+                      {bookCount} كتاب
+                    </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    بواسطة <span className="text-foreground font-semibold">@{curator}</span>
-                  </span>
-                  <span className="text-xs text-muted-foreground mr-auto">{bookCount} كتاب</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground border-t border-border pt-2">
-                  <ThumbsUpIcon className="w-3.5 h-3.5" />
-                  {votes.toLocaleString("ar")} صوتًا
-                </div>
-              </CardContent>
-            </Card>
-          </a>
-        ))}
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground border-t border-border pt-2">
+                    <ThumbsUpIcon className="w-3.5 h-3.5" />
+                    {votes.toLocaleString("ar")} صوتًا
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+          ),
+        )}
       </div>
     </section>
   );

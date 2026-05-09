@@ -1,15 +1,25 @@
 import { Badge } from "@components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 import { Separator } from "@components/ui/separator";
-import { ArrowLeftIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react/dist/ssr";
-import type { FeaturedArticleItem, OfficialListItem } from "@/features/book/book-page-mock";
+import {
+  ArrowLeftIcon,
+  FileTextIcon,
+  ListIcon,
+} from "@phosphor-icons/react/dist/ssr";
+import type {
+  FeaturedArticleItem,
+  OfficialListItem,
+} from "@/features/book/book-page-mock";
 
 interface FeaturedArticlesProps {
   articles?: FeaturedArticleItem[];
   officialLists?: OfficialListItem[];
 }
 
-export function FeaturedArticles({ articles = [], officialLists = [] }: FeaturedArticlesProps) {
+export function FeaturedArticles({
+  articles = [],
+  officialLists = [],
+}: FeaturedArticlesProps) {
   if (articles.length === 0 && officialLists.length === 0) return null;
 
   return (
@@ -76,7 +86,9 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
         </div>
       )}
 
-      {articles.length > 0 && officialLists.length > 0 && <Separator className="bg-border" />}
+      {articles.length > 0 && officialLists.length > 0 && (
+        <Separator className="bg-border" />
+      )}
 
       {officialLists.length > 0 && (
         <div className="flex flex-col gap-7">
@@ -121,7 +133,9 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
                       <p className="text-xs font-semibold leading-snug line-clamp-3 text-balance group-hover:underline underline-offset-2 text-foreground">
                         {title}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">{bookCount} كتاب</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {bookCount} كتاب
+                      </p>
                     </div>
                   </CardContent>
                 </Card>

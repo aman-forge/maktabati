@@ -17,7 +17,8 @@ export default function NotFound() {
           لم يتم العثور على الصفحة!
         </h1>
         <p className="mt-2 max-w-sm text-balance text-muted-foreground text-sm">
-          عذرًا، الصفحة التي تحاول الوصول إليها غير متوفرة أو ربما تم نقلها. يمكنك العودة إلى الصفحة
+          عذرًا، الصفحة التي تحاول الوصول إليها غير متوفرة أو ربما تم نقلها.
+          يمكنك العودة إلى الصفحة
         </p>
 
         <div className="mt-8 flex items-center gap-2">
@@ -62,7 +63,8 @@ function Grid() {
         backgroundImage:
           "linear-gradient(to right, color-mix(in srgb, var(--foreground) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 8%, transparent) 1px, transparent 1px)",
         backgroundSize: "48px 48px",
-        maskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
+        maskImage:
+          "radial-gradient(ellipse at center, black 35%, transparent 75%)",
       }}
     />
   );

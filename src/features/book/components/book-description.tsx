@@ -16,7 +16,9 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
   if (!paragraphs) return null;
 
   // Split string into array by new lines to render actual paragraphs
-  const contentParagraphs = paragraphs.split("\n").filter((p) => p.trim() !== "");
+  const contentParagraphs = paragraphs
+    .split("\n")
+    .filter((p) => p.trim() !== "");
 
   return (
     <section dir="rtl" className="flex flex-col gap-5" id="about-book">
@@ -51,10 +53,15 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
           className="self-start mt-1 gap-2"
           onClick={() => setExpanded(!expanded)}
         >
-          <span className="font-bold">{expanded ? "عرض أقل" : "اقرأ المزيد"}</span>
+          <span className="font-bold">
+            {expanded ? "عرض أقل" : "اقرأ المزيد"}
+          </span>
           <CaretDownIcon
             weight="bold"
-            className={cn("w-4 h-4 transition-transform duration-300", expanded && "rotate-180")}
+            className={cn(
+              "w-4 h-4 transition-transform duration-300",
+              expanded && "rotate-180",
+            )}
           />
         </Button>
       </div>

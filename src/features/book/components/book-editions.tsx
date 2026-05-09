@@ -1,5 +1,9 @@
 import { Badge } from "@components/ui/badge";
-import { BookOpenTextIcon, IdentificationCardIcon, TranslateIcon } from "@phosphor-icons/react";
+import {
+  BookOpenTextIcon,
+  IdentificationCardIcon,
+  TranslateIcon,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import type { BibliographicEdition } from "@/features/book/book-page-mock";
 import { cn } from "@/ui/lib/utils";
@@ -16,7 +20,9 @@ export function BookEditions({ editions }: BookEditionsProps) {
   return (
     <section dir="rtl" className="flex flex-col gap-4" id="editions">
       <div className="flex flex-col gap-1">
-        <p className="text-xs text-muted-foreground uppercase tracking-wider">بيانات ببليوغرافية</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-wider">
+          بيانات ببليوغرافية
+        </p>
         <h2
           className="text-2xl font-bold text-foreground"
           style={{ fontFamily: "var(--font-display)" }}
@@ -67,11 +73,16 @@ export function BookEditions({ editions }: BookEditionsProps) {
                   <span className="text-sm font-semibold text-foreground">
                     {format} - {editionName}
                   </span>
-                  <Badge variant="outline" className="text-[10px] px-2 py-0 font-medium">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] px-2 py-0 font-medium"
+                  >
                     {publication}
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground font-medium">{publisher}</p>
+                <p className="text-xs text-muted-foreground font-medium">
+                  {publisher}
+                </p>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
                     <TranslateIcon className="w-3 h-3" />
@@ -84,7 +95,9 @@ export function BookEditions({ editions }: BookEditionsProps) {
                     </span>
                   )}
                   {isbn13 && <span>ISBN-13: {isbn13}</span>}
-                  {edition.pageCount ? <span>{edition.pageCount} صفحة</span> : null}
+                  {edition.pageCount ? (
+                    <span>{edition.pageCount} صفحة</span>
+                  ) : null}
                 </div>
               </div>
             </button>

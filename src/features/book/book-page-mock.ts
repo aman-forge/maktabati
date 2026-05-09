@@ -162,7 +162,8 @@ export function getBookPageMock(book: BookType): BookPageMockData {
         id: "article-1",
         tag: "تحليل",
         title: "كيف يعيد هذا العمل تعريف الفانتازيا الملحمية بالعربية",
-        excerpt: "قراءة في البنية السردية والشخصيات الرئيسية وأثر الترجمة على تجربة القارئ العربي.",
+        excerpt:
+          "قراءة في البنية السردية والشخصيات الرئيسية وأثر الترجمة على تجربة القارئ العربي.",
         author: "فريق مكتباتي",
         date: "2026-04-02",
         readTime: "6 دقائق",
@@ -172,7 +173,8 @@ export function getBookPageMock(book: BookType): BookPageMockData {
         id: "article-2",
         tag: "دليل قراءة",
         title: "من أين تبدأ في السلسلة؟ ترتيب مقترح للمبتدئين",
-        excerpt: "خط سير واضح لمن يريد دخول العالم لأول مرة بدون حرق للأحداث الرئيسية.",
+        excerpt:
+          "خط سير واضح لمن يريد دخول العالم لأول مرة بدون حرق للأحداث الرئيسية.",
         author: "دعاء رجب",
         date: "2026-03-11",
         readTime: "4 دقائق",
@@ -225,7 +227,9 @@ export function getBookPageMock(book: BookType): BookPageMockData {
         format: "غلاف صلب",
         edition: "الطبعة العربية الأولى",
         publisher: book.publisher?.name ?? "دار نشر عربية",
-        publication: book.publicationYear ? `سنة ${book.publicationYear}` : "2023",
+        publication: book.publicationYear
+          ? `سنة ${book.publicationYear}`
+          : "2023",
         isbn: book.isbn ?? "978-1-2345-6789-0",
         isbn13: book.isbn13 ?? "9781234567890",
         language: "العربية",
