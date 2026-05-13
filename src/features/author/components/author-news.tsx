@@ -1,9 +1,10 @@
+import { AuthorType } from "@/features/auth/server/get-auther";
 import {
   MapPinIcon,
   NewspaperIcon,
   TelevisionIcon,
 } from "@phosphor-icons/react";
-import type { Author } from "@/features/author/types";
+
 
 const MOCK_NEWS = [
   {
@@ -54,7 +55,7 @@ const ICON_MAP = {
   // library: BuildingLibraryIcon,
 };
 
-export function AuthorNews({ author: _author }: { author: Author }) {
+export function AuthorNews({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-8" dir="rtl">
 

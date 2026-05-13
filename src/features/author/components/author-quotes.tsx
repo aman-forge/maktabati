@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { HeartIcon } from "@phosphor-icons/react";
 import { cn } from "@/ui/lib/utils";
-import type { Author } from "@/features/author/types";
+import { AuthorType } from "@/features/auth/server/get-auther";
+
 
 const MOCK_QUOTES = [
   { id: "1", text: "الإنسان لا يخشى الموت وإنما يخشى النسيان.", source: "زقاق المدق", likes: 241 },
@@ -11,7 +12,7 @@ const MOCK_QUOTES = [
   { id: "5", text: "إن الغني لا يشتري له سعادة، وإنما يشتري ما يخدر به آلامه.", source: "خان الخليلي", likes: 74 },
 ];
 
-export function AuthorQuotes({ author: _author }: { author: Author }) {
+export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
   const [liked, setLiked] = useState<Record<string, boolean>>({});
   const [counts, setCounts] = useState<Record<string, number>>(
     Object.fromEntries(MOCK_QUOTES.map((q) => [q.id, q.likes])),

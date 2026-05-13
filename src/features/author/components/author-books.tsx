@@ -5,7 +5,8 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { StarIcon } from "@phosphor-icons/react";
-import type { Author } from "@/features/author/types";
+import { AuthorType } from "@/features/auth/server/get-auther";
+// import type { Author } from "@/features/author/types";
 
 type Filter = "all" | "novel" | "story" | "series";
 
@@ -28,7 +29,7 @@ const MOCK_ALL_BOOKS = [
   { id: "8", title: "ميرامار", year: "١٩٦٧", rating: "٤٫٢", type: "novel", coverColor: "#F5F3FF", barColor: "#8B5CF6" },
 ];
 
-export function AuthorBooks({ author: _author }: { author: Author }) {
+export function AuthorBooks({ author: _author }: { author: AuthorType }) {
   const [filter, setFilter] = useState<Filter>("all");
   const filtered = filter === "all" ? MOCK_ALL_BOOKS : MOCK_ALL_BOOKS.filter((b) => b.type === filter);
 

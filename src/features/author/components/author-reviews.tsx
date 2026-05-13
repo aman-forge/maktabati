@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StarIcon, BookIcon } from "@phosphor-icons/react";
-import type { Author } from "@/features/author/types";
+
+import { AuthorType } from "@/features/auth/server/get-auther";
 
 type ReviewFilter = "all" | "five" | "four" | "friends";
 
@@ -44,7 +45,7 @@ const MOCK_REVIEWS = [
   },
 ];
 
-export function AuthorReviews({ author: _author }: { author: Author }) {
+export function AuthorReviews({ author: _author }: { author: AuthorType }) {
   const [filter, setFilter] = useState<ReviewFilter>("all");
 
   const filtered = MOCK_REVIEWS.filter((r) => {
@@ -99,7 +100,7 @@ export function AuthorReviews({ author: _author }: { author: Author }) {
                 <StarIcon
                   key={s}
                   weight={s <= review.stars ? "fill" : "regular"}
-                  className="size-3.5 text-amber-500"
+                  className="w-4 h-4 text-amber-500"
                 />
               ))}
             </div>

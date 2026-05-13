@@ -14,8 +14,8 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import type { Author } from "@/features/author/types";
 import { cn } from "@/ui/lib/utils";
+import { AuthorType } from "@/features/auth/server/get-auther";
 
 // ─── Fake friends — replace with real query ──────────────────────────────────
 const FAKE_FRIENDS = [
@@ -50,7 +50,7 @@ function formatNumber(n?: number | null) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function AuthorHero({ author }: { author: Author }) {
+export function AuthorHero({ author }: { author: AuthorType }) {
   const [following, setFollowing] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -63,17 +63,16 @@ export function AuthorHero({ author }: { author: Author }) {
         .join(""),
     [author.name],
   );
-
   return (
-    <section className="border-b bg-muted/30" dir="rtl">
+    <section className="border-b bg-muted/30 sm:flex flex-col items-center" dir="rtl">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start">
+        <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">
           {/* ── Avatar column ── */}
           <div className="flex flex-col items-center gap-3 shrink-0">
             <div className="relative">
-              {author.imageUrl ? (
+              {author.profileImage ? (
                 <img
-                  src={author.imageUrl}
+                  src={author.profileImage}
                   alt={author.name ?? ""}
                   className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover ring-4 ring-background border border-border/50 shadow-md"
                 />
@@ -90,7 +89,7 @@ export function AuthorHero({ author }: { author: Author }) {
             <Button
               size="sm"
               variant={following ? "outline" : "default"}
-              className="w-full max-w-[160px] gap-1.5 text-xs"
+              className="w-full max-w-40 gap-1.5 text-xs"
               onClick={() => setFollowing((f) => !f)}
             >
               {following ? (
@@ -110,7 +109,7 @@ export function AuthorHero({ author }: { author: Author }) {
           {/* ── Info column ── */}
           <div className="flex flex-col gap-4 flex-1 min-w-0">
             {/* Genre pills */}
-            {author.genres && author.genres.length > 0 && (
+            {/* {author.genres && author.genres.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {author.genres.slice(0, 4).map((g) => (
                   <Badge key={g} variant="secondary" className="text-xs font-normal">
@@ -118,7 +117,7 @@ export function AuthorHero({ author }: { author: Author }) {
                   </Badge>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Name */}
             <div>
@@ -186,9 +185,7 @@ export function AuthorHero({ author }: { author: Author }) {
                 )}
                 {bookmarked ? "محفوظ" : "احفظ المؤلف"}
               </Button>
-              <Button size="sm" variant="outline" className="size-8 p-0" aria-label="تنبيهات">
-                <BellIcon weight="bold" className="size-3.5" />
-              </Button>
+
               <Button size="sm" variant="outline" className="size-8 p-0" aria-label="مشاركة">
                 <ShareNetworkIcon weight="bold" className="size-3.5" />
               </Button>

@@ -1,7 +1,8 @@
 import { BooksIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
-import { Link } from "@tanstack/react-router";
-import type { Author } from "@/features/author/types";
+// import { Link } from "@tanstack/react-router";
+
+import { AuthorType } from "@/features/auth/server/get-auther";
 
 const MOCK_SERIES = [
   {
@@ -32,7 +33,7 @@ const MOCK_SERIES = [
 ];
 
 
-export function AuthorSeries({ author: _author }: { author: Author }) {
+export function AuthorSeries({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-3" dir="rtl">
       {MOCK_SERIES.map((series) => (

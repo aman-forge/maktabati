@@ -173,7 +173,7 @@ export function BookHero({
                     <span className="text-muted-foreground">بقلم</span>
                     <Link
                       to="/author/$id" // TODO: CHANGE TO SLUG?
-                      params={{ id: book.author?.slug ?? "" }}
+                      params={{ id: book.author?.id ?? "" }}
                       className="font-semibold text-primary hover:underline"
                     >
                       {book.author?.name ?? "غير معروف"}

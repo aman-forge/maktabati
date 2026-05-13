@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { StarIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import type { Author } from "@/features/author/types";
+import { AuthorType } from "@/features/auth/server/get-auther";
+
 
 // ─── Mock rating distribution — replace with real data ───────────────────────
 const MOCK_DISTRIBUTION = [
@@ -22,9 +23,9 @@ const MOCK_BOOKS = [
   { id: "6", title: "اللص والكلاب", year: "١٩٦١", rating: "٤٫٤", coverColor: "#F0FDF4", barColor: "#16A34A" },
 ];
 
-export function AuthorAbout({ author }: { author: Author }) {
+export function AuthorAbout({ author }: { author: AuthorType }) {
   const [bioExpanded, setBioExpanded] = useState(false);
-  const avgRating = author.averageRating ?? 4.6;
+  const avgRating = author.rating ?? 4.6;
   const totalRatings = author.ratingCount ?? 34200;
 
   return (
@@ -57,7 +58,7 @@ export function AuthorAbout({ author }: { author: Author }) {
         <SectionTitle>التقييمات</SectionTitle>
         <div className="flex items-center gap-6">
           <div className="flex flex-col items-center gap-1 ">
-            <span className="font-serif text-5xl text-foreground">{avgRating.toFixed(1)}</span>
+            <span className=" text-5xl  tabular-nums text-foreground">{avgRating.toFixed(1)}</span>
             <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((s) => (
                 <StarIcon

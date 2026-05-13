@@ -6,7 +6,7 @@ import {
   TrophyIcon,
 } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
-import type { Author } from "@/features/author/types";
+import { AuthorType } from "@/features/auth/server/get-auther";
 
 // ─── Mock data — replace with real queries ───────────────────────────────────
 
@@ -29,7 +29,7 @@ const MOCK_RANKINGS = [
   { label: "الكلاسيكيات", rank: "#٧" },
 ];
 
-export function AuthorSidebar({ author: _author }: { author: Author }) {
+export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-4" dir="rtl">
 

@@ -9,17 +9,26 @@ import { AuthorSeries } from "@/features/author/components/author-series";
 import { AuthorAbout } from "@/features/author/components/author-about";
 import { AuthorSidebar } from "@/features/author/components/author-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
-import { getAuthorById } from "@/features/author/data/author-repository";
+import { getAuthorById } from "@/features/auth/server/get-auther";
 
 export const Route = createFileRoute("/_public/author/$id")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const author = await getAuthorById(params.id);
+    const author = await getAuthorById({ data: params.id });
     if (!author) throw notFound();
     return author;
   },
 });
 
+const TAB_CONFIG = [
+  { value: "about", label: "نبذة" },
+  { value: "books", label: "الكتب" },
+  { value: "series", label: "السلاسل" },
+  { value: "reviews", label: "المراجعات" },
+  { value: "quotes", label: "الاقتباسات" },
+  { value: "similar", label: "مؤلفون مشابهون" },
+  { value: "news", label: "أخبار وفعاليات" },
+];
 function RouteComponent() {
   const author = Route.useLoaderData();
 
@@ -78,13 +87,3 @@ function RouteComponent() {
     </main>
   );
 }
-
-const TAB_CONFIG = [
-  { value: "about", label: "نبذة" },
-  { value: "books", label: "الكتب" },
-  { value: "series", label: "السلاسل" },
-  { value: "reviews", label: "المراجعات" },
-  { value: "quotes", label: "الاقتباسات" },
-  { value: "similar", label: "مؤلفون مشابهون" },
-  { value: "news", label: "أخبار وفعاليات" },
-];

@@ -1,6 +1,6 @@
 import { CaretLeftIcon } from "@phosphor-icons/react";
-import { Link } from "@tanstack/react-router";
-import type { Author } from "@/features/author/types";
+// import { Link } from "@tanstack/react-router";
+import { AuthorType } from "@/features/auth/server/get-auther";
 
 const MOCK_SIMILAR = [
   {
@@ -56,7 +56,7 @@ const MOCK_INFLUENCES = [
   },
 ];
 
-export function AuthorSimilar({ author: _author }: { author: Author }) {
+export function AuthorSimilar({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-8" dir="rtl">
       <section>
