@@ -16,30 +16,31 @@ import {
 import { bookSearchSchema } from "@/app/_public/discover/books";
 import { db } from "@/db";
 import { authors, books } from "@/db/tables";
+import { uuidSchema } from "@/ui/lib/validators";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
   return db.query.books.findMany({
     limit: 10,
-    with: {
-      author: true,
-    },
-    orderBy: {
-      publicationDate: "desc",
-    },
+    with: { author: true },
+    orderBy: { publicationDate: "desc" },
   });
 });
 
 // ==== Discovery Page ==== //
-
 const PAGE_SIZE = 24 as const;
+const ORDER_MAP = {
+  newest: desc(books.publicationYear),
+  oldest: asc(books.publicationYear),
+  "title-asc": asc(books.title),
+  "title-desc": desc(books.title),
+} satisfies Record<string, SQL>;
 
 export const searchBooks = createServerFn({ method: "GET" })
   .inputValidator(bookSearchSchema)
   .handler(async ({ data }) => {
     const conditions: SQL[] = [];
 
-    // Unified search — q searches title, original title, AND author name
     if (data.q) {
       const pattern = `%${data.q}%`;
       const orCondition = or(
@@ -47,56 +48,21 @@ export const searchBooks = createServerFn({ method: "GET" })
         ilike(books.originalTitle, pattern),
         ilike(authors.name, pattern),
       );
-      if (orCondition) {
-        conditions.push(orCondition);
-      }
+      if (orCondition) conditions.push(orCondition);
     }
 
-    // Explicit author filter (from FilterDialog or future author chip)
-    // if (data.author) {
-    //   conditions.push(ilike(authors.name, `%${data.author}%`));
-    // }
-
-    // Year range
     if (data.minYear) conditions.push(gte(books.publicationYear, data.minYear));
     if (data.maxYear) conditions.push(lte(books.publicationYear, data.maxYear));
-
-    // Page count range
     if (data.minPages) conditions.push(gte(books.pageCount, data.minPages));
     if (data.maxPages) conditions.push(lte(books.pageCount, data.maxPages));
+    if (data.genres?.length) conditions.push(arrayOverlaps(books.genres, data.genres));
+    if (data.topics?.length) conditions.push(arrayOverlaps(books.topics, data.topics));
+    if (data.publishers?.length) conditions.push(inArray(books.publisherId, data.publishers));
 
-    // Genres
-    if (data.genres?.length) {
-      conditions.push(arrayOverlaps(books.genres, data.genres));
-    }
-
-    // Topics
-    if (data.topics?.length) {
-      conditions.push(arrayOverlaps(books.topics, data.topics));
-    }
-
-    // Rating
-    // if (data.ratingMin && data.ratingMin > 0) {
-    //   conditions.push(gte(books.averageRating, data.ratingMin));
-    // }
-
-    // Publishers
-    if (data.publishers?.length) {
-      conditions.push(inArray(books.publisherId, data.publishers));
-    }
-
-    const orderBy =
-      {
-        newest: desc(books.publicationYear),
-        oldest: asc(books.publicationYear),
-        "title-asc": asc(books.title),
-        "title-desc": desc(books.title),
-        // rating: desc(books.averageRating),
-      }[data.sort] ?? desc(books.publicationYear);
-
-    const where = conditions.length ? and(...conditions) : undefined;
     const page = data.page ?? 1;
     const offset = (page - 1) * PAGE_SIZE;
+    const orderBy = ORDER_MAP[data.sort] ?? ORDER_MAP.newest;
+    const where = conditions.length ? and(...conditions) : undefined;
 
     const rows = await db
       .select({
@@ -105,14 +71,13 @@ export const searchBooks = createServerFn({ method: "GET" })
         title: books.title,
         subtitle: books.subtitle,
         description: books.description,
-        coverImageUrl: books.coverImageUrl ?? "/books/book.jpg",
+        coverImageUrl: books.coverImageUrl, // fallback in the component
         pageCount: books.pageCount,
         publicationYear: books.publicationYear,
         publicationDate: books.publicationDate,
         originalLanguage: books.originalLanguage,
         originalTitle: books.originalTitle,
         genres: books.genres,
-        // averageRating: books.averageRating,
         createdAt: books.createdAt,
         updatedAt: books.updatedAt,
         author: {
@@ -120,7 +85,7 @@ export const searchBooks = createServerFn({ method: "GET" })
           name: authors.name,
           slug: authors.slug,
         },
-        total: sql<number>`count(*) over()`, // ← one query instead of two
+        total: sql<string>`count(*) over()`,
       })
       .from(books)
       .leftJoin(authors, eq(books.authorId, authors.id))
@@ -129,47 +94,34 @@ export const searchBooks = createServerFn({ method: "GET" })
       .limit(PAGE_SIZE)
       .offset(offset);
 
-    const total = rows[0]?.total ?? 0;
+    const total = Number(rows[0]?.total ?? 0);
 
     return {
       books: rows,
-      total: Number(total),
-      hasMore: page * PAGE_SIZE < Number(total),
+      total,
+      hasMore: page * PAGE_SIZE < total,
     };
   });
 
-type SearchBooksResult = Awaited<ReturnType<typeof searchBooks>>;
+export type SearchBooksResult = Awaited<ReturnType<typeof searchBooks>>;
 export type BookCardBook = SearchBooksResult["books"][number];
 
 export const getBookById = createServerFn({ method: "GET" })
-  .inputValidator((data: string) => data)
-  .handler(async ({ data: requestedBookId }) => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(requestedBookId)) return null;
-
+  .inputValidator(uuidSchema)
+  .handler(async ({ data: bookId }) => {
     const book = await db.query.books.findFirst({
-      where: {
-        id: requestedBookId,
-      },
+      where: { id: bookId },
       with: {
         author: {
           extras: {
+            // Note: fires a separate COUNT query — fine for single-book pages only
             totalBooks: (author) => db.$count(books, eq(books.authorId, author.id)),
           },
-
           with: {
             books: {
               limit: 3,
-              columns: {
-                id: true,
-                title: true,
-                coverImageUrl: true,
-              },
-              where: {
-                NOT: {
-                  id: requestedBookId,
-                },
-              },
+              columns: { id: true, title: true, coverImageUrl: true },
+              where: { NOT: { id: bookId } },
             },
           },
         },
@@ -178,8 +130,7 @@ export const getBookById = createServerFn({ method: "GET" })
       },
     });
 
-    if (!book) return null;
-
-    return book;
+    return book ?? null;
   });
+
 export type BookType = NonNullable<Awaited<ReturnType<typeof getBookById>>>;
