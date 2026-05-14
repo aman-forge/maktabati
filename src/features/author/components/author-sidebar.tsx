@@ -1,3 +1,4 @@
+import type { AuthorType } from "@features/author/server/get-author";
 import {
   BookmarkSimpleIcon,
   HeartIcon,
@@ -6,7 +7,6 @@ import {
   TrophyIcon,
 } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
-import { AuthorType } from "@/features/auth/server/get-auther";
 
 // ─── Mock data — replace with real queries ───────────────────────────────────
 
@@ -18,9 +18,24 @@ const MOCK_AWARDS = [
 ];
 
 const MOCK_FRIENDS = [
-  { initials: "عخ", name: "عمر خ.", bg: "bg-violet-100 dark:bg-violet-900", text: "text-violet-800 dark:text-violet-200" },
-  { initials: "سم", name: "سارة م.", bg: "bg-emerald-100 dark:bg-emerald-900", text: "text-emerald-800 dark:text-emerald-200" },
-  { initials: "من", name: "محمد ن.", bg: "bg-amber-100 dark:bg-amber-900", text: "text-amber-800 dark:text-amber-200" },
+  {
+    initials: "عخ",
+    name: "عمر خ.",
+    bg: "bg-violet-100 dark:bg-violet-900",
+    text: "text-violet-800 dark:text-violet-200",
+  },
+  {
+    initials: "سم",
+    name: "سارة م.",
+    bg: "bg-emerald-100 dark:bg-emerald-900",
+    text: "text-emerald-800 dark:text-emerald-200",
+  },
+  {
+    initials: "من",
+    name: "محمد ن.",
+    bg: "bg-amber-100 dark:bg-amber-900",
+    text: "text-amber-800 dark:text-amber-200",
+  },
 ];
 
 const MOCK_RANKINGS = [
@@ -32,7 +47,6 @@ const MOCK_RANKINGS = [
 export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-4" dir="rtl">
-
       {/* Awards */}
       <SidebarCard title="الجوائز">
         <div className="flex flex-col divide-y divide-border">

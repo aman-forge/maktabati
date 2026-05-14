@@ -1,8 +1,7 @@
-import { useState } from "react";
+import type { AuthorType } from "@features/author/server/get-author";
 import { StarIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import { AuthorType } from "@/features/auth/server/get-auther";
-
+import { useState } from "react";
 
 // ─── Mock rating distribution — replace with real data ───────────────────────
 const MOCK_DISTRIBUTION = [
@@ -15,12 +14,54 @@ const MOCK_DISTRIBUTION = [
 
 // ─── Mock books — replace with real query ────────────────────────────────────
 const MOCK_BOOKS = [
-  { id: "1", title: "الثلاثية", year: "١٩٥٦", rating: "٤٫٨", coverColor: "#EDE9FE", barColor: "#7C3AED" },
-  { id: "2", title: "أولاد حارتنا", year: "١٩٥٩", rating: "٤٫٥", coverColor: "#D1FAE5", barColor: "#059669" },
-  { id: "3", title: "زقاق المدق", year: "١٩٤٧", rating: "٤٫٦", coverColor: "#FEF3C7", barColor: "#D97706" },
-  { id: "4", title: "الحرافيش", year: "١٩٧٧", rating: "٤٫٧", coverColor: "#FFE4E6", barColor: "#E11D48" },
-  { id: "5", title: "خان الخليلي", year: "١٩٤٥", rating: "٤٫٣", coverColor: "#EFF6FF", barColor: "#2563EB" },
-  { id: "6", title: "اللص والكلاب", year: "١٩٦١", rating: "٤٫٤", coverColor: "#F0FDF4", barColor: "#16A34A" },
+  {
+    id: "1",
+    title: "الثلاثية",
+    year: "١٩٥٦",
+    rating: "٤٫٨",
+    coverColor: "#EDE9FE",
+    barColor: "#7C3AED",
+  },
+  {
+    id: "2",
+    title: "أولاد حارتنا",
+    year: "١٩٥٩",
+    rating: "٤٫٥",
+    coverColor: "#D1FAE5",
+    barColor: "#059669",
+  },
+  {
+    id: "3",
+    title: "زقاق المدق",
+    year: "١٩٤٧",
+    rating: "٤٫٦",
+    coverColor: "#FEF3C7",
+    barColor: "#D97706",
+  },
+  {
+    id: "4",
+    title: "الحرافيش",
+    year: "١٩٧٧",
+    rating: "٤٫٧",
+    coverColor: "#FFE4E6",
+    barColor: "#E11D48",
+  },
+  {
+    id: "5",
+    title: "خان الخليلي",
+    year: "١٩٤٥",
+    rating: "٤٫٣",
+    coverColor: "#EFF6FF",
+    barColor: "#2563EB",
+  },
+  {
+    id: "6",
+    title: "اللص والكلاب",
+    year: "١٩٦١",
+    rating: "٤٫٤",
+    coverColor: "#F0FDF4",
+    barColor: "#16A34A",
+  },
 ];
 
 export function AuthorAbout({ author }: { author: AuthorType }) {
@@ -30,7 +71,6 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 
   return (
     <div className="flex flex-col gap-8" dir="rtl">
-
       {/* ── Biography ── */}
       {author.bio && (
         <div>
@@ -75,14 +115,18 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
           <div className="flex flex-col gap-1.5 flex-1">
             {MOCK_DISTRIBUTION.map(({ stars, percent }) => (
               <div key={stars} className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground w-3 text-center tabular-nums">{stars}</span>
+                <span className="text-xs text-muted-foreground w-3 text-center tabular-nums">
+                  {stars}
+                </span>
                 <div className="h-1.5 flex-1 rounded-full bg-secondary overflow-hidden">
                   <div
                     className="h-full rounded-full bg-primary transition-all"
                     style={{ width: `${percent}%` }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground w-7 text-left tabular-nums">%{percent}</span>
+                <span className="text-xs text-muted-foreground w-7 text-left tabular-nums">
+                  %{percent}
+                </span>
               </div>
             ))}
           </div>
@@ -114,9 +158,12 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
                   style={{ background: book.barColor }}
                 />
               </div>
-              <span className="text-xs font-medium text-foreground leading-snug line-clamp-2">{book.title}</span>
+              <span className="text-xs font-medium text-foreground leading-snug line-clamp-2">
+                {book.title}
+              </span>
               <span className="text-[11px] text-muted-foreground">
-                <StarIcon weight="fill" className="inline size-2.5 text-amber-500 mb-px" /> {book.rating} · {book.year}
+                <StarIcon weight="fill" className="inline size-2.5 text-amber-500 mb-px" />{" "}
+                {book.rating} · {book.year}
               </span>
             </Link>
           ))}
@@ -129,7 +176,9 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <h2 className="font-serif text-lg font-normal text-foreground whitespace-nowrap">{children}</h2>
+      <h2 className="font-serif text-lg font-normal text-foreground whitespace-nowrap">
+        {children}
+      </h2>
       <div className="flex-1 h-px bg-border" />
     </div>
   );

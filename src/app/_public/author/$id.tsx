@@ -1,15 +1,15 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AuthorHero } from "@features/author/components/author-hero";
-import { AuthorBooks } from "@/features/author/components/author-books";
-import { AuthorReviews } from "@/features/author/components/author-reviews";
-import { AuthorQuotes } from "@/features/author/components/author-quotes";
-import { AuthorSimilar } from "@/features/author/components/author-similar";
-import { AuthorNews } from "@/features/author/components/author-news";
-import { AuthorSeries } from "@/features/author/components/author-series";
-import { AuthorAbout } from "@/features/author/components/author-about";
-import { AuthorSidebar } from "@/features/author/components/author-sidebar";
+import { getAuthorById } from "@features/author/server/get-author";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
-import { getAuthorById } from "@/features/auth/server/get-auther";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { AuthorAbout } from "@/features/author/components/author-about";
+import { AuthorBooks } from "@/features/author/components/author-books";
+import { AuthorNews } from "@/features/author/components/author-news";
+import { AuthorQuotes } from "@/features/author/components/author-quotes";
+import { AuthorReviews } from "@/features/author/components/author-reviews";
+import { AuthorSeries } from "@/features/author/components/author-series";
+import { AuthorSidebar } from "@/features/author/components/author-sidebar";
+import { AuthorSimilar } from "@/features/author/components/author-similar";
 
 export const Route = createFileRoute("/_public/author/$id")({
   component: RouteComponent,

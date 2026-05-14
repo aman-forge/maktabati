@@ -2,7 +2,7 @@ import { BooksIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 // import { Link } from "@tanstack/react-router";
 
-import { AuthorType } from "@/features/auth/server/get-auther";
+import type { AuthorType } from "@features/author/server/get-author";
 
 const MOCK_SERIES = [
   {
@@ -12,7 +12,6 @@ const MOCK_SERIES = [
     bookCount: 3,
     status: "مكتملة",
     accent: false,
-
   },
   {
     id: "2",
@@ -31,7 +30,6 @@ const MOCK_SERIES = [
     accent: true,
   },
 ];
-
 
 export function AuthorSeries({ author: _author }: { author: AuthorType }) {
   return (

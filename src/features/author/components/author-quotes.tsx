@@ -1,15 +1,29 @@
-import { useState } from "react";
+import type { AuthorType } from "@features/author/server/get-author";
 import { HeartIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { AuthorType } from "@/features/auth/server/get-auther";
-
 
 const MOCK_QUOTES = [
   { id: "1", text: "الإنسان لا يخشى الموت وإنما يخشى النسيان.", source: "زقاق المدق", likes: 241 },
-  { id: "2", text: "الحب لا يعني أن تجد شخصاً مثالياً بل أن تجد شخصاً تقبل عيوبه.", source: "الثلاثية", likes: 185 },
+  {
+    id: "2",
+    text: "الحب لا يعني أن تجد شخصاً مثالياً بل أن تجد شخصاً تقبل عيوبه.",
+    source: "الثلاثية",
+    likes: 185,
+  },
   { id: "3", text: "لا تعيش لتأكل بل كُل لتعيش وتفهم وتُحب.", source: "أولاد حارتنا", likes: 152 },
-  { id: "4", text: "الوطن ليس بلداً يعيش فيه الإنسان، بل هو البلد الذي يعيش في القلب.", source: "الحرافيش", likes: 98 },
-  { id: "5", text: "إن الغني لا يشتري له سعادة، وإنما يشتري ما يخدر به آلامه.", source: "خان الخليلي", likes: 74 },
+  {
+    id: "4",
+    text: "الوطن ليس بلداً يعيش فيه الإنسان، بل هو البلد الذي يعيش في القلب.",
+    source: "الحرافيش",
+    likes: 98,
+  },
+  {
+    id: "5",
+    text: "إن الغني لا يشتري له سعادة، وإنما يشتري ما يخدر به آلامه.",
+    source: "خان الخليلي",
+    likes: 74,
+  },
 ];
 
 export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
@@ -43,10 +57,7 @@ export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
               liked[quote.id] ? "text-pink-500" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            <HeartIcon
-              weight={liked[quote.id] ? "fill" : "regular"}
-              className="size-3.5"
-            />
+            <HeartIcon weight={liked[quote.id] ? "fill" : "regular"} className="size-3.5" />
             {counts[quote.id].toLocaleString("ar-EG")} إعجاباً
           </button>
         </div>

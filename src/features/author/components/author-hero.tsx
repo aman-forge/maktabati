@@ -1,3 +1,4 @@
+import type { AuthorType } from "@features/author/server/get-author";
 import {
   BellIcon,
   BookmarkSimpleIcon,
@@ -15,7 +16,6 @@ import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { cn } from "@/ui/lib/utils";
-import { AuthorType } from "@/features/auth/server/get-auther";
 
 // ─── Fake friends — replace with real query ──────────────────────────────────
 const FAKE_FRIENDS = [

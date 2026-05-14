@@ -1,6 +1,6 @@
-import { CaretLeftIcon } from "@phosphor-icons/react";
 // import { Link } from "@tanstack/react-router";
-import { AuthorType } from "@/features/auth/server/get-auther";
+import type { AuthorType } from "@features/author/server/get-author";
+import { CaretLeftIcon } from "@phosphor-icons/react";
 
 const MOCK_SIMILAR = [
   {

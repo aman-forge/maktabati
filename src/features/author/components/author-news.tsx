@@ -1,10 +1,5 @@
-import { AuthorType } from "@/features/auth/server/get-auther";
-import {
-  MapPinIcon,
-  NewspaperIcon,
-  TelevisionIcon,
-} from "@phosphor-icons/react";
-
+import type { AuthorType } from "@features/author/server/get-author";
+import { MapPinIcon, NewspaperIcon, TelevisionIcon } from "@phosphor-icons/react";
 
 const MOCK_NEWS = [
   {
@@ -58,7 +53,6 @@ const ICON_MAP = {
 export function AuthorNews({ author: _author }: { author: AuthorType }) {
   return (
     <div className="flex flex-col gap-8" dir="rtl">
-
       {/* News */}
       <section>
         <SectionTitle>أخبار</SectionTitle>
@@ -66,7 +60,10 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
           {MOCK_NEWS.map((item) => {
             const Icon = ICON_MAP[item.icon as keyof typeof ICON_MAP] ?? NewspaperIcon;
             return (
-              <div key={item.id} className="flex gap-3 items-start rounded-xl border border-border bg-card p-4">
+              <div
+                key={item.id}
+                className="flex gap-3 items-start rounded-xl border border-border bg-card p-4"
+              >
                 <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <Icon className="size-4 text-primary" />
                 </div>
@@ -86,10 +83,15 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
         <SectionTitle>فعاليات قادمة</SectionTitle>
         <div className="flex flex-col gap-3">
           {MOCK_EVENTS.map((event) => (
-            <div key={event.id} className="grid grid-cols-[52px_1fr_auto] gap-3 items-center rounded-xl border border-border bg-card p-4">
+            <div
+              key={event.id}
+              className="grid grid-cols-[52px_1fr_auto] gap-3 items-center rounded-xl border border-border bg-card p-4"
+            >
               <div className="text-center">
                 <p className="text-xl font-semibold leading-none text-primary">{event.day}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">{event.month}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">
+                  {event.month}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-foreground">{event.title}</p>
@@ -112,7 +114,9 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <h2 className="font-serif text-lg font-normal text-foreground whitespace-nowrap">{children}</h2>
+      <h2 className="font-serif text-lg font-normal text-foreground whitespace-nowrap">
+        {children}
+      </h2>
       <div className="flex-1 h-px bg-border" />
     </div>
   );

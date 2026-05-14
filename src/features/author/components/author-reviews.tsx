@@ -1,7 +1,6 @@
-import { useState } from "react";
+import type { AuthorType } from "@features/author/server/get-author";
 import { StarIcon, BookIcon } from "@phosphor-icons/react";
-
-import { AuthorType } from "@/features/auth/server/get-auther";
+import { useState } from "react";
 
 type ReviewFilter = "all" | "five" | "four" | "friends";
 
@@ -15,7 +14,12 @@ const FILTER_LABELS: Record<ReviewFilter, string> = {
 const MOCK_REVIEWS = [
   {
     id: "1",
-    reviewer: { name: "عمر خالد", initials: "عخ", bg: "bg-violet-100 dark:bg-violet-900", text: "text-violet-800 dark:text-violet-200" },
+    reviewer: {
+      name: "عمر خالد",
+      initials: "عخ",
+      bg: "bg-violet-100 dark:bg-violet-900",
+      text: "text-violet-800 dark:text-violet-200",
+    },
     date: "مارس ٢٠٢٥",
     stars: 5,
     body: "الثلاثية تحفة أدبية خالدة. محفوظ يرسم مصر بريشة سحرية لا تُضاهى، وكل صفحة فيها كنز لا يُقدَّر.",
@@ -25,7 +29,12 @@ const MOCK_REVIEWS = [
   },
   {
     id: "2",
-    reviewer: { name: "سارة محمود", initials: "سم", bg: "bg-emerald-100 dark:bg-emerald-900", text: "text-emerald-800 dark:text-emerald-200" },
+    reviewer: {
+      name: "سارة محمود",
+      initials: "سم",
+      bg: "bg-emerald-100 dark:bg-emerald-900",
+      text: "text-emerald-800 dark:text-emerald-200",
+    },
     date: "فبراير ٢٠٢٥",
     stars: 5,
     body: "قرأت زقاق المدق للمرة الثالثة وكأنني أقرؤها لأول مرة. هذا هو سحر محفوظ الذي لا يخبو.",
@@ -35,7 +44,12 @@ const MOCK_REVIEWS = [
   },
   {
     id: "3",
-    reviewer: { name: "محمد ناصر", initials: "من", bg: "bg-amber-100 dark:bg-amber-900", text: "text-amber-800 dark:text-amber-200" },
+    reviewer: {
+      name: "محمد ناصر",
+      initials: "من",
+      bg: "bg-amber-100 dark:bg-amber-900",
+      text: "text-amber-800 dark:text-amber-200",
+    },
     date: "يناير ٢٠٢٥",
     stars: 4,
     body: "اللص والكلاب رواية وجودية بامتياز. أسلوب محفوظ في هذه المرحلة يختلف جذرياً عن الثلاثية ومبهر بشكل مختلف.",
@@ -86,7 +100,9 @@ export function AuthorReviews({ author: _author }: { author: AuthorType }) {
                 {review.reviewer.initials}
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground leading-none">{review.reviewer.name}</p>
+                <p className="text-sm font-medium text-foreground leading-none">
+                  {review.reviewer.name}
+                </p>
                 <p className="text-[11px] text-muted-foreground mt-0.5">{review.date}</p>
               </div>
               {review.isFriend && (
