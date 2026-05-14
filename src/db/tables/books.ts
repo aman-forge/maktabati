@@ -10,13 +10,9 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import {
-  anonymousRole,
-  authenticatedRole,
-  authUid,
-  crudPolicy,
-} from "../roles";
+import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles";
 import { authors, publishers } from "./authors";
+import { profiles } from "./users";
 
 // ─────────────────────────────────────────────────────────────
 // BOOKS
@@ -55,8 +51,12 @@ export const books = pgTable.withRLS(
     originalTitle: text("original_title"),
     translator: text("translator"),
 
-    genres: text("genres").array().default(sql`'{}'::text[]`),
-    topics: text("topics").array().default(sql`'{}'::text[]`),
+    genres: text("genres")
+      .array()
+      .default(sql`'{}'::text[]`),
+    topics: text("topics")
+      .array()
+      .default(sql`'{}'::text[]`),
 
     isbn: text("isbn"),
     isbn13: text("isbn_13"),
@@ -126,8 +126,9 @@ export const userBooks = pgTable.withRLS(
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
-    userId: text("user_id").notNull(),
-    // .references(() => usersSync.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
 
     bookId: uuid("book_id")
       .notNull()

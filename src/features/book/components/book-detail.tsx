@@ -8,7 +8,7 @@
 // import { useState } from "react";
 // import type { BookWithAuthor } from "@/db/tables";
 // import { cn } from "@/ui/lib/utils";
-// import { TrackBookModal } from "../../books/components/track-book-modal";
+// import { TrackBookModal } from "@components/book/track-book-modal";
 
 // interface BookDetailedProps {
 //   book: BookWithAuthor;

@@ -1,20 +1,16 @@
+import { BookCard } from "@components/book/book-card";
 import { Button } from "@components/ui/button";
-import {
-  ArrowLeftIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-} from "@phosphor-icons/react";
+import { ArrowLeftIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { BookWithAuthor } from "@/db/tables";
-import { BookCard } from "@/features/books/components/book-card";
+import type { BookCardBook } from "@/features/books/server/get-books";
 import { Skeleton } from "@/ui/components/ui/skeleton";
 import { cn } from "@/ui/lib/utils";
 
 interface BookCarouselProps {
   title: string;
   subtitle?: string;
-  books: BookWithAuthor[];
+  books: BookCardBook[];
   accentColor?: string;
   viewAllHref?: string;
 }
@@ -81,11 +77,7 @@ export function BookCarousel({
               {title}
             </h2>
           </div>
-          {subtitle && (
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {subtitle}
-            </p>
-          )}
+          {subtitle && <p className="text-sm leading-relaxed text-muted-foreground">{subtitle}</p>}
         </div>
 
         <div className="flex items-center gap-2">
@@ -138,8 +130,7 @@ export function BookCarousel({
             canScrollLeft ? "opacity-100" : "opacity-0",
           )}
           style={{
-            background:
-              "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
+            background: "linear-gradient(to left, hsl(var(--background)) 0%, transparent 100%)",
           }}
         />
 
@@ -149,8 +140,7 @@ export function BookCarousel({
             canScrollRight ? "opacity-100" : "opacity-0",
           )}
           style={{
-            background:
-              "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)",
+            background: "linear-gradient(to right, hsl(var(--background)) 0%, transparent 100%)",
           }}
         />
 
@@ -188,10 +178,7 @@ export function BookCarouselSkeleton() {
       </div>
       <div className="flex gap-5 overflow-visible px-6 lg:px-12 container mx-auto">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton
-            key={`i-${_}-${i++}`}
-            className="shrink-0 w-40 sm:w-50 h-60 sm:h-75"
-          />
+          <Skeleton key={`i-${_}-${i++}`} className="shrink-0 w-40 sm:w-50 h-60 sm:h-75" />
         ))}
       </div>
     </section>

@@ -25,14 +25,8 @@ import {
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import {
-  type CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useUser } from "@/features/auth/utils";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 
@@ -98,14 +92,9 @@ function Header() {
       <div className="container mx-auto flex h-full items-center gap-4 px-4">
         {/* Left */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-4">
-          <Link
-            to={isLoggedIn ? "/dashboard" : "/"}
-            className="flex shrink-0 items-center gap-2.5"
-          >
+          <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex shrink-0 items-center gap-2.5">
             <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
-            <span className="inline-block text-lg font-bold tracking-tight">
-              مكتبتي
-            </span>
+            <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
 
           {isLoggedIn && !isLoading && readingStreak > 0 && (
@@ -130,13 +119,9 @@ function Header() {
 
         {/* Right */}
         <div className="flex shrink-0 items-center gap-1">
-          {isLoggedIn && !isLoading && (
-            <CurrentlyReadingChip book={currentlyReading} />
-          )}
+          {isLoggedIn && !isLoading && <CurrentlyReadingChip book={currentlyReading} />}
           <ThemeToggle />
-          {isLoggedIn && !isLoading && (
-            <NotificationsMenu notifications={notifications} />
-          )}
+          {isLoggedIn && !isLoading && <NotificationsMenu notifications={notifications} />}
 
           {isLoading ? (
             <Skeleton className="flex size-8 items-center justify-center border">
@@ -190,20 +175,11 @@ function Header() {
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
-                render={
-                  <Link to="/auth/$pathname" params={{ pathname: "login" }} />
-                }
+                render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}
               >
                 تسجيل الدخول
               </Button>
-              <Button
-                render={
-                  <Link
-                    to="/auth/$pathname"
-                    params={{ pathname: "register" }}
-                  />
-                }
-              >
+              <Button render={<Link to="/auth/$pathname" params={{ pathname: "register" }} />}>
                 إنشاء حساب
               </Button>
             </div>
@@ -224,9 +200,7 @@ function SearchButton() {
     >
       <div className="flex min-w-0 items-center gap-2">
         <MagnifyingGlassIcon className="size-4 shrink-0" />
-        <span className="truncate text-sm">
-          ابحث عن كتاب، مؤلف، أو قائمة...
-        </span>
+        <span className="truncate text-sm">ابحث عن كتاب، مؤلف، أو قائمة...</span>
       </div>
 
       <kbd className="pointer-events-none flex h-5 select-none items-center gap-0.5 rounded-full border bg-muted px-1.5 font-mono text-[10px] font-medium">
@@ -255,9 +229,7 @@ function CurrentlyReadingChip({ book }: { book: CurrentlyReadingBook }) {
     >
       <BookOpenIcon className="size-6 bg-primary/25 p-0.75 rounded-lg shrink-0 text-primary" />
       <div className="flex flex-col gap-0.5 min-w-0 max-w-36">
-        <span className=" font-medium text-foreground leading-none text-[10px]">
-          {book.title}
-        </span>
+        <span className=" font-medium text-foreground leading-none text-[10px]">{book.title}</span>
         <div className="flex items-center gap-1.5">
           {/* Progress bar */}
           <div className="h-1 w-16 rounded-full bg-muted overflow-hidden">
@@ -273,10 +245,7 @@ function CurrentlyReadingChip({ book }: { book: CurrentlyReadingBook }) {
   );
 }
 
-const notificationIcons: Record<
-  NonNullable<NotificationItem["type"]>,
-  React.ElementType
-> = {
+const notificationIcons: Record<NonNullable<NotificationItem["type"]>, React.ElementType> = {
   review: BooksIcon,
   friend: UserIcon,
   recommendation: BooksIcon,
@@ -284,10 +253,7 @@ const notificationIcons: Record<
   challenge: FireIcon,
 };
 
-const notificationColors: Record<
-  NonNullable<NotificationItem["type"]>,
-  string
-> = {
+const notificationColors: Record<NonNullable<NotificationItem["type"]>, string> = {
   review: "bg-blue-100 dark:bg-blue-950/50",
   friend: "bg-purple-100 dark:bg-purple-950/50",
   recommendation: "bg-green-100 dark:bg-green-950/50",
@@ -295,10 +261,7 @@ const notificationColors: Record<
   challenge: "bg-orange-100 dark:bg-orange-950/50",
 };
 
-const notificationIconColors: Record<
-  NonNullable<NotificationItem["type"]>,
-  string
-> = {
+const notificationIconColors: Record<NonNullable<NotificationItem["type"]>, string> = {
   review: "text-blue-500",
   friend: "text-purple-500",
   recommendation: "text-green-500",
@@ -308,29 +271,19 @@ const notificationIconColors: Record<
 
 type NotificationTab = "all" | "unread";
 
-function NotificationsMenu({
-  notifications,
-}: {
-  notifications: NotificationItem[];
-}) {
+function NotificationsMenu({ notifications }: { notifications: NotificationItem[] }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<NotificationTab>("all");
   const [items, setItems] = useState(notifications);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const unreadCount = useMemo(
-    () => items.filter((item) => item.unread).length,
-    [items],
-  );
+  const unreadCount = useMemo(() => items.filter((item) => item.unread).length, [items]);
   const filtered = tab === "unread" ? items.filter((i) => i.unread) : items;
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent | TouchEvent) {
       if (!wrapperRef.current) return;
-      if (
-        event.target instanceof Node &&
-        !wrapperRef.current.contains(event.target)
-      ) {
+      if (event.target instanceof Node && !wrapperRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
@@ -347,9 +300,7 @@ function NotificationsMenu({
   }
 
   function markOneRead(id: string) {
-    setItems((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, unread: false } : n)),
-    );
+    setItems((prev) => prev.map((n) => (n.id === id ? { ...n, unread: false } : n)));
   }
 
   return (
@@ -435,23 +386,14 @@ function NotificationsMenu({
                             notificationColors[type],
                           )}
                         >
-                          <IconComponent
-                            className={cn(
-                              "size-4",
-                              notificationIconColors[type],
-                            )}
-                          />
+                          <IconComponent className={cn("size-4", notificationIconColors[type])} />
                         </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-3">
-                            <p className="text-sm font-medium leading-5">
-                              {item.title}
-                            </p>
+                            <p className="text-sm font-medium leading-5">{item.title}</p>
                             <div className="flex shrink-0 items-center gap-1">
-                              <span className="text-[11px] text-muted-foreground">
-                                {item.time}
-                              </span>
+                              <span className="text-[11px] text-muted-foreground">{item.time}</span>
                               {item.unread && (
                                 <button
                                   type="button"
@@ -509,10 +451,7 @@ function DesktopNav({ isLoggedIn }: { isLoggedIn: boolean }) {
       <NavigationMenuList className="gap-1" dir="rtl">
         {isLoggedIn && (
           <NavigationMenuItem
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "border-0 px-4",
-            )}
+            className={cn(buttonVariants({ variant: "ghost" }), "border-0 px-4")}
             render={<Link to="/library" className="nav-link" />}
           >
             كتبي
@@ -619,9 +558,7 @@ function NavListItem({ item }: { item: NavItem }) {
                 قريباً
               </Badge>
             </div>
-            <p className="line-clamp-1 text-xs text-muted-foreground">
-              {item.description}
-            </p>
+            <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
           </div>
         </span>
       </li>
@@ -641,9 +578,7 @@ function NavListItem({ item }: { item: NavItem }) {
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">
-                {item.description}
-              </p>
+              <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
             </div>
           </Link>
         }

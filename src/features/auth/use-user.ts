@@ -3,35 +3,28 @@ import { authClient } from "@/features/auth/client";
 
 const HAS_SESSION_KEY = "auth:hasSession";
 
-function readHasSessionHint() {
+function readHasSessionHint(): boolean {
   if (typeof window === "undefined") return false;
   return localStorage.getItem(HAS_SESSION_KEY) === "1";
 }
 
 export function useUser() {
-  const { data: clientSession, isPending } = authClient.useSession();
-
+  const { data: session, isPending } = authClient.useSession();
   const [likelyHasSession, setLikelyHasSession] = useState(readHasSessionHint);
 
   useEffect(() => {
-    if (clientSession?.user) {
+    if (session?.user) {
       localStorage.setItem(HAS_SESSION_KEY, "1");
       setLikelyHasSession(true);
-      return;
-    }
-
-    if (!isPending) {
+    } else if (!isPending) {
       localStorage.removeItem(HAS_SESSION_KEY);
       setLikelyHasSession(false);
     }
-  }, [clientSession, isPending]);
-
-  const user = clientSession?.user ?? null;
+  }, [session, isPending]);
 
   return {
-    session: clientSession ?? null,
-    user,
-    isLoggedIn: !!user,
+    user: session?.user ?? null,
+    isLoggedIn: !!session?.user,
     isLoading: likelyHasSession && isPending,
   };
 }

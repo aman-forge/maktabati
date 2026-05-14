@@ -1,4 +1,6 @@
+import { TrackBookModal } from "@components/book/track-book-modal";
 import { Button } from "@components/ui/button";
+import type { BookType } from "@features/books/server/get-books";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
@@ -16,8 +18,6 @@ import { BOOK_GENRES } from "@/db/constants/books";
 import type { RatingSummary } from "@/features/book/book-page-mock";
 import { ButtonGroup } from "@/ui/components/ui/button-group";
 import { cn } from "@/ui/lib/utils";
-import { TrackBookModal } from "../../books/components/track-book-modal";
-import type { BookType } from "../../books/server/get-books";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [
@@ -70,10 +70,7 @@ export function BookHero({
   const [trackOpen, setTrackOpen] = useState(false);
 
   const languageLabel = useMemo(
-    () =>
-      LANGUAGE_MAP[book.originalLanguage ?? ""] ??
-      book.originalLanguage ??
-      "غير معروفة",
+    () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
     [book.originalLanguage],
   );
 
@@ -135,10 +132,7 @@ export function BookHero({
               {/* Primary CTA */}
               <div className="w-full max-w-56 space-y-2">
                 <ButtonGroup className="flex w-full">
-                  <Button
-                    className="flex-1 gap-2"
-                    onClick={() => setWishList((w) => !w)}
-                  >
+                  <Button className="flex-1 gap-2" onClick={() => setWishList((w) => !w)}>
                     {wishList ? (
                       <>
                         <CheckIcon weight="bold" className="size-4" />
@@ -151,10 +145,7 @@ export function BookHero({
                       </>
                     )}
                   </Button>
-                  <Button
-                    aria-label="خيارات الرف"
-                    onClick={() => setTrackOpen(true)}
-                  >
+                  <Button aria-label="خيارات الرف" onClick={() => setTrackOpen(true)}>
                     <CaretDownIcon className="size-4" />
                   </Button>
                 </ButtonGroup>
@@ -168,14 +159,9 @@ export function BookHero({
                   >
                     <HeartIcon
                       weight={liked ? "fill" : "regular"}
-                      className={cn(
-                        "size-4 transition-colors",
-                        liked && "text-destructive",
-                      )}
+                      className={cn("size-4 transition-colors", liked && "text-destructive")}
                     />
-                    <span className="text-xs">
-                      {liked ? "أعجبني" : "إعجاب"}
-                    </span>
+                    <span className="text-xs">{liked ? "أعجبني" : "إعجاب"}</span>
                   </Button>
                   <Button variant="outline" size="icon" aria-label="مشاركة">
                     <ShareNetworkIcon weight="bold" className="size-4" />
@@ -189,10 +175,7 @@ export function BookHero({
               {/* Award pill — show if any */}
               {/* Replace with real awards data */}
               <div className="flex items-center gap-1.5 w-fit rounded-full bg-amber-50 dark:bg-amber-950 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-200">
-                <TrophyIcon
-                  weight="duotone"
-                  className="size-3.5 text-amber-500"
-                />
+                <TrophyIcon weight="duotone" className="size-3.5 text-amber-500" />
                 أفضل ترجمة عربية 2023
               </div>
 
@@ -203,9 +186,7 @@ export function BookHero({
                     {book.title}
                   </h1>
                   {book.subtitle && (
-                    <p className="text-base text-muted-foreground">
-                      {book.subtitle}
-                    </p>
+                    <p className="text-base text-muted-foreground">{book.subtitle}</p>
                   )}
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                     <span className="text-muted-foreground">بقلم</span>
@@ -245,9 +226,7 @@ export function BookHero({
                           <StarIcon
                             key={star}
                             weight={
-                              star <= Math.round(ratingSummary?.average ?? 0)
-                                ? "fill"
-                                : "regular"
+                              star <= Math.round(ratingSummary?.average ?? 0) ? "fill" : "regular"
                             }
                             className="w-4 h-4 text-primary"
                           />
@@ -287,17 +266,13 @@ export function BookHero({
                 <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
                   {meta.map(({ label, value }) => (
                     <div key={label} className="flex flex-col gap-0.5">
-                      <span className="text-[11px] text-muted-foreground">
-                        {label}
-                      </span>
+                      <span className="text-[11px] text-muted-foreground">{label}</span>
                       <span className="text-sm font-medium">{value}</span>
                     </div>
                   ))}
                   {/* Genre chips */}
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] text-muted-foreground">
-                      التصنيفات
-                    </span>
+                    <span className="text-[11px] text-muted-foreground">التصنيفات</span>
                     <span className="text-sm font-medium">
                       {genreLabels.length > 0 && (
                         <div className="flex flex-wrap gap-2">
@@ -322,11 +297,7 @@ export function BookHero({
         </div>
       </div>
 
-      <TrackBookModal
-        book={book}
-        open={trackOpen}
-        onOpenChange={setTrackOpen}
-      />
+      <TrackBookModal book={book} open={trackOpen} onOpenChange={setTrackOpen} />
     </section>
   );
 }
