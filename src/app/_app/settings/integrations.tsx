@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import {
 	ArrowRightIcon,
 	CheckCircleIcon,
@@ -10,9 +12,16 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Switch } from "@shadcn/switch";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "./section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
-export function IntegrationsSection() {
+export const Route = createFileRoute("/_app/settings/integrations")({
+	component: IntegrationsSection,
+});
+function IntegrationsSection() {
 	const integrations = [
 		{
 			name: "Kindle",
@@ -188,7 +197,10 @@ export function IntegrationsSection() {
 				<div className="grid gap-3 sm:grid-cols-2">
 					<div className="flex items-center gap-3 rounded-lg border border-border bg-secondary/50 p-4">
 						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-card">
-							<DeviceMobileIcon className="h-5 w-5 text-foreground" weight="fill" />
+							<DeviceMobileIcon
+								className="h-5 w-5 text-foreground"
+								weight="fill"
+							/>
 						</div>
 						<div className="flex-1">
 							<p className="text-sm font-medium text-foreground">iOS App</p>
@@ -200,7 +212,10 @@ export function IntegrationsSection() {
 					</div>
 					<div className="flex items-center gap-3 rounded-lg border border-border bg-secondary/50 p-4">
 						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-card">
-							<DeviceMobileIcon className="h-5 w-5 text-foreground" weight="fill" />
+							<DeviceMobileIcon
+								className="h-5 w-5 text-foreground"
+								weight="fill"
+							/>
 						</div>
 						<div className="flex-1">
 							<p className="text-sm font-medium text-foreground">Android App</p>

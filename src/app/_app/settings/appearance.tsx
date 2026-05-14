@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import {
 	DesktopIcon,
 	GridFourIcon,
@@ -13,9 +15,17 @@ import { RadioGroup, RadioGroupItem } from "@shadcn/radio-group";
 import { Slider } from "@shadcn/slider";
 import { Switch } from "@shadcn/switch";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "./section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
-export function AppearanceSection() {
+export const Route = createFileRoute("/_app/settings/appearance")({
+	component: AppearanceSection,
+});
+
+function AppearanceSection() {
 	const [theme, setTheme] = useState("dark");
 	const [fontSize, setFontSize] = useState([16]);
 	const [bookView, setBookView] = useState("grid");
@@ -128,12 +138,13 @@ export function AppearanceSection() {
 						</div>
 						<Slider
 							value={fontSize}
-							onValueChange={(val) => setFontSize(typeof val === 'number' ? [val] : [...val])}
-
+							onValueChange={(val) =>
+								setFontSize(typeof val === "number" ? [val] : [...val])
+							}
 							max={24}
 							min={12}
 							step={1}
-							className="[&_[role=slider]]:bg-primary"
+							className="**:[[role=slider]]:bg-primary"
 						/>
 						<div className="flex justify-between text-xs text-muted-foreground">
 							<span>12 بكسل</span>

@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import {
 	BookOpenIcon,
 	ClockIcon,
@@ -20,9 +22,16 @@ import {
 import { Slider } from "@shadcn/slider";
 import { Switch } from "@shadcn/switch";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "./section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
-export function ReadingPreferencesSection() {
+export const Route = createFileRoute("/_app/settings/readingPreferences")({
+	component: ReadingPreferencesSection,
+});
+function ReadingPreferencesSection() {
 	const [readingGoal, setReadingGoal] = useState(52);
 	const [preferences, setPreferences] = useState({
 		showPageCount: true,
@@ -82,7 +91,9 @@ export function ReadingPreferencesSection() {
 						</div>
 						<Slider
 							value={[readingGoal]}
-							onValueChange={(value) => setReadingGoal(typeof value === 'number' ? value : value[0])}
+							onValueChange={(value) =>
+								setReadingGoal(typeof value === "number" ? value : value[0])
+							}
 							max={100}
 							min={1}
 							step={1}

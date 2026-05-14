@@ -15,22 +15,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import { Button } from "@shadcn/button";
 import { cn } from "@/ui/lib/utils";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 
 export type SettingsSection =
-  | "profile"
-  | "account"
-  | "notifications"
-  | "privacy"
-  | "reading"
-  | "social"
-  | "appearance"
-  | "integrations"
-  | "data";
-
-interface SettingsSidebarProps {
-	activeSection: SettingsSection;
-	onSectionChange: (section: SettingsSection) => void;
-}
+	| "profile"
+	| "account"
+	| "notifications"
+	| "privacy"
+	| "reading"
+	| "social"
+	| "appearance"
+	| "integrations"
+	| "data";
 
 const sidebarSections = [
 	{
@@ -38,7 +34,11 @@ const sidebarSections = [
 		items: [
 			{ id: "profile" as const, label: "الملف الشخصي", icon: UserIcon },
 			{ id: "account" as const, label: "الحساب والأمان", icon: LockIcon },
-			{ id: "notifications" as const, label: "الإشعارات", icon: BellRingingIcon },
+			{
+				id: "notifications" as const,
+				label: "الإشعارات",
+				icon: BellRingingIcon,
+			},
 			{ id: "privacy" as const, label: "الخصوصية", icon: EyeIcon },
 		],
 	},
@@ -64,10 +64,9 @@ const sidebarSections = [
 	},
 ];
 
-export function SettingsSidebar({
-	activeSection,
-	onSectionChange,
-}: SettingsSidebarProps) {
+export function SettingsSidebar() {
+	const matchRoute = useMatchRoute();
+
 	return (
 		<aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-s border-border bg-sidebar lg:block">
 			<div className="flex h-full flex-col overflow-y-auto">
@@ -83,12 +82,11 @@ export function SettingsSidebar({
 						</div>
 						<nav className="space-y-0.5 px-2">
 							{sectionIndex === 0 && section.title === "الحساب" && (
-								<button
-									type="button"
-									onClick={() => onSectionChange("profile")}
+								<Link
+									to="/settings/profile"
 									className={cn(
 										"group flex w-full items-center gap-3 rounded-md px-2 py-1.5 text-right transition-colors",
-										activeSection === "profile"
+										matchRoute({ to: "/settings/profile" })
 											? "bg-sidebar-accent text-sidebar-foreground"
 											: "text-sidebar-foreground/80 hover:bg-sidebar-accent/50",
 									)}
@@ -100,18 +98,19 @@ export function SettingsSidebar({
 										</AvatarFallback>
 									</Avatar>
 									<span className="text-sm">أحمد محمد</span>
-								</button>
+								</Link>
 							)}
 							{section.items.map((item) => {
 								if (sectionIndex === 0 && item.id === "profile") return null;
+
 								const Icon = item.icon;
-								const isActive = activeSection === item.id;
+								const routePath = `/settings/${item.id}`;
+								const isActive = matchRoute({ to: routePath });
 
 								return (
-									<button
-										type="button"
+									<Link
 										key={item.id}
-										onClick={() => onSectionChange(item.id)}
+										to={routePath}
 										className={cn(
 											"group flex w-full items-center gap-3 rounded-md px-2 py-1.5 text-right transition-colors",
 											isActive
@@ -124,7 +123,7 @@ export function SettingsSidebar({
 											weight={isActive ? "fill" : "regular"}
 										/>
 										<span className="text-sm">{item.label}</span>
-									</button>
+									</Link>
 								);
 							})}
 						</nav>
@@ -156,7 +155,10 @@ export function SettingsSidebar({
 						>
 							تفعيل المصادقة الثنائية
 						</Button>
-						<button type="button" className="mt-2 flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground">
+						<button
+							type="button"
+							className="mt-2 flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+						>
 							<InfoIcon className="h-3 w-3" />
 							معرفة المزيد
 						</button>

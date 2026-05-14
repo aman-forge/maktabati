@@ -18,7 +18,7 @@
     ]
   },
   "formatter": {
-    "enabled": false
+    "enabled": true
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
@@ -42,7 +42,7 @@
       "tailwindDirectives": true
     },
     "formatter": {
-      "enabled": false
+      "enabled": true
     }
   }
 }

@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import {
 	BooksIcon,
 	ChatCircleIcon,
@@ -12,9 +14,17 @@ import { Label } from "@shadcn/label";
 import { RadioGroup, RadioGroupItem } from "@shadcn/radio-group";
 import { Switch } from "@shadcn/switch";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "./section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
-export function NotificationsSection() {
+export const Route = createFileRoute("/_app/settings/notifications")({
+	component: NotificationsSection,
+});
+
+function NotificationsSection() {
 	const [emailDigest, setEmailDigest] = useState("daily");
 	const [notifications, setNotifications] = useState({
 		newFollower: true,
@@ -42,7 +52,10 @@ export function NotificationsSection() {
 			>
 				<div className="space-y-4">
 					<div className="flex items-center gap-3 rounded-lg bg-secondary p-4">
-						<EnvelopeSimpleIcon className="h-5 w-5 text-primary" weight="fill" />
+						<EnvelopeSimpleIcon
+							className="h-5 w-5 text-primary"
+							weight="fill"
+						/>
 						<div className="flex-1">
 							<p className="text-sm font-medium text-foreground">
 								ملخص البريد الإلكتروني

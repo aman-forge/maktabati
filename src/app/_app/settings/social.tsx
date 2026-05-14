@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import {
 	BellIcon,
 	ChatCircleDotsIcon,
@@ -13,9 +15,16 @@ import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "./section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
-export function SocialSection() {
+export const Route = createFileRoute("/_app/settings/social")({
+	component: SocialSection,
+});
+function SocialSection() {
 	const [social, setSocial] = useState({
 		autoFollow: false,
 		showOnline: true,
