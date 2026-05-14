@@ -11,7 +11,6 @@ export const getAuthorById = createServerFn({ method: "GET" })
       },
       with: {
         books: true,
-        series: true,
       },
     });
 
