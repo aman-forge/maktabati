@@ -248,7 +248,7 @@ function LibrarySidebar({
                 {count > 0 && (
                   <span
                     className={cn(
-                      "text-xs tabular-nums min-w-[1.25rem] text-center",
+                      "text-xs tabular-nums min-w-5 text-center",
                       isActive ? "text-primary font-semibold" : "text-muted-foreground",
                     )}
                   >
@@ -382,14 +382,15 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
       case "title":
         result = [...result].sort((a, b) => (a.title ?? "").localeCompare(b.title ?? ""));
         break;
-      case "rating":
-        result = [...result].sort((a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0));
-        break;
+      // case "rating":
+      //   result = [...result].sort((a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0));
+      //   break;
       case "added_asc":
         // Replace with real `addedAt` timestamp when available
         result = [...result];
         break;
       case "added_desc":
+        break;
       default:
         result = [...result].reverse();
         break;

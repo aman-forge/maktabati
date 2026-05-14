@@ -8,5 +8,6 @@ export const Route = createFileRoute("/_app/dashboard")({
 });
 
 function RouteComponent() {
-  return <DashboardHome />;
+  return <DashboardHomeSkeleton />;
+  // return <DashboardHome />;
 }
