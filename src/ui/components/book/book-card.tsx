@@ -33,7 +33,7 @@ const STATUS_ICONS: Record<string, React.ElementType> = {
   completed: CheckCircleIcon,
 };
 
-export function BookCard({ book, size = "md", trackingStatus }: BookCardProps) {
+export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
   const rating = 4.5; // TODO: add rating
