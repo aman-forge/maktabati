@@ -58,7 +58,7 @@ export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
             )}
           >
             <HeartIcon weight={liked[quote.id] ? "fill" : "regular"} className="size-3.5" />
-            {counts[quote.id].toLocaleString("ar-EG")} إعجاباً
+            {counts[quote.id].toLocaleString("ar-US")} إعجاباً
           </button>
         </div>
       ))}

@@ -45,7 +45,7 @@ const FAKE_FRIENDS = [
 function formatNumber(n?: number | null) {
   if (!n) return "—";
   if (n >= 1000) return `${(n / 1000).toFixed(1)} ألف`;
-  return n.toLocaleString("ar-EG");
+  return n.toLocaleString("ar-US");
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────

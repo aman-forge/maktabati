@@ -109,7 +109,7 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
               ))}
             </div>
             <span className="text-[11px] text-muted-foreground">
-              {totalRatings.toLocaleString("ar-EG")} تقييم
+              {totalRatings.toLocaleString("ar-US")} تقييم
             </span>
           </div>
           <div className="flex flex-col gap-1.5 flex-1">
