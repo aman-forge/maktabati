@@ -40,7 +40,7 @@ export function BookCard({ book, size = "md", trackingStatus }: BookCardProps) {
   const StatusIcon = trackingStatus ? STATUS_ICONS[trackingStatus] : null;
 
   return (
-    <article className={cn("flex flex-col gap-2.5 shrink-0 group m-auto", dim.card)}>
+    <article className={cn("flex flex-col gap-2.5 shrink-0 group mt-0 mb-auto", dim.card)}>
       {/* Cover wrapper */}
       <div
         className={cn(
