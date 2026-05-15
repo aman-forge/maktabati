@@ -1,6 +1,7 @@
 import { SpinnerGapIcon } from "@phosphor-icons/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+
 import { authClient } from "@/features/auth/client";
 
 export const Route = createFileRoute("/_app/me")({
@@ -23,13 +24,9 @@ function MeRoute() {
   }, [data, navigate]);
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex justify-center items-center text-foreground">
+    <div className="text-foreground flex min-h-[calc(100vh-4rem)] items-center justify-center">
       {/* TODO: IMPROVE DESIGN */}
-      <SpinnerGapIcon
-        size={32}
-        className="size-20 animate-spin"
-        weight="regular"
-      />
+      <SpinnerGapIcon size={32} className="size-20 animate-spin" weight="regular" />
     </div>
   );
 }

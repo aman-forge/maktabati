@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { authClient } from "@/features/auth/client";
 
 const HAS_SESSION_KEY = "auth:hasSession";

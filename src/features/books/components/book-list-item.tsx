@@ -2,10 +2,12 @@
 
 import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
+import { Button } from "@shadcn/button";
 import { useState } from "react";
+
 import { BOOK_GENRES } from "@/db/constants/books";
-import { Button } from "@/ui/components/ui/button";
 import { cn } from "@/ui/lib/utils";
+
 import type { BookCardBook } from "../server/get-books";
 import { TrackBookModal } from "./track-book-modal";
 
@@ -32,31 +34,29 @@ export function BookListItem({ book }: BookListItemProps) {
           )}
         >
           {/* Cover */}
-          <div className="w-10 h-14 rounded overflow-hidden shrink-0 bg-muted shadow-sm">
+          <div className="bg-muted h-14 w-10 shrink-0 overflow-hidden rounded shadow-sm">
             <img
               src={book.coverImageUrl ?? "/books/book.jpg"}
               alt={`Cover of ${book.title}`}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           </div>
 
           {/* Title & Author */}
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium leading-tight truncate text-foreground group-hover:text-primary transition-colors">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-foreground group-hover:text-primary truncate text-sm leading-tight font-medium transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-muted-foreground truncate mt-0.5">
-              {book.author?.name}
-            </p>
+            <p className="text-muted-foreground mt-0.5 truncate text-xs">{book.author?.name}</p>
           </div>
 
           {/* Genres - hidden on mobile */}
-          <div className="hidden md:flex items-center gap-1.5 shrink-0 w-36">
+          <div className="hidden w-36 shrink-0 items-center gap-1.5 md:flex">
             {book.genres?.slice(0, 2).map((genre) => (
               <Badge
                 key={genre}
                 variant="secondary"
-                className="text-[10px] px-2 py-0.5 font-normal bg-secondary/50"
+                className="bg-secondary/50 px-2 py-0.5 text-[10px] font-normal"
               >
                 {BOOK_GENRES.filter((g) => g.value === genre).at(0)?.label}
               </Badge>
@@ -64,15 +64,15 @@ export function BookListItem({ book }: BookListItemProps) {
           </div>
 
           {/* Year */}
-          <div className="hidden sm:block w-12 text-center text-xs text-muted-foreground shrink-0">
+          <div className="text-muted-foreground hidden w-12 shrink-0 text-center text-xs sm:block">
             {book.publicationYear}
           </div>
 
           {/* Rating */}
-          <div className="w-14 flex items-center justify-center gap-1 shrink-0">
+          <div className="flex w-14 shrink-0 items-center justify-center gap-1">
             {rating && (
               <>
-                <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+                <StarIcon weight="fill" className="h-3 w-3 text-amber-400" />
                 <span className="text-xs font-medium">{rating.toFixed(1)}</span>
               </>
             )}
@@ -94,15 +94,11 @@ export function BookListItem({ book }: BookListItemProps) {
             )}
             aria-label="Add to reading list"
           >
-            <PlusIcon weight="bold" className="w-3.5 h-3.5" />
+            <PlusIcon weight="bold" className="h-3.5 w-3.5" />
           </Button>
         </div>
       </article>
-      <TrackBookModal
-        book={book}
-        open={isTracking}
-        onOpenChange={setIsTracking}
-      />
+      <TrackBookModal book={book} open={isTracking} onOpenChange={setIsTracking} />
     </>
   );
 }

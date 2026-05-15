@@ -9,16 +9,12 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+
 // ─────────────────────────────────────────────────────────────
 // USERS
 // mirrors your auth provider's user (Supabase / Neon Auth)
 // ─────────────────────────────────────────────────────────────
-import {
-  anonymousRole,
-  authenticatedRole,
-  authUid,
-  crudPolicy,
-} from "../roles"; // the neon_auth.users_sync table
+import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles"; // the neon_auth.users_sync table
 import { books } from "./books";
 
 export const profiles = pgTable.withRLS(
@@ -81,14 +77,8 @@ export const reviews = pgTable.withRLS(
     index("reviews_user_idx").on(t.userId),
 
     // ✅ DB-level guard
-    check(
-      "rating_range",
-      sql`${t.rating} IS NULL OR (${t.rating} >= 1 AND ${t.rating} <= 5)`,
-    ),
-    check(
-      "review_needs_rating_or_body",
-      sql`${t.rating} IS NOT NULL OR ${t.body} IS NOT NULL`,
-    ),
+    check("rating_range", sql`${t.rating} IS NULL OR (${t.rating} >= 1 AND ${t.rating} <= 5)`),
+    check("review_needs_rating_or_body", sql`${t.rating} IS NOT NULL OR ${t.body} IS NOT NULL`),
   ],
 );
 

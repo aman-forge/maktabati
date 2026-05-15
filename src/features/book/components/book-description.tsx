@@ -2,6 +2,7 @@ import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+
 import { cn } from "@/ui/lib/utils";
 
 interface BookDescriptionProps {
@@ -16,14 +17,12 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
   if (!paragraphs) return null;
 
   // Split string into array by new lines to render actual paragraphs
-  const contentParagraphs = paragraphs
-    .split("\n")
-    .filter((p) => p.trim() !== "");
+  const contentParagraphs = paragraphs.split("\n").filter((p) => p.trim() !== "");
 
   return (
     <section dir="rtl" className="flex flex-col gap-5" id="about-book">
       <h2
-        className="text-2xl font-bold text-foreground tracking-tight"
+        className="text-foreground text-2xl font-bold tracking-tight"
         style={{ fontFamily: "var(--font-display)" }}
       >
         عن هذا الكتاب
@@ -44,24 +43,19 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
 
           {/* Fade overlay when collapsed */}
           {!expanded && (
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent" />
+            <div className="from-background absolute right-0 bottom-0 left-0 h-24 bg-linear-to-t to-transparent" />
           )}
         </div>
 
         <Button
           variant="ghost"
-          className="self-start mt-1 gap-2"
+          className="mt-1 gap-2 self-start"
           onClick={() => setExpanded(!expanded)}
         >
-          <span className="font-bold">
-            {expanded ? "عرض أقل" : "اقرأ المزيد"}
-          </span>
+          <span className="font-bold">{expanded ? "عرض أقل" : "اقرأ المزيد"}</span>
           <CaretDownIcon
             weight="bold"
-            className={cn(
-              "w-4 h-4 transition-transform duration-300",
-              expanded && "rotate-180",
-            )}
+            className={cn("w-4 h-4 transition-transform duration-300", expanded && "rotate-180")}
           />
         </Button>
       </div>
@@ -70,7 +64,7 @@ export function BookDescription({ paragraphs, tags }: BookDescriptionProps) {
       {safeTags.length > 0 && (
         <div className="flex flex-wrap gap-2 pt-1">
           {safeTags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-sm h-7 px-3">
+            <Badge key={tag} variant="secondary" className="h-7 px-3 text-sm">
               {tag}
             </Badge>
           ))}

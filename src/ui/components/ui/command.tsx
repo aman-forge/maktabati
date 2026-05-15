@@ -1,16 +1,17 @@
 "use client";
 
 import { CheckIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
-import { Command as CommandPrimitive } from "cmdk";
-import type * as React from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/ui/components/ui/dialog";
-import { InputGroup, InputGroupAddon } from "@/ui/components/ui/input-group";
+} from "@shadcn/dialog";
+import { InputGroup, InputGroupAddon } from "@shadcn/input-group";
+import { Command as CommandPrimitive } from "cmdk";
+import type * as React from "react";
+
 import { cn } from "@/ui/lib/utils";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
@@ -62,7 +63,7 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-9 bg-input/30">
+      <InputGroup className="bg-input/30 h-9">
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(

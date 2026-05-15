@@ -1,10 +1,7 @@
 import { Badge } from "@components/ui/badge";
-import {
-  BookOpenTextIcon,
-  IdentificationCardIcon,
-  TranslateIcon,
-} from "@phosphor-icons/react";
+import { BookOpenTextIcon, IdentificationCardIcon, TranslateIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+
 import type { BibliographicEdition } from "@/features/book/book-page-mock";
 import { cn } from "@/ui/lib/utils";
 
@@ -20,11 +17,9 @@ export function BookEditions({ editions }: BookEditionsProps) {
   return (
     <section dir="rtl" className="flex flex-col gap-4" id="editions">
       <div className="flex flex-col gap-1">
-        <p className="text-xs text-muted-foreground uppercase tracking-wider">
-          بيانات ببليوغرافية
-        </p>
+        <p className="text-muted-foreground text-xs tracking-wider uppercase">بيانات ببليوغرافية</p>
         <h2
-          className="text-2xl font-bold text-foreground"
+          className="text-foreground text-2xl font-bold"
           style={{ fontFamily: "var(--font-display)" }}
         >
           الإصدارات والطبعات
@@ -65,39 +60,32 @@ export function BookEditions({ editions }: BookEditionsProps) {
                     : "bg-secondary text-muted-foreground",
                 )}
               >
-                <BookOpenTextIcon weight="duotone" className="w-5 h-5" />
+                <BookOpenTextIcon weight="duotone" className="h-5 w-5" />
               </div>
 
-              <div className="flex flex-col gap-0.5 flex-1 min-w-0 text-right">
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5 text-right">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">
+                  <span className="text-foreground text-sm font-semibold">
                     {format} - {editionName}
                   </span>
-                  <Badge
-                    variant="outline"
-                    className="text-[10px] px-2 py-0 font-medium"
-                  >
+                  <Badge variant="outline" className="px-2 py-0 text-[10px] font-medium">
                     {publication}
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground font-medium">
-                  {publisher}
-                </p>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] text-muted-foreground">
+                <p className="text-muted-foreground text-xs font-medium">{publisher}</p>
+                <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px]">
                   <span className="inline-flex items-center gap-1">
-                    <TranslateIcon className="w-3 h-3" />
+                    <TranslateIcon className="h-3 w-3" />
                     {language}
                   </span>
                   {isbn && (
                     <span className="inline-flex items-center gap-1">
-                      <IdentificationCardIcon className="w-3 h-3" />
+                      <IdentificationCardIcon className="h-3 w-3" />
                       ISBN: {isbn}
                     </span>
                   )}
                   {isbn13 && <span>ISBN-13: {isbn13}</span>}
-                  {edition.pageCount ? (
-                    <span>{edition.pageCount} صفحة</span>
-                  ) : null}
+                  {edition.pageCount ? <span>{edition.pageCount} صفحة</span> : null}
                 </div>
               </div>
             </button>

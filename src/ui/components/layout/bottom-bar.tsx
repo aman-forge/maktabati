@@ -7,6 +7,7 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import { Link, useRouterState } from "@tanstack/react-router";
+
 import { useUser } from "@/features/auth/utils";
 import { cn } from "@/ui/lib/utils";
 
@@ -82,7 +83,7 @@ function BottomBar() {
 
   return (
     <nav
-      className="fixed bottom-0 z-50 w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
+      className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed bottom-0 z-50 w-full border-t backdrop-blur md:hidden"
       dir="rtl"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
@@ -127,14 +128,10 @@ function BottomBar() {
               aria-current={active ? "page" : undefined}
               className={cn(
                 "relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-all duration-200",
-                active
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                active ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {active && (
-                <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />
-              )}
+              {active && <span className="bg-primary absolute top-0 h-0.5 w-6 rounded-full" />}
 
               {item.kind === "profile" && isLoggedIn ? (
                 <div
@@ -153,16 +150,14 @@ function BottomBar() {
                   />
 
                   {item.kind === "profile" && unreadNotifications > 0 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                    <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full text-[9px] font-bold">
                       {unreadNotifications > 9 ? "9+" : unreadNotifications}
                     </span>
                   )}
                 </div>
               )}
 
-              <span className="text-[10px] font-medium leading-none">
-                {item.label}
-              </span>
+              <span className="text-[10px] leading-none font-medium">{item.label}</span>
             </Link>
           );
         })}

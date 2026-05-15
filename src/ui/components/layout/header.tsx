@@ -25,15 +25,11 @@ import {
   XCircleIcon,
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import {
-  type CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+
 import { useUser } from "@/features/auth/utils";
 import { cn } from "@/ui/lib/utils";
+
 import { Skeleton } from "../ui/skeleton";
 
 type NotificationItem = {
@@ -94,24 +90,19 @@ function Header() {
   const { isLoggedIn, isLoading } = useUser();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 hidden h-(--header-height) border-b bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/80 md:flex">
+    <header className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed inset-x-0 top-0 z-50 hidden h-(--header-height) border-b backdrop-blur-2xl md:flex">
       <div className="container mx-auto flex h-full items-center gap-4 px-4">
         {/* Left */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-4">
-          <Link
-            to={isLoggedIn ? "/dashboard" : "/"}
-            className="flex shrink-0 items-center gap-2.5"
-          >
+          <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex shrink-0 items-center gap-2.5">
             <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
-            <span className="inline-block text-lg font-bold tracking-tight">
-              مكتبتي
-            </span>
+            <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
 
           {isLoggedIn && !isLoading && readingStreak > 0 && (
             <div
               title={`سلسلة قراءة: ${readingStreak} أيام متواصلة`}
-              className="flex flex-row items-center cursor-default select-none rounded-full border border-orange-200 bg-orange-50 px-2 py-0.5 text-xs font-medium text-orange-600 dark:border-orange-900 dark:bg-orange-950/50 dark:text-orange-400"
+              className="flex cursor-default flex-row items-center rounded-full border border-orange-200 bg-orange-50 px-2 py-0.5 text-xs font-medium text-orange-600 select-none dark:border-orange-900 dark:bg-orange-950/50 dark:text-orange-400"
             >
               <FireIcon className="size-3.5" weight="fill" />
               <span>{readingStreak}</span>
@@ -123,20 +114,16 @@ function Header() {
 
         {/* Center */}
         <div className="flex min-w-0 flex-1 justify-center px-2">
-          <div className="w-full min-w-0 max-w-[18rem] md:max-w-88 lg:max-w-120 xl:max-w-xl">
+          <div className="w-full max-w-[18rem] min-w-0 md:max-w-88 lg:max-w-120 xl:max-w-xl">
             <SearchButton />
           </div>
         </div>
 
         {/* Right */}
         <div className="flex shrink-0 items-center gap-1">
-          {isLoggedIn && !isLoading && (
-            <CurrentlyReadingChip book={currentlyReading} />
-          )}
+          {isLoggedIn && !isLoading && <CurrentlyReadingChip book={currentlyReading} />}
           <ThemeToggle />
-          {isLoggedIn && !isLoading && (
-            <NotificationsMenu notifications={notifications} />
-          )}
+          {isLoggedIn && !isLoading && <NotificationsMenu notifications={notifications} />}
 
           {isLoading ? (
             <Skeleton className="flex size-8 items-center justify-center border">
@@ -190,20 +177,11 @@ function Header() {
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
-                render={
-                  <Link to="/auth/$pathname" params={{ pathname: "login" }} />
-                }
+                render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}
               >
                 تسجيل الدخول
               </Button>
-              <Button
-                render={
-                  <Link
-                    to="/auth/$pathname"
-                    params={{ pathname: "register" }}
-                  />
-                }
-              >
+              <Button render={<Link to="/auth/$pathname" params={{ pathname: "register" }} />}>
                 إنشاء حساب
               </Button>
             </div>
@@ -219,17 +197,15 @@ function SearchButton() {
     <Button
       variant="outline"
       type="button"
-      className="h-9 w-full min-w-0 max-w-sm justify-between gap-2 px-3 text-muted-foreground"
+      className="text-muted-foreground h-9 w-full max-w-sm min-w-0 justify-between gap-2 px-3"
       aria-label="البحث في المنصة"
     >
       <div className="flex min-w-0 items-center gap-2">
         <MagnifyingGlassIcon className="size-4 shrink-0" />
-        <span className="truncate text-sm">
-          ابحث عن كتاب، مؤلف، أو قائمة...
-        </span>
+        <span className="truncate text-sm">ابحث عن كتاب، مؤلف، أو قائمة...</span>
       </div>
 
-      <kbd className="pointer-events-none flex h-5 select-none items-center gap-0.5 rounded-full border bg-muted px-1.5 font-mono text-[10px] font-medium">
+      <kbd className="bg-muted pointer-events-none flex h-5 items-center gap-0.5 rounded-full border px-1.5 font-mono text-[10px] font-medium select-none">
         K<span className="relative top-px text-xs">⌘</span>
       </kbd>
     </Button>
@@ -253,16 +229,14 @@ function CurrentlyReadingChip({ book }: { book: CurrentlyReadingBook }) {
       )}
       title={`تقرأ الآن: ${book.title}`}
     >
-      <BookOpenIcon className="size-6 bg-primary/25 p-0.75 rounded-lg shrink-0 text-primary" />
-      <div className="flex flex-col gap-0.5 min-w-0 max-w-36">
-        <span className=" font-medium text-foreground leading-none text-[10px]">
-          {book.title}
-        </span>
+      <BookOpenIcon className="bg-primary/25 text-primary size-6 shrink-0 rounded-lg p-0.75" />
+      <div className="flex max-w-36 min-w-0 flex-col gap-0.5">
+        <span className="text-foreground text-[10px] leading-none font-medium">{book.title}</span>
         <div className="flex items-center gap-1.5">
           {/* Progress bar */}
-          <div className="h-1 w-16 rounded-full bg-muted overflow-hidden">
+          <div className="bg-muted h-1 w-16 overflow-hidden rounded-full">
             <div
-              className="h-full rounded-full bg-primary transition-all"
+              className="bg-primary h-full rounded-full transition-all"
               style={{ width: `${book.progress}%` }}
             />
           </div>
@@ -273,10 +247,7 @@ function CurrentlyReadingChip({ book }: { book: CurrentlyReadingBook }) {
   );
 }
 
-const notificationIcons: Record<
-  NonNullable<NotificationItem["type"]>,
-  React.ElementType
-> = {
+const notificationIcons: Record<NonNullable<NotificationItem["type"]>, React.ElementType> = {
   review: BooksIcon,
   friend: UserIcon,
   recommendation: BooksIcon,
@@ -284,10 +255,7 @@ const notificationIcons: Record<
   challenge: FireIcon,
 };
 
-const notificationColors: Record<
-  NonNullable<NotificationItem["type"]>,
-  string
-> = {
+const notificationColors: Record<NonNullable<NotificationItem["type"]>, string> = {
   review: "bg-blue-100 dark:bg-blue-950/50",
   friend: "bg-purple-100 dark:bg-purple-950/50",
   recommendation: "bg-green-100 dark:bg-green-950/50",
@@ -295,10 +263,7 @@ const notificationColors: Record<
   challenge: "bg-orange-100 dark:bg-orange-950/50",
 };
 
-const notificationIconColors: Record<
-  NonNullable<NotificationItem["type"]>,
-  string
-> = {
+const notificationIconColors: Record<NonNullable<NotificationItem["type"]>, string> = {
   review: "text-blue-500",
   friend: "text-purple-500",
   recommendation: "text-green-500",
@@ -308,29 +273,19 @@ const notificationIconColors: Record<
 
 type NotificationTab = "all" | "unread";
 
-function NotificationsMenu({
-  notifications,
-}: {
-  notifications: NotificationItem[];
-}) {
+function NotificationsMenu({ notifications }: { notifications: NotificationItem[] }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<NotificationTab>("all");
   const [items, setItems] = useState(notifications);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const unreadCount = useMemo(
-    () => items.filter((item) => item.unread).length,
-    [items],
-  );
+  const unreadCount = useMemo(() => items.filter((item) => item.unread).length, [items]);
   const filtered = tab === "unread" ? items.filter((i) => i.unread) : items;
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent | TouchEvent) {
       if (!wrapperRef.current) return;
-      if (
-        event.target instanceof Node &&
-        !wrapperRef.current.contains(event.target)
-      ) {
+      if (event.target instanceof Node && !wrapperRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
@@ -347,9 +302,7 @@ function NotificationsMenu({
   }
 
   function markOneRead(id: string) {
-    setItems((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, unread: false } : n)),
-    );
+    setItems((prev) => prev.map((n) => (n.id === id ? { ...n, unread: false } : n)));
   }
 
   return (
@@ -366,7 +319,7 @@ function NotificationsMenu({
       >
         <BellIcon className="size-4" />
         {unreadCount > 0 && (
-          <span className="absolute -right-0.75 -top-0.75 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+          <span className="bg-primary text-primary-foreground absolute -top-0.75 -right-0.75 flex size-4 items-center justify-center rounded-full text-[9px] font-bold">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -376,7 +329,7 @@ function NotificationsMenu({
         <div
           role="menu"
           aria-label="الإشعارات"
-          className="absolute left-0 top-[calc(100%+0.5rem)] w-92 overflow-hidden rounded-2xl border bg-background shadow-xl"
+          className="bg-background absolute top-[calc(100%+0.5rem)] left-0 w-92 overflow-hidden rounded-2xl border shadow-xl"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b px-4 py-3">
@@ -385,7 +338,7 @@ function NotificationsMenu({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 px-2 text-xs gap-1"
+                className="h-7 gap-1 px-2 text-xs"
                 onClick={markAllRead}
               >
                 <CheckCircleIcon className="size-3.5" />
@@ -435,42 +388,33 @@ function NotificationsMenu({
                             notificationColors[type],
                           )}
                         >
-                          <IconComponent
-                            className={cn(
-                              "size-4",
-                              notificationIconColors[type],
-                            )}
-                          />
+                          <IconComponent className={cn("size-4", notificationIconColors[type])} />
                         </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-3">
-                            <p className="text-sm font-medium leading-5">
-                              {item.title}
-                            </p>
+                            <p className="text-sm leading-5 font-medium">{item.title}</p>
                             <div className="flex shrink-0 items-center gap-1">
-                              <span className="text-[11px] text-muted-foreground">
-                                {item.time}
-                              </span>
+                              <span className="text-muted-foreground text-[11px]">{item.time}</span>
                               {item.unread && (
                                 <button
                                   type="button"
                                   onClick={() => markOneRead(item.id)}
-                                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="opacity-0 transition-opacity group-hover:opacity-100"
                                   title="تمييز كمقروء"
                                 >
-                                  <XCircleIcon className="size-3.5 text-muted-foreground hover:text-foreground" />
+                                  <XCircleIcon className="text-muted-foreground hover:text-foreground size-3.5" />
                                 </button>
                               )}
                             </div>
                           </div>
-                          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                          <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">
                             {item.description}
                           </p>
                         </div>
 
                         {item.unread && (
-                          <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
+                          <span className="bg-primary mt-1.5 size-2 shrink-0 rounded-full" />
                         )}
                       </div>
                     </li>
@@ -479,9 +423,9 @@ function NotificationsMenu({
               </ul>
             ) : (
               <div className="px-4 py-10 text-center">
-                <BellIcon className="mx-auto mb-2 size-8 text-muted-foreground/40" />
+                <BellIcon className="text-muted-foreground/40 mx-auto mb-2 size-8" />
                 <p className="text-sm font-medium">لا توجد إشعارات</p>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <p className="text-muted-foreground mt-1 text-xs">
                   ستظهر هنا أحدث التنبيهات والنشاط.
                 </p>
               </div>
@@ -492,7 +436,7 @@ function NotificationsMenu({
           <div className="border-t px-4 py-2">
             <Link
               to="/notifications"
-              className="block text-center text-xs text-primary hover:underline"
+              className="text-primary block text-center text-xs hover:underline"
             >
               عرض كل الإشعارات
             </Link>
@@ -509,10 +453,7 @@ function DesktopNav({ isLoggedIn }: { isLoggedIn: boolean }) {
       <NavigationMenuList className="gap-1" dir="rtl">
         {isLoggedIn && (
           <NavigationMenuItem
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "border-0 px-4",
-            )}
+            className={cn(buttonVariants({ variant: "ghost" }), "border-0 px-4")}
             render={<Link to="/library" className="nav-link" />}
           >
             كتبي
@@ -574,15 +515,15 @@ function DiscoverMenuContent() {
   return (
     <div className="p-1">
       {/* Featured / trending strip */}
-      <div className="mb-1 rounded-lg bg-muted/60 px-3 py-2">
-        <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <div className="bg-muted/60 mb-1 rounded-lg px-3 py-2">
+        <p className="text-muted-foreground mb-1.5 text-[10px] font-semibold tracking-widest uppercase">
           الأكثر قراءة هذا الأسبوع
         </p>
         <Link
           to="/discover/books"
           // TODO: Trending
           search={{ sort: "newest" }}
-          className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
+          className="hover:text-primary flex items-center gap-2 text-sm font-medium transition-colors"
         >
           <TrophyIcon className="size-4 text-yellow-500" weight="fill" />
           استعرض الكتب الأكثر رواجاً
@@ -609,8 +550,8 @@ function NavListItem({ item }: { item: NavItem }) {
             "cursor-not-allowed opacity-50",
           )}
         >
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors">
-            <item.icon className="size-5 text-muted-foreground" />
+          <div className="bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors">
+            <item.icon className="text-muted-foreground size-5" />
           </div>
           <div className="flex-1 space-y-0.5">
             <div className="flex items-center gap-1.5 text-sm font-medium">
@@ -619,9 +560,7 @@ function NavListItem({ item }: { item: NavItem }) {
                 قريباً
               </Badge>
             </div>
-            <p className="line-clamp-1 text-xs text-muted-foreground">
-              {item.description}
-            </p>
+            <p className="text-muted-foreground line-clamp-1 text-xs">{item.description}</p>
           </div>
         </span>
       </li>
@@ -634,16 +573,14 @@ function NavListItem({ item }: { item: NavItem }) {
         render={
           <Link
             to={item.href}
-            className="group flex select-none items-center gap-3 rounded-lg p-2.5 leading-none no-underline outline-none transition-colors hover:bg-accent focus:bg-accent"
+            className="group hover:bg-accent focus:bg-accent flex items-center gap-3 rounded-lg p-2.5 leading-none no-underline transition-colors outline-none select-none"
           >
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-primary/10">
-              <item.icon className="size-5 text-muted-foreground transition-all duration-200 group-hover:text-primary group-hover:scale-110 dark:group-hover:brightness-150" />
+            <div className="bg-muted group-hover:bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors">
+              <item.icon className="text-muted-foreground group-hover:text-primary size-5 transition-all duration-200 group-hover:scale-110 dark:group-hover:brightness-150" />
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">
-                {item.description}
-              </p>
+              <p className="text-muted-foreground line-clamp-1 text-xs">{item.description}</p>
             </div>
           </Link>
         }

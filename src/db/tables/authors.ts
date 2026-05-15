@@ -1,11 +1,5 @@
-import {
-  integer,
-  pgTable,
-  text,
-  timestamp,
-  uniqueIndex,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+
 import { anonymousRole, authenticatedRole, crudPolicy } from "../roles";
 
 // ─────────────────────────────────────────────────────────────

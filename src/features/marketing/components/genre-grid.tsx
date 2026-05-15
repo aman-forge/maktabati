@@ -48,33 +48,27 @@ const GENRES: Genre[] = [
 
 export function GenreGrid() {
   return (
-    <section
-      dir="rtl"
-      className="flex flex-col gap-8 px-6 lg:px-12 container mx-auto"
-    >
+    <section dir="rtl" className="container mx-auto flex flex-col gap-8 px-6 lg:px-12">
       {/* Section header */}
       <div className="flex items-end justify-between">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <span
-              className="w-1 h-5 rounded-full bg-primary shrink-0"
-              aria-hidden="true"
-            />
+            <span className="bg-primary h-5 w-1 shrink-0 rounded-full" aria-hidden="true" />
             <h2
-              className="text-2xl font-bold tracking-tight text-foreground"
+              className="text-foreground text-2xl font-bold tracking-tight"
               style={{ fontFamily: "var(--font-display)" }}
             >
               تصفح حسب التصنيفات
             </h2>
           </div>
-          <p className="text-sm text-muted-foreground pe-3">
+          <p className="text-muted-foreground pe-3 text-sm">
             ابحث عن قراءتك المثالية عبر مجموعات التصنيفات المنتقاة بعناية.
           </p>
         </div>
 
         <Badge
           variant="secondary"
-          className="shrink-0 text-xs px-3 py-1.5 rounded-full tabular-nums"
+          className="shrink-0 rounded-full px-3 py-1.5 text-xs tabular-nums"
         >
           {GENRES.length} تصنيفات
         </Badge>
@@ -83,7 +77,7 @@ export function GenreGrid() {
       <Separator className="bg-border -mt-2" />
 
       {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {GENRES.map((genre) => {
           const Icon = genre.icon;
           const color = `hsl(${genre.hsl})`;
@@ -94,12 +88,12 @@ export function GenreGrid() {
             <a
               key={genre.name}
               href="/"
-              className="group relative flex flex-col gap-4 p-5 rounded-2xl border border-border bg-card overflow-hidden transition-all duration-200 hover:border-border/80 hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group border-border bg-card hover:border-border/80 focus-visible:ring-ring relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:outline-none"
               aria-label={`تصفح ${genre.name}`}
             >
               {/* Radial glow on hover */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 style={{
                   background: `radial-gradient(ellipse at 15% 0%, ${colorGlow} 0%, transparent 65%)`,
                 }}
@@ -107,34 +101,32 @@ export function GenreGrid() {
 
               {/* Icon bubble */}
               <div
-                className="relative z-10 w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shadow-sm"
+                className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm transition-transform duration-200 group-hover:scale-110"
                 style={{ backgroundColor: colorBg, color }}
               >
-                <Icon weight="duotone" className="w-5 h-5" />
+                <Icon weight="duotone" className="h-5 w-5" />
               </div>
 
               {/* Text */}
-              <div className="relative z-10 flex flex-col gap-0.5 flex-1">
-                <h3 className="text-sm font-semibold leading-snug text-balance text-foreground">
+              <div className="relative z-10 flex flex-1 flex-col gap-0.5">
+                <h3 className="text-foreground text-sm leading-snug font-semibold text-balance">
                   {genre.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">
-                  {genre.count} كتاب
-                </p>
+                <p className="text-muted-foreground text-xs">{genre.count} كتاب</p>
               </div>
 
               {/* Explore arrow — slides in on hover */}
               <div
-                className="relative z-10 flex items-center gap-1 text-xs font-medium transition-all duration-200 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
+                className="relative z-10 flex translate-y-1 items-center gap-1 text-xs font-medium opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100"
                 style={{ color }}
               >
                 استكشف
-                <ArrowUpRight weight="bold" className="w-3.5 h-3.5" />
+                <ArrowUpRight weight="bold" className="h-3.5 w-3.5" />
               </div>
 
               {/* Subtle bottom accent line */}
               <div
-                className="absolute bottom-0 inset-x-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                className="absolute inset-x-0 bottom-0 h-0.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                 style={{
                   background: `linear-gradient(to left, ${color}, transparent)`,
                 }}
