@@ -14,12 +14,20 @@ import {
 } from "@phosphor-icons/react";
 
 import { Button } from "@shadcn/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@shadcn/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@shadcn/dialog";
 import { Input } from "@shadcn/input";
 import { Textarea } from "@shadcn/textarea";
 import React from "react";
 import { cn } from "@/ui/lib/utils";
-import type { BookCardBook, BookType } from "../../../features/books/server/get-books";
+import type {
+  BookCardBook,
+  BookType,
+} from "../../../features/books/server/get-books";
 import { Label } from "../ui/label";
 
 /* ─── Status config ───────────────────────────────────────────────── */
@@ -29,7 +37,8 @@ const STATUSES = [
     label: "أخطط للقراءة",
     icon: BookmarkSimpleIcon,
     pill: "bg-slate-500/10 text-slate-400 border-slate-500/20",
-    active: "bg-slate-600 border-slate-600 shadow-slate-500/30 shadow-md text-white",
+    active:
+      "bg-slate-600 border-slate-600 shadow-slate-500/30 shadow-md text-white",
     dot: "bg-slate-400",
     barColor: "bg-slate-400",
   },
@@ -47,7 +56,8 @@ const STATUSES = [
     label: "مكتمل",
     icon: CheckCircleIcon,
     pill: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    active: "bg-emerald-500 border-emerald-500 shadow-emerald-500/30 shadow-md text-white",
+    active:
+      "bg-emerald-500 border-emerald-500 shadow-emerald-500/30 shadow-md text-white",
     dot: "bg-emerald-400",
     barColor: "bg-emerald-400",
   },
@@ -56,7 +66,8 @@ const STATUSES = [
     label: "مؤجل",
     icon: PauseIcon,
     pill: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    active: "bg-amber-500 border-amber-500 shadow-amber-500/30 shadow-md text-white",
+    active:
+      "bg-amber-500 border-amber-500 shadow-amber-500/30 shadow-md text-white",
     dot: "bg-amber-400",
     barColor: "bg-amber-400",
   },
@@ -65,7 +76,8 @@ const STATUSES = [
     label: "متروك",
     icon: ProhibitIcon,
     pill: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    active: "bg-rose-500 border-rose-500 shadow-rose-500/30 shadow-md text-white",
+    active:
+      "bg-rose-500 border-rose-500 shadow-rose-500/30 shadow-md text-white",
     dot: "bg-rose-400",
     barColor: "bg-rose-400",
   },
@@ -114,16 +126,26 @@ export function TrackBookModal({
   onSave,
   initialData,
 }: TrackBookModalProps) {
-  const [isFavorite, setIsFavorite] = React.useState(initialData?.isFavorite ?? false);
-  const [status, setStatus] = React.useState(initialData?.status ?? "plan-to-read");
+  const [isFavorite, setIsFavorite] = React.useState(
+    initialData?.isFavorite ?? false,
+  );
+  const [status, setStatus] = React.useState(
+    initialData?.status ?? "plan-to-read",
+  );
   const [score, setScore] = React.useState(initialData?.score ?? 0);
-  const [pagesProgress, setPagesProgress] = React.useState(initialData?.pagesProgress ?? 0);
+  const [pagesProgress, setPagesProgress] = React.useState(
+    initialData?.pagesProgress ?? 0,
+  );
   const [startDate, setStartDate] = React.useState(
     initialData?.startDate ?? new Date().toISOString().split("T")[0],
   );
-  const [finishDate, setFinishDate] = React.useState(initialData?.finishDate ?? "");
+  const [finishDate, setFinishDate] = React.useState(
+    initialData?.finishDate ?? "",
+  );
   const [notes, setNotes] = React.useState(initialData?.notes ?? "");
-  const [rereadCount, setRereadCount] = React.useState(initialData?.rereadCount ?? 0);
+  const [rereadCount, setRereadCount] = React.useState(
+    initialData?.rereadCount ?? 0,
+  );
   const [hoveredScore, setHoveredScore] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -132,12 +154,22 @@ export function TrackBookModal({
       setStatus(initialData?.status ?? "plan-to-read");
       setScore(initialData?.score ?? 0);
       setPagesProgress(initialData?.pagesProgress ?? 0);
-      setStartDate(initialData?.startDate ?? new Date().toISOString().split("T")[0]);
+      setStartDate(
+        initialData?.startDate ?? new Date().toISOString().split("T")[0],
+      );
       setFinishDate(initialData?.finishDate ?? "");
       setNotes(initialData?.notes ?? "");
       setRereadCount(initialData?.rereadCount ?? 0);
     }
   }, [open, book, initialData]);
+
+  React.useEffect(() => {
+    if (status === "completed" && book?.pageCount) {
+      setPagesProgress(book.pageCount);
+    } else if (status === "plan-to-read") {
+      setPagesProgress(0);
+    }
+  }, [status, book?.pageCount]);
 
   const handleSave = () => {
     if (book && onSave) {
@@ -158,7 +190,8 @@ export function TrackBookModal({
   if (!book) return null;
 
   const totalPages = book.pageCount || 0;
-  const progressPercent = totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
+  const progressPercent =
+    totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
   const currentStatus = STATUSES.find((s) => s.value === status);
   const showFinishDate = status === "completed";
   const displayScore = hoveredScore ?? score;
@@ -217,7 +250,10 @@ export function TrackBookModal({
             )}
             aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
           >
-            <HeartIcon weight={isFavorite ? "fill" : "bold"} className="w-4 h-4" />
+            <HeartIcon
+              weight={isFavorite ? "fill" : "bold"}
+              className="w-4 h-4"
+            />
           </Button>
 
           {/* Book info row */}
@@ -258,7 +294,9 @@ export function TrackBookModal({
         <div className="flex-1 overflow-y-auto pb-4 pt-8 space-y-6 bg-card dark:bg-background">
           {/* ── Status ────────────────────────────────────────────── */}
           <section className="space-y-2.5">
-            <SectionLabel icon={<ClockIcon className="w-3.5 h-3.5" />}>حالة القراءة</SectionLabel>
+            <SectionLabel icon={<ClockIcon className="w-3.5 h-3.5" />}>
+              حالة القراءة
+            </SectionLabel>
             <div className="flex flex-nowrap gap-1.5 overflow-x-auto no-scrollbar px-4">
               {STATUSES.map((s) => {
                 const Icon = s.icon;
@@ -273,7 +311,10 @@ export function TrackBookModal({
                       isActive ? s.active : cn(s.pill, "hover:brightness-125"),
                     )}
                   >
-                    <Icon weight={isActive ? "fill" : "bold"} className="w-3.5 h-3.5 shrink-0" />
+                    <Icon
+                      weight={isActive ? "fill" : "bold"}
+                      className="w-3.5 h-3.5 shrink-0"
+                    />
                     {s.label}
                   </button>
                 );
@@ -298,9 +339,16 @@ export function TrackBookModal({
                   value={pagesProgress || ""}
                   onChange={(e) =>
                     setPagesProgress(
-                      Math.max(0, Math.min(totalPages || 9999, parseInt(e.target.value, 10) || 0)),
+                      Math.max(
+                        0,
+                        Math.min(
+                          totalPages || 9999,
+                          parseInt(e.target.value, 10) || 0,
+                        ),
+                      ),
                     )
                   }
+                  disabled={status === "completed" || status === "plan-to-read"}
                   placeholder="0"
                   className="pl-16"
                 />
@@ -351,6 +399,7 @@ export function TrackBookModal({
                 label="بدأت القراءة"
                 value={startDate}
                 onChange={setStartDate}
+                disabled={status === "plan-to-read"}
               />
               <DateField
                 id="finish-date"
@@ -371,9 +420,12 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Notes ─────────────────────────────────────────────── */}
-          <section className="space-y-2.5 px-4">
-            <SectionLabel icon={<NotePencilIcon className="w-3.5 h-3.5" />}>ملاحظاتي</SectionLabel>
+          <section className="space-y-2.5 px-4 hidden">
+            <SectionLabel icon={<NotePencilIcon className="w-3.5 h-3.5" />}>
+              ملاحظاتي
+            </SectionLabel>
             <Textarea
+              disabled // TODO: NOTES
               placeholder="اكتب انطباعاتك وملاحظاتك عن الكتاب..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -385,13 +437,17 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Score: 10-point scale ──────────────────────────────── */}
-          <section className="space-y-2.5 px-4">
+          <section className="space-y-2.5 px-4 hidden">
             <div className="flex items-center justify-between">
-              <SectionLabel icon={<StarIcon className="w-3.5 h-3.5" />}>التقييم</SectionLabel>
+              <SectionLabel icon={<StarIcon className="w-3.5 h-3.5" />}>
+                التقييم
+              </SectionLabel>
               <span
                 className={cn(
                   "text-xs font-semibold transition-colors",
-                  displayScore > 0 ? "text-amber-400" : "text-muted-foreground/40",
+                  displayScore > 0
+                    ? "text-amber-400"
+                    : "text-muted-foreground/40",
                 )}
               >
                 {displayScore > 0
@@ -402,9 +458,13 @@ export function TrackBookModal({
 
             {/* 10-square grid */}
             {/* biome-ignore lint/a11y/noStaticElementInteractions: I want this*/}
-            <div className="flex gap-1" onMouseLeave={() => setHoveredScore(null)}>
+            <div
+              className="flex gap-1"
+              onMouseLeave={() => setHoveredScore(null)}
+            >
               {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                 <Button
+                  disabled // TODO: RATING
                   key={n}
                   type="button"
                   variant={"outline"}
@@ -425,12 +485,15 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Reread counter ─────────────────────────────────────── */}
-          <section className="space-y-2.5 px-4">
-            <SectionLabel icon={<ArrowCounterClockwiseIcon className="w-3.5 h-3.5" />}>
+          <section className="space-y-2.5 px-4 hidden">
+            <SectionLabel
+              icon={<ArrowCounterClockwiseIcon className="w-3.5 h-3.5" />}
+            >
               عدد مرات القراءة
             </SectionLabel>
             <div className="flex items-center gap-3">
               <Button
+                disabled // TODO: REREAD
                 type="button"
                 onClick={() => setRereadCount((c) => Math.max(0, c - 1))}
                 variant="outline"
@@ -442,6 +505,7 @@ export function TrackBookModal({
                 {rereadCount}
               </span>
               <Button
+                disabled // TODO: REREAD
                 type="button"
                 onClick={() => setRereadCount((c) => c + 1)}
                 variant="outline"
@@ -465,13 +529,23 @@ export function TrackBookModal({
           {/* Status pill */}
           <div className="flex items-center gap-2 min-w-0">
             {currentStatus && (
-              <span className={cn("w-2 h-2 rounded-full shrink-0", currentStatus.dot)} />
+              <span
+                className={cn(
+                  "w-2 h-2 rounded-full shrink-0",
+                  currentStatus.dot,
+                )}
+              />
             )}
-            <span className="text-sm text-muted-foreground truncate">{currentStatus?.label}</span>
+            <span className="text-sm text-muted-foreground truncate">
+              {currentStatus?.label}
+            </span>
             {isFavorite && (
               <>
                 <span className="text-muted-foreground/20 shrink-0">·</span>
-                <HeartIcon weight="fill" className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                <HeartIcon
+                  weight="fill"
+                  className="w-3.5 h-3.5 text-rose-400 shrink-0"
+                />
               </>
             )}
             {score > 0 && (
@@ -485,7 +559,12 @@ export function TrackBookModal({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Button type="button" onClick={() => onOpenChange(false)} variant="ghost" size="sm">
+            <Button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              variant="ghost"
+              size="sm"
+            >
               إلغاء
             </Button>
             <Button type="button" onClick={handleSave} size="sm">
@@ -500,7 +579,13 @@ export function TrackBookModal({
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
 
-function SectionLabel({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+function SectionLabel({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex items-center gap-1.5 px-4 text-[11px] font-semibold text-muted-foreground/50 uppercase tracking-widest">
       {icon}
@@ -528,7 +613,10 @@ function DateField({
 }) {
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={id} className="block text-[11px] text-muted-foreground/40 font-medium">
+      <Label
+        htmlFor={id}
+        className="block text-[11px] text-muted-foreground/40 font-medium"
+      >
         {label}
       </Label>
       <Input
@@ -538,7 +626,9 @@ function DateField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className={cn(disabled && "opacity-30 cursor-not-allowed pointer-events-none")}
+        className={cn(
+          disabled && "opacity-30 cursor-not-allowed pointer-events-none",
+        )}
       />
     </div>
   );

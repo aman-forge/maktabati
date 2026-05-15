@@ -98,9 +98,9 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
           </div>
         )}
 
-        {/* Add / Track button — appears on hover */}
         <Button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             openTrackModal(book);
           }}

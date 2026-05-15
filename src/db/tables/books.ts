@@ -10,7 +10,12 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles";
+import {
+  anonymousRole,
+  authenticatedRole,
+  authUid,
+  crudPolicy,
+} from "../roles";
 import { authors, publishers } from "./authors";
 import { profiles } from "./users";
 
