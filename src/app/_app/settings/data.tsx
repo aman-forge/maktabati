@@ -1,5 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
-
 import {
 	ArrowClockwiseIcon,
 	CheckCircleIcon,
@@ -29,6 +27,7 @@ import {
 	SelectValue,
 } from "@shadcn/select";
 import { Switch } from "@shadcn/switch";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
 	SectionWrapper,
@@ -36,7 +35,7 @@ import {
 	SettingRow,
 } from "@/features/settings/components/section-wrapper";
 
-export const Route = createFileRoute("/_app/settings/import-export")({
+export const Route = createFileRoute("/_app/settings/data")({
 	component: DataSection,
 });
 
@@ -53,46 +52,46 @@ function DataSection() {
 
 	return (
 		<SectionWrapper
-			title="Data & Export"
-			description="Manage your data, export, and account deletion."
+			title="البيانات والتصدير"
+			description="إدارة بياناتك، وتصديرها، وحذف الحساب."
 		>
 			<SettingCard
-				title="Your Data Overview"
-				description="Summary of all your Bookshelf data."
+				title="نظرة عامة على بياناتك"
+				description="ملخص لجميع بيانات مكتبتي."
 			>
 				<div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
 					<div className="rounded-lg border border-border bg-secondary/50 p-4 text-center">
 						<p className="text-2xl font-bold text-foreground">
 							{dataStats.books}
 						</p>
-						<p className="text-xs text-muted-foreground">Books</p>
+						<p className="text-xs text-muted-foreground">الكتب</p>
 					</div>
 					<div className="rounded-lg border border-border bg-secondary/50 p-4 text-center">
 						<p className="text-2xl font-bold text-foreground">
 							{dataStats.reviews}
 						</p>
-						<p className="text-xs text-muted-foreground">Reviews</p>
+						<p className="text-xs text-muted-foreground">المراجعات</p>
 					</div>
 					<div className="rounded-lg border border-border bg-secondary/50 p-4 text-center">
 						<p className="text-2xl font-bold text-foreground">
 							{dataStats.lists}
 						</p>
-						<p className="text-xs text-muted-foreground">Lists</p>
+						<p className="text-xs text-muted-foreground">القوائم</p>
 					</div>
 					<div className="rounded-lg border border-border bg-secondary/50 p-4 text-center">
 						<p className="text-2xl font-bold text-foreground">
 							{dataStats.notes}
 						</p>
-						<p className="text-xs text-muted-foreground">Notes</p>
+						<p className="text-xs text-muted-foreground">الملاحظات</p>
 					</div>
 				</div>
 				<div className="mt-4 flex items-center justify-between rounded-lg bg-secondary p-4">
 					<div>
 						<p className="text-sm font-medium text-foreground">
-							Total Data Size
+							إجمالي حجم البيانات
 						</p>
 						<p className="text-xs text-muted-foreground">
-							All your books, reviews, and activity
+							جميع كتبك ومراجعاتك ونشاطك
 						</p>
 					</div>
 					<Badge variant="outline" className="border-border text-foreground">
@@ -102,8 +101,8 @@ function DataSection() {
 			</SettingCard>
 
 			<SettingCard
-				title="Export Data"
-				description="Download a copy of all your data."
+				title="تصدير البيانات"
+				description="تنزيل نسخة من جميع بياناتك."
 			>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4">
@@ -112,7 +111,7 @@ function DataSection() {
 								htmlFor="export-format"
 								className="text-sm font-medium text-foreground"
 							>
-								Export Format
+								صيغة التصدير
 							</label>
 							<Select
 								value={exportFormat}
@@ -129,7 +128,7 @@ function DataSection() {
 										<div className="flex items-center gap-2">
 											<FileTextIcon className="h-4 w-4 text-popover-foreground" />
 											<span className="text-popover-foreground">
-												JSON (Recommended)
+												JSON (موصى به)
 											</span>
 										</div>
 									</SelectItem>
@@ -143,7 +142,7 @@ function DataSection() {
 										<div className="flex items-center gap-2">
 											<FileZipIcon className="h-4 w-4 text-popover-foreground" />
 											<span className="text-popover-foreground">
-												ZIP Archive
+												أرشيف ZIP
 											</span>
 										</div>
 									</SelectItem>
@@ -154,36 +153,36 @@ function DataSection() {
 
 					<div className="space-y-2">
 						<p className="text-sm font-medium text-foreground">
-							Include in Export:
+							تضمين في التصدير:
 						</p>
 						<div className="space-y-2">
 							<SettingRow
-								label="Reading History"
-								description="All books you've read"
+								label="سجل القراءة"
+								description="جميع الكتب التي قرأتها"
 							>
 								<Switch defaultChecked />
 							</SettingRow>
 							<SettingRow
-								label="Reviews & Ratings"
-								description="Your book reviews"
+								label="المراجعات والتقييمات"
+								description="مراجعات الكتب الخاصة بك"
 							>
 								<Switch defaultChecked />
 							</SettingRow>
 							<SettingRow
-								label="Reading Lists"
-								description="Custom lists you've created"
+								label="قوائم القراءة"
+								description="القوائم المخصصة التي أنشأتها"
 							>
 								<Switch defaultChecked />
 							</SettingRow>
 							<SettingRow
-								label="Notes & Highlights"
-								description="Book annotations"
+								label="الملاحظات والتمييزات"
+								description="تعليقات الكتب"
 							>
 								<Switch defaultChecked />
 							</SettingRow>
 							<SettingRow
-								label="Social Connections"
-								description="Followers and following"
+								label="التواصل الاجتماعي"
+								description="المتابعون ومن تتابعهم"
 							>
 								<Switch />
 							</SettingRow>
@@ -192,14 +191,14 @@ function DataSection() {
 
 					<Button className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
 						<DownloadSimpleIcon className="h-5 w-5" />
-						Export My Data
+						تصدير بياناتي
 					</Button>
 				</div>
 			</SettingCard>
 
 			<SettingCard
-				title="Previous Exports"
-				description="Download your past data exports."
+				title="عمليات التصدير السابقة"
+				description="تنزيل عمليات تصدير البيانات السابقة."
 			>
 				<div className="space-y-3">
 					<div className="flex items-center justify-between rounded-lg border border-border bg-secondary/50 p-4">
@@ -213,14 +212,14 @@ function DataSection() {
 								</p>
 								<p className="text-xs text-muted-foreground">
 									<ClockIcon className="mr-1 inline h-3 w-3" />
-									Created Dec 1, 2024 • 18.2 MB
+									تم الإنشاء في 1 ديسمبر 2024 • 18.2 MB
 								</p>
 							</div>
 						</div>
 						<div className="flex items-center gap-2">
 							<Badge className="gap-1 bg-primary/20 text-primary">
 								<CheckCircleIcon className="h-3 w-3" weight="fill" />
-								Ready
+								جاهز
 							</Badge>
 							<Button variant="ghost" size="sm" className="text-primary">
 								<DownloadSimpleIcon className="h-4 w-4" />
@@ -238,7 +237,7 @@ function DataSection() {
 								</p>
 								<p className="text-xs text-muted-foreground">
 									<ClockIcon className="mr-1 inline h-3 w-3" />
-									Created Nov 15, 2024 • 16.8 MB
+									تم الإنشاء في 15 نوفمبر 2024 • 16.8 MB
 								</p>
 							</div>
 						</div>
@@ -247,7 +246,7 @@ function DataSection() {
 								variant="outline"
 								className="border-border text-muted-foreground"
 							>
-								Expired
+								منتهي الصلاحية
 							</Badge>
 							<Button
 								variant="ghost"
@@ -261,13 +260,13 @@ function DataSection() {
 					</div>
 				</div>
 				<p className="mt-3 text-xs text-muted-foreground">
-					Export files are available for 30 days after creation.
+					ملفات التصدير متاحة لمدة 30 يومًا بعد إنشائها.
 				</p>
 			</SettingCard>
 
 			<SettingCard
-				title="Import Data"
-				description="Import data from other platforms."
+				title="استيراد البيانات"
+				description="استيراد البيانات من منصات أخرى."
 			>
 				<div className="space-y-4">
 					<div className="rounded-lg border-2 border-dashed border-border bg-secondary/30 p-8 text-center">
@@ -275,31 +274,31 @@ function DataSection() {
 							<ArrowClockwiseIcon className="h-6 w-6 text-muted-foreground" />
 						</div>
 						<p className="text-sm font-medium text-foreground">
-							Drop your export file here
+							أفلت ملف التصدير هنا
 						</p>
 						<p className="mt-1 text-xs text-muted-foreground">
-							Supports JSON, CSV from Goodreads, LibraryThing, and more
+							يدعم JSON و CSV من Goodreads و LibraryThing والمزيد
 						</p>
 						<Button variant="secondary" size="sm" className="mt-4">
-							Choose File
+							اختر ملفاً
 						</Button>
 					</div>
 				</div>
 			</SettingCard>
 
 			<SettingCard
-				title="Clear Data"
-				description="Remove specific types of data from your account."
+				title="مسح البيانات"
+				description="إزالة أنواع معينة من البيانات من حسابك."
 				className="border-destructive/30"
 			>
 				<div className="space-y-3">
 					<div className="flex items-center justify-between rounded-lg border border-border bg-secondary/50 p-4">
 						<div>
 							<p className="text-sm font-medium text-foreground">
-								Clear Reading History
+								مسح سجل القراءة
 							</p>
 							<p className="text-xs text-muted-foreground">
-								Remove all books marked as read
+								إزالة جميع الكتب المحددة كمقروءة
 							</p>
 						</div>
 						<Dialog>
@@ -310,7 +309,7 @@ function DataSection() {
 										size="sm"
 										className="text-destructive hover:text-destructive"
 									>
-										Clear
+										مسح
 									</Button>
 								}
 							/>
@@ -318,18 +317,18 @@ function DataSection() {
 							<DialogContent className="bg-card">
 								<DialogHeader>
 									<DialogTitle className="text-card-foreground">
-										Clear Reading History?
+										مسح سجل القراءة؟
 									</DialogTitle>
 									<DialogDescription>
-										This will remove all books from your reading history. Your
-										reviews and ratings will be preserved.
+										سيؤدي هذا إلى إزالة جميع الكتب من سجل القراءة الخاص بك. سيتم
+										الحفاظ على مراجعاتك وتقييماتك.
 									</DialogDescription>
 								</DialogHeader>
 								<DialogFooter>
 									<Button variant="ghost" className="text-muted-foreground">
-										Cancel
+										إلغاء
 									</Button>
-									<Button variant="destructive">Clear History</Button>
+									<Button variant="destructive">مسح السجل</Button>
 								</DialogFooter>
 							</DialogContent>
 						</Dialog>
@@ -337,10 +336,10 @@ function DataSection() {
 					<div className="flex items-center justify-between rounded-lg border border-border bg-secondary/50 p-4">
 						<div>
 							<p className="text-sm font-medium text-foreground">
-								Clear All Reviews
+								مسح جميع المراجعات
 							</p>
 							<p className="text-xs text-muted-foreground">
-								Delete all your reviews and ratings
+								حذف جميع مراجعاتك وتقييماتك
 							</p>
 						</div>
 						<Button
@@ -348,16 +347,16 @@ function DataSection() {
 							size="sm"
 							className="text-destructive hover:text-destructive"
 						>
-							Clear
+							مسح
 						</Button>
 					</div>
 					<div className="flex items-center justify-between rounded-lg border border-border bg-secondary/50 p-4">
 						<div>
 							<p className="text-sm font-medium text-foreground">
-								Clear Notes & Highlights
+								مسح الملاحظات والتمييزات
 							</p>
 							<p className="text-xs text-muted-foreground">
-								Remove all your book annotations
+								إزالة جميع تعليقات الكتب الخاصة بك
 							</p>
 						</div>
 						<Button
@@ -365,15 +364,15 @@ function DataSection() {
 							size="sm"
 							className="text-destructive hover:text-destructive"
 						>
-							Clear
+							مسح
 						</Button>
 					</div>
 				</div>
 			</SettingCard>
 
 			<SettingCard
-				title="Delete Everything"
-				description="Permanently delete your entire account."
+				title="حذف كل شيء"
+				description="حذف حسابك بالكامل نهائياً."
 				className="border-destructive/30"
 			>
 				<div className="flex items-center gap-4 rounded-lg bg-destructive/10 p-4">
@@ -382,11 +381,11 @@ function DataSection() {
 					</div>
 					<div className="flex-1">
 						<p className="text-sm font-medium text-foreground">
-							This action is irreversible
+							هذا الإجراء لا يمكن التراجع عنه
 						</p>
 						<p className="text-xs text-muted-foreground">
-							All your data, reviews, reading lists, and social connections will
-							be permanently deleted.
+							سيتم حذف جميع بياناتك ومراجعاتك وقوائم القراءة والتواصل الاجتماعي
+							نهائياً.
 						</p>
 					</div>
 					<Dialog>
@@ -394,37 +393,37 @@ function DataSection() {
 							render={
 								<Button variant="destructive" size="sm">
 									<TrashIcon className="mr-2 h-4 w-4" />
-									Delete Account
+									حذف الحساب
 								</Button>
 							}
 						/>
 						<DialogContent className="bg-card">
 							<DialogHeader>
 								<DialogTitle className="text-card-foreground">
-									Delete Your Account?
+									حذف حسابك؟
 								</DialogTitle>
 								<DialogDescription>
-									This will permanently delete your account and all associated
-									data. This action cannot be undone.
+									سيؤدي هذا إلى حذف حسابك وجميع البيانات المرتبطة به نهائياً. لا
+									يمكن التراجع عن هذا الإجراء.
 								</DialogDescription>
 							</DialogHeader>
 							<div className="my-4 space-y-2">
 								<p className="text-sm text-muted-foreground">
-									Type{" "}
-									<strong className="text-foreground">delete my account</strong>{" "}
-									to confirm:
+									اكتب{" "}
+									<strong className="text-foreground">حذف حسابي</strong>{" "}
+									للتأكيد:
 								</p>
 								<input
 									type="text"
-									placeholder="delete my account"
+									placeholder="حذف حسابي"
 									className="w-full rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
 								/>
 							</div>
 							<DialogFooter>
 								<Button variant="ghost" className="text-muted-foreground">
-									Cancel
+									إلغاء
 								</Button>
-								<Button variant="destructive">Permanently Delete</Button>
+								<Button variant="destructive">حذف نهائي</Button>
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>

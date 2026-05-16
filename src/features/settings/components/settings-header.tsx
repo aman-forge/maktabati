@@ -1,4 +1,9 @@
-import { BellIcon, BooksIcon, CaretLeftIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import {
+	BellIcon,
+	BooksIcon,
+	CaretLeftIcon,
+	MagnifyingGlassIcon,
+} from "@phosphor-icons/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import { Button } from "@shadcn/button";
 import {
@@ -25,7 +30,10 @@ export function SettingsHeader() {
 					</Button>
 					<div className="hidden items-center gap-2 md:flex">
 						<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-							<BooksIcon className="h-5 w-5 text-primary-foreground" weight="fill" />
+							<BooksIcon
+								className="h-5 w-5 text-primary-foreground"
+								weight="fill"
+							/>
 						</div>
 						<span className="text-lg font-semibold tracking-tight text-foreground">
 							Bookshelf

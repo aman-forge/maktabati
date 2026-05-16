@@ -1,5 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
-
 import {
 	ArrowRightIcon,
 	CheckCircleIcon,
@@ -11,6 +9,7 @@ import {
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Switch } from "@shadcn/switch";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
 	SectionWrapper,
@@ -24,43 +23,43 @@ export const Route = createFileRoute("/_app/settings/integrations")({
 function IntegrationsSection() {
 	const integrations = [
 		{
-			name: "Kindle",
-			description: "Sync your Kindle library and reading progress",
+			name: "كيندل",
+			description: "مزامنة مكتبة كيندل وتقدم القراءة",
 			icon: "📱",
 			connected: true,
-			lastSync: "2 hours ago",
+			lastSync: "منذ ساعتين",
 		},
 		{
-			name: "Audible",
-			description: "Import audiobook library and listening history",
+			name: "أوديبل",
+			description: "استيراد مكتبة الكتب الصوتية وسجل الاستماع",
 			icon: "🎧",
 			connected: true,
-			lastSync: "1 day ago",
+			lastSync: "منذ يوم واحد",
 		},
 		{
 			name: "Goodreads",
-			description: "Import your Goodreads library and reviews",
+			description: "استيراد مكتبة Goodreads والمراجعات",
 			icon: "📚",
 			connected: false,
 			lastSync: null,
 		},
 		{
 			name: "Libby",
-			description: "Sync library loans and reading lists",
+			description: "مزامنة إعارات المكتبة وقوائم القراءة",
 			icon: "📖",
 			connected: false,
 			lastSync: null,
 		},
 		{
 			name: "Kobo",
-			description: "Connect your Kobo e-reader library",
+			description: "ربط مكتبة قارئ Kobo الإلكتروني",
 			icon: "📕",
 			connected: false,
 			lastSync: null,
 		},
 		{
 			name: "Apple Books",
-			description: "Import books from your Apple library",
+			description: "استيراد الكتب من مكتبة Apple الخاصة بك",
 			icon: "🍎",
 			connected: false,
 			lastSync: null,
@@ -71,18 +70,18 @@ function IntegrationsSection() {
 
 	return (
 		<SectionWrapper
-			title="Integrations"
-			description="Connect external services and sync your reading data."
+			title="التكاملات"
+			description="ربط الخدمات الخارجية ومزامنة بيانات القراءة الخاصة بك."
 		>
 			<SettingCard
-				title="Connected Services"
-				description="Manage your connected reading platforms."
+				title="الخدمات المتصلة"
+				description="إدارة منصات القراءة المتصلة الخاصة بك."
 				action={
 					<Badge
 						variant="outline"
 						className="gap-1 border-primary/30 text-primary"
 					>
-						<PlugsIcon className="h-3 w-3" weight="fill" />2 Connected
+						<PlugsIcon className="h-3 w-3" weight="fill" />2 متصلة
 					</Badge>
 				}
 			>
@@ -122,7 +121,7 @@ function IntegrationsSection() {
 									</p>
 									{integration.connected && integration.lastSync && (
 										<p className="mt-1 text-xs text-primary">
-											Last synced: {integration.lastSync}
+											آخر مزامنة: {integration.lastSync}
 										</p>
 									)}
 								</div>
@@ -134,19 +133,19 @@ function IntegrationsSection() {
 										size="sm"
 										className="text-muted-foreground"
 									>
-										Sync Now
+										مزامنة الآن
 									</Button>
 									<Button
 										variant="ghost"
 										size="sm"
 										className="text-destructive hover:text-destructive"
 									>
-										Disconnect
+										فصل
 									</Button>
 								</div>
 							) : (
 								<Button variant="secondary" size="sm" className="gap-1">
-									Connect
+									اتصال
 									<ArrowRightIcon className="h-4 w-4" />
 								</Button>
 							)}
@@ -156,13 +155,13 @@ function IntegrationsSection() {
 			</SettingCard>
 
 			<SettingCard
-				title="Sync Settings"
-				description="Configure how your data syncs."
+				title="إعدادات المزامنة"
+				description="تكوين كيفية مزامنة بياناتك."
 			>
 				<div className="divide-y divide-border">
 					<SettingRow
-						label="Automatic Sync"
-						description="Automatically sync connected services daily"
+						label="مزامنة تلقائية"
+						description="مزامنة الخدمات المتصلة تلقائياً يومياً"
 					>
 						<div className="flex items-center gap-3">
 							<CloudArrowUpIcon className="h-5 w-5 text-muted-foreground" />
@@ -170,20 +169,20 @@ function IntegrationsSection() {
 						</div>
 					</SettingRow>
 					<SettingRow
-						label="Sync Reading Progress"
-						description="Keep page numbers and progress in sync"
+						label="مزامنة تقدم القراءة"
+						description="الحفاظ على أرقام الصفحات والتقدم متزامناً"
 					>
 						<Switch defaultChecked />
 					</SettingRow>
 					<SettingRow
-						label="Import Reviews"
-						description="Bring in reviews from connected platforms"
+						label="استيراد المراجعات"
+						description="جلب المراجعات من المنصات المتصلة"
 					>
 						<Switch defaultChecked />
 					</SettingRow>
 					<SettingRow
-						label="Two-way Sync"
-						description="Push changes back to connected services"
+						label="مزامنة ثنائية الاتجاه"
+						description="إرسال التغييرات مرة أخرى إلى الخدمات المتصلة"
 					>
 						<Switch />
 					</SettingRow>
@@ -191,8 +190,8 @@ function IntegrationsSection() {
 			</SettingCard>
 
 			<SettingCard
-				title="Mobile Apps"
-				description="Download our apps for the best reading experience."
+				title="تطبيقات الهاتف"
+				description="قم بتنزيل تطبيقاتنا للحصول على أفضل تجربة قراءة."
 			>
 				<div className="grid gap-3 sm:grid-cols-2">
 					<div className="flex items-center gap-3 rounded-lg border border-border bg-secondary/50 p-4">
@@ -203,11 +202,11 @@ function IntegrationsSection() {
 							/>
 						</div>
 						<div className="flex-1">
-							<p className="text-sm font-medium text-foreground">iOS App</p>
-							<p className="text-xs text-muted-foreground">iPhone & iPad</p>
+							<p className="text-sm font-medium text-foreground">تطبيق iOS</p>
+							<p className="text-xs text-muted-foreground">آيفون وآيباد</p>
 						</div>
 						<Button variant="secondary" size="sm">
-							Download
+							تنزيل
 						</Button>
 					</div>
 					<div className="flex items-center gap-3 rounded-lg border border-border bg-secondary/50 p-4">
@@ -218,39 +217,39 @@ function IntegrationsSection() {
 							/>
 						</div>
 						<div className="flex-1">
-							<p className="text-sm font-medium text-foreground">Android App</p>
-							<p className="text-xs text-muted-foreground">Phone & Tablet</p>
+							<p className="text-sm font-medium text-foreground">تطبيق أندرويد</p>
+							<p className="text-xs text-muted-foreground">هاتف وتابلت</p>
 						</div>
 						<Button variant="secondary" size="sm">
-							Download
+							تنزيل
 						</Button>
 					</div>
 				</div>
 			</SettingCard>
 
 			<SettingCard
-				title="API Access"
-				description="For developers and power users."
+				title="وصول API"
+				description="للمطورين والمستخدمين المتقدمين."
 			>
 				<div className="space-y-4">
 					<div className="flex items-center gap-4 rounded-lg bg-secondary p-4">
 						<div className="flex-1">
-							<p className="text-sm font-medium text-foreground">API Key</p>
+							<p className="text-sm font-medium text-foreground">مفتاح API</p>
 							<p className="font-mono text-xs text-muted-foreground">
 								bks_••••••••••••••••
 							</p>
 						</div>
 						<Button variant="secondary" size="sm">
-							Reveal
+							كشف
 						</Button>
 						<Button variant="ghost" size="sm" className="text-muted-foreground">
-							Regenerate
+							إعادة إنشاء
 						</Button>
 					</div>
 					<p className="text-xs text-muted-foreground">
-						Use your API key to integrate Bookshelf with other applications.{" "}
-						<a href="#" className="text-primary hover:underline">
-							View Documentation
+						استخدم مفتاح API الخاص بك لربط مكتبتي مع تطبيقات أخرى.{" "}
+						<a href="/" className="text-primary hover:underline">
+							عرض التوثيق
 						</a>
 					</p>
 				</div>

@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-
 import {
+	BellIcon,
 	BooksIcon,
 	ChatCircleIcon,
 	DeviceMobileIcon,
@@ -13,6 +12,7 @@ import {
 import { Label } from "@shadcn/label";
 import { RadioGroup, RadioGroupItem } from "@shadcn/radio-group";
 import { Switch } from "@shadcn/switch";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
 	SectionWrapper,
@@ -23,6 +23,13 @@ import {
 export const Route = createFileRoute("/_app/settings/notifications")({
 	component: NotificationsSection,
 });
+
+const digestOptions = [
+	{ value: "instant", label: "فوري", desc: "على الفور" },
+	{ value: "daily", label: "يومي", desc: "ملخص يومي" },
+	{ value: "weekly", label: "أسبوعي", desc: "ملخص أسبوعي" },
+	{ value: "never", label: "أبداً", desc: "لا بريد" },
+];
 
 function NotificationsSection() {
 	const [emailDigest, setEmailDigest] = useState("daily");
@@ -37,190 +44,165 @@ function NotificationsSection() {
 		marketing: false,
 	});
 
-	const toggleNotification = (key: keyof typeof notifications) => {
+	const toggle = (key: keyof typeof notifications) =>
 		setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
-	};
 
 	return (
 		<SectionWrapper
 			title="الإشعارات"
-			description="اختر كيف ومتى تريد أن يتم إشعارك."
+			description="اختر كيف ومتى تريد أن يتم إشعارك عن النشاط في المجتمع."
 		>
+			{/* Email Digest */}
 			<SettingCard
-				title="إشعارات البريد الإلكتروني"
-				description="إدارة تكرار ونوع الرسائل البريدية."
+				title="ملخص البريد الإلكتروني"
+				description="اختر مدى تكرار إرسال ملخص الإشعارات إلى بريدك."
+				icon={<EnvelopeSimpleIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="space-y-4">
-					<div className="flex items-center gap-3 rounded-lg bg-secondary p-4">
-						<EnvelopeSimpleIcon
-							className="h-5 w-5 text-primary"
-							weight="fill"
-						/>
-						<div className="flex-1">
-							<p className="text-sm font-medium text-foreground">
-								ملخص البريد الإلكتروني
-							</p>
-							<p className="text-xs text-muted-foreground">
-								احصل على ملخص لإشعاراتك
-							</p>
-						</div>
-					</div>
-					<RadioGroup
-						value={emailDigest}
-						onValueChange={setEmailDigest}
-						className="grid grid-cols-2 gap-3 sm:grid-cols-4"
-					>
-						{[
-							{ value: "instant", label: "فوري" },
-							{ value: "daily", label: "يومي" },
-							{ value: "weekly", label: "أسبوعي" },
-							{ value: "never", label: "أبداً" },
-						].map((option) => (
-							<div key={option.value}>
-								<RadioGroupItem
-									value={option.value}
-									id={option.value}
-									className="peer sr-only"
-								/>
-								<Label
-									htmlFor={option.value}
-									className="flex cursor-pointer items-center justify-center rounded-lg border border-border bg-secondary px-4 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
-								>
+				<RadioGroup
+					value={emailDigest}
+					onValueChange={setEmailDigest}
+					className="grid grid-cols-2 gap-2 sm:grid-cols-4"
+				>
+					{digestOptions.map((option) => (
+						<div key={option.value}>
+							<RadioGroupItem
+								value={option.value}
+								id={`digest-${option.value}`}
+								className="peer sr-only"
+							/>
+							<Label
+								htmlFor={`digest-${option.value}`}
+								className="flex cursor-pointer flex-col items-center gap-1 rounded-xl border-2 bg-muted/30 px-3 py-3 transition-all duration-150 hover:border-primary/40 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
+							>
+								<span className="text-sm font-semibold text-foreground peer-data-[state=checked]:text-primary">
 									{option.label}
-								</Label>
-							</div>
-						))}
-					</RadioGroup>
-				</div>
+								</span>
+								<span className="text-[10px] text-muted-foreground">
+									{option.desc}
+								</span>
+							</Label>
+						</div>
+					))}
+				</RadioGroup>
 			</SettingCard>
 
+			{/* Push Notifications */}
 			<SettingCard
 				title="الإشعارات الفورية"
-				description="تنبيهات فورية على جهازك."
+				description="تنبيهات تصلك مباشرةً على جهازك."
+				icon={<DeviceMobileIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="flex items-center gap-3 rounded-lg bg-primary/10 p-4">
-					<DeviceMobileIcon className="h-5 w-5 text-primary" weight="fill" />
-					<div className="flex-1">
-						<p className="text-sm font-medium text-primary">
-							الإشعارات الفورية مفعلة
-						</p>
-						<p className="text-xs text-primary/70">
-							ستتلقى تنبيهات على هذا الجهاز
-						</p>
+				<div className="flex items-center justify-between rounded-xl bg-primary/5 px-4 py-3.5 ring-1 ring-primary/20">
+					<div className="flex items-center gap-3">
+						<BellIcon className="h-5 w-5 text-primary" weight="fill" />
+						<div>
+							<p className="text-sm font-medium text-foreground">
+								إشعارات هذا الجهاز
+							</p>
+							<p className="text-[11px] text-muted-foreground">
+								ستتلقى تنبيهات فورية على هذا الجهاز
+							</p>
+						</div>
 					</div>
 					<Switch defaultChecked />
 				</div>
 			</SettingCard>
 
+			{/* Social */}
 			<SettingCard
 				title="النشاط الاجتماعي"
-				description="إشعارات حول تفاعلاتك الاجتماعية."
+				description="إشعارات حول تفاعلات المجتمع معك."
+				icon={<UserPlusIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="divide-y divide-border">
-					<SettingRow
-						label="متابعون جدد"
-						description="عندما يتابع شخص ما ملفك الشخصي"
-					>
-						<div className="flex items-center gap-3">
-							<UserPlusIcon className="h-5 w-5 text-muted-foreground" />
-							<Switch
-								checked={notifications.newFollower}
-								onCheckedChange={() => toggleNotification("newFollower")}
-							/>
-						</div>
-					</SettingRow>
-					<SettingRow
-						label="تعليقات المراجعات"
-						description="عندما يعلق شخص ما على مراجعاتك"
-					>
-						<div className="flex items-center gap-3">
-							<ChatCircleIcon className="h-5 w-5 text-muted-foreground" />
-							<Switch
-								checked={notifications.reviewComment}
-								onCheckedChange={() => toggleNotification("reviewComment")}
-							/>
-						</div>
-					</SettingRow>
-					<SettingRow
-						label="إعجابات المراجعات"
-						description="عندما يعجب شخص ما بمراجعاتك"
-					>
-						<div className="flex items-center gap-3">
-							<HeartIcon className="h-5 w-5 text-muted-foreground" />
-							<Switch
-								checked={notifications.reviewLike}
-								onCheckedChange={() => toggleNotification("reviewLike")}
-							/>
-						</div>
-					</SettingRow>
-					<SettingRow
-						label="نشاط الأصدقاء"
-						description="عندما ينهي الأصدقاء كتباً أو يكتبون مراجعات"
-					>
-						<div className="flex items-center gap-3">
-							<BooksIcon className="h-5 w-5 text-muted-foreground" />
-							<Switch
-								checked={notifications.friendActivity}
-								onCheckedChange={() => toggleNotification("friendActivity")}
-							/>
-						</div>
-					</SettingRow>
+				<div className="divide-y divide-border/40">
+					{[
+						{
+							key: "newFollower" as const,
+							label: "متابعون جدد",
+							desc: "عندما يتابع شخص ما ملفك الشخصي",
+							icon: <UserPlusIcon className="h-4 w-4" />,
+						},
+						{
+							key: "reviewComment" as const,
+							label: "تعليقات المراجعات",
+							desc: "عندما يعلق شخص على مراجعاتك",
+							icon: <ChatCircleIcon className="h-4 w-4" />,
+						},
+						{
+							key: "reviewLike" as const,
+							label: "إعجابات المراجعات",
+							desc: "عندما يُعجب أحد بمراجعاتك",
+							icon: <HeartIcon className="h-4 w-4" />,
+						},
+						{
+							key: "friendActivity" as const,
+							label: "نشاط الأصدقاء",
+							desc: "عندما ينهي أصدقاؤك كتباً أو يكتبون مراجعات",
+							icon: <BooksIcon className="h-4 w-4" />,
+						},
+					].map((item) => (
+						<SettingRow key={item.key} label={item.label} description={item.desc}>
+							<div className="flex items-center gap-3">
+								<span className="text-muted-foreground">{item.icon}</span>
+								<Switch
+									checked={notifications[item.key]}
+									onCheckedChange={() => toggle(item.key)}
+								/>
+							</div>
+						</SettingRow>
+					))}
 				</div>
 			</SettingCard>
 
+			{/* Reading */}
 			<SettingCard
 				title="نشاط القراءة"
-				description="ابق على اطلاع برحلة قراءتك."
+				description="ابقَ على اطلاع برحلة قراءتك وتوصياتك."
+				icon={<BooksIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="divide-y divide-border">
-					<SettingRow
-						label="توصيات الكتب"
-						description="اقتراحات كتب مخصصة بناءً على ذوقك"
-					>
-						<Switch
-							checked={notifications.bookRecommendation}
-							onCheckedChange={() => toggleNotification("bookRecommendation")}
-						/>
-					</SettingRow>
-					<SettingRow
-						label="تقدم هدف القراءة"
-						description="تحديثات أسبوعية عن تحدي القراءة الخاص بك"
-					>
-						<div className="flex items-center gap-3">
-							<TrophyIcon className="h-5 w-5 text-muted-foreground" />
+				<div className="divide-y divide-border/40">
+					{[
+						{
+							key: "bookRecommendation" as const,
+							label: "توصيات الكتب",
+							desc: "اقتراحات مخصصة بناءً على ذوقك",
+						},
+						{
+							key: "readingGoal" as const,
+							label: "تقدم هدف القراءة",
+							desc: "تحديثات أسبوعية عن تحدي القراءة",
+							icon: <TrophyIcon className="h-4 w-4" />,
+						},
+						{
+							key: "newRelease" as const,
+							label: "الإصدارات الجديدة",
+							desc: "من المؤلفين الذين تتابعهم أو قائمة رغباتك",
+						},
+					].map((item) => (
+						<SettingRow key={item.key} label={item.label} description={item.desc}>
 							<Switch
-								checked={notifications.readingGoal}
-								onCheckedChange={() => toggleNotification("readingGoal")}
+								checked={notifications[item.key]}
+								onCheckedChange={() => toggle(item.key)}
 							/>
-						</div>
-					</SettingRow>
-					<SettingRow
-						label="الإصدارات الجديدة"
-						description="من المؤلفين الذين تتابعهم أو الكتب في قائمة رغباتك"
-					>
-						<Switch
-							checked={notifications.newRelease}
-							onCheckedChange={() => toggleNotification("newRelease")}
-						/>
-					</SettingRow>
+						</SettingRow>
+					))}
 				</div>
 			</SettingCard>
 
+			{/* Marketing */}
 			<SettingCard
-				title="التسويق"
-				description="المحتوى الترويجي والنشرات الإخبارية."
+				title="التسويق والإعلانات"
+				description="المحتوى الترويجي والنشرات الإخبارية من مكتبتي."
+				icon={<MegaphoneIcon className="h-4 w-4" weight="fill" />}
 			>
 				<SettingRow
 					label="رسائل التسويق"
-					description="الأخبار والتحديثات والعروض الخاصة من رف الكتب"
+					description="أخبار وتحديثات وعروض خاصة من مكتبتي"
 				>
-					<div className="flex items-center gap-3">
-						<MegaphoneIcon className="h-5 w-5 text-muted-foreground" />
-						<Switch
-							checked={notifications.marketing}
-							onCheckedChange={() => toggleNotification("marketing")}
-						/>
-					</div>
+					<Switch
+						checked={notifications.marketing}
+						onCheckedChange={() => toggle("marketing")}
+					/>
 				</SettingRow>
 			</SettingCard>
 		</SectionWrapper>

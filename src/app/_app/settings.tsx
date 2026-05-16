@@ -1,23 +1,19 @@
 import { SettingsSidebar } from "@/features/settings/components/settings-sidebar";
-
-import { Outlet, createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/settings")({
-	component: SettingsLayout,
+  component: SettingsLayout,
 });
 
 function SettingsLayout() {
-	return (
-		<html lang="ar" dir="rtl">
-			<body>
-				<div className="flex">
-					<SettingsSidebar />
-					<main className="flex-2 p-6 lg:p-10 mx-auto max-w-3xl">
-						<Outlet />
-					</main>
-				</div>
-			</body>
-		</html>
-	);
+  return (
+    <div className="flex min-h-[calc(100vh-64px)]">
+      <SettingsSidebar />
+      <main className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-2xl px-6 py-8 lg:px-10 lg:py-10">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  );
 }

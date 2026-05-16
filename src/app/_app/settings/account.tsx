@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import {
 	AppleLogoIcon,
 	CheckCircleIcon,
@@ -6,6 +5,8 @@ import {
 	EnvelopeIcon,
 	GoogleLogoIcon,
 	KeyIcon,
+	LockIcon,
+	MonitorIcon,
 	ShieldCheckIcon,
 	SignOutIcon,
 	WarningIcon,
@@ -24,13 +25,17 @@ import {
 import { Input } from "@shadcn/input";
 import { Label } from "@shadcn/label";
 import { Switch } from "@shadcn/switch";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { SectionWrapper, SettingCard, SettingRow } from "@/features/settings/components/section-wrapper";
+import {
+	SectionWrapper,
+	SettingCard,
+	SettingRow,
+} from "@/features/settings/components/section-wrapper";
 
 export const Route = createFileRoute("/_app/settings/account")({
 	component: AccountPage,
 });
-
 
 export function AccountPage() {
 	const [email, setEmail] = useState("ahmed@example.com");
@@ -38,257 +43,285 @@ export function AccountPage() {
 
 	return (
 		<SectionWrapper
-			title="الحساب"
-			description="إدارة أمان حسابك وإعدادات المصادقة."
+			title="الحساب والأمان"
+			description="إدارة أمان حسابك وإعدادات المصادقة والجلسات النشطة."
 		>
+			{/* Email */}
 			<SettingCard
 				title="البريد الإلكتروني"
-				description="بريدك الإلكتروني الأساسي للإشعارات واستعادة الحساب."
+				description="بريدك الأساسي للإشعارات واستعادة الحساب."
+				icon={<EnvelopeIcon className="h-4 w-4" weight="fill" />}
 				action={
-					<Badge
-						variant="outline"
-						className="gap-1 border-primary/30 text-primary"
-					>
+					<Badge className="gap-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[11px]">
 						<CheckCircleIcon className="h-3 w-3" weight="fill" />
 						موثق
 					</Badge>
 				}
 			>
-				<div className="flex items-center gap-3">
-					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-						<EnvelopeIcon className="h-5 w-5 text-muted-foreground" />
-					</div>
+				<div className="flex items-center gap-2">
 					<Input
 						type="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
-						className="flex-1 bg-secondary text-foreground"
+						className="flex-1 h-9 bg-muted/30 text-sm"
 					/>
-					<Button variant="secondary" size="sm">
+					<Button variant="secondary" size="sm" className="h-9 shrink-0 text-xs">
 						تغيير
 					</Button>
 				</div>
 			</SettingCard>
 
+			{/* Password */}
 			<SettingCard
 				title="كلمة المرور"
 				description="قم بتغيير كلمة المرور بانتظام لأمان أفضل."
+				icon={<KeyIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="space-y-4">
-					<div className="grid gap-2">
-						<Label htmlFor="current" className="text-foreground">
+				<div className="grid gap-4">
+					<div className="grid gap-1.5">
+						<Label htmlFor="current" className="text-xs font-semibold text-foreground">
 							كلمة المرور الحالية
 						</Label>
-						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-								<KeyIcon className="h-5 w-5 text-muted-foreground" />
-							</div>
+						<Input
+							id="current"
+							type="password"
+							placeholder="••••••••"
+							className="h-9 bg-muted/30 text-sm"
+						/>
+					</div>
+					<div className="grid grid-cols-2 gap-3">
+						<div className="grid gap-1.5">
+							<Label htmlFor="new" className="text-xs font-semibold text-foreground">
+								كلمة المرور الجديدة
+							</Label>
 							<Input
-								id="current"
+								id="new"
 								type="password"
-								placeholder="أدخل كلمة المرور الحالية"
-								className="flex-1 bg-secondary text-foreground"
+								placeholder="••••••••"
+								className="h-9 bg-muted/30 text-sm"
+							/>
+						</div>
+						<div className="grid gap-1.5">
+							<Label htmlFor="confirm" className="text-xs font-semibold text-foreground">
+								تأكيد كلمة المرور
+							</Label>
+							<Input
+								id="confirm"
+								type="password"
+								placeholder="••••••••"
+								className="h-9 bg-muted/30 text-sm"
 							/>
 						</div>
 					</div>
-					<div className="grid gap-2">
-						<Label htmlFor="new" className="text-foreground">
-							كلمة المرور الجديدة
-						</Label>
-						<Input
-							id="new"
-							type="password"
-							placeholder="أدخل كلمة المرور الجديدة"
-							className="bg-secondary text-foreground"
-						/>
-						<p className="text-xs text-muted-foreground">
-							8 أحرف على الأقل مع أحرف كبيرة وصغيرة وأرقام
-						</p>
+					<p className="text-[11px] text-muted-foreground">
+						8 أحرف على الأقل مع أحرف كبيرة وصغيرة وأرقام ورموز
+					</p>
+					<div className="flex justify-end">
+						<Button size="sm" className="h-8 text-xs">
+							تحديث كلمة المرور
+						</Button>
 					</div>
-					<div className="grid gap-2">
-						<Label htmlFor="confirm" className="text-foreground">
-							تأكيد كلمة المرور الجديدة
-						</Label>
-						<Input
-							id="confirm"
-							type="password"
-							placeholder="تأكيد كلمة المرور الجديدة"
-							className="bg-secondary text-foreground"
-						/>
-					</div>
-					<Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-						تحديث كلمة المرور
-					</Button>
 				</div>
 			</SettingCard>
 
+			{/* 2FA */}
 			<SettingCard
 				title="المصادقة الثنائية"
-				description="أضف طبقة أمان إضافية لحسابك."
+				description="أضف طبقة حماية إضافية لحسابك عند تسجيل الدخول."
+				icon={<ShieldCheckIcon className="h-4 w-4" weight="fill" />}
 			>
 				<div className="space-y-4">
-					<SettingRow
-						label="تفعيل المصادقة الثنائية"
-						description="استخدم تطبيق المصادقة للتحقق عند تسجيل الدخول"
-					>
+					<div className="flex items-center justify-between">
+						<div>
+							<p className="text-sm font-medium text-foreground">
+								تفعيل المصادقة الثنائية
+							</p>
+							<p className="mt-0.5 text-xs text-muted-foreground">
+								استخدم تطبيق المصادقة للتحقق عند كل تسجيل دخول
+							</p>
+						</div>
 						<Switch
 							checked={twoFactorEnabled}
 							onCheckedChange={setTwoFactorEnabled}
 						/>
-					</SettingRow>
+					</div>
+
 					{twoFactorEnabled && (
-						<div className="flex items-center gap-3 rounded-lg bg-primary/10 p-3">
-							<ShieldCheckIcon className="h-5 w-5 text-primary" weight="fill" />
-							<p className="text-sm text-primary">المصادقة الثنائية مفعلة</p>
+						<div className="flex items-center gap-3 rounded-xl bg-emerald-500/10 px-4 py-3">
+							<ShieldCheckIcon className="h-5 w-5 shrink-0 text-emerald-500" weight="fill" />
+							<div>
+								<p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+									المصادقة الثنائية مفعّلة
+								</p>
+								<p className="text-[11px] text-muted-foreground">
+									حسابك محمي بطبقة أمان إضافية
+								</p>
+							</div>
 						</div>
 					)}
-					<SettingRow
-						label="رموز الاستعادة"
-						description="تنزيل رموز احتياطية لاستعادة الحساب"
-					>
-						<Button variant="secondary" size="sm" disabled={!twoFactorEnabled}>
-							إنشاء الرموز
-						</Button>
-					</SettingRow>
+
+					<div className="rounded-xl border border-border/60 bg-muted/20 divide-y divide-border/40">
+						<SettingRow
+							label="رموز الاستعادة"
+							description="رموز احتياطية لاستعادة الحساب في حال فقد جهازك"
+							className="px-4"
+						>
+							<Button variant="secondary" size="sm" disabled={!twoFactorEnabled} className="h-7 text-xs">
+								إنشاء الرموز
+							</Button>
+						</SettingRow>
+					</div>
 				</div>
 			</SettingCard>
 
+			{/* Connected Accounts */}
 			<SettingCard
 				title="الحسابات المتصلة"
-				description="تسجيل الدخول بحساباتك الاجتماعية."
+				description="تسجيل الدخول السريع عبر حساباتك الأخرى."
+				icon={<LockIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="space-y-3">
-					<div className="flex items-center justify-between rounded-lg border border-border p-4">
-						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-								<GoogleLogoIcon
-									className="h-5 w-5 text-foreground"
-									weight="bold"
-								/>
-							</div>
-							<div>
-								<p className="text-sm font-medium text-foreground">Google</p>
-								<p className="text-xs text-muted-foreground">ahmed@gmail.com</p>
-							</div>
-						</div>
-						<Button
-							variant="ghost"
-							size="sm"
-							className="text-destructive hover:text-destructive"
+				<div className="grid gap-2">
+					{[
+						{
+							name: "Google",
+							icon: <GoogleLogoIcon className="h-5 w-5" weight="bold" />,
+							detail: "ahmed@gmail.com",
+							connected: true,
+							color: "text-red-500",
+						},
+						{
+							name: "Apple",
+							icon: <AppleLogoIcon className="h-5 w-5" weight="fill" />,
+							detail: "غير متصل",
+							connected: false,
+							color: "text-foreground",
+						},
+					].map((account) => (
+						<div
+							key={account.name}
+							className="flex items-center gap-3 rounded-xl border border-border/60 bg-muted/20 px-4 py-3"
 						>
-							قطع الاتصال
-						</Button>
-					</div>
-					<div className="flex items-center justify-between rounded-lg border border-border p-4">
-						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-								<AppleLogoIcon
-									className="h-5 w-5 text-foreground"
-									weight="fill"
-								/>
+							<div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted ${account.color}`}>
+								{account.icon}
 							</div>
-							<div>
-								<p className="text-sm font-medium text-foreground">Apple</p>
-								<p className="text-xs text-muted-foreground">غير متصل</p>
+							<div className="flex-1">
+								<p className="text-sm font-medium text-foreground">
+									{account.name}
+								</p>
+								<p className="text-[11px] text-muted-foreground">
+									{account.detail}
+								</p>
 							</div>
+							{account.connected ? (
+								<Button variant="ghost" size="sm" className="h-7 text-xs text-destructive hover:text-destructive">
+									قطع الاتصال
+								</Button>
+							) : (
+								<Button variant="secondary" size="sm" className="h-7 text-xs">
+									ربط
+								</Button>
+							)}
 						</div>
-						<Button variant="secondary" size="sm">
-							اتصال
-						</Button>
-					</div>
+					))}
 				</div>
 			</SettingCard>
 
+			{/* Active Sessions */}
 			<SettingCard
 				title="الجلسات النشطة"
-				description="إدارة الأجهزة التي سجلت الدخول منها."
+				description="الأجهزة التي سجّلت الدخول منها حالياً."
+				icon={<MonitorIcon className="h-4 w-4" weight="fill" />}
 			>
-				<div className="space-y-3">
-					<div className="flex items-center justify-between rounded-lg border border-primary/30 bg-primary/5 p-4">
-						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
-								<DeviceMobileIcon className="h-5 w-5 text-primary" />
+				<div className="space-y-2">
+					{[
+						{
+							device: "MacBook Pro",
+							location: "الرياض، السعودية",
+							time: "نشط الآن",
+							isCurrent: true,
+						},
+						{
+							device: "iPhone 15 Pro",
+							location: "الرياض، السعودية",
+							time: "آخر نشاط منذ ساعتين",
+							isCurrent: false,
+						},
+					].map((session) => (
+						<div
+							key={session.device}
+							className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
+								session.isCurrent
+									? "border-primary/30 bg-primary/5"
+									: "border-border/60 bg-muted/20"
+							}`}
+						>
+							<div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${session.isCurrent ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+								<DeviceMobileIcon className="h-5 w-5" />
 							</div>
-							<div>
+							<div className="flex-1">
 								<p className="text-sm font-medium text-foreground">
-									MacBook Pro • الرياض
+									{session.device} • {session.location}
 								</p>
-								<p className="text-xs text-muted-foreground">
-									الجلسة الحالية • نشط الآن
-								</p>
+								<p className="text-[11px] text-muted-foreground">{session.time}</p>
 							</div>
+							{session.isCurrent ? (
+								<Badge className="bg-primary/15 text-primary text-[10px] border-primary/30">
+									الحالي
+								</Badge>
+							) : (
+								<Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground">
+									<SignOutIcon className="h-4 w-4" />
+								</Button>
+							)}
 						</div>
-						<Badge className="bg-primary/20 text-primary">الحالي</Badge>
-					</div>
-					<div className="flex items-center justify-between rounded-lg border border-border p-4">
-						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
-								<DeviceMobileIcon className="h-5 w-5 text-muted-foreground" />
-							</div>
-							<div>
-								<p className="text-sm font-medium text-foreground">
-									iPhone 15 Pro • الرياض
-								</p>
-								<p className="text-xs text-muted-foreground">
-									آخر نشاط منذ ساعتين
-								</p>
-							</div>
-						</div>
-						<Button variant="ghost" size="sm" className="text-muted-foreground">
-							<SignOutIcon className="h-4 w-4" />
-						</Button>
-					</div>
+					))}
+					<Button
+						variant="ghost"
+						size="sm"
+						className="mt-1 w-full text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+					>
+						تسجيل الخروج من جميع الأجهزة
+					</Button>
 				</div>
-				<Button
-					variant="ghost"
-					className="mt-4 w-full text-destructive hover:text-destructive"
-				>
-					تسجيل الخروج من جميع الأجهزة
-				</Button>
 			</SettingCard>
 
+			{/* Danger Zone */}
 			<SettingCard
 				title="منطقة الخطر"
-				description="إجراءات لا رجعة فيها ومدمرة."
+				description="إجراءات حساسة لا رجعة فيها — تعامل بحذر."
 				className="border-destructive/30"
+				icon={<WarningIcon className="h-4 w-4 text-destructive" weight="fill" />}
 			>
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-destructive/10">
-							<WarningIcon className="h-5 w-5 text-destructive" weight="fill" />
-						</div>
-						<div>
-							<p className="text-sm font-medium text-foreground">حذف الحساب</p>
-							<p className="text-xs text-muted-foreground">
-								حذف حسابك وجميع بياناتك نهائياً
-							</p>
-						</div>
+				<div className="flex items-center justify-between rounded-xl bg-destructive/5 px-4 py-3">
+					<div>
+						<p className="text-sm font-semibold text-foreground">حذف الحساب</p>
+						<p className="mt-0.5 text-xs text-muted-foreground">
+							حذف حسابك وجميع بياناتك نهائياً بلا رجعة
+						</p>
 					</div>
 					<Dialog>
 						<DialogTrigger
 							render={
-								<Button variant="destructive" size="sm">
+								<Button variant="destructive" size="sm" className="h-8 text-xs">
 									حذف الحساب
 								</Button>
 							}
 						/>
-
 						<DialogContent className="bg-card">
 							<DialogHeader>
 								<DialogTitle className="text-card-foreground">
 									هل أنت متأكد تماماً؟
 								</DialogTitle>
 								<DialogDescription>
-									لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف حسابك نهائياً
-									وإزالة جميع بياناتك بما في ذلك المراجعات وقوائم القراءة
-									والاتصالات الاجتماعية.
+									لا يمكن التراجع عن هذا الإجراء. سيُحذف حسابك وجميع بياناتك
+									بما في ذلك المراجعات وقوائم القراءة والاتصالات الاجتماعية.
 								</DialogDescription>
 							</DialogHeader>
-							<DialogFooter className="flex-row-reverse gap-2">
+							<DialogFooter>
 								<Button variant="ghost" className="text-muted-foreground">
 									إلغاء
 								</Button>
-								<Button variant="destructive">حذف الحساب</Button>
+								<Button variant="destructive">حذف الحساب نهائياً</Button>
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>

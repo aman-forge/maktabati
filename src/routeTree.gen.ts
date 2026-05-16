@@ -39,7 +39,7 @@ import { Route as AppSettingsProfileRouteImport } from './app/_app/settings/prof
 import { Route as AppSettingsPrivacyRouteImport } from './app/_app/settings/privacy'
 import { Route as AppSettingsNotificationsRouteImport } from './app/_app/settings/notifications'
 import { Route as AppSettingsIntegrationsRouteImport } from './app/_app/settings/integrations'
-import { Route as AppSettingsImportExportRouteImport } from './app/_app/settings/import-export'
+import { Route as AppSettingsDataRouteImport } from './app/_app/settings/data'
 import { Route as AppSettingsAppearanceRouteImport } from './app/_app/settings/appearance'
 import { Route as AppSettingsAccountRouteImport } from './app/_app/settings/account'
 import { Route as PublicPublisherIdBooksRouteImport } from './app/_public/publisher/$id.books'
@@ -199,9 +199,9 @@ const AppSettingsIntegrationsRoute = AppSettingsIntegrationsRouteImport.update({
   path: '/integrations',
   getParentRoute: () => AppSettingsRoute,
 } as any)
-const AppSettingsImportExportRoute = AppSettingsImportExportRouteImport.update({
-  id: '/import-export',
-  path: '/import-export',
+const AppSettingsDataRoute = AppSettingsDataRouteImport.update({
+  id: '/data',
+  path: '/data',
   getParentRoute: () => AppSettingsRoute,
 } as any)
 const AppSettingsAppearanceRoute = AppSettingsAppearanceRouteImport.update({
@@ -246,7 +246,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
-  '/settings/import-export': typeof AppSettingsImportExportRoute
+  '/settings/data': typeof AppSettingsDataRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
@@ -283,7 +283,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
-  '/settings/import-export': typeof AppSettingsImportExportRoute
+  '/settings/data': typeof AppSettingsDataRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
@@ -322,7 +322,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/_app/settings/account': typeof AppSettingsAccountRoute
   '/_app/settings/appearance': typeof AppSettingsAppearanceRoute
-  '/_app/settings/import-export': typeof AppSettingsImportExportRoute
+  '/_app/settings/data': typeof AppSettingsDataRoute
   '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/_app/settings/notifications': typeof AppSettingsNotificationsRoute
   '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
@@ -362,7 +362,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/settings/account'
     | '/settings/appearance'
-    | '/settings/import-export'
+    | '/settings/data'
     | '/settings/integrations'
     | '/settings/notifications'
     | '/settings/privacy'
@@ -399,7 +399,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/settings/account'
     | '/settings/appearance'
-    | '/settings/import-export'
+    | '/settings/data'
     | '/settings/integrations'
     | '/settings/notifications'
     | '/settings/privacy'
@@ -437,7 +437,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/_app/settings/account'
     | '/_app/settings/appearance'
-    | '/_app/settings/import-export'
+    | '/_app/settings/data'
     | '/_app/settings/integrations'
     | '/_app/settings/notifications'
     | '/_app/settings/privacy'
@@ -684,11 +684,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsIntegrationsRouteImport
       parentRoute: typeof AppSettingsRoute
     }
-    '/_app/settings/import-export': {
-      id: '/_app/settings/import-export'
-      path: '/import-export'
-      fullPath: '/settings/import-export'
-      preLoaderRoute: typeof AppSettingsImportExportRouteImport
+    '/_app/settings/data': {
+      id: '/_app/settings/data'
+      path: '/data'
+      fullPath: '/settings/data'
+      preLoaderRoute: typeof AppSettingsDataRouteImport
       parentRoute: typeof AppSettingsRoute
     }
     '/_app/settings/appearance': {
@@ -739,7 +739,7 @@ declare module '@tanstack/react-router' {
 interface AppSettingsRouteChildren {
   AppSettingsAccountRoute: typeof AppSettingsAccountRoute
   AppSettingsAppearanceRoute: typeof AppSettingsAppearanceRoute
-  AppSettingsImportExportRoute: typeof AppSettingsImportExportRoute
+  AppSettingsDataRoute: typeof AppSettingsDataRoute
   AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
   AppSettingsNotificationsRoute: typeof AppSettingsNotificationsRoute
   AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
@@ -751,7 +751,7 @@ interface AppSettingsRouteChildren {
 const AppSettingsRouteChildren: AppSettingsRouteChildren = {
   AppSettingsAccountRoute: AppSettingsAccountRoute,
   AppSettingsAppearanceRoute: AppSettingsAppearanceRoute,
-  AppSettingsImportExportRoute: AppSettingsImportExportRoute,
+  AppSettingsDataRoute: AppSettingsDataRoute,
   AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
   AppSettingsNotificationsRoute: AppSettingsNotificationsRoute,
   AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
