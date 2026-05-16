@@ -12,22 +12,15 @@ import {
   StarIcon,
   XIcon,
 } from "@phosphor-icons/react";
-
 import { Button } from "@shadcn/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@shadcn/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@shadcn/dialog";
 import { Input } from "@shadcn/input";
 import { Textarea } from "@shadcn/textarea";
 import React from "react";
+
 import { cn } from "@/ui/lib/utils";
-import type {
-  BookCardBook,
-  BookType,
-} from "../../../features/books/server/get-books";
+
+import type { BookCardBook, BookType } from "../../../features/books/server/get-books";
 import { Label } from "../ui/label";
 
 /* ─── Status config ───────────────────────────────────────────────── */
@@ -37,8 +30,7 @@ const STATUSES = [
     label: "أخطط للقراءة",
     icon: BookmarkSimpleIcon,
     pill: "bg-slate-500/10 text-slate-400 border-slate-500/20",
-    active:
-      "bg-slate-600 border-slate-600 shadow-slate-500/30 shadow-md text-white",
+    active: "bg-slate-600 border-slate-600 shadow-slate-500/30 shadow-md text-white",
     dot: "bg-slate-400",
     barColor: "bg-slate-400",
   },
@@ -56,8 +48,7 @@ const STATUSES = [
     label: "مكتمل",
     icon: CheckCircleIcon,
     pill: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    active:
-      "bg-emerald-500 border-emerald-500 shadow-emerald-500/30 shadow-md text-white",
+    active: "bg-emerald-500 border-emerald-500 shadow-emerald-500/30 shadow-md text-white",
     dot: "bg-emerald-400",
     barColor: "bg-emerald-400",
   },
@@ -66,8 +57,7 @@ const STATUSES = [
     label: "مؤجل",
     icon: PauseIcon,
     pill: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    active:
-      "bg-amber-500 border-amber-500 shadow-amber-500/30 shadow-md text-white",
+    active: "bg-amber-500 border-amber-500 shadow-amber-500/30 shadow-md text-white",
     dot: "bg-amber-400",
     barColor: "bg-amber-400",
   },
@@ -76,8 +66,7 @@ const STATUSES = [
     label: "متروك",
     icon: ProhibitIcon,
     pill: "bg-rose-500/10 text-rose-400 border-rose-500/20",
-    active:
-      "bg-rose-500 border-rose-500 shadow-rose-500/30 shadow-md text-white",
+    active: "bg-rose-500 border-rose-500 shadow-rose-500/30 shadow-md text-white",
     dot: "bg-rose-400",
     barColor: "bg-rose-400",
   },
@@ -126,26 +115,16 @@ export function TrackBookModal({
   onSave,
   initialData,
 }: TrackBookModalProps) {
-  const [isFavorite, setIsFavorite] = React.useState(
-    initialData?.isFavorite ?? false,
-  );
-  const [status, setStatus] = React.useState(
-    initialData?.status ?? "plan-to-read",
-  );
+  const [isFavorite, setIsFavorite] = React.useState(initialData?.isFavorite ?? false);
+  const [status, setStatus] = React.useState(initialData?.status ?? "plan-to-read");
   const [score, setScore] = React.useState(initialData?.score ?? 0);
-  const [pagesProgress, setPagesProgress] = React.useState(
-    initialData?.pagesProgress ?? 0,
-  );
+  const [pagesProgress, setPagesProgress] = React.useState(initialData?.pagesProgress ?? 0);
   const [startDate, setStartDate] = React.useState(
     initialData?.startDate ?? new Date().toISOString().split("T")[0],
   );
-  const [finishDate, setFinishDate] = React.useState(
-    initialData?.finishDate ?? "",
-  );
+  const [finishDate, setFinishDate] = React.useState(initialData?.finishDate ?? "");
   const [notes, setNotes] = React.useState(initialData?.notes ?? "");
-  const [rereadCount, setRereadCount] = React.useState(
-    initialData?.rereadCount ?? 0,
-  );
+  const [rereadCount, setRereadCount] = React.useState(initialData?.rereadCount ?? 0);
   const [hoveredScore, setHoveredScore] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -154,9 +133,7 @@ export function TrackBookModal({
       setStatus(initialData?.status ?? "plan-to-read");
       setScore(initialData?.score ?? 0);
       setPagesProgress(initialData?.pagesProgress ?? 0);
-      setStartDate(
-        initialData?.startDate ?? new Date().toISOString().split("T")[0],
-      );
+      setStartDate(initialData?.startDate ?? new Date().toISOString().split("T")[0]);
       setFinishDate(initialData?.finishDate ?? "");
       setNotes(initialData?.notes ?? "");
       setRereadCount(initialData?.rereadCount ?? 0);
@@ -190,8 +167,7 @@ export function TrackBookModal({
   if (!book) return null;
 
   const totalPages = book.pageCount || 0;
-  const progressPercent =
-    totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
+  const progressPercent = totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
   const currentStatus = STATUSES.find((s) => s.value === status);
   const showFinishDate = status === "completed";
   const displayScore = hoveredScore ?? score;
@@ -223,7 +199,7 @@ export function TrackBookModal({
             }}
           />
           {/* Bottom fade to modal bg */}
-          <div className="absolute inset-0 bg-linear-to-b from-transparent to-card dark:to-background" />
+          <div className="to-card dark:to-background absolute inset-0 bg-linear-to-b from-transparent" />
 
           {/* Controls */}
           <Button
@@ -231,10 +207,10 @@ export function TrackBookModal({
             onClick={() => onOpenChange(false)}
             variant="ghost"
             size="icon"
-            className="absolute top-3 left-3 z-10 w-8 h-8 rounded-xl backdrop-blur-sm bg-secondary text-secondary-foreground hover:bg-accent/50!"
+            className="bg-secondary text-secondary-foreground hover:bg-accent/50! absolute top-3 left-3 z-10 h-8 w-8 rounded-xl backdrop-blur-sm"
             aria-label="إغلاق"
           >
-            <XIcon className="w-4 h-4" />
+            <XIcon className="h-4 w-4" />
           </Button>
 
           <Button
@@ -250,38 +226,35 @@ export function TrackBookModal({
             )}
             aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
           >
-            <HeartIcon
-              weight={isFavorite ? "fill" : "bold"}
-              className="w-4 h-4"
-            />
+            <HeartIcon weight={isFavorite ? "fill" : "bold"} className="h-4 w-4" />
           </Button>
 
           {/* Book info row */}
-          <div className="absolute bottom-0 inset-x-0 flex items-end gap-4 px-5 pb-12">
+          <div className="absolute inset-x-0 bottom-0 flex items-end gap-4 px-5 pb-12">
             {/* Cover */}
-            <div className="shrink-0 w-18 h-26 rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10 translate-y-5 z-10">
+            <div className="z-10 h-26 w-18 shrink-0 translate-y-5 overflow-hidden rounded-lg shadow-2xl ring-1 ring-white/10">
               <img
                 src={book.coverImageUrl || "/books/book.jpg"}
                 alt={book.title}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
 
-            <div className="flex-1 min-w-0 pb-1">
-              <DialogTitle className="text-lg font-bold leading-snug line-clamp-2 text-white">
+            <div className="min-w-0 flex-1 pb-1">
+              <DialogTitle className="line-clamp-2 text-lg leading-snug font-bold text-white">
                 {book.title}
               </DialogTitle>
-              <DialogDescription className="text-sm text-white/50 mt-0.5">
+              <DialogDescription className="mt-0.5 text-sm text-white/50">
                 {book.author?.name}
               </DialogDescription>
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 {book.publicationYear && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/8 border border-white/10 text-white/60">
+                  <span className="rounded-full border border-white/10 bg-white/8 px-2 py-0.5 text-[11px] text-white/60">
                     {book.publicationYear}
                   </span>
                 )}
                 {book.pageCount && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/8 border border-white/10 text-white/60">
+                  <span className="rounded-full border border-white/10 bg-white/8 px-2 py-0.5 text-[11px] text-white/60">
                     {book.pageCount} صفحة
                   </span>
                 )}
@@ -291,13 +264,11 @@ export function TrackBookModal({
         </div>
 
         {/* ── Scrollable body ─────────────────────────────────────── */}
-        <div className="flex-1 overflow-y-auto pb-4 pt-8 space-y-6 bg-card dark:bg-background">
+        <div className="bg-card dark:bg-background flex-1 space-y-6 overflow-y-auto pt-8 pb-4">
           {/* ── Status ────────────────────────────────────────────── */}
           <section className="space-y-2.5">
-            <SectionLabel icon={<ClockIcon className="w-3.5 h-3.5" />}>
-              حالة القراءة
-            </SectionLabel>
-            <div className="flex flex-nowrap gap-1.5 overflow-x-auto no-scrollbar px-4">
+            <SectionLabel icon={<ClockIcon className="h-3.5 w-3.5" />}>حالة القراءة</SectionLabel>
+            <div className="no-scrollbar flex flex-nowrap gap-1.5 overflow-x-auto px-4">
               {STATUSES.map((s) => {
                 const Icon = s.icon;
                 const isActive = status === s.value;
@@ -311,10 +282,7 @@ export function TrackBookModal({
                       isActive ? s.active : cn(s.pill, "hover:brightness-125"),
                     )}
                   >
-                    <Icon
-                      weight={isActive ? "fill" : "bold"}
-                      className="w-3.5 h-3.5 shrink-0"
-                    />
+                    <Icon weight={isActive ? "fill" : "bold"} className="h-3.5 w-3.5 shrink-0" />
                     {s.label}
                   </button>
                 );
@@ -326,7 +294,7 @@ export function TrackBookModal({
 
           {/* ── Progress ───────────────────────────────────────────── */}
           <section className="space-y-2.5 px-4">
-            <SectionLabel icon={<BookOpenIcon className="w-3.5 h-3.5" />}>
+            <SectionLabel icon={<BookOpenIcon className="h-3.5 w-3.5" />}>
               التقدم في القراءة
             </SectionLabel>
 
@@ -339,20 +307,14 @@ export function TrackBookModal({
                   value={pagesProgress || ""}
                   onChange={(e) =>
                     setPagesProgress(
-                      Math.max(
-                        0,
-                        Math.min(
-                          totalPages || 9999,
-                          parseInt(e.target.value, 10) || 0,
-                        ),
-                      ),
+                      Math.max(0, Math.min(totalPages || 9999, parseInt(e.target.value, 10) || 0)),
                     )
                   }
                   disabled={status === "completed" || status === "plan-to-read"}
                   placeholder="0"
                   className="pl-16"
                 />
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground/40 pointer-events-none tabular-nums">
+                <span className="text-muted-foreground/40 pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-xs tabular-nums">
                   / {totalPages || "؟"}
                 </span>
               </div>
@@ -373,7 +335,7 @@ export function TrackBookModal({
             {/* Progress bar */}
             {totalPages > 0 && (
               <div className="space-y-1">
-                <div className="h-1.5 rounded-full overflow-hidden bg-white/6">
+                <div className="h-1.5 overflow-hidden rounded-full bg-white/6">
                   <div
                     className={cn(
                       "h-full rounded-full transition-all duration-500",
@@ -390,7 +352,7 @@ export function TrackBookModal({
 
           {/* ── Dates ─────────────────────────────────────────────── */}
           <section className="space-y-2.5 px-4">
-            <SectionLabel icon={<CalendarBlankIcon className="w-3.5 h-3.5" />}>
+            <SectionLabel icon={<CalendarBlankIcon className="h-3.5 w-3.5" />}>
               التواريخ
             </SectionLabel>
             <div className="grid grid-cols-2 gap-3">
@@ -410,8 +372,8 @@ export function TrackBookModal({
               />
             </div>
             {!showFinishDate && (
-              <p className="text-[11px] text-muted-foreground/35 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400/50 inline-block shrink-0" />
+              <p className="text-muted-foreground/35 flex items-center gap-1.5 text-[11px]">
+                <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400/50" />
                 متاح عند تعيين الحالة إلى «مكتمل»
               </p>
             )}
@@ -420,10 +382,8 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Notes ─────────────────────────────────────────────── */}
-          <section className="space-y-2.5 px-4 hidden">
-            <SectionLabel icon={<NotePencilIcon className="w-3.5 h-3.5" />}>
-              ملاحظاتي
-            </SectionLabel>
+          <section className="hidden space-y-2.5 px-4">
+            <SectionLabel icon={<NotePencilIcon className="h-3.5 w-3.5" />}>ملاحظاتي</SectionLabel>
             <Textarea
               disabled // TODO: NOTES
               placeholder="اكتب انطباعاتك وملاحظاتك عن الكتاب..."
@@ -437,17 +397,13 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Score: 10-point scale ──────────────────────────────── */}
-          <section className="space-y-2.5 px-4 hidden">
+          <section className="hidden space-y-2.5 px-4">
             <div className="flex items-center justify-between">
-              <SectionLabel icon={<StarIcon className="w-3.5 h-3.5" />}>
-                التقييم
-              </SectionLabel>
+              <SectionLabel icon={<StarIcon className="h-3.5 w-3.5" />}>التقييم</SectionLabel>
               <span
                 className={cn(
                   "text-xs font-semibold transition-colors",
-                  displayScore > 0
-                    ? "text-amber-400"
-                    : "text-muted-foreground/40",
+                  displayScore > 0 ? "text-amber-400" : "text-muted-foreground/40",
                 )}
               >
                 {displayScore > 0
@@ -458,10 +414,7 @@ export function TrackBookModal({
 
             {/* 10-square grid */}
             {/* biome-ignore lint/a11y/noStaticElementInteractions: I want this*/}
-            <div
-              className="flex gap-1"
-              onMouseLeave={() => setHoveredScore(null)}
-            >
+            <div className="flex gap-1" onMouseLeave={() => setHoveredScore(null)}>
               {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                 <Button
                   disabled // TODO: RATING
@@ -485,10 +438,8 @@ export function TrackBookModal({
           <Divider />
 
           {/* ── Reread counter ─────────────────────────────────────── */}
-          <section className="space-y-2.5 px-4 hidden">
-            <SectionLabel
-              icon={<ArrowCounterClockwiseIcon className="w-3.5 h-3.5" />}
-            >
+          <section className="hidden space-y-2.5 px-4">
+            <SectionLabel icon={<ArrowCounterClockwiseIcon className="h-3.5 w-3.5" />}>
               عدد مرات القراءة
             </SectionLabel>
             <div className="flex items-center gap-3">
@@ -501,7 +452,7 @@ export function TrackBookModal({
               >
                 −
               </Button>
-              <span className="w-10 text-center text-2xl font-bold tabular-nums text-foreground">
+              <span className="text-foreground w-10 text-center text-2xl font-bold tabular-nums">
                 {rereadCount}
               </span>
               <Button
@@ -513,7 +464,7 @@ export function TrackBookModal({
               >
                 +
               </Button>
-              <span className="text-xs text-muted-foreground/40 mr-1">
+              <span className="text-muted-foreground/40 mr-1 text-xs">
                 {rereadCount === 0
                   ? "أول قراءة"
                   : rereadCount === 1
@@ -525,46 +476,31 @@ export function TrackBookModal({
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────── */}
-        <div className="shrink-0 flex items-center justify-between gap-3 px-4 py-3 border-t border-border/10 bg-card dark:bg-background">
+        <div className="border-border/10 bg-card dark:bg-background flex shrink-0 items-center justify-between gap-3 border-t px-4 py-3">
           {/* Status pill */}
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex min-w-0 items-center gap-2">
             {currentStatus && (
-              <span
-                className={cn(
-                  "w-2 h-2 rounded-full shrink-0",
-                  currentStatus.dot,
-                )}
-              />
+              <span className={cn("w-2 h-2 rounded-full shrink-0", currentStatus.dot)} />
             )}
-            <span className="text-sm text-muted-foreground truncate">
-              {currentStatus?.label}
-            </span>
+            <span className="text-muted-foreground truncate text-sm">{currentStatus?.label}</span>
             {isFavorite && (
               <>
                 <span className="text-muted-foreground/20 shrink-0">·</span>
-                <HeartIcon
-                  weight="fill"
-                  className="w-3.5 h-3.5 text-rose-400 shrink-0"
-                />
+                <HeartIcon weight="fill" className="h-3.5 w-3.5 shrink-0 text-rose-400" />
               </>
             )}
             {score > 0 && (
               <>
                 <span className="text-muted-foreground/20 shrink-0">·</span>
-                <span className="text-xs font-semibold text-amber-400 tabular-nums shrink-0">
+                <span className="shrink-0 text-xs font-semibold text-amber-400 tabular-nums">
                   {score}/10
                 </span>
               </>
             )}
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <Button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              variant="ghost"
-              size="sm"
-            >
+          <div className="flex shrink-0 items-center gap-2">
+            <Button type="button" onClick={() => onOpenChange(false)} variant="ghost" size="sm">
               إلغاء
             </Button>
             <Button type="button" onClick={handleSave} size="sm">
@@ -579,15 +515,9 @@ export function TrackBookModal({
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
 
-function SectionLabel({
-  icon,
-  children,
-}: {
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
+function SectionLabel({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-1.5 px-4 text-[11px] font-semibold text-muted-foreground/50 uppercase tracking-widest">
+    <div className="text-muted-foreground/50 flex items-center gap-1.5 px-4 text-[11px] font-semibold tracking-widest uppercase">
       {icon}
       {children}
     </div>
@@ -595,7 +525,7 @@ function SectionLabel({
 }
 
 function Divider() {
-  return <div className="h-px bg-border/30 mx-4" />;
+  return <div className="bg-border/30 mx-4 h-px" />;
 }
 
 function DateField({
@@ -613,10 +543,7 @@ function DateField({
 }) {
   return (
     <div className="space-y-1.5">
-      <Label
-        htmlFor={id}
-        className="block text-[11px] text-muted-foreground/40 font-medium"
-      >
+      <Label htmlFor={id} className="text-muted-foreground/40 block text-[11px] font-medium">
         {label}
       </Label>
       <Input
@@ -626,9 +553,7 @@ function DateField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className={cn(
-          disabled && "opacity-30 cursor-not-allowed pointer-events-none",
-        )}
+        className={cn(disabled && "opacity-30 cursor-not-allowed pointer-events-none")}
       />
     </div>
   );

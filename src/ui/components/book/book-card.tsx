@@ -3,8 +3,10 @@ import type { BookCardBook } from "@features/books/server/get-books";
 import { BookmarkSimpleIcon, CheckCircleIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
+
 import { BOOK_GENRES } from "@/db/constants/books";
 import { cn } from "@/ui/lib/utils";
+
 import { Badge } from "../ui/badge";
 
 interface BookCardProps {
@@ -58,13 +60,13 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
           <img
             src={book.coverImageUrl ?? "/books/book.jpg"}
             alt={`غلاف ${book.title}`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
           {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="from-background/80 via-background/10 absolute inset-0 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
           {/* Hover info: genre + readers */}
-          <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1.5 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+          <div className="absolute inset-x-0 bottom-0 flex translate-y-1 flex-col gap-1.5 p-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             {book.genres?.[0] && (
               <Badge variant="secondary">
                 {BOOK_GENRES.find((g) => g.value === book.genres?.[0])?.label}
@@ -76,9 +78,9 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
         {/* Rating badge — top right */}
         {rating != null && (
           <div className="absolute top-2 right-2 z-20">
-            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-foreground/60 dark:bg-background/60 backdrop-blur-md border-border shadow-lg">
-              <StarIcon weight="fill" className="w-2.5 h-2.5 text-amber-400" />
-              <span className="text-[11px] font-semibold text-background dark:text-foreground tabular-nums">
+            <div className="bg-foreground/60 dark:bg-background/60 border-border flex items-center gap-1 rounded-full px-1.5 py-0.5 shadow-lg backdrop-blur-md">
+              <StarIcon weight="fill" className="h-2.5 w-2.5 text-amber-400" />
+              <span className="text-background dark:text-foreground text-[11px] font-semibold tabular-nums">
                 {rating.toFixed(1)}
               </span>
             </div>
@@ -94,7 +96,7 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
             )}
             title={trackingStatus}
           >
-            {StatusIcon && <StatusIcon weight="fill" className="w-2.5 h-2.5 text-white" />}
+            {StatusIcon && <StatusIcon weight="fill" className="h-2.5 w-2.5 text-white" />}
           </div>
         )}
 
@@ -114,20 +116,20 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
           )}
           aria-label="إضافة إلى قائمة القراءة"
         >
-          <PlusIcon weight="bold" className="w-4 h-4" />
+          <PlusIcon weight="bold" className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Text info */}
       <div className="flex flex-col gap-0.5 px-0.5">
         <Link to="/book/$id" params={{ id: book.id }}>
-          <h3 className="text-sm font-semibold leading-snug line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200">
+          <h3 className="text-foreground group-hover:text-primary line-clamp-2 text-sm leading-snug font-semibold transition-colors duration-200">
             {book.title}
           </h3>
         </Link>
-        <p className="text-xs text-muted-foreground truncate">{book.author?.name}</p>
+        <p className="text-muted-foreground truncate text-xs">{book.author?.name}</p>
         {book.pageCount && (
-          <p className="text-[10px] text-muted-foreground/60 tabular-nums mt-0.5">
+          <p className="text-muted-foreground/60 mt-0.5 text-[10px] tabular-nums">
             {book.pageCount} صفحة
           </p>
         )}

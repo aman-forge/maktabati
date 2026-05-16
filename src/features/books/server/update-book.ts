@@ -1,6 +1,7 @@
-import { readingStatusEnum } from "@/db/tables";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+
+import { readingStatusEnum } from "@/db/tables";
 
 const updateBookTrackingSchema = z.object({
   bookId: z.string(),

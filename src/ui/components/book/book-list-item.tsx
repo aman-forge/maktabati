@@ -4,6 +4,7 @@ import { CheckCircleIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
+
 import { BOOK_GENRES } from "@/db/constants/books";
 import { cn } from "@/ui/lib/utils";
 
@@ -61,32 +62,32 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
           )}
 
           {/* Cover */}
-          <div className="relative w-9 h-14 rounded-md overflow-hidden shrink-0 bg-muted shadow-sm">
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1 bg-linear-to-r from-background/25 to-transparent" />
+          <div className="bg-muted relative h-14 w-9 shrink-0 overflow-hidden rounded-md shadow-sm">
+            <div className="from-background/25 pointer-events-none absolute inset-y-0 left-0 z-10 w-1 bg-linear-to-r to-transparent" />
             <img
               src={book.coverImageUrl ?? "/books/book.jpg"}
               alt={`غلاف ${book.title}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
 
           {/* Title & Author */}
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-semibold leading-tight truncate text-foreground group-hover:text-primary transition-colors">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-foreground group-hover:text-primary truncate text-sm leading-tight font-semibold transition-colors">
               {book.title}
             </h3>
-            <p className="text-xs text-muted-foreground/70 truncate mt-0.5">{book.author?.name}</p>
+            <p className="text-muted-foreground/70 mt-0.5 truncate text-xs">{book.author?.name}</p>
 
             {/* Progress bar — mobile only for reading books */}
             {isReading && readingProgress != null && (
-              <div className="flex items-center gap-2 mt-1.5 md:hidden">
-                <div className="h-1 flex-1 rounded-full bg-muted overflow-hidden">
+              <div className="mt-1.5 flex items-center gap-2 md:hidden">
+                <div className="bg-muted h-1 flex-1 overflow-hidden rounded-full">
                   <div
                     className="h-full rounded-full bg-sky-500"
                     style={{ width: `${readingProgress}%` }}
                   />
                 </div>
-                <span className="text-[10px] text-sky-400 tabular-nums font-medium">
+                <span className="text-[10px] font-medium text-sky-400 tabular-nums">
                   {readingProgress}%
                 </span>
               </div>
@@ -95,26 +96,26 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
 
           {/* Progress — desktop */}
           {isReading && readingProgress != null && (
-            <div className="hidden md:flex items-center gap-2 shrink-0 w-28">
-              <div className="h-1 flex-1 rounded-full bg-muted overflow-hidden">
+            <div className="hidden w-28 shrink-0 items-center gap-2 md:flex">
+              <div className="bg-muted h-1 flex-1 overflow-hidden rounded-full">
                 <div
                   className="h-full rounded-full bg-sky-500 transition-all"
                   style={{ width: `${readingProgress}%` }}
                 />
               </div>
-              <span className="text-[10px] text-sky-400 tabular-nums font-semibold">
+              <span className="text-[10px] font-semibold text-sky-400 tabular-nums">
                 {readingProgress}%
               </span>
             </div>
           )}
 
           {/* Genres — desktop only */}
-          <div className="hidden md:flex items-center gap-1.5 shrink-0 w-36">
+          <div className="hidden w-36 shrink-0 items-center gap-1.5 md:flex">
             {book.genres?.slice(0, 2).map((genre) => (
               <Badge
                 key={genre}
                 variant="secondary"
-                className="text-[10px] px-1.5 py-0 h-5 font-normal bg-secondary/40 rounded-full"
+                className="bg-secondary/40 h-5 rounded-full px-1.5 py-0 text-[10px] font-normal"
               >
                 {BOOK_GENRES.find((g) => g.value === genre)?.label ?? genre}
               </Badge>
@@ -123,18 +124,18 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
 
           {/* Year */}
           {book.publicationYear && (
-            <div className="hidden sm:block w-12 text-center text-[11px] text-muted-foreground/60 tabular-nums shrink-0">
+            <div className="text-muted-foreground/60 hidden w-12 shrink-0 text-center text-[11px] tabular-nums sm:block">
               {book.publicationYear}
             </div>
           )}
 
           {/* Rating */}
-          <div className="w-14 flex items-center justify-center gap-1 shrink-0">
+          <div className="flex w-14 shrink-0 items-center justify-center gap-1">
             {isCompleted ? (
-              <CheckCircleIcon weight="fill" className="w-4 h-4 text-emerald-400" />
+              <CheckCircleIcon weight="fill" className="h-4 w-4 text-emerald-400" />
             ) : rating ? (
               <>
-                <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+                <StarIcon weight="fill" className="h-3 w-3 text-amber-400" />
                 <span className="text-xs font-semibold tabular-nums">{rating.toFixed(1)}</span>
               </>
             ) : null}
@@ -156,7 +157,7 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
             )}
             aria-label="إضافة إلى قائمة القراءة"
           >
-            <PlusIcon weight="bold" className="w-3.5 h-3.5" />
+            <PlusIcon weight="bold" className="h-3.5 w-3.5" />
           </Button>
         </div>
       </Link>

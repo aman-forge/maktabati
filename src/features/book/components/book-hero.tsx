@@ -17,8 +17,8 @@ import { useMemo, useState } from "react";
 
 import { BOOK_GENRES } from "@/db/constants/books";
 import type { RatingSummary } from "@/features/book/book-page-mock";
-import { cn } from "@/ui/lib/utils";
 import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { cn } from "@/ui/lib/utils";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [
@@ -146,10 +146,7 @@ export function BookHero({
                       </>
                     )}
                   </Button>
-                  <Button
-                    aria-label="خيارات الرف"
-                    onClick={() => openTrackModal(book)}
-                  >
+                  <Button aria-label="خيارات الرف" onClick={() => openTrackModal(book)}>
                     <CaretDownIcon className="size-4" />
                   </Button>
                 </ButtonGroup>

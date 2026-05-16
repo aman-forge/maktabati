@@ -3,8 +3,9 @@
 import { TrackBookModal } from "@components/book/track-book-modal";
 import { BookType, type BookCardBook } from "@features/books/server/get-books";
 import React from "react";
-import { useUser } from "@/features/auth/use-user";
 import { toast } from "sonner";
+
+import { useUser } from "@/features/auth/use-user";
 
 interface BookTrackingContextValue {
   openTrackModal: (book: BookCardBook | BookType) => void;
@@ -23,9 +24,7 @@ interface BookTrackingProviderProps {
 }
 
 export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
-  const [selectedBook, setSelectedBook] = React.useState<
-    BookCardBook | BookType | null
-  >(null);
+  const [selectedBook, setSelectedBook] = React.useState<BookCardBook | BookType | null>(null);
   const [open, setOpen] = React.useState(false);
   const { isLoggedIn, isLoading } = useUser();
 
@@ -34,8 +33,7 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
       if (isLoading) return;
       if (!isLoggedIn) {
         toast.error("يجب تسجيل الدخول أولاً", {
-          description:
-            "لا يمكنك تتبع الكتب وإضافتها لمكتبتك بدون تسجيل الدخول.",
+          description: "لا يمكنك تتبع الكتب وإضافتها لمكتبتك بدون تسجيل الدخول.",
         });
         return;
       }

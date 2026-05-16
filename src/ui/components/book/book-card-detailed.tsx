@@ -10,6 +10,7 @@ import {
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
+
 import { BOOK_GENRES } from "@/db/constants/books";
 import { cn } from "@/ui/lib/utils";
 
@@ -76,18 +77,18 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
 
         {/* Cover */}
         <Link to="/book/$id" params={{ id: book.id }}>
-          <div className="relative w-auto shrink-0 rounded-r-2xl h-52 overflow-hidden bg-muted self-stretch">
+          <div className="bg-muted relative h-52 w-auto shrink-0 self-stretch overflow-hidden rounded-r-2xl">
             {/* Spine highlight */}
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-2 bg-linear-to-r from-black/30 to-transparent" />
             <img
               src={book.coverImageUrl ?? "/books/book.jpg"}
               alt={`غلاف ${book.title}`}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
 
             {/* Status badge overlaid on cover bottom */}
             {status && (
-              <div className="absolute bottom-2 inset-x-1 flex justify-center">
+              <div className="absolute inset-x-1 bottom-2 flex justify-center">
                 <span
                   className={cn(
                     "text-[10px] font-medium px-2 py-0.5 rounded-full border backdrop-blur-md",
@@ -103,7 +104,7 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
         </Link>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col min-w-0 py-4 pl-4 gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-2 py-4 pl-4">
           {/* Header row: title + rating */}
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
@@ -119,18 +120,18 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
               </Link>
               {book.author ? (
                 <Link to="/author/$id" params={{ id: book.author.id }} className="inline w-fit">
-                  <p className="text-sm text-muted-foreground mt-1 truncate hover:underline">
+                  <p className="text-muted-foreground mt-1 truncate text-sm hover:underline">
                     {book.author?.name}
                   </p>
                 </Link>
               ) : (
-                <p className="text-sm text-muted-foreground mt-0.5 truncate">مجهول</p>
+                <p className="text-muted-foreground mt-0.5 truncate text-sm">مجهول</p>
               )}
             </div>
 
             {rating && (
-              <div className="flex items-center gap-1 shrink-0 px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                <StarIcon weight="fill" className="w-3.5 h-3.5 text-amber-400" />
+              <div className="flex shrink-0 items-center gap-1 rounded-lg border border-amber-500/20 bg-amber-500/10 px-2 py-1">
+                <StarIcon weight="fill" className="h-3.5 w-3.5 text-amber-400" />
                 <span className="text-sm font-semibold text-amber-400 tabular-nums">
                   {rating.toFixed(1)}
                 </span>
@@ -140,7 +141,7 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
 
           {/* Description */}
           {book.description && (
-            <p className="text-sm text-muted-foreground text-justify line-clamp-2 leading-relaxed">
+            <p className="text-muted-foreground line-clamp-2 text-justify text-sm leading-relaxed">
               {book.description}
             </p>
           )}
@@ -149,15 +150,15 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
           {isReading && readingProgress != null && (
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                  <BookOpenIcon className="w-3 h-3" />
+                <span className="text-muted-foreground flex items-center gap-1 text-[10px]">
+                  <BookOpenIcon className="h-3 w-3" />
                   التقدم
                 </span>
                 <span className="text-[10px] font-semibold text-sky-400 tabular-nums">
                   {readingProgress}%
                 </span>
               </div>
-              <div className="h-1 rounded-full bg-muted overflow-hidden">
+              <div className="bg-muted h-1 overflow-hidden rounded-full">
                 <div
                   className="h-full rounded-full bg-sky-500 transition-all duration-500"
                   style={{ width: `${readingProgress}%` }}
@@ -167,27 +168,27 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
           )}
 
           {/* Footer: meta + genres */}
-          <div className="flex items-center gap-3 mt-auto flex-wrap">
+          <div className="mt-auto flex flex-wrap items-center gap-3">
             {book.publicationYear && (
-              <span className="flex items-center gap-1 text-[11px] text-muted-foreground/70">
-                <CalendarBlankIcon className="w-3 h-3" />
+              <span className="text-muted-foreground/70 flex items-center gap-1 text-[11px]">
+                <CalendarBlankIcon className="h-3 w-3" />
                 {book.publicationYear}
               </span>
             )}
             {book.pageCount && (
-              <span className="text-[11px] text-muted-foreground/70 tabular-nums">
+              <span className="text-muted-foreground/70 text-[11px] tabular-nums">
                 {book.pageCount} ص
               </span>
             )}
 
             {/* Genres */}
             {book.genres && book.genres.length > 0 && (
-              <div className="flex flex-wrap gap-1 mr-auto pl-8">
+              <div className="mr-auto flex flex-wrap gap-1 pl-8">
                 {book.genres.slice(0, 3).map((genre) => (
                   <Badge
                     key={genre}
                     variant="secondary"
-                    className="text-[10px] px-2 py-0.5 font-medium bg-secondary/40 rounded-full"
+                    className="bg-secondary/40 rounded-full px-2 py-0.5 text-[10px] font-medium"
                   >
                     {BOOK_GENRES.find((g) => g.value === genre)?.label}
                   </Badge>
@@ -195,7 +196,7 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
                 {book.genres.length > 3 && (
                   <Badge
                     variant="outline"
-                    className="text-[10px] px-2 py-0.5 font-normal border-dashed rounded-full"
+                    className="rounded-full border-dashed px-2 py-0.5 text-[10px] font-normal"
                   >
                     +{book.genres.length - 3}
                   </Badge>
@@ -224,9 +225,9 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
         aria-label={trackingStatus ? "تحديث حالة القراءة" : "إضافة إلى قائمة القراءة"}
       >
         {trackingStatus === "completed" ? (
-          <CheckCircleIcon weight="fill" className="w-3.5 h-3.5" />
+          <CheckCircleIcon weight="fill" className="h-3.5 w-3.5" />
         ) : (
-          <PlusIcon weight="bold" className="w-3.5 h-3.5" />
+          <PlusIcon weight="bold" className="h-3.5 w-3.5" />
         )}
       </Button>
     </article>

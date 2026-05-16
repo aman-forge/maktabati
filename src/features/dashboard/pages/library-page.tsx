@@ -12,6 +12,7 @@ import {
   XIcon,
 } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
+
 import type { BookCardBook } from "@/features/books/server/get-books";
 import { BookCard } from "@/ui/components/book/book-card";
 import { BookCardDetailed } from "@/ui/components/book/book-card-detailed";
@@ -126,12 +127,12 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
       <button
         type="button"
         onClick={() => setCollapsed((c) => !c)}
-        className="group flex items-center gap-2.5 w-full text-right"
+        className="group flex w-full items-center gap-2.5 text-right"
       >
         <div className={cn("p-1.5 rounded-lg bg-muted/60", status.color)}>
           <Icon className="size-4" weight="duotone" />
         </div>
-        <h2 className="font-semibold text-base flex-1 text-right">{status.label}</h2>
+        <h2 className="flex-1 text-right text-base font-semibold">{status.label}</h2>
         <Badge
           variant="secondary"
           className={cn("text-xs font-medium px-2 h-5", status.badgeClass)}
@@ -194,16 +195,16 @@ function LibrarySidebar({
   onViewModeChange,
 }: SidebarProps) {
   return (
-    <aside className="w-64 shrink-0 flex flex-col gap-6 sticky top-20 self-start h-[calc(100vh-6rem)] overflow-y-visible pb-6 scrollbar-none">
+    <aside className="scrollbar-none sticky top-20 flex h-[calc(100vh-6rem)] w-64 shrink-0 flex-col gap-6 self-start overflow-y-visible pb-6">
       {/* Search */}
       <div className="relative">
-        <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+        <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
         <Input
           type="search"
           placeholder="ابحث في مكتبتك..."
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          className="pr-9 h-9 text-sm"
+          className="h-9 pr-9 text-sm"
           autoComplete="off"
         />
 
@@ -211,7 +212,7 @@ function LibrarySidebar({
           <button
             type="button"
             onClick={() => onQueryChange("")}
-            className="absolute left-[13.4px] top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 left-[13.4px] -translate-y-1/2 transition-colors"
           >
             <XIcon className="size-3.5" weight="bold" />
           </button>
@@ -220,7 +221,7 @@ function LibrarySidebar({
 
       {/* Status filter */}
       <div className="space-y-1">
-        <p className="text-xs font-medium text-muted-foreground px-1 mb-2 uppercase tracking-wider">
+        <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
           حالة القراءة
         </p>
         <nav className="space-y-0.5">
@@ -262,16 +263,16 @@ function LibrarySidebar({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-border" />
+      <div className="bg-border h-px" />
 
       {/* View & Sort */}
       <div className="space-y-4">
         {/* View toggle */}
         <div>
-          <p className="text-xs font-medium text-muted-foreground px-1 mb-2 uppercase tracking-wider">
+          <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
             طريقة العرض
           </p>
-          <div className="flex rounded-lg border bg-muted/40 p-0.5 gap-0.5">
+          <div className="bg-muted/40 flex gap-0.5 rounded-lg border p-0.5">
             {(
               [
                 { value: "grid", icon: SquaresFourIcon, label: "شبكة" },
@@ -299,7 +300,7 @@ function LibrarySidebar({
 
         {/* Sort */}
         <div>
-          <p className="text-xs font-medium text-muted-foreground px-1 mb-2 uppercase tracking-wider">
+          <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
             الترتيب
           </p>
           <div className="space-y-0.5">
@@ -431,13 +432,13 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
         />
 
         {/* Main content */}
-        <main className="flex-1 min-w-0 space-y-10">
+        <main className="min-w-0 flex-1 space-y-10">
           {/* Active query banner */}
           {query && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <MagnifyingGlassIcon className="size-4 shrink-0" />
               <span className="flex gap-2">
-                نتائج البحث عن <span className="font-medium text-foreground">"{query}"</span>
+                نتائج البحث عن <span className="text-foreground font-medium">"{query}"</span>
                 <span>{" · "}</span>
                 <span>
                   {filtered.length} {filtered.length <= 10 ? "كتب" : "كتاب"}
@@ -446,7 +447,7 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="mr-1 text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground mr-1 transition-colors"
               >
                 <XIcon className="size-3.5" />
               </button>
@@ -456,13 +457,13 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
           {/* Empty state */}
           {!hasResults ? (
             <div className="flex flex-col items-center justify-center py-32 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
-                <BookOpenIcon className="size-8 text-muted-foreground/30" weight="duotone" />
+              <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                <BookOpenIcon className="text-muted-foreground/30 size-8" weight="duotone" />
               </div>
-              <h3 className="text-base font-semibold mb-1.5">
+              <h3 className="mb-1.5 text-base font-semibold">
                 {query ? `لا نتائج لـ "${query}"` : "لا توجد كتب هنا بعد"}
               </h3>
-              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-5">
+              <p className="text-muted-foreground mb-5 max-w-xs text-sm leading-relaxed">
                 {query
                   ? "جرّب كلمات مختلفة أو غيّر التصفية"
                   : "ابدأ باستكشاف الكتب وأضفها إلى مكتبتك"}
