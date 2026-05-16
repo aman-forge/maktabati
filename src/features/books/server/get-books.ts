@@ -1,3 +1,4 @@
+import { uuidSchema } from "@features/books/lib/validators";
 import { createServerFn } from "@tanstack/react-start";
 import {
   and,
@@ -13,10 +14,10 @@ import {
   type SQL,
   sql,
 } from "drizzle-orm";
+
 import { bookSearchSchema } from "@/app/_public/discover/books";
 import { db } from "@/db";
 import { authors, books } from "@/db/tables";
-import { uuidSchema } from "@features/books/lib/validators";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
@@ -56,12 +57,9 @@ export const searchBooks = createServerFn({ method: "GET" })
     if (data.maxYear) conditions.push(lte(books.publicationYear, data.maxYear));
     if (data.minPages) conditions.push(gte(books.pageCount, data.minPages));
     if (data.maxPages) conditions.push(lte(books.pageCount, data.maxPages));
-    if (data.genres?.length)
-      conditions.push(arrayOverlaps(books.genres, data.genres));
-    if (data.topics?.length)
-      conditions.push(arrayOverlaps(books.topics, data.topics));
-    if (data.publishers?.length)
-      conditions.push(inArray(books.publisherId, data.publishers));
+    if (data.genres?.length) conditions.push(arrayOverlaps(books.genres, data.genres));
+    if (data.topics?.length) conditions.push(arrayOverlaps(books.topics, data.topics));
+    if (data.publishers?.length) conditions.push(inArray(books.publisherId, data.publishers));
 
     const page = data.page ?? 1;
     const offset = (page - 1) * PAGE_SIZE;
@@ -111,16 +109,18 @@ export type SearchBooksResult = Awaited<ReturnType<typeof searchBooks>>;
 export type BookCardBook = SearchBooksResult["books"][number];
 
 export const getBookById = createServerFn({ method: "GET" })
-  .inputValidator(uuidSchema)
+  .inputValidator((data: string) => data)
   .handler(async ({ data: bookId }) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(bookId)) return null;
+
     const book = await db.query.books.findFirst({
       where: { id: bookId },
       with: {
         author: {
           extras: {
             // Note: fires a separate COUNT query — fine for single-book pages only
-            totalBooks: (author) =>
-              db.$count(books, eq(books.authorId, author.id)),
+            totalBooks: (author) => db.$count(books, eq(books.authorId, author.id)),
           },
           with: {
             books: {

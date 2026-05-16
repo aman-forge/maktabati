@@ -10,13 +10,11 @@ interface BookTrackingContextValue {
   openTrackModal: (book: BookCardBook | BookType) => void;
 }
 
-const BookTrackingContext =
-  React.createContext<BookTrackingContextValue | null>(null);
+const BookTrackingContext = React.createContext<BookTrackingContextValue | null>(null);
 
 export function useBookTracking(): BookTrackingContextValue {
   const ctx = React.useContext(BookTrackingContext);
-  if (!ctx)
-    throw new Error("useBookTracking must be used within BookTrackingProvider");
+  if (!ctx) throw new Error("useBookTracking must be used within BookTrackingProvider");
   return ctx;
 }
 

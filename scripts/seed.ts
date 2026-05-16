@@ -1,7 +1,8 @@
 import "dotenv/config";
-import { authors, books } from "@/db/tables";
 import { eq } from "drizzle-orm";
+
 import { db } from "@/db";
+import { authors, books } from "@/db/tables";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

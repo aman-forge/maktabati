@@ -1,6 +1,7 @@
 import { NeonAuthUIProvider } from "@neondatabase/auth/react/ui";
 import { Link, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+
 import { authClient } from "@/features/auth/client";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -147,8 +148,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         EMAIL_CAN_NOT_BE_UPDATED: "لا يمكن تحديث البريد الإلكتروني",
         CREDENTIAL_ACCOUNT_NOT_FOUND: "لم يتم العثور على حساب بيانات الاعتماد",
         SESSION_EXPIRED: "انتهت صلاحية الجلسة",
-        FAILED_TO_UNLINK_LAST_ACCOUNT:
-          "فشل إلغاء ربط الحساب الأخير. يجب أن يظل حساب واحد على الأقل",
+        FAILED_TO_UNLINK_LAST_ACCOUNT: "فشل إلغاء ربط الحساب الأخير. يجب أن يظل حساب واحد على الأقل",
         ACCOUNT_NOT_FOUND: "الحساب غير موجود",
         USER_ALREADY_HAS_PASSWORD: "المستخدم لديه كلمة مرور بالفعل",
 

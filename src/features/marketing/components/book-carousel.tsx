@@ -59,19 +59,19 @@ export function BookCarousel({
   }
 
   return (
-    <section dir="rtl" className="flex flex-col gap-6 relative group/carousel">
-      <div className="flex items-end justify-between px-6 lg:px-12 container mx-auto">
+    <section dir="rtl" className="group/carousel relative flex flex-col gap-6">
+      <div className="container mx-auto flex items-end justify-between px-6 lg:px-12">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             {accentColor && (
               <span
-                className="w-1 h-5 rounded-full shrink-0"
+                className="h-5 w-1 shrink-0 rounded-full"
                 style={{ backgroundColor: accentColor }}
                 aria-hidden="true"
               />
             )}
             <h2
-              className="text-2xl font-bold tracking-tight text-foreground"
+              className="text-foreground text-2xl font-bold tracking-tight"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {title}
@@ -92,7 +92,7 @@ export function BookCarousel({
             disabled={!canScrollLeft}
             aria-label="السابق"
           >
-            <CaretRightIcon className="w-4 h-4" />
+            <CaretRightIcon className="h-4 w-4" />
           </Button>
 
           <Button
@@ -106,18 +106,18 @@ export function BookCarousel({
             disabled={!canScrollRight}
             aria-label="التالي"
           >
-            <CaretLeftIcon className="w-4 h-4" />
+            <CaretLeftIcon className="h-4 w-4" />
           </Button>
 
           {/* Conditionally render Link to prevent Hydration crashes with '#' */}
           {viewAllHref && (
             <Link
               to={viewAllHref}
-              className="hidden sm:flex items-center gap-1 text-sm font-medium me-2 transition-colors hover:opacity-80"
+              className="me-2 hidden items-center gap-1 text-sm font-medium transition-colors hover:opacity-80 sm:flex"
               style={{ color: accentColor ?? "hsl(var(--primary))" }}
             >
               عرض الكل
-              <ArrowLeftIcon className="w-4 h-4 transition-transform group-hover/carousel:-translate-x-0.5" />
+              <ArrowLeftIcon className="h-4 w-4 transition-transform group-hover/carousel:-translate-x-0.5" />
             </Link>
           )}
         </div>
@@ -147,7 +147,7 @@ export function BookCarousel({
         <ul
           ref={scrollRef}
           onScroll={checkScroll}
-          className="list-none m-0 p-0 flex gap-5 overflow-x-auto pb-4 px-6 lg:px-12 scroll-smooth"
+          className="m-0 flex list-none gap-5 overflow-x-auto scroll-smooth p-0 px-6 pb-4 lg:px-12"
           style={{ scrollbarWidth: "none" }}
           aria-label={`قائمة كتب ${title}`}
         >
@@ -166,7 +166,7 @@ export function BookCarousel({
 export function BookCarouselSkeleton() {
   return (
     <section dir="rtl" className="flex flex-col gap-6">
-      <div className="flex items-end justify-between px-6 lg:px-12 container mx-auto">
+      <div className="container mx-auto flex items-end justify-between px-6 lg:px-12">
         <div className="flex flex-col gap-2">
           <Skeleton className="h-6 w-40" />
           <Skeleton className="h-4 w-64" />
@@ -176,7 +176,7 @@ export function BookCarouselSkeleton() {
           <Skeleton className="h-8 w-8 rounded-full" />
         </div>
       </div>
-      <div className="flex gap-5 overflow-visible px-6 lg:px-12 container mx-auto">
+      <div className="container mx-auto flex gap-5 overflow-visible px-6 lg:px-12">
         {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton key={`i-${_}-${i++}`} className="shrink-0 w-40 sm:w-50 h-60 sm:h-75" />
         ))}

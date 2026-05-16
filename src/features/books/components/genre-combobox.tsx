@@ -12,7 +12,9 @@ import {
 } from "@shadcn/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@shadcn/popover";
 import * as React from "react";
+
 import { cn } from "@/ui/lib/utils";
+
 import { BOOK_GENRES, type BookGenre } from "../../../db/constants/books";
 
 interface GenreComboboxProps {
@@ -20,10 +22,7 @@ interface GenreComboboxProps {
   onSelectionChange: (genres: BookGenre[]) => void;
 }
 
-export function GenreCombobox({
-  selected,
-  onSelectionChange,
-}: GenreComboboxProps) {
+export function GenreCombobox({ selected, onSelectionChange }: GenreComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleGenre = (genre: BookGenre) => {
@@ -49,9 +48,7 @@ export function GenreCombobox({
           >
             <TagIcon className="size-4 shrink-0 opacity-50 group-hover:opacity-100" />
             {selected.length === 0 ? (
-              <span className="text-muted-foreground group-hover:text-foreground">
-                التصنيفات
-              </span>
+              <span className="text-muted-foreground group-hover:text-foreground">التصنيفات</span>
             ) : selected.length === 1 ? (
               <span className="truncate">{selected[0].label}</span>
             ) : (
@@ -60,7 +57,7 @@ export function GenreCombobox({
           </Button>
         }
       />
-      <PopoverContent className="w-65 p-0 gap-0!" align="start">
+      <PopoverContent className="w-65 gap-0! p-0" align="start">
         <Command>
           <CommandInput
             placeholder="عن التصنيفات أبحث..."
@@ -90,9 +87,7 @@ export function GenreCombobox({
                       >
                         {isSelected && <CheckIcon className="size-3" />}
                       </div>
-                      <span className={cn(isSelected && "font-medium")}>
-                        {genre.label}
-                      </span>
+                      <span className={cn(isSelected && "font-medium")}>{genre.label}</span>
                     </CommandItem>
                   );
                 })}

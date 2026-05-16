@@ -2,15 +2,8 @@
 // https://orm.drizzle.team/docs/relations-v2
 
 import { defineRelations } from "drizzle-orm";
-import {
-  authors,
-  books,
-  profiles,
-  publishers,
-  reviews,
-  series,
-  userBooks,
-} from "./tables";
+
+import { authors, books, profiles, publishers, reviews, series, userBooks } from "./tables";
 
 export const relations = defineRelations(
   { authors, books, publishers, reviews, series, userBooks, profiles },

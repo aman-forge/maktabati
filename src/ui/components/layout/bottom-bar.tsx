@@ -82,7 +82,7 @@ function BottomBar() {
 
   return (
     <nav
-      className="fixed bottom-0 z-50 w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
+      className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed bottom-0 z-50 w-full border-t backdrop-blur md:hidden"
       dir="rtl"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
@@ -149,7 +149,7 @@ function BottomBar() {
                   />
 
                   {item.kind === "profile" && unreadNotifications > 0 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                    <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full text-[9px] font-bold">
                       {unreadNotifications > 9 ? "9+" : unreadNotifications}
                     </span>
                   )}

@@ -14,10 +14,10 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="size-9 hidden sm:flex rounded-xl"
+      className="hidden size-9 rounded-xl sm:flex"
     >
-      <MoonIcon className="size-4.5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 duration" />
-      <SunDimIcon className="absolute size-4.5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 duration" />
+      <MoonIcon className="duration size-4.5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+      <SunDimIcon className="duration absolute size-4.5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
       <span className="sr-only">تبديل السمة</span>
     </Button>
   );

@@ -1,18 +1,12 @@
 import { Await } from "@tanstack/react-router";
 import { Suspense } from "react";
+
 import type { getBooks } from "@/features/books/server/get-books";
-import {
-  BookCarousel,
-  BookCarouselSkeleton,
-} from "@/features/marketing/components/book-carousel";
+import { BookCarousel, BookCarouselSkeleton } from "@/features/marketing/components/book-carousel";
 import { GenreGrid } from "@/features/marketing/components/genre-grid";
 import { HeroSection } from "@/features/marketing/components/hero-section";
 
-function MarketingHome({
-  booksPromise,
-}: {
-  booksPromise: ReturnType<typeof getBooks>;
-}) {
+function MarketingHome({ booksPromise }: { booksPromise: ReturnType<typeof getBooks> }) {
   return (
     <main className="min-h-screen font-sans">
       <HeroSection />
@@ -79,14 +73,14 @@ function MarketingHome({
 
 function SectionDivider({ label }: { label?: string }) {
   return (
-    <div className="flex items-center gap-4 px-8 lg:px-16 opacity-40">
-      <div className="h-px flex-1 bg-border" />
+    <div className="flex items-center gap-4 px-8 opacity-40 lg:px-16">
+      <div className="bg-border h-px flex-1" />
       {label && (
-        <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
+        <span className="text-muted-foreground text-[10px] font-bold tracking-[0.25em] uppercase">
           {label}
         </span>
       )}
-      <div className="h-px flex-1 bg-border" />
+      <div className="bg-border h-px flex-1" />
     </div>
   );
 }

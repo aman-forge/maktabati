@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";
+
 import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
 import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
 import { searchBooks } from "@/features/books/server/get-books";
@@ -179,7 +180,6 @@ function BooksSearchPage() {
   const [qInput, setQInput] = React.useState(search.q ?? "");
   const debouncedQ = useDebounce(qInput, 350);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: setParams is stable
   React.useEffect(() => {
     setParams(() => ({ q: debouncedQ || undefined }));
   }, [debouncedQ]);
@@ -345,26 +345,26 @@ function BooksSearchPage() {
   const isSearching = isNavigating && search.page === 1;
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="bg-background min-h-screen overflow-x-hidden">
       {/* ── Sticky filter bar ──────────────────────────────── */}
-      <div className="sticky! top-0 md:relative z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
-        <div className="container mx-auto px-0 py-3 space-y-2.5">
+      <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky! top-0 z-30 border-b backdrop-blur md:relative">
+        <div className="container mx-auto space-y-2.5 px-0 py-3">
           {/* Search input */}
           <div className="relative px-4">
-            <MagnifyingGlassIcon className="absolute right-3 top-1/2 mr-4 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2" />
             <Input
               type="search"
               placeholder="ابحث عن كتاب أو مؤلف..."
               value={qInput}
               onChange={(e) => setQInput(e.target.value)}
-              className="pr-9 h-10 text-sm"
+              className="h-10 pr-9 text-sm"
               autoComplete="off"
               autoCorrect="off"
             />
             {/* Loading spinner while debouncing */}
             {isSearching ? (
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 ml-4">
-                <div className="size-4 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
+              <div className="absolute top-1/2 left-3 ml-4 -translate-y-1/2">
+                <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
               </div>
             ) : qInput ? (
               <button
@@ -373,7 +373,7 @@ function BooksSearchPage() {
                   setQInput("");
                   setParams(() => ({ q: undefined }));
                 }}
-                className="absolute left-3 top-1/2 ml-4 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 ml-4 -translate-y-1/2 transition-colors"
               >
                 <XIcon className="size-4" />
               </button>
@@ -381,7 +381,7 @@ function BooksSearchPage() {
           </div>
 
           {/* Filter row */}
-          <div className="flex items-center gap-2 overflow-x-auto overflow-visible! scrollbar-none px-4">
+          <div className="scrollbar-none flex items-center gap-2 overflow-visible! overflow-x-auto px-4">
             <GenreCombobox
               selected={selectedGenres}
               onSelectionChange={(newGenres: BookGenre[]) =>
@@ -398,13 +398,13 @@ function BooksSearchPage() {
               />
             </div>
 
-            <div className="h-5 w-px bg-border shrink-0" />
+            <div className="bg-border h-5 w-px shrink-0" />
 
             <Select
               value={search.sort}
               onValueChange={(v) => setParams(() => ({ sort: v as BookSortOption }))}
             >
-              <SelectTrigger className="h-8 shrink-0 w-auto gap-1.5 border-dashed text-xs text-muted-foreground">
+              <SelectTrigger className="text-muted-foreground h-8 w-auto shrink-0 gap-1.5 border-dashed text-xs">
                 <SortAscendingIcon className="size-3.5 shrink-0" />
                 <span className="hidden sm:inline">
                   {SORT_OPTIONS.find((o) => o.value === search.sort)?.label}
@@ -433,7 +433,7 @@ function BooksSearchPage() {
                   key={tag.key}
                   variant="secondary"
                   onClick={tag.onRemove}
-                  className="h-6 gap-1 pl-1 text-xs font-normal cursor-pointer bg-primary/10 text-primary hover:bg-destructive/10 hover:text-destructive transition-colors"
+                  className="bg-primary/10 text-primary hover:bg-destructive/10 hover:text-destructive h-6 cursor-pointer gap-1 pl-1 text-xs font-normal transition-colors"
                 >
                   {tag.label}
                   <XIcon className="size-3 opacity-60" />
@@ -442,7 +442,7 @@ function BooksSearchPage() {
               <button
                 type="button"
                 onClick={clearAllFilters}
-                className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+                className="text-muted-foreground hover:text-destructive text-xs transition-colors"
               >
                 مسح الكل
               </button>
@@ -455,8 +455,8 @@ function BooksSearchPage() {
       <main className="container mx-auto px-4 py-5">
         {/* Count */}
         {books.length > 0 && (
-          <p className="text-sm text-muted-foreground mb-4">
-            <span className="font-medium text-foreground">{loaderData.total}</span>
+          <p className="text-muted-foreground mb-4 text-sm">
+            <span className="text-foreground font-medium">{loaderData.total}</span>
             {" كتاب"}
             {hasActiveFilters && <span className="text-muted-foreground/60"> · بتصفية نشطة</span>}
           </p>
@@ -465,13 +465,13 @@ function BooksSearchPage() {
         {/* Empty state */}
         {books.length === 0 && !isSearching ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
-              <MagnifyingGlassIcon className="size-7 text-muted-foreground/40" />
+            <div className="bg-muted mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
+              <MagnifyingGlassIcon className="text-muted-foreground/40 size-7" />
             </div>
-            <h3 className="text-base font-semibold mb-1.5">
+            <h3 className="mb-1.5 text-base font-semibold">
               {qInput ? `لا نتائج لـ "${qInput}"` : "لا توجد كتب"}
             </h3>
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-5">
+            <p className="text-muted-foreground mb-5 max-w-xs text-sm leading-relaxed">
               {qInput
                 ? "جرّب كلمات مختلفة، أو قلّل من التصفيات"
                 : "جرّب تعديل التصفيات للعثور على ما تبحث عنه"}
@@ -483,12 +483,12 @@ function BooksSearchPage() {
             )}
           </div>
         ) : search.view === "list" ? (
-          <div className="rounded-xl border bg-card overflow-visible">
-            <div className="hidden sm:flex items-center gap-4 px-4 py-2.5 text-xs font-medium text-muted-foreground border-b bg-muted/40">
+          <div className="bg-card overflow-visible rounded-xl border">
+            <div className="text-muted-foreground bg-muted/40 hidden items-center gap-4 border-b px-4 py-2.5 text-xs font-medium sm:flex">
               <div className="w-10 shrink-0" />
               <div className="flex-1">العنوان</div>
-              <div className="hidden md:block w-36">التصنيفات</div>
-              <div className="hidden sm:block w-12 text-center">السنة</div>
+              <div className="hidden w-36 md:block">التصنيفات</div>
+              <div className="hidden w-12 text-center sm:block">السنة</div>
               <div className="w-14 text-center">التقييم</div>
               <div className="w-8 shrink-0" />
             </div>
@@ -521,18 +521,18 @@ function BooksSearchPage() {
                 disabled={isNavigating}
               >
                 {isNavigating && search.page > 1 ? (
-                  <div className="size-4 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />
+                  <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
                 ) : (
                   <FileMagnifyingGlassIcon className="size-4" />
                 )}
                 تحميل المزيد
               </Button>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {books.length} من {loaderData.total} كتاب
               </p>
             </>
           ) : books.length > 0 ? (
-            <p className="text-sm text-muted-foreground py-2">
+            <p className="text-muted-foreground py-2 text-sm">
               وصلت لنهاية النتائج · {loaderData.total} كتاب
             </p>
           ) : null}

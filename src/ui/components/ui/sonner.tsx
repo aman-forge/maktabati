@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@lonik/themer";
 import {
   CheckCircleIcon,
   InfoIcon,
@@ -7,7 +8,6 @@ import {
   WarningIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
-import { useTheme } from "@lonik/themer";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {

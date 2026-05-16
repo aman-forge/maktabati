@@ -195,7 +195,7 @@ const activityConfig = {
 
 export default function DashboardHome() {
   return (
-    <main className="min-h-screen container mx-auto py-6 px-4 ">
+    <main className="container mx-auto min-h-screen px-4 py-6">
       {/* Mobile */}
       <div className="space-y-6 xl:hidden">
         <StreakCard streak={streak} />
@@ -234,12 +234,7 @@ export default function DashboardHome() {
         >
           <div className="mt-2 grid grid-cols-2 gap-3">
             {stats.map((item) => (
-              <StatCard
-                key={item.label}
-                label={item.label}
-                value={item.value}
-                icon={item.icon}
-              />
+              <StatCard key={item.label} label={item.label} value={item.value} icon={item.icon} />
             ))}
           </div>
         </PanelCard>
@@ -322,12 +317,7 @@ export default function DashboardHome() {
           >
             <div className="mt-2 grid grid-cols-2 gap-3">
               {stats.map((item) => (
-                <StatCard
-                  key={item.label}
-                  label={item.label}
-                  value={item.value}
-                  icon={item.icon}
-                />
+                <StatCard key={item.label} label={item.label} value={item.value} icon={item.icon} />
               ))}
             </div>
           </PanelCard>
@@ -355,23 +345,16 @@ function PanelCard({
   className?: string;
 }) {
   return (
-    <section
-      className={[
-        "rounded-2xl border bg-card p-5 shadow-sm",
-        className ?? "",
-      ].join(" ")}
-    >
+    <section className={["rounded-2xl border bg-card p-5 shadow-sm", className ?? ""].join(" ")}>
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold tracking-tight">{title}</h2>
-          {subtitle && (
-            <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-muted-foreground mt-0.5 text-sm">{subtitle}</p>}
         </div>
         {actionLabel && actionHref && (
           <Link
             to={actionHref}
-            className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground inline-flex shrink-0 items-center gap-1 text-xs transition-colors"
           >
             {actionLabel}
             <CaretRightIcon weight="bold" className="h-3 w-3 rotate-180" />
@@ -387,26 +370,26 @@ function PanelCard({
 
 function ReadingCard({ book }: { book: ReadingBook }) {
   return (
-    <article className="relative group rounded-xl border bg-background p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-border/80">
+    <article className="group bg-background hover:border-border/80 relative rounded-xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex gap-3">
         <img
           src={book.coverUrl ?? "/books/book.jpg"}
           alt={book.title}
           loading="lazy"
           decoding="async"
-          className="w-16 rounded-lg object-cover aspect-2/3 bg-muted h-auto"
+          className="bg-muted aspect-2/3 h-auto w-16 rounded-lg object-cover"
         />
 
-        <div className="min-w-0 flex-1 flex flex-col justify-between">
+        <div className="flex min-w-0 flex-1 flex-col justify-between">
           <div>
             <Link to={`/book/$id`} params={{ id: book.id }}>
-              <h3 className="truncate text-sm font-semibold leading-snug hover:text-primary transition-colors">
+              <h3 className="hover:text-primary truncate text-sm leading-snug font-semibold transition-colors">
                 {book.title}
               </h3>
             </Link>
             {/*TODO: UPDATE URL*/}
             <Link to={`/`}>
-              <p className="mt-0.5 text-xs text-muted-foreground hover:text-foreground transition-colors hover:underline">
+              <p className="text-muted-foreground hover:text-foreground mt-0.5 text-xs transition-colors hover:underline">
                 {book.author}
               </p>
             </Link>
@@ -414,29 +397,22 @@ function ReadingCard({ book }: { book: ReadingBook }) {
 
           <div className="mt-3 flex w-full gap-2">
             <div className="flex-1">
-              <div className="mb-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
+              <div className="text-muted-foreground mb-1.5 flex items-center justify-between text-[11px]">
                 <span>
                   صفحة {book.currentPage} من {book.totalPages}
                 </span>
-                <span className="font-medium text-foreground">
-                  {book.progress}٪
-                </span>
+                <span className="text-foreground font-medium">{book.progress}٪</span>
               </div>
-              <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+              <div className="bg-muted h-1.5 overflow-hidden rounded-full">
                 <div
-                  className="h-1.5 rounded-full bg-primary transition-all"
+                  className="bg-primary h-1.5 rounded-full transition-all"
                   style={{ width: `${book.progress}%` }}
                 />
               </div>
             </div>
 
-            <div className="flex justify-end mt-1">
-              <Button
-                type="button"
-                variant="ghost"
-                size="xs"
-                className="px-2 gap-0.5 text-xs"
-              >
+            <div className="mt-1 flex justify-end">
+              <Button type="button" variant="ghost" size="xs" className="gap-0.5 px-2 text-xs">
                 <PlusIcon weight="bold" className="h-3 w-3 rotate-180" />
                 تحديث
               </Button>
@@ -450,55 +426,44 @@ function ReadingCard({ book }: { book: ReadingBook }) {
 
 // ─── Activity row ─────────────────────────────────────────────────────────────
 
-function ActivityRow({
-  item,
-  isLast,
-}: {
-  item: ActivityItem;
-  isLast: boolean;
-}) {
+function ActivityRow({ item, isLast }: { item: ActivityItem; isLast: boolean }) {
   const cfg = activityConfig[item.type];
   const isMe = item.userId === "me";
 
   return (
     <div className="relative flex gap-3 pb-4 last:pb-0">
       {/* Timeline line */}
-      {!isLast && (
-        <div className="absolute right-3 top-7 bottom-0 w-px bg-border" />
-      )}
+      {!isLast && <div className="bg-border absolute top-7 right-3 bottom-0 w-px" />}
 
       {/* Dot */}
       <div className="relative z-10 shrink-0">
         <div
-          className={`flex h-6 w-6 items-center justify-center rounded-full ring-4 ring-background ${cfg.dotClass}`}
+          className={`ring-background flex h-6 w-6 items-center justify-center rounded-full ring-4 ${cfg.dotClass}`}
         >
           <cfg.icon className="size-3 text-white" weight="bold" />
         </div>
       </div>
 
       {/* Card */}
-      <div className="flex-1 min-w-0 rounded-xl border bg-background p-3 transition-all hover:shadow-sm hover:border-border/80">
+      <div className="bg-background hover:border-border/80 min-w-0 flex-1 rounded-xl border p-3 transition-all hover:shadow-sm">
         {/* Header */}
-        <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary">
-              <UserIcon
-                weight="duotone"
-                className="size-4 text-muted-foreground"
-              />
+            <div className="bg-secondary flex h-7 w-7 items-center justify-center rounded-full">
+              <UserIcon weight="duotone" className="text-muted-foreground size-4" />
             </div>
             {isMe ? (
               <span className="text-sm font-semibold">أنت</span>
             ) : (
               <Link
                 to={`/`} // TODO: UPDATE URL - /u/${item.userId}
-                className="text-sm font-semibold hover:text-primary transition-colors"
+                className="hover:text-primary text-sm font-semibold transition-colors"
               >
                 {item.user}
               </Link>
             )}
           </div>
-          <span className="shrink-0 text-[11px] text-muted-foreground bg-muted rounded-full px-2 py-0.5">
+          <span className="text-muted-foreground bg-muted shrink-0 rounded-full px-2 py-0.5 text-[11px]">
             {item.time}
           </span>
         </div>
@@ -506,22 +471,18 @@ function ActivityRow({
         {/* Content */}
         <div className="flex gap-3">
           {item.type !== "goal" && (
-            <Link
-              to={`/book/$id`}
-              params={{ id: item.bookId }}
-              className="shrink-0"
-            >
+            <Link to={`/book/$id`} params={{ id: item.bookId }} className="shrink-0">
               <img
                 src={"/books/book.jpg"}
                 alt={item.bookId}
                 loading="lazy"
                 decoding="async"
-                className="w-16 rounded-lg object-cover aspect-2/3 bg-muted h-auto"
+                className="bg-muted aspect-2/3 h-auto w-16 rounded-lg object-cover"
               />
             </Link>
           )}
 
-          <div className="flex-1 min-w-0 space-y-1.5">
+          <div className="min-w-0 flex-1 space-y-1.5">
             <p className="text-sm leading-relaxed">
               <span className="text-muted-foreground">{item.action} </span>
               {item.type === "goal" ? (
@@ -530,14 +491,14 @@ function ActivityRow({
                 <Link
                   to={`/book/$id`}
                   params={{ id: item.bookId }}
-                  className="font-semibold hover:text-primary transition-colors"
+                  className="hover:text-primary font-semibold transition-colors"
                 >
                   {item.book}
                 </Link>
               )}
             </p>
 
-            <p className="text-xs text-muted-foreground bg-muted/60 rounded-lg px-2.5 py-2 leading-relaxed">
+            <p className="text-muted-foreground bg-muted/60 rounded-lg px-2.5 py-2 text-xs leading-relaxed">
               {item.detail}
             </p>
           </div>
@@ -558,23 +519,19 @@ type StreakData = {
 
 function StreakCard({ streak }: { streak: StreakData }) {
   return (
-    <section className="rounded-2xl border bg-card p-5 shadow-sm overflow-hidden relative">
+    <section className="bg-card relative overflow-hidden rounded-2xl border p-5 shadow-sm">
       {/* Subtle amber glow behind the number */}
-      <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-amber-400/10 blur-2xl pointer-events-none" />
+      <div className="pointer-events-none absolute -top-6 -right-6 h-24 w-24 rounded-full bg-amber-400/10 blur-2xl" />
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-5">
+      <div className="mb-5 flex items-start justify-between">
         <div>
-          <h2 className="text-base font-semibold tracking-tight">
-            سلسلة القراءة
-          </h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            حافظ على القراءة يومياً
-          </p>
+          <h2 className="text-base font-semibold tracking-tight">سلسلة القراءة</h2>
+          <p className="text-muted-foreground mt-0.5 text-sm">حافظ على القراءة يومياً</p>
         </div>
         <Link
           to="/" // TODO: UPDATE URL
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
         >
           تعديل
           <CaretRightIcon weight="bold" className="h-3 w-3 rotate-180" />
@@ -582,18 +539,14 @@ function StreakCard({ streak }: { streak: StreakData }) {
       </div>
 
       {/* Big number — Duolingo style */}
-      <div className="flex items-center gap-4 mb-5">
+      <div className="mb-5 flex items-center gap-4">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-amber-400/15">
           <FireIcon weight="fill" className="h-8 w-8 text-amber-500" />
         </div>
         <div>
           <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-bold tracking-tight text-amber-500">
-              {streak.days}
-            </span>
-            <span className="text-sm font-medium text-muted-foreground">
-              يوم
-            </span>
+            <span className="text-4xl font-bold tracking-tight text-amber-500">{streak.days}</span>
+            <span className="text-muted-foreground text-sm font-medium">يوم</span>
           </div>
           <span
             className={[
@@ -603,11 +556,7 @@ function StreakCard({ streak }: { streak: StreakData }) {
                 : "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
             ].join(" ")}
           >
-            {streak.todayDone ? (
-              <>✓ أنجزت اليوم</>
-            ) : (
-              <>اقرأ الليلة للحفاظ عليها</>
-            )}
+            {streak.todayDone ? <>✓ أنجزت اليوم</> : <>اقرأ الليلة للحفاظ عليها</>}
           </span>
         </div>
       </div>
@@ -626,13 +575,9 @@ function StreakCard({ streak }: { streak: StreakData }) {
                     : "bg-muted text-muted-foreground",
               ].join(" ")}
             >
-              {streak.completedDays[i] ? (
-                <FireIcon weight="fill" className="size-3.5" />
-              ) : (
-                day
-              )}
+              {streak.completedDays[i] ? <FireIcon weight="fill" className="size-3.5" /> : day}
             </div>
-            <span className="text-[10px] text-muted-foreground">{day}</span>
+            <span className="text-muted-foreground text-[10px]">{day}</span>
           </div>
         ))}
       </div>
@@ -644,9 +589,9 @@ function StreakCard({ streak }: { streak: StreakData }) {
 
 function GoalCard({ goal }: { goal: GoalItem }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl border bg-background p-3">
+    <div className="bg-background flex items-center gap-4 rounded-xl border p-3">
       {/* Circular progress */}
-      <div className="relative shrink-0 h-14">
+      <div className="relative h-14 shrink-0">
         <svg viewBox="0 0 36 36" className="size-14 -rotate-90">
           <title>logo</title>
           <circle
@@ -670,16 +615,16 @@ function GoalCard({ goal }: { goal: GoalItem }) {
             className="text-primary transition-all duration-500"
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-sm -mb-0.5 font-semibold">
+        <span className="absolute inset-0 -mb-0.5 flex items-center justify-center text-sm font-semibold">
           {goal.progress}٪
         </span>
       </div>
 
       {/* Text */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium leading-snug">{goal.label}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{goal.value}</p>
-        <p className="mt-1 text-[11px] text-muted-foreground">{goal.hint}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm leading-snug font-medium">{goal.label}</p>
+        <p className="text-muted-foreground mt-0.5 text-xs">{goal.value}</p>
+        <p className="text-muted-foreground mt-1 text-[11px]">{goal.hint}</p>
       </div>
     </div>
   );
@@ -687,24 +632,16 @@ function GoalCard({ goal }: { goal: GoalItem }) {
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string;
-  icon: Icon;
-}) {
+function StatCard({ label, value, icon: Icon }: { label: string; value: string; icon: Icon }) {
   return (
-    <div className="rounded-xl border bg-background p-3">
+    <div className="bg-background rounded-xl border p-3">
       <div className="flex items-start justify-between gap-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-          <Icon weight="duotone" className="h-4 w-4 text-primary" />
+        <div className="bg-primary/10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg">
+          <Icon weight="duotone" className="text-primary h-4 w-4" />
         </div>
       </div>
       <p className="mt-3 text-2xl font-semibold tracking-tight">{value}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">{label}</p>
+      <p className="text-muted-foreground mt-0.5 text-xs">{label}</p>
     </div>
   );
 }

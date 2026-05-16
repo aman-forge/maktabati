@@ -1,22 +1,13 @@
-import {
-  MagnifyingGlassIcon,
-  SortAscendingIcon,
-  XIcon,
-} from "@phosphor-icons/react";
+import { MagnifyingGlassIcon, SortAscendingIcon, XIcon } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@shadcn/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 
 // TODO: replace later
 function AuthorCard({ author }: { author: any }) {
-  return <div className="p-4 border rounded-xl">{author.name}</div>;
+  return <div className="rounded-xl border p-4">{author.name}</div>;
 }
 
 const SORT_OPTIONS = [
@@ -40,13 +31,13 @@ function AuthorsPage() {
   const isEmpty = authors.length === 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Top bar */}
-      <div className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto px-4 py-3 space-y-2.5">
+      <div className="bg-background/95 sticky top-0 z-30 border-b backdrop-blur">
+        <div className="container mx-auto space-y-2.5 px-4 py-3">
           {/* Search */}
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 right-3 size-4 -translate-y-1/2" />
             <Input
               placeholder="ابحث عن مؤلف..."
               value={q}
@@ -57,9 +48,9 @@ function AuthorsPage() {
               <button
                 type="button"
                 onClick={() => setQ("")}
-                className="absolute left-3 top-1/2 -translate-y-1/2"
+                className="absolute top-1/2 left-3 -translate-y-1/2"
               >
-                <XIcon className="size-4 text-muted-foreground" />
+                <XIcon className="text-muted-foreground size-4" />
               </button>
             )}
           </div>
@@ -67,7 +58,7 @@ function AuthorsPage() {
           {/* Controls */}
           <div className="flex items-center gap-2">
             <Select value={sort} onValueChange={setSort}>
-              <SelectTrigger className="h-8 text-xs gap-1.5">
+              <SelectTrigger className="h-8 gap-1.5 text-xs">
                 <SortAscendingIcon className="size-3.5" />
               </SelectTrigger>
               <SelectContent>
@@ -104,18 +95,18 @@ function AuthorsPage() {
       {/* Content */}
       <main className="container mx-auto px-4 py-6">
         {isEmpty ? (
-          <div className="text-center py-24">
-            <MagnifyingGlassIcon className="size-8 mx-auto text-muted-foreground/40 mb-3" />
-            <p className="text-sm text-muted-foreground">لا توجد نتائج</p>
+          <div className="py-24 text-center">
+            <MagnifyingGlassIcon className="text-muted-foreground/40 mx-auto mb-3 size-8" />
+            <p className="text-muted-foreground text-sm">لا توجد نتائج</p>
           </div>
         ) : view === "grid" ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {authors.map((a) => (
               <AuthorCard key={a.id} author={a} />
             ))}
           </div>
         ) : (
-          <div className="divide-y border rounded-xl">
+          <div className="divide-y rounded-xl border">
             {authors.map((a) => (
               <div key={a.id} className="p-4">
                 <AuthorCard author={a} />

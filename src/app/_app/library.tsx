@@ -1,5 +1,6 @@
-import { Await, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Await } from "@tanstack/react-router";
 import { Suspense } from "react";
+
 import { getBooks } from "@/features/books/server/get-books";
 import LibraryPageSkeleton from "@/features/dashboard/components/library-page-skeleton";
 import LibraryBooks from "@/features/dashboard/pages/library-page";
