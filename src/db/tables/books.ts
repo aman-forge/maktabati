@@ -13,6 +13,7 @@ import {
 
 import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles";
 import { authors, publishers } from "./authors";
+import { profiles } from "./users";
 
 // ─────────────────────────────────────────────────────────────
 // BOOKS
@@ -126,8 +127,9 @@ export const userBooks = pgTable.withRLS(
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
-    userId: text("user_id").notNull(),
-    // .references(() => usersSync.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
 
     bookId: uuid("book_id")
       .notNull()

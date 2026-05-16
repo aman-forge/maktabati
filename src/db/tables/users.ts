@@ -1,8 +1,10 @@
 import { sql } from "drizzle-orm";
 import {
   check,
+  date,
   index,
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
@@ -12,7 +14,7 @@ import {
 
 // ─────────────────────────────────────────────────────────────
 // USERS
-// mirrors your auth provider's user (Supabase / Neon Auth)
+// mirrors your auth provider's user (Neon Auth)
 // ─────────────────────────────────────────────────────────────
 import { anonymousRole, authenticatedRole, authUid, crudPolicy } from "../roles"; // the neon_auth.users_sync table
 import { books } from "./books";
@@ -20,11 +22,28 @@ import { books } from "./books";
 export const profiles = pgTable.withRLS(
   "profiles",
   {
-    // id mirrors neon_auth.users_sync.id — text type, not uuid
-    id: text("id").primaryKey(), // .references(() => usersSync.id, { onDelete: "cascade" }),
-    displayName: text("display_name"),
+    id: text("id").primaryKey(), // same as Neon Auth user id
+
+    displayName: text("display_name").notNull(),
     avatarUrl: text("avatar_url"),
     bio: text("bio"),
+
+    birthday: date("birthday"),
+    website: text("website"),
+    socialLinks: jsonb("social_links").$type<{
+      x?: string;
+      instagram?: string;
+      tiktok?: string;
+      youtube?: string;
+      goodreads?: string;
+      facebook?: string;
+      linkedin?: string;
+    }>(),
+
+    location: text("location"),
+    preferredLanguage: text("preferred_language"),
+    profileVisibility: text("profile_visibility").default("public"), // public | private | friends
+
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
@@ -64,7 +83,6 @@ export const reviews = pgTable.withRLS(
       .$onUpdate(() => new Date()),
   },
   (t) => [
-    // ✅ reviews are public; only the author can edit/delete their own
     crudPolicy({
       role: authenticatedRole,
       read: true,
@@ -76,7 +94,6 @@ export const reviews = pgTable.withRLS(
     index("reviews_book_idx").on(t.bookId),
     index("reviews_user_idx").on(t.userId),
 
-    // ✅ DB-level guard
     check("rating_range", sql`${t.rating} IS NULL OR (${t.rating} >= 1 AND ${t.rating} <= 5)`),
     check("review_needs_rating_or_body", sql`${t.rating} IS NOT NULL OR ${t.body} IS NOT NULL`),
   ],

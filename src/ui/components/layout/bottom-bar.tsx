@@ -7,8 +7,7 @@ import {
   UserCircleIcon,
 } from "@phosphor-icons/react";
 import { Link, useRouterState } from "@tanstack/react-router";
-
-import { useUser } from "@/features/auth/utils";
+import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 
 const unreadNotifications = 2;
@@ -131,7 +130,7 @@ function BottomBar() {
                 active ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {active && <span className="bg-primary absolute top-0 h-0.5 w-6 rounded-full" />}
+              {active && <span className="absolute top-0 h-0.5 w-6 rounded-full bg-primary" />}
 
               {item.kind === "profile" && isLoggedIn ? (
                 <div
@@ -157,7 +156,7 @@ function BottomBar() {
                 </div>
               )}
 
-              <span className="text-[10px] leading-none font-medium">{item.label}</span>
+              <span className="text-[10px] font-medium leading-none">{item.label}</span>
             </Link>
           );
         })}

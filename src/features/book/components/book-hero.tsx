@@ -1,4 +1,5 @@
 import { Button } from "@components/ui/button";
+import type { BookType } from "@features/books/server/get-books";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
@@ -17,9 +18,7 @@ import { useMemo, useState } from "react";
 import { BOOK_GENRES } from "@/db/constants/books";
 import type { RatingSummary } from "@/features/book/book-page-mock";
 import { cn } from "@/ui/lib/utils";
-
-import { TrackBookModal } from "../../books/components/track-book-modal";
-import type { BookType } from "../../books/server/get-books";
+import { useBookTracking } from "@/features/books/context/book-tracking-context";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [
@@ -69,7 +68,7 @@ export function BookHero({
 }) {
   const [wishList, setWishList] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [trackOpen, setTrackOpen] = useState(false);
+  const { openTrackModal } = useBookTracking();
 
   const languageLabel = useMemo(
     () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
@@ -147,7 +146,10 @@ export function BookHero({
                       </>
                     )}
                   </Button>
-                  <Button aria-label="خيارات الرف" onClick={() => setTrackOpen(true)}>
+                  <Button
+                    aria-label="خيارات الرف"
+                    onClick={() => openTrackModal(book)}
+                  >
                     <CaretDownIcon className="size-4" />
                   </Button>
                 </ButtonGroup>
@@ -298,8 +300,6 @@ export function BookHero({
           </div>
         </div>
       </div>
-
-      <TrackBookModal book={book} open={trackOpen} onOpenChange={setTrackOpen} />
     </section>
   );
 }

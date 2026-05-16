@@ -1,12 +1,13 @@
 "use client";
 
+import { TrackBookModal } from "@components/book/track-book-modal";
+import { BookType, type BookCardBook } from "@features/books/server/get-books";
 import React from "react";
-
-import { TrackBookModal, type TrackingData } from "../components/track-book-modal";
-import type { BookCardBook } from "../server/get-books";
+import { useUser } from "@/features/auth/use-user";
+import { toast } from "sonner";
 
 interface BookTrackingContextValue {
-  openTrackModal: (book: BookCardBook) => void;
+  openTrackModal: (book: BookCardBook | BookType) => void;
 }
 
 const BookTrackingContext = React.createContext<BookTrackingContextValue | null>(null);
@@ -19,22 +20,35 @@ export function useBookTracking(): BookTrackingContextValue {
 
 interface BookTrackingProviderProps {
   children: React.ReactNode;
-  onSave?: (bookId: string, data: TrackingData) => void;
 }
 
-export function BookTrackingProvider({ children, onSave }: BookTrackingProviderProps) {
-  const [selectedBook, setSelectedBook] = React.useState<BookCardBook | null>(null);
+export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
+  const [selectedBook, setSelectedBook] = React.useState<
+    BookCardBook | BookType | null
+  >(null);
   const [open, setOpen] = React.useState(false);
+  const { isLoggedIn, isLoading } = useUser();
 
-  const openTrackModal = React.useCallback((book: BookCardBook) => {
-    setSelectedBook(book);
-    setOpen(true);
-  }, []);
+  const openTrackModal = React.useCallback(
+    (book: BookCardBook | BookType) => {
+      if (isLoading) return;
+      if (!isLoggedIn) {
+        toast.error("يجب تسجيل الدخول أولاً", {
+          description:
+            "لا يمكنك تتبع الكتب وإضافتها لمكتبتك بدون تسجيل الدخول.",
+        });
+        return;
+      }
+      setSelectedBook(book);
+      setOpen(true);
+    },
+    [isLoggedIn, isLoading],
+  );
 
   return (
     <BookTrackingContext.Provider value={{ openTrackModal }}>
       {children}
-      <TrackBookModal book={selectedBook} open={open} onOpenChange={setOpen} onSave={onSave} />
+      <TrackBookModal book={selectedBook} open={open} onOpenChange={setOpen} />
     </BookTrackingContext.Provider>
   );
 }

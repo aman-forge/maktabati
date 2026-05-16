@@ -1,6 +1,6 @@
-import { BookCard } from "@features/books/components/book-card";
-import { BookCardDetailed } from "@features/books/components/book-card-detailed";
-import { BookListItem } from "@features/books/components/book-list-item";
+import { BookCard } from "@components/book/book-card";
+import { BookCardDetailed } from "@components/book/book-card-detailed";
+import { BookListItem } from "@components/book/book-list-item";
 import { GenreCombobox } from "@features/books/components/genre-combobox";
 import { ViewToggle } from "@features/books/components/view-toggle";
 import {
