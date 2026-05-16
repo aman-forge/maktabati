@@ -6,8 +6,8 @@ type ReviewFilter = "all" | "five" | "four" | "friends";
 
 const FILTER_LABELS: Record<ReviewFilter, string> = {
   all: "الكل",
-  five: "٥ نجوم",
-  four: "٤ نجوم",
+  five: "5 نجوم",
+  four: "4 نجوم",
   friends: "الأصدقاء",
 };
 
@@ -20,7 +20,7 @@ const MOCK_REVIEWS = [
       bg: "bg-violet-100 dark:bg-violet-900",
       text: "text-violet-800 dark:text-violet-200",
     },
-    date: "مارس ٢٠٢٥",
+    date: "مارس 2025",
     stars: 5,
     body: "الثلاثية تحفة أدبية خالدة. محفوظ يرسم مصر بريشة سحرية لا تُضاهى، وكل صفحة فيها كنز لا يُقدَّر.",
     book: "الثلاثية",
@@ -35,7 +35,7 @@ const MOCK_REVIEWS = [
       bg: "bg-emerald-100 dark:bg-emerald-900",
       text: "text-emerald-800 dark:text-emerald-200",
     },
-    date: "فبراير ٢٠٢٥",
+    date: "فبراير 2025",
     stars: 5,
     body: "قرأت زقاق المدق للمرة الثالثة وكأنني أقرؤها لأول مرة. هذا هو سحر محفوظ الذي لا يخبو.",
     book: "زقاق المدق",
@@ -50,7 +50,7 @@ const MOCK_REVIEWS = [
       bg: "bg-amber-100 dark:bg-amber-900",
       text: "text-amber-800 dark:text-amber-200",
     },
-    date: "يناير ٢٠٢٥",
+    date: "يناير 2025",
     stars: 4,
     body: "اللص والكلاب رواية وجودية بامتياز. أسلوب محفوظ في هذه المرحلة يختلف جذرياً عن الثلاثية ومبهر بشكل مختلف.",
     book: "اللص والكلاب",

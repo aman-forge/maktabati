@@ -9,7 +9,7 @@ import { AuthorQuotes } from "@/features/author/components/author-quotes";
 import { AuthorReviews } from "@/features/author/components/author-reviews";
 import { AuthorSeries } from "@/features/author/components/author-series";
 import { AuthorSidebar } from "@/features/author/components/author-sidebar";
-import { AuthorSimilar } from "@/features/author/components/author-similar";
+
 
 export const Route = createFileRoute("/_public/author/$id")({
   component: RouteComponent,
@@ -26,24 +26,22 @@ const TAB_CONFIG = [
   { value: "series", label: "السلاسل" },
   { value: "reviews", label: "المراجعات" },
   { value: "quotes", label: "الاقتباسات" },
-  { value: "similar", label: "مؤلفون مشابهون" },
   { value: "news", label: "أخبار وفعاليات" },
 ];
 function RouteComponent() {
   const author = Route.useLoaderData();
 
   return (
-    <main className="min-h-screen font-sans bg-background pb-12" dir="rtl">
+    <main className="min-h-screen overflow-auto bg-background pb-12" dir="rtl">
       <AuthorHero author={author} />
-
-      <div className="container mx-auto px-4 md:px-0 py-10 max-w-6xl">
+      <div className="container mx-auto px-4 md:px-0 py-10 max-w-6xl overflow-hidden">
         <Tabs defaultValue="about" dir="rtl">
-          <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0 h-auto mb-8  flex-nowrap">
+          <TabsList variant="line" className="w-full justify-center  md:justify-start  border-border p-0  h-auto mb-8 flex-wrap">
             {TAB_CONFIG.map(({ value, label }) => (
               <TabsTrigger
                 key={value}
                 value={value}
-                className="rounded border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 pb-3 pt-0 text-sm font-medium text-muted-foreground data-[state=active]:text-primary whitespace-nowrap"
+                className="relative border-none bg-transparent px-4 pb-3 pt-0 text-sm font-medium text-muted-foreground whitespace-nowrap rounded-none shadow-none"
               >
                 {label}
               </TabsTrigger>
@@ -73,10 +71,6 @@ function RouteComponent() {
 
           <TabsContent value="quotes">
             <AuthorQuotes author={author} />
-          </TabsContent>
-
-          <TabsContent value="similar">
-            <AuthorSimilar author={author} />
           </TabsContent>
 
           <TabsContent value="news">

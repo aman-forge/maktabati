@@ -1,20 +1,17 @@
 import type { AuthorType } from "@features/author/server/get-author";
 import {
-  BookmarkSimpleIcon,
-  HeartIcon,
-  ListBulletsIcon,
   MedalIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
-import { Button } from "@shadcn/button";
+
 
 // ─── Mock data — replace with real queries ───────────────────────────────────
 
 const MOCK_AWARDS = [
-  { year: "١٩٨٨", name: "جائزة نوبل في الأدب", icon: "trophy" },
-  { year: "١٩٧٢", name: "جائزة الدولة التقديرية", icon: "medal" },
-  { year: "١٩٦٦", name: "قلادة الجمهورية", icon: "medal" },
-  { year: "١٩٥٩", name: "جائزة الدولة للتفوق", icon: "medal" },
+  { year: "1988", name: "جائزة نوبل في الأدب", icon: "trophy" },
+  { year: "1972", name: "جائزة الدولة التقديرية", icon: "medal" },
+  { year: "1966", name: "قلادة الجمهورية", icon: "medal" },
+  { year: "1959", name: "جائزة الدولة للتفوق", icon: "medal" },
 ];
 
 const MOCK_FRIENDS = [
@@ -39,9 +36,9 @@ const MOCK_FRIENDS = [
 ];
 
 const MOCK_RANKINGS = [
-  { label: "الأدب العربي", rank: "#١" },
-  { label: "الرواية التاريخية", rank: "#٣" },
-  { label: "الكلاسيكيات", rank: "#٧" },
+  { label: "الأدب العربي", rank: "#1" },
+  { label: "الرواية التاريخية", rank: "#3" },
+  { label: "الكلاسيكيات", rank: "#7" },
 ];
 
 export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
@@ -81,7 +78,7 @@ export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
             </div>
           ))}
         </div>
-        <p className="text-[11px] text-muted-foreground">٥ من أصدقائك يقرؤون له</p>
+        <p className="text-[11px] text-muted-foreground">5 من أصدقائك يقرؤون له</p>
       </SidebarCard>
 
       {/* Rankings */}
@@ -97,19 +94,7 @@ export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
       </SidebarCard>
 
       {/* Add to list */}
-      <SidebarCard title="أضف إلى قائمة">
-        <div className="flex flex-col gap-2">
-          <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs">
-            <HeartIcon weight="bold" className="size-3.5" /> مؤلفون مفضلون
-          </Button>
-          <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs">
-            <BookmarkSimpleIcon weight="bold" className="size-3.5" /> أريد قراءة أعماله
-          </Button>
-          <Button variant="outline" size="sm" className="w-full justify-start gap-2 text-xs">
-            <ListBulletsIcon weight="bold" className="size-3.5" /> قائمة مخصصة
-          </Button>
-        </div>
-      </SidebarCard>
+
     </div>
   );
 }

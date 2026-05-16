@@ -24,8 +24,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "1",
     title: "الثلاثية",
-    year: "١٩٥٦",
-    rating: "٤٫٨",
+    year: "1956",
+    rating: "٤٫8",
     type: "series",
     coverColor: "#EDE9FE",
     barColor: "#7C3AED",
@@ -33,8 +33,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "2",
     title: "أولاد حارتنا",
-    year: "١٩٥٩",
-    rating: "٤٫٥",
+    year: "1959",
+    rating: "٤٫5",
     type: "novel",
     coverColor: "#D1FAE5",
     barColor: "#059669",
@@ -42,8 +42,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "3",
     title: "زقاق المدق",
-    year: "١٩٤٧",
-    rating: "٤٫٦",
+    year: "19٤7",
+    rating: "٤٫6",
     type: "novel",
     coverColor: "#FEF3C7",
     barColor: "#D97706",
@@ -51,8 +51,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "4",
     title: "الحرافيش",
-    year: "١٩٧٧",
-    rating: "٤٫٧",
+    year: "1977",
+    rating: "٤٫7",
     type: "novel",
     coverColor: "#FFE4E6",
     barColor: "#E11D48",
@@ -60,7 +60,7 @@ const MOCK_ALL_BOOKS = [
   {
     id: "5",
     title: "خان الخليلي",
-    year: "١٩٤٥",
+    year: "19٤5",
     rating: "٤٫٣",
     type: "novel",
     coverColor: "#EFF6FF",
@@ -69,7 +69,7 @@ const MOCK_ALL_BOOKS = [
   {
     id: "6",
     title: "اللص والكلاب",
-    year: "١٩٦١",
+    year: "1961",
     rating: "٤٫٤",
     type: "novel",
     coverColor: "#F0FDF4",
@@ -78,8 +78,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "7",
     title: "دنيا الله",
-    year: "١٩٦٣",
-    rating: "٤٫١",
+    year: "196٣",
+    rating: "٤٫1",
     type: "story",
     coverColor: "#FFF7ED",
     barColor: "#EA580C",
@@ -87,7 +87,7 @@ const MOCK_ALL_BOOKS = [
   {
     id: "8",
     title: "ميرامار",
-    year: "١٩٦٧",
+    year: "1967",
     rating: "٤٫٢",
     type: "novel",
     coverColor: "#F5F3FF",

@@ -16,7 +16,7 @@ const MOCK_SERIES = [
   {
     id: "2",
     name: "الحرافيش",
-    description: "ملحمة اجتماعية — ١ مجلد",
+    description: "ملحمة اجتماعية — 1 مجلد",
     bookCount: 1,
     status: "مكتملة",
     accent: false,
@@ -24,7 +24,7 @@ const MOCK_SERIES = [
   {
     id: "3",
     name: "أولاد حارتنا",
-    description: "رواية رمزية فلسفية — ١ مجلد",
+    description: "رواية رمزية فلسفية — 1 مجلد",
     bookCount: 1,
     status: "مميزة",
     accent: true,

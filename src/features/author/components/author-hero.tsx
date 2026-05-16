@@ -17,30 +17,8 @@ import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { cn } from "@/ui/lib/utils";
 
-// ─── Fake friends — replace with real query ──────────────────────────────────
-const FAKE_FRIENDS = [
-  {
-    id: "1",
-    name: "عمر خالد",
-    initials: "عخ",
-    bg: "bg-violet-100 dark:bg-violet-900",
-    text: "text-violet-800 dark:text-violet-200",
-  },
-  {
-    id: "2",
-    name: "سارة محمد",
-    initials: "سم",
-    bg: "bg-emerald-100 dark:bg-emerald-900",
-    text: "text-emerald-800 dark:text-emerald-200",
-  },
-  {
-    id: "3",
-    name: "محمد علي",
-    initials: "من",
-    bg: "bg-amber-100 dark:bg-amber-900",
-    text: "text-amber-800 dark:text-amber-200",
-  },
-];
+
+
 
 function formatNumber(n?: number | null) {
   if (!n) return "—";
@@ -64,7 +42,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
     [author.name],
   );
   return (
-    <section className="border-b bg-muted/30 sm:flex flex-col items-center" dir="rtl">
+    <section className="border-b bg-muted/30  sm:flex flex-col items-center" dir="rtl">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center">
           {/* ── Avatar column ── */}
@@ -150,11 +128,6 @@ export function AuthorHero({ author }: { author: AuthorType }) {
             <div className="flex flex-wrap gap-5 sm:gap-8">
               <Stat label="كتاباً" value={author.bookCount?.toString() ?? "—"} />
               <Stat label="قارئ" value={formatNumber(author.followerCount)} />
-              <Stat
-                label="متوسط التقييم"
-                value={author.averageRating?.toFixed(1) ?? "—"}
-                icon={<StarIcon weight="fill" className="size-3.5 text-amber-500" />}
-              />
               <Stat label="مراجعة" value={formatNumber(author.reviewCount)} />
             </div>
 
@@ -189,9 +162,6 @@ export function AuthorHero({ author }: { author: AuthorType }) {
               <Button size="sm" variant="outline" className="size-8 p-0" aria-label="مشاركة">
                 <ShareNetworkIcon weight="bold" className="size-3.5" />
               </Button>
-
-              {/* Friends who read */}
-              <FriendsWhoRead friends={FAKE_FRIENDS} />
             </div>
           </div>
         </div>
@@ -214,38 +184,4 @@ function Stat({ label, value, icon }: { label: string; value: string; icon?: Rea
   );
 }
 
-// ─── Friends who read ─────────────────────────────────────────────────────────
 
-function FriendsWhoRead({ friends }: { friends: typeof FAKE_FRIENDS }) {
-  if (!friends.length) return null;
-  const shown = friends.slice(0, 3);
-  const display = shown.map((f) => f.name.split(" ")[0]).join("، ");
-
-  return (
-    <button
-      type="button"
-      className="flex items-center gap-2.5 rounded-xl border bg-muted/30 px-3 py-2 text-right transition-colors hover:bg-muted/60 text-sm mr-1"
-    >
-      <div className="flex items-center">
-        {shown.map((f, i) => (
-          <div
-            key={f.id}
-            className={cn(
-              "flex h-6 w-6 items-center justify-center rounded-full border-2 border-background text-[10px] font-medium shrink-0",
-              f.bg,
-              f.text,
-              i > 0 && "-mr-1.5",
-            )}
-          >
-            {f.initials}
-          </div>
-        ))}
-      </div>
-      <span className="text-xs text-muted-foreground leading-tight">
-        <span className="font-medium text-foreground">{display}</span>
-        {friends.length > 3 && ` و${friends.length - 3} آخرون`}
-        {" قرأوا له"}
-      </span>
-    </button>
-  );
-}
