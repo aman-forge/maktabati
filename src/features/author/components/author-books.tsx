@@ -3,6 +3,7 @@
  * Filterable grid of all books by this author.
  */
 
+import { BookCard } from "@/features/books/components/book-card";
 import type { AuthorType } from "@features/author/server/get-author";
 import { StarIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
@@ -25,7 +26,7 @@ const MOCK_ALL_BOOKS = [
     id: "1",
     title: "الثلاثية",
     year: "1956",
-    rating: "٤٫8",
+    rating: "4٫8",
     type: "series",
     coverColor: "#EDE9FE",
     barColor: "#7C3AED",
@@ -34,7 +35,7 @@ const MOCK_ALL_BOOKS = [
     id: "2",
     title: "أولاد حارتنا",
     year: "1959",
-    rating: "٤٫5",
+    rating: "4٫5",
     type: "novel",
     coverColor: "#D1FAE5",
     barColor: "#059669",
@@ -42,8 +43,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "3",
     title: "زقاق المدق",
-    year: "19٤7",
-    rating: "٤٫6",
+    year: "1947",
+    rating: "4٫6",
     type: "novel",
     coverColor: "#FEF3C7",
     barColor: "#D97706",
@@ -52,7 +53,7 @@ const MOCK_ALL_BOOKS = [
     id: "4",
     title: "الحرافيش",
     year: "1977",
-    rating: "٤٫7",
+    rating: "4٫7",
     type: "novel",
     coverColor: "#FFE4E6",
     barColor: "#E11D48",
@@ -60,8 +61,8 @@ const MOCK_ALL_BOOKS = [
   {
     id: "5",
     title: "خان الخليلي",
-    year: "19٤5",
-    rating: "٤٫٣",
+    year: "1945",
+    rating: "4٫٣",
     type: "novel",
     coverColor: "#EFF6FF",
     barColor: "#2563EB",
@@ -70,7 +71,7 @@ const MOCK_ALL_BOOKS = [
     id: "6",
     title: "اللص والكلاب",
     year: "1961",
-    rating: "٤٫٤",
+    rating: "4٫4",
     type: "novel",
     coverColor: "#F0FDF4",
     barColor: "#16A34A",
@@ -79,7 +80,7 @@ const MOCK_ALL_BOOKS = [
     id: "7",
     title: "دنيا الله",
     year: "196٣",
-    rating: "٤٫1",
+    rating: "4٫1",
     type: "story",
     coverColor: "#FFF7ED",
     barColor: "#EA580C",
@@ -88,7 +89,7 @@ const MOCK_ALL_BOOKS = [
     id: "8",
     title: "ميرامار",
     year: "1967",
-    rating: "٤٫٢",
+    rating: "4٫٢",
     type: "novel",
     coverColor: "#F5F3FF",
     barColor: "#8B5CF6",
@@ -127,38 +128,16 @@ export function AuthorBooks({ author: _author }: { author: AuthorType }) {
         </select>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-4 ">
         {filtered.map((book) => (
-          <Link
-            key={book.id}
-            to="/book/$id"
-            params={{ id: book.id }}
-            className="group flex flex-col gap-1.5"
-          >
-            <div
-              className="w-full rounded-lg border border-border/50 overflow-hidden relative transition-transform group-hover:-translate-y-0.5 group-hover:shadow-md"
-              style={{ aspectRatio: "2/3", background: book.coverColor }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center p-2">
-                <span className="font-serif text-xs font-semibold text-center leading-snug text-foreground/80">
-                  {book.title}
-                </span>
-              </div>
-              <div
-                className="absolute bottom-0 left-0 right-0 h-1"
-                style={{ background: book.barColor }}
-              />
-            </div>
-            <span className="text-xs font-medium text-foreground leading-snug line-clamp-2">
-              {book.title}
-            </span>
-            <span className="text-[11px] text-muted-foreground">
-              <StarIcon weight="fill" className="inline size-2.5 text-amber-500 mb-px" />{" "}
-              {book.rating} · {book.year}
-            </span>
-          </Link>
+          <div
+            key={book.id} className="flex flex-wrap shrink-0 pt-1">
+            <BookCard book={book} size="md" />
+          </div>
         ))}
       </div>
     </div>
+
+
   );
 }

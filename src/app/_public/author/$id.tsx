@@ -36,7 +36,7 @@ function RouteComponent() {
       <AuthorHero author={author} />
       <div className="container mx-auto px-4 md:px-0 py-10 max-w-6xl overflow-hidden">
         <Tabs defaultValue="about" dir="rtl">
-          <TabsList variant="line" className="w-full justify-center  md:justify-start  border-border p-0  h-auto mb-8 flex-wrap">
+          <TabsList variant="line" className="w-full justify-center mb-15 md:mb-8 sm:mb-8 md:justify-start border-border p-0 h-auto flex-wrap gap-x-5 gap-y-5">
             {TAB_CONFIG.map(({ value, label }) => (
               <TabsTrigger
                 key={value}

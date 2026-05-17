@@ -1,11 +1,5 @@
 import { BookCard } from "@/features/books/components/book-card";
 import type { AuthorType } from "@features/author/server/get-author";
-import { StarIcon } from "@phosphor-icons/react";
-
-
-
-
-
 
 // ─── Mock books — replace with real query ────────────────────────────────────
 const MOCK_BOOKS = [
@@ -55,7 +49,7 @@ const MOCK_BOOKS = [
 export function AuthorAbout({ author }: { author: AuthorType }) {
 
   return (
-    <div className="  md:flex flex-col gap-8" dir="rtl">
+    <div className="flex flex-col gap-8" dir="rtl">
       {/* ── Biography ── */}
       {author.bio && (
         <div>
@@ -75,12 +69,12 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
       {/* ── Featured books ── */}
       <div>
         <SectionTitle>أشهر أعماله</SectionTitle>
-        <div className=" grid grid-cols-3 sm:grid-cols-6 md:grid-cols-6 gap-4">
+        <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
           {MOCK_BOOKS.map((book) => (
-            <li
+            <div
               key={book.id} className="flex shrink-0 pt-1">
-              <BookCard book={book} size="sm" />
-            </li>
+              <BookCard book={book} size="md" />
+            </div>
           ))}
 
         </div>
