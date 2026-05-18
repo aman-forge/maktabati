@@ -15,9 +15,9 @@ import {
   sql,
 } from "drizzle-orm";
 
-import { bookSearchSchema } from "@/app/_public/discover/books";
 import { db } from "@/db";
-import { authors, books } from "@/db/tables";
+import { authors, books, userBooks } from "@/db/tables";
+import { bookSearchInputSchema } from "@/features/books/lib/validators";
 
 import type { BookCardType, DetailedBookType } from "../types";
 
@@ -41,7 +41,7 @@ const ORDER_MAP = {
 } satisfies Record<string, SQL>;
 
 export const searchBooks = createServerFn({ method: "GET" })
-  .inputValidator(bookSearchSchema)
+  .inputValidator(bookSearchInputSchema)
   .handler(async ({ data }) => {
     const conditions: SQL[] = [];
 
@@ -62,13 +62,19 @@ export const searchBooks = createServerFn({ method: "GET" })
     if (data.genres?.length) conditions.push(arrayOverlaps(books.genres, data.genres));
     if (data.topics?.length) conditions.push(arrayOverlaps(books.topics, data.topics));
     if (data.publishers?.length) conditions.push(inArray(books.publisherId, data.publishers));
+    if (data.userId && data.readingStatus?.length) {
+      conditions.push(inArray(userBooks.status, data.readingStatus));
+    }
 
     const page = data.page ?? 1;
     const offset = (page - 1) * PAGE_SIZE;
     const orderBy = ORDER_MAP[data.sort] ?? ORDER_MAP.newest;
     const where = conditions.length ? and(...conditions) : undefined;
+    const trackingJoin = data.userId
+      ? and(eq(userBooks.bookId, books.id), eq(userBooks.userId, data.userId))
+      : sql`false`;
 
-    const rows = (await db
+    const rows = await db
       .select({
         id: books.id,
         slug: books.slug,
@@ -82,8 +88,12 @@ export const searchBooks = createServerFn({ method: "GET" })
         originalLanguage: books.originalLanguage,
         originalTitle: books.originalTitle,
         genres: books.genres,
+        topics: books.topics,
         createdAt: books.createdAt,
         updatedAt: books.updatedAt,
+        status: userBooks.status,
+        startedAt: userBooks.startedAt,
+        finishedAt: userBooks.finishedAt,
         author: {
           id: authors.id,
           name: authors.name,
@@ -92,16 +102,18 @@ export const searchBooks = createServerFn({ method: "GET" })
         total: sql<string>`count(*) over()`,
       })
       .from(books)
-      .leftJoin(authors, eq(books.authorId, authors.id))
+      .innerJoin(authors, eq(books.authorId, authors.id))
+      .leftJoin(userBooks, trackingJoin)
       .where(where)
       .orderBy(orderBy, desc(books.id))
       .limit(PAGE_SIZE)
-      .offset(offset)) as (BookCardType & { total: string })[];
+      .offset(offset);
 
     const total = Number(rows[0]?.total ?? 0);
+    const resultBooks: BookCardType[] = rows.map(({ total: _total, ...book }) => book);
 
     return {
-      books: rows,
+      books: resultBooks,
       total,
       hasMore: page * PAGE_SIZE < total,
     };

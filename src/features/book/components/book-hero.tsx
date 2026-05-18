@@ -4,20 +4,22 @@ import {
   BooksIcon,
   CaretDownIcon,
   CaretLeftIcon,
-  CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
 import { ButtonGroup } from "@shadcn/button-group";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
 import { BOOK_GENRES } from "@/db/constants/books";
+import { useUser } from "@/features/auth/use-user";
 import type { RatingSummary } from "@/features/book/book-page-mock";
 import { useBookTracking } from "@/features/books/context/book-tracking-context";
-import { DetailedBookType } from "@/features/books/types";
+import { getUserBookTracking } from "@/features/books/server/library";
+import { DetailedBookType, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
@@ -66,9 +68,27 @@ export function BookHero({
   book: DetailedBookType;
   ratingSummary: RatingSummary;
 }) {
-  const [wishList, setWishList] = useState(false);
   const [liked, setLiked] = useState(false);
   const { openTrackModal } = useBookTracking();
+  const { user } = useUser();
+  const trackingQuery = useQuery({
+    queryKey: ["book-tracking", user?.id, book.id],
+    queryFn: () => getUserBookTracking({ data: { userId: user!.id, bookId: book.id } }),
+    enabled: !!user?.id,
+  });
+  const tracking = trackingQuery.data;
+  const trackingStatus = tracking?.status ?? undefined;
+  const statusConfig = trackingStatus ? getStatusConfig(trackingStatus) : null;
+  const StatusIcon = statusConfig?.icon ?? BookmarkSimpleIcon;
+  const trackingBook = useMemo(
+    () => ({
+      ...book,
+      status: trackingStatus,
+      startedAt: tracking?.startedAt ?? null,
+      finishedAt: tracking?.finishedAt ?? null,
+    }),
+    [book, tracking?.finishedAt, tracking?.startedAt, trackingStatus],
+  );
 
   const languageLabel = useMemo(
     () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
@@ -131,22 +151,30 @@ export function BookHero({
               </div>
 
               {/* Primary CTA */}
-              <div className="w-full max-w-56 space-y-2">
-                <ButtonGroup className="flex w-full">
-                  <Button className="flex-1 gap-2" onClick={() => setWishList((w) => !w)}>
-                    {wishList ? (
-                      <>
-                        <CheckIcon weight="bold" className="size-4" />
-                        أريد قراءته
-                      </>
-                    ) : (
-                      <>
-                        <BookmarkSimpleIcon weight="bold" className="size-4" />
-                        أضف إلى الرف
-                      </>
+              <div className="w-full max-w-64 space-y-2">
+                <ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">
+                  <Button
+                    className={cn(
+                      "h-11 flex-1 gap-2 rounded-none text-sm font-semibold shadow-none",
+                      statusConfig?.bgColor,
+                      statusConfig?.bgHoverColor,
+                      statusConfig && "text-white",
                     )}
+                    onClick={() => openTrackModal(trackingBook)}
+                  >
+                    <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
+                    {statusConfig?.label ?? "أريد قراءته"}
                   </Button>
-                  <Button aria-label="خيارات الرف" onClick={() => openTrackModal(book)}>
+                  <Button
+                    className={cn(
+                      "h-11 rounded-none border-r border-white/15 px-3 shadow-none",
+                      statusConfig?.bgColor,
+                      statusConfig?.bgHoverColor,
+                      statusConfig && "text-white",
+                    )}
+                    aria-label="خيارات التتبع"
+                    onClick={() => openTrackModal(trackingBook)}
+                  >
                     <CaretDownIcon className="size-4" />
                   </Button>
                 </ButtonGroup>

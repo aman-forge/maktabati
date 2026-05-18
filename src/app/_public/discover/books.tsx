@@ -12,12 +12,14 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
-import { z } from "zod";
 
 import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
+import { useUser } from "@/features/auth/use-user";
 import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
+import { bookSearchSchema, type BookSearch } from "@/features/books/lib/validators";
 import { searchBooks } from "@/features/books/server/get-books";
 import { BookListItem } from "@/ui/components/book/book-card-list";
 
@@ -48,29 +50,6 @@ const DEFAULT_FILTERS: FilterState = {
 };
 
 type BookSortOption = (typeof SORT_OPTIONS)[number]["value"];
-
-// ---------------------------------------------------------------------------
-// Schema
-// ---------------------------------------------------------------------------
-
-export const bookSearchSchema = z.object({
-  q: z.string().max(100).optional(),
-  author: z.string().max(100).optional(),
-  genres: z.array(z.string()).optional().catch(undefined),
-  sort: z.enum(["newest", "oldest", "title-asc", "title-desc"]).default("newest"),
-  view: z.enum(["grid", "detailed", "list"]).default("grid"),
-  minYear: z.number().optional(),
-  maxYear: z.number().optional(),
-  minPages: z.number().optional(),
-  maxPages: z.number().optional(),
-  ratingMin: z.number().optional(),
-  publishers: z.array(z.string()).optional().catch(undefined),
-  topics: z.array(z.string()).optional().catch(undefined),
-  readingStatus: z.array(z.string()).optional().catch(undefined),
-  page: z.number().int().min(1).default(1),
-});
-
-export type BookSearch = z.infer<typeof bookSearchSchema>;
 
 // ---------------------------------------------------------------------------
 // Route
@@ -109,11 +88,11 @@ function useDebounce<T>(value: T, delay = 300): T {
 function getStatusLabel(value: string) {
   return (
     {
-      Unread: "غير مقروء",
-      Reading: "يُقرأ الآن",
-      Completed: "مكتمل",
-      "On Hold": "متوقف",
-      did_not_finish: "متروك",
+      want_to_read: "أخطط لقراءته",
+      currently_reading: "قيد القراءة",
+      completed: "مكتمل",
+      on_hold: "متوقف",
+      dropped: "متروك",
     }[value] ?? value
   );
 }
@@ -127,24 +106,38 @@ function BooksSearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const isNavigating = useRouterState({ select: (s) => s.isLoading });
+  const { user } = useUser();
 
-  const [books, setBooks] = React.useState(loaderData.books);
+  const userScopedSearch = React.useMemo(() => {
+    const { view: _view, ...rest } = search;
+    return rest;
+  }, [search]);
+
+  const userResultsQuery = useQuery({
+    queryKey: ["discover-books", user?.id, userScopedSearch],
+    queryFn: () => searchBooks({ data: { ...userScopedSearch, userId: user!.id } }),
+    enabled: !!user?.id,
+  });
+
+  const resultData = user?.id ? (userResultsQuery.data ?? loaderData) : loaderData;
+
+  const [books, setBooks] = React.useState(resultData.books);
   const newItemsRef = React.useRef<HTMLDivElement | null>(null);
   const [lastAddedIndex, setLastAddedIndex] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (search.page === 1 || search.page === undefined) {
-      setBooks(loaderData.books);
+      setBooks(resultData.books);
       setLastAddedIndex(null);
       return;
     }
     setBooks((prev) => {
       const seen = new Set(prev.map((b) => b.id));
-      const incoming = loaderData.books.filter((b) => !seen.has(b.id));
+      const incoming = resultData.books.filter((b) => !seen.has(b.id));
       if (incoming.length > 0) setLastAddedIndex(prev.length);
       return [...prev, ...incoming];
     });
-  }, [loaderData.books, search.page]);
+  }, [resultData.books, search.page]);
 
   React.useEffect(() => {
     if (lastAddedIndex !== null && newItemsRef.current) {
@@ -182,7 +175,7 @@ function BooksSearchPage() {
 
   React.useEffect(() => {
     setParams(() => ({ q: debouncedQ || undefined }));
-  }, [debouncedQ]);
+  }, [debouncedQ, setParams]);
 
   // Sync input if URL changes externally (e.g. back button)
   React.useEffect(() => {
@@ -202,7 +195,7 @@ function BooksSearchPage() {
       ratingMin: search.ratingMin ?? 0,
       publishers: search.publishers ?? [],
       topics: search.topics ?? [],
-      readingStatus: search.readingStatus ?? [],
+      readingStatus: user?.id ? (search.readingStatus ?? []) : [],
     }),
     [
       search.maxPages,
@@ -213,6 +206,7 @@ function BooksSearchPage() {
       search.ratingMin,
       search.readingStatus,
       search.topics,
+      user?.id,
     ],
   );
 
@@ -226,10 +220,10 @@ function BooksSearchPage() {
         ratingMin: next.ratingMin > 0 ? next.ratingMin : undefined,
         publishers: next.publishers.length > 0 ? next.publishers : undefined,
         topics: next.topics.length > 0 ? next.topics : undefined,
-        readingStatus: next.readingStatus.length > 0 ? next.readingStatus : undefined,
+        readingStatus: user?.id && next.readingStatus.length > 0 ? next.readingStatus : undefined,
       }));
     },
-    [setParams],
+    [setParams, user?.id],
   );
 
   const handleResetFilters = React.useCallback(() => {
@@ -303,19 +297,21 @@ function BooksSearchPage() {
       });
     });
 
-    search.readingStatus?.map((value) =>
-      tags.push({
-        key: `status-${value}`,
-        label: getStatusLabel(value),
-        onRemove: () =>
-          setParams((prev) => ({
-            readingStatus: prev.readingStatus?.filter((s) => s !== value),
-          })),
-      }),
-    );
+    if (user?.id) {
+      search.readingStatus?.map((value) =>
+        tags.push({
+          key: `status-${value}`,
+          label: getStatusLabel(value),
+          onRemove: () =>
+            setParams((prev) => ({
+              readingStatus: prev.readingStatus?.filter((s) => s !== value),
+            })),
+        }),
+      );
+    }
 
     return tags;
-  }, [search, setParams]);
+  }, [search, setParams, user?.id]);
 
   const hasActiveFilters = activeFilterTags.length > 0;
 
@@ -335,14 +331,14 @@ function BooksSearchPage() {
       Component: BookCardDetailed,
     },
     list: {
-      wrapper: "divide-y divide-border/50",
+      wrapper: "p-2 flex flex-col gap-2",
       Component: BookListItem,
     },
   } as const;
 
   const currentView = viewConfig[search.view] ?? viewConfig.grid;
   const Component = currentView.Component;
-  const isSearching = isNavigating && search.page === 1;
+  const isSearching = (isNavigating || userResultsQuery.isFetching) && search.page === 1;
 
   return (
     <div className="bg-background min-h-screen overflow-x-hidden">
@@ -381,7 +377,7 @@ function BooksSearchPage() {
           </div>
 
           {/* Filter row */}
-          <div className="scrollbar-none flex items-center gap-2 overflow-visible! overflow-x-auto px-4">
+          <div className="flex scrollbar-none items-center gap-2 overflow-visible! overflow-x-auto px-4">
             <GenreCombobox
               selected={selectedGenres}
               onSelectionChange={(newGenres: BookGenre[]) =>
@@ -395,6 +391,7 @@ function BooksSearchPage() {
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
                 onReset={handleResetFilters}
+                showReadingStatus={!!user?.id}
               />
             </div>
 
@@ -456,7 +453,7 @@ function BooksSearchPage() {
         {/* Count */}
         {books.length > 0 && (
           <p className="text-muted-foreground mb-4 text-sm">
-            <span className="text-foreground font-medium">{loaderData.total}</span>
+            <span className="text-foreground font-medium">{resultData.total}</span>
             {" كتاب"}
             {hasActiveFilters && <span className="text-muted-foreground/60"> · بتصفية نشطة</span>}
           </p>
@@ -512,7 +509,7 @@ function BooksSearchPage() {
 
         {/* Load more */}
         <div className="mt-10 flex flex-col items-center gap-2">
-          {loaderData.hasMore ? (
+          {resultData.hasMore ? (
             <>
               <Button
                 variant="outline"
@@ -528,12 +525,12 @@ function BooksSearchPage() {
                 تحميل المزيد
               </Button>
               <p className="text-muted-foreground text-xs">
-                {books.length} من {loaderData.total} كتاب
+                {books.length} من {resultData.total} كتاب
               </p>
             </>
           ) : books.length > 0 ? (
             <p className="text-muted-foreground py-2 text-sm">
-              وصلت لنهاية النتائج · {loaderData.total} كتاب
+              وصلت لنهاية النتائج · {resultData.total} كتاب
             </p>
           ) : null}
         </div>

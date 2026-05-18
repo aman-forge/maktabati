@@ -28,6 +28,7 @@ import { Slider } from "@shadcn/slider";
 import * as React from "react";
 
 import { BOOK_TOPICS, PUBLISHERS } from "@/db/constants/books";
+import type { ReadingStatus } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -35,13 +36,13 @@ import { cn } from "@/ui/lib/utils";
 // ---------------------------------------------------------------------------
 
 interface StatusType {
-  value: string;
+  value: ReadingStatus;
   label: string;
 }
 const READING_STATUS: StatusType[] = [
-  { value: "Unread", label: "غير مقروء" },
-  { value: "Reading", label: "يُقرأ الآن" },
-  { value: "Completed", label: "مكتمل" },
+  { value: "want_to_read", label: "أخطط لقراءته" },
+  { value: "currently_reading", label: "قيد القراءة" },
+  { value: "completed", label: "مكتمل" },
   { value: "on_hold", label: "متوقف" },
   { value: "dropped", label: "متروك" },
 ] as const;
@@ -61,23 +62,29 @@ export interface FilterState {
   ratingMin: number;
   publishers: string[];
   topics: string[];
-  readingStatus: string[];
+  readingStatus: ReadingStatus[];
 }
 
 interface FilterDialogProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
   onReset: () => void;
+  showReadingStatus?: boolean;
 }
 
-type ArrayFilterKey = "publishers" | "topics" | "readingStatus";
+type ArrayFilterKey = "publishers" | "topics";
 type RangeValue = [number, number];
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialogProps) {
+export function FilterDialog({
+  filters,
+  onFiltersChange,
+  onReset,
+  showReadingStatus = true,
+}: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
   const [publisherOpen, setPublisherOpen] = React.useState(false);
@@ -112,6 +119,19 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
     });
   }, []);
 
+  const toggleReadingStatus = React.useCallback((value: ReadingStatus) => {
+    setLocalFilters((prev) => {
+      const exists = prev.readingStatus.includes(value);
+
+      return {
+        ...prev,
+        readingStatus: exists
+          ? prev.readingStatus.filter((status) => status !== value)
+          : [...prev.readingStatus, value],
+      };
+    });
+  }, []);
+
   const setRangeValue = React.useCallback(
     (key: "yearRange" | "pageRange", value: number | readonly number[]) => {
       if (!Array.isArray(value) || value.length < 2) return;
@@ -133,9 +153,9 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
     if (filters.ratingMin > 0) count++;
     if (filters.publishers.length > 0) count++;
     if (filters.topics.length > 0) count++;
-    if (filters.readingStatus.length > 0) count++;
+    if (showReadingStatus && filters.readingStatus.length > 0) count++;
     return count;
-  }, [filters]);
+  }, [filters, showReadingStatus]);
 
   const filteredTopics = React.useMemo(() => {
     if (!topicSearch) return BOOK_TOPICS;
@@ -216,7 +236,10 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
               </div>
               <Slider
                 value={[localFilters.ratingMin]}
-                onValueChange={([v]) => setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))}
+                onValueChange={(value) => {
+                  if (!Array.isArray(value)) return;
+                  setLocalFilters((prev) => ({ ...prev, ratingMin: value[0] ?? 0 }));
+                }}
                 min={0}
                 max={5}
                 step={0.5}
@@ -289,12 +312,14 @@ export function FilterDialog({ filters, onFiltersChange, onReset }: FilterDialog
               )}
             </div>
 
-            <ChipSection
-              label="حالة القراءة"
-              items={READING_STATUS}
-              selected={localFilters.readingStatus}
-              onToggle={(v) => toggleArrayFilter("readingStatus", v)}
-            />
+            {showReadingStatus && (
+              <ChipSection
+                label="حالة القراءة"
+                items={READING_STATUS}
+                selected={localFilters.readingStatus}
+                onToggle={toggleReadingStatus}
+              />
+            )}
 
             <div className="space-y-3">
               <Label>الوسوم</Label>
@@ -391,8 +416,8 @@ function ChipSection({
 }: {
   label: string;
   items: StatusType[];
-  selected: string[];
-  onToggle: (v: string) => void;
+  selected: ReadingStatus[];
+  onToggle: (v: ReadingStatus) => void;
 }) {
   return (
     <div className="space-y-3">

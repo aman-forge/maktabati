@@ -172,7 +172,7 @@ export function ReadingProgress({ progress, showLabel = true, className }: Readi
             <BookOpenIcon className="h-3 w-3" />
             التقدم
           </span>
-          <span className="text-[10px] font-semibold tabular-nums text-blue-400">{progress}%</span>
+          <span className="text-[10px] font-semibold text-blue-400 tabular-nums">{progress}%</span>
         </div>
       )}
       <div className="bg-muted h-1 overflow-hidden rounded-full">
@@ -202,9 +202,9 @@ export function BookCover({ src, alt, className, children }: BookCoverProps) {
   return (
     <div className={cn("relative overflow-hidden bg-muted", className)}>
       {/* Spine shadow — Arabic books bind on the right */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-3 rounded-r-xl bg-linear-to-l from-background/40 to-transparent" />
+      <div className="from-background/40 pointer-events-none absolute inset-y-0 right-0 z-10 w-3 rounded-r-xl bg-linear-to-l to-transparent" />
       {/* Left edge highlight */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1 bg-linear-to-r from-background/10 to-transparent" />
+      <div className="from-background/10 pointer-events-none absolute inset-y-0 left-0 z-10 w-1 bg-linear-to-r to-transparent" />
 
       <img
         src={src ?? "/books/book.jpg"}

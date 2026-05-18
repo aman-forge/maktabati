@@ -79,7 +79,7 @@ function RouteComponent() {
 
   return (
     <main className="bg-background min-h-screen pb-6 font-sans">
-      <BookHero book={book ?? undefined} ratingSummary={mock.ratingSummary} />
+      <BookHero book={book} ratingSummary={mock.ratingSummary} />
 
       <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:px-0">
         <div className="gap-10 lg:grid lg:grid-cols-[1fr_340px] lg:gap-14">

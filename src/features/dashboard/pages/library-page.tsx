@@ -3,7 +3,6 @@ import {
   ArticleIcon,
   BookmarkIcon,
   BookOpenIcon,
-  CaretDownIcon,
   CheckCircleIcon,
   ListIcon,
   MagnifyingGlassIcon,
@@ -14,8 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 
-import { ReadingStatus } from "@/db/tables";
-import { BookCardType } from "@/features/books/types";
+import type { BookCardType, ReadingStatus } from "@/features/books/types";
 import { BookCard } from "@/ui/components/book/book-card";
 import { BookCardDetailed } from "@/ui/components/book/book-card-detailed";
 import { BookListItem } from "@/ui/components/book/book-card-list";
@@ -100,7 +98,6 @@ interface StatusSectionProps {
 }
 
 function StatusSection({ status, books, viewMode }: StatusSectionProps) {
-  const [collapsed, setCollapsed] = useState(false);
   const Icon = status.icon;
 
   if (books.length === 0) return null;
@@ -108,11 +105,7 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
   return (
     <section className="space-y-4">
       {/* Section header */}
-      <button
-        type="button"
-        onClick={() => setCollapsed((c) => !c)}
-        className="group flex w-full items-center gap-2.5 text-right hover:bg-accent py-2 px-4 rounded-full"
-      >
+      <div className="flex w-full items-center gap-2.5 px-1 py-1 text-right">
         <div className={cn("p-1.5 rounded-lg bg-muted/60", status.color)}>
           <Icon className="size-4" weight="duotone" />
         </div>
@@ -123,38 +116,39 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
         >
           {books.length}
         </Badge>
-        <CaretDownIcon
-          className={cn(
-            "size-4 text-muted-foreground transition-transform duration-200",
-            collapsed && "-rotate-90",
-          )}
-        />
-      </button>
+      </div>
 
       {/* Books grid/detailed/list */}
-      {!collapsed && (
-        <div
-          className={cn(
-            viewMode === "grid"
-              ? "flex flex-wrap gap-3 justify-center w-fit"
-              : viewMode === "detailed"
-                ? "grid grid-cols-1 lg:grid-cols-2 gap-4"
-                : "flex-col divide-y divide-border/50",
-          )}
-        >
-          {viewMode === "grid"
-            ? books.map((book) => (
-                <BookCard trackingStatus={book.status} key={book.id} book={book} size="lg" />
-              ))
+      <div
+        className={cn(
+          viewMode === "grid"
+            ? "flex flex-wrap gap-3 justify-center w-fit"
             : viewMode === "detailed"
-              ? books.map((book) => (
-                  <BookCardDetailed trackingStatus={book.status} key={book.id} book={book} />
-                ))
-              : books.map((book) => (
-                  <BookListItem trackingStatus={book.status} key={book.id} book={book} />
-                ))}
-        </div>
-      )}
+              ? "grid grid-cols-1 lg:grid-cols-2 gap-4"
+              : "flex flex-col gap-1",
+        )}
+      >
+        {viewMode === "grid"
+          ? books.map((book) => (
+              <BookCard
+                trackingStatus={book.status ?? undefined}
+                key={book.id}
+                book={book}
+                size="lg"
+              />
+            ))
+          : viewMode === "detailed"
+            ? books.map((book) => (
+                <BookCardDetailed
+                  trackingStatus={book.status ?? undefined}
+                  key={book.id}
+                  book={book}
+                />
+              ))
+            : books.map((book) => (
+                <BookListItem trackingStatus={book.status ?? undefined} key={book.id} book={book} />
+              ))}
+      </div>
     </section>
   );
 }
@@ -185,7 +179,7 @@ function LibrarySidebar({
   onViewModeChange,
 }: SidebarProps) {
   return (
-    <aside className="scrollbar-none sticky top-20 flex h-[calc(100vh-6rem)] w-64 shrink-0 flex-col gap-6 self-start overflow-y-visible pb-6">
+    <aside className="sticky top-20 flex h-[calc(100vh-6rem)] w-64 shrink-0 scrollbar-none flex-col gap-6 self-start overflow-y-visible pb-6">
       {/* Search */}
       <div className="relative">
         <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />

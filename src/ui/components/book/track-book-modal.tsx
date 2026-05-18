@@ -32,11 +32,9 @@ function dateToInputValue(d: Date | string | undefined | null): string {
   return isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
 }
 
-function inputValueToDate(s: string): Date | null {
+function inputValueToDateString(s: string): string | null {
   // Returns null (not undefined) so callers can distinguish "not set" from "not provided"
-  if (!s) return null;
-  const d = new Date(s);
-  return isNaN(d.getTime()) ? null : d;
+  return s || null;
 }
 
 // ─── Date rules per status ─────────────────────────────────────────
@@ -177,7 +175,7 @@ export function TrackBookModal({
       setNotes(initialData?.notes ?? "");
       setRereadCount(initialData?.rereadCount ?? 0);
     }
-  }, [open, book]);
+  }, [open, book, initialData]);
 
   // ── Status change: update pages + clear dates per rules ───────────
   const handleStatusChange = (next: ReadingStatus) => {
@@ -212,8 +210,8 @@ export function TrackBookModal({
       status,
       score,
       pagesProgress,
-      startDate: rules.showStart ? (inputValueToDate(startDate) ?? null) : null,
-      finishDate: rules.showFinish ? (inputValueToDate(finishDate) ?? null) : null,
+      startDate: rules.showStart ? inputValueToDateString(startDate) : null,
+      finishDate: rules.showFinish ? inputValueToDateString(finishDate) : null,
       notes,
       isFavorite,
       rereadCount,

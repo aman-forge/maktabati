@@ -3,13 +3,14 @@ import { DirectionProvider } from "@components/ui/direction";
 import { Toaster } from "@components/ui/sonner";
 import { TooltipProvider } from "@shadcn/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import AuthProvider from "@/features/auth/components/provider";
 import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 
 const Providers = ({ children }: { children: ReactNode }) => {
-  const queryClient = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <AuthProvider>
       <DirectionProvider direction="rtl">

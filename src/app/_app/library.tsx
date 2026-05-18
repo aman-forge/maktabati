@@ -19,7 +19,9 @@ export const Route = createFileRoute("/_app/library")({
 function RouteComponent() {
   const { user, isLoading: isUserLoading } = useUser();
   const { data: books, isLoading: isBooksLoading } = useQuery({
-    queryKey: ["books", user?.id],
+    queryKey: ["library-books", user?.id],
+    // Temporary auth boundary: use the client session id until Neon Auth can be
+    // read reliably from TanStack Start server functions.
     queryFn: () => getUserBooks({ data: user!.id }),
     enabled: !!user?.id, // NOTE: This prevents the query from running until the client auth is ready
   });

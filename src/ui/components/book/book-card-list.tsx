@@ -1,18 +1,13 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
+import { CalendarBlankIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
 import { BOOK_GENRES } from "@/db/constants/books";
-import { BookCardType, ReadingStatus } from "@/features/books/types";
+import { BookCardType, ReadingStatus, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
-import {
-  BookCover,
-  RatingPill,
-  ReadingProgress,
-  StatusBadge,
-  TrackButton,
-} from "./book-card-parts";
+import { BookCover, RatingPill, ReadingProgress, TrackButton } from "./book-card-parts";
 
 interface BookListItemProps {
   book: BookCardType;
@@ -42,106 +37,130 @@ function RankNumber({ rank }: { rank: number }) {
 export function BookListItem({ book, rank, trackingStatus, readingProgress }: BookListItemProps) {
   const { openTrackModal } = useBookTracking();
   const rating = 4.6; // TODO: add book.rating
-  const isReading = trackingStatus === "currently_reading";
+  const effectiveStatus = trackingStatus ?? book.status ?? undefined;
+  const isReading = effectiveStatus === "currently_reading";
+  const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
+  const StatusIcon = statusConfig?.icon;
 
   return (
     <article className="group">
-      <Link to="/book/$id" params={{ id: book.id }} className="block">
-        <div
-          className={cn(
-            "relative flex items-center gap-3 px-3 py-2.5 rounded-xl",
-            "transition-all duration-150 ease-out",
-            "hover:bg-accent/60 hover:shadow-sm",
-            // subtle left-shift on hover for a "sliding" feel
-            "hover:-translate-x-0.5",
-          )}
-        >
-          {/* Status stripe — right edge (RTL) */}
-          {trackingStatus && (
-            <div className="absolute right-0 inset-y-2 z-10">
-              <StatusBadge status={trackingStatus} variant="stripe-dot" />
-            </div>
-          )}
+      <div
+        className={cn(
+          "relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-3",
+          "bg-card/45 transition-all duration-150 ease-out",
+          "hover:border-border hover:bg-card hover:shadow-sm",
+        )}
+      >
+        {statusConfig && (
+          <div
+            className={cn(
+              "absolute inset-y-3 right-0 w-1 rounded-l-full opacity-80",
+              statusConfig.bgColor,
+            )}
+          />
+        )}
 
-          {/* Rank */}
-          {rank != null && <RankNumber rank={rank} />}
+        {rank != null && <RankNumber rank={rank} />}
 
-          {/* Cover */}
+        <Link to="/book/$id" params={{ id: book.id }} className="shrink-0">
           <BookCover
             src={book.coverImageUrl}
             alt={`غلاف ${book.title}`}
-            className="h-14 w-9 shrink-0 rounded-md shadow-sm"
+            className="ring-border/50 h-16 w-10 rounded-md shadow-sm ring-1 transition-transform duration-150 group-hover:-translate-y-0.5"
           />
+        </Link>
 
-          {/* Title, author, and progress (stacked) */}
-          <div className="min-w-0 flex-1 flex flex-col gap-0.5">
-            <h3 className="text-foreground group-hover:text-primary truncate text-sm leading-tight font-semibold transition-colors">
-              {book.title}
-            </h3>
-            <p className="text-muted-foreground/70 truncate text-xs">{book.author?.name}</p>
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="min-w-0 flex-1">
+              <Link
+                to="/book/$id"
+                params={{ id: book.id }}
+                className="text-foreground hover:text-primary block truncate text-sm leading-tight font-semibold transition-colors"
+              >
+                {book.title}
+              </Link>
+              <p className="text-muted-foreground/75 mt-0.5 truncate text-xs">
+                {book.author?.name ?? "مؤلف غير معروف"}
+              </p>
+            </div>
 
-            {/* Progress bar — always inline below author when reading */}
-            {isReading && readingProgress != null && (
-              <ReadingProgress
-                progress={readingProgress}
-                showLabel={false}
-                className="mt-1.5 space-y-0"
-              />
+            {statusConfig && (
+              <span
+                className={cn(
+                  "hidden h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11px] font-medium sm:inline-flex",
+                  statusConfig.badgeClass,
+                )}
+              >
+                {StatusIcon && <StatusIcon weight="fill" className="size-3" />}
+                {statusConfig.label}
+              </span>
             )}
           </div>
 
-          {/* Reading % label — desktop, only when reading */}
           {isReading && readingProgress != null && (
-            <span className="hidden md:block shrink-0 text-[11px] font-semibold tabular-nums text-blue-400 w-8 text-center">
-              {readingProgress}%
-            </span>
+            <ReadingProgress
+              progress={readingProgress}
+              showLabel={false}
+              className="max-w-sm [&>div]:h-1"
+            />
           )}
 
-          {/* Genres — desktop only */}
-          {book.genres && book.genres.length > 0 && (
-            <div className="hidden md:flex shrink-0 items-center gap-1 w-36">
-              {book.genres.slice(0, 2).map((genre) => (
-                <Badge
-                  key={genre}
-                  variant="secondary"
-                  className="bg-secondary/40 h-5 rounded-full px-1.5 py-0 text-[10px] font-normal"
-                >
-                  {BOOK_GENRES.find((g) => g.value === genre)?.label ?? genre}
-                </Badge>
-              ))}
-              {book.genres.length > 2 && (
-                <span className="text-muted-foreground/40 text-[10px]">
-                  +{book.genres.length - 2}
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* Year — desktop */}
-          {book.publicationYear && (
-            <div className="text-muted-foreground/50 hidden sm:block shrink-0 w-12 text-center text-[11px] tabular-nums">
-              {book.publicationYear}
-            </div>
-          )}
-
-          {/* Rating */}
-          <div className="shrink-0 w-14 flex justify-center">
-            <RatingPill rating={rating} variant="overlay" />
-          </div>
-
-          {/* Track button — dim at rest, bright on hover */}
-          <TrackButton
-            trackingStatus={trackingStatus}
-            onClick={() => openTrackModal(book)}
-            size="sm"
-            className={cn(
-              "shrink-0 transition-all duration-150",
-              "opacity-20 scale-90",
-              "group-hover:opacity-100 group-hover:scale-100",
+          <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+            {book.publicationYear && (
+              <span className="text-muted-foreground/65 bg-muted/50 inline-flex h-5 items-center gap-1 rounded px-1.5 text-[10px] tabular-nums">
+                <CalendarBlankIcon className="size-3" />
+                {book.publicationYear}
+              </span>
             )}
-          />
+
+            {book.genres?.slice(0, 2).map((genre) => (
+              <Badge
+                key={genre}
+                variant="secondary"
+                className="bg-secondary/45 h-5 max-w-24 truncate rounded px-1.5 py-0 text-[10px] font-normal"
+              >
+                {BOOK_GENRES.find((g) => g.value === genre)?.label ?? genre}
+              </Badge>
+            ))}
+
+            {book.genres && book.genres.length > 2 && (
+              <span className="text-muted-foreground/45 text-[10px]">
+                +{book.genres.length - 2}
+              </span>
+            )}
+
+            {statusConfig && (
+              <span
+                className={cn(
+                  "inline-flex h-5 items-center gap-1 rounded px-1.5 text-[10px] font-medium sm:hidden",
+                  statusConfig.badgeClass,
+                )}
+              >
+                {StatusIcon && <StatusIcon weight="fill" className="size-3" />}
+                {statusConfig.label}
+              </span>
+            )}
+          </div>
         </div>
-      </Link>
+
+        <div className="hidden w-14 shrink-0 justify-center sm:flex">
+          <RatingPill rating={rating} variant="overlay" />
+        </div>
+
+        <TrackButton
+          trackingStatus={effectiveStatus}
+          onClick={() => openTrackModal(book)}
+          size="sm"
+          className={cn(
+            "shrink-0 transition-all duration-150",
+            statusConfig
+              ? cn(statusConfig.bgColor, statusConfig.bgHoverColor)
+              : "bg-primary hover:bg-primary/90",
+            "opacity-75 group-hover:opacity-100",
+          )}
+        />
+      </div>
     </article>
   );
 }

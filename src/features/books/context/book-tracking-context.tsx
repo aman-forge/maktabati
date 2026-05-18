@@ -1,9 +1,11 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import React from "react";
-import { toast } from "sonner";
 
 import { useUser } from "@/features/auth/use-user";
 import { BaseBook } from "@/features/books/types";
 import { TrackBookModal } from "@/ui/components/book/track-book-modal";
+import { toast } from "@/ui/components/ui/sonner";
 
 import { updateBookTracking, TrackingDataType } from "../server/update-book";
 
@@ -29,6 +31,19 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
   const [isSaving, setIsSaving] = React.useState(false);
 
   const { user, isLoggedIn, isLoading } = useUser();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const initialTrackingData = React.useMemo(
+    () =>
+      selectedBook?.status
+        ? {
+            status: selectedBook.status,
+            startDate: selectedBook.startedAt ?? null,
+            finishDate: selectedBook.finishedAt ?? null,
+          }
+        : undefined,
+    [selectedBook?.finishedAt, selectedBook?.startedAt, selectedBook?.status],
+  );
 
   const openTrackModal = React.useCallback(
     (book: BaseBook) => {
@@ -51,6 +66,22 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
     setIsSaving(true);
     try {
       await updateBookTracking({ data: { bookId, data, userId: user.id } });
+      setSelectedBook((book) =>
+        book?.id === bookId
+          ? {
+              ...book,
+              status: data.status,
+              startedAt: data.startDate,
+              finishedAt: data.finishDate,
+            }
+          : book,
+      );
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["library-books"] }),
+        queryClient.invalidateQueries({ queryKey: ["discover-books"] }),
+        queryClient.invalidateQueries({ queryKey: ["book-tracking"] }),
+        router.invalidate(),
+      ]);
       toast.success("تم حفظ التتبع بنجاح");
       setOpen(false);
     } catch (error) {
@@ -72,6 +103,7 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
         onOpenChange={setOpen}
         isSaving={isSaving}
         onSave={updateBookStatus}
+        initialData={initialTrackingData}
       />
     </BookTrackingContext.Provider>
   );

@@ -6,6 +6,7 @@ import {
   SquaresFourIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
+import type React from "react";
 
 import { authors, books, readingStatusEnum } from "@/db/tables";
 
@@ -97,29 +98,32 @@ export interface BaseBook {
   id: string;
   slug: string;
   title: string;
-  coverImageUrl?: string;
-  pageCount?: number;
-  publicationYear?: number;
+  coverImageUrl?: string | null;
+  pageCount?: number | null;
+  publicationYear?: number | null;
+  status?: ReadingStatus | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
   author?: {
     id: string;
     name: string;
     slug: string;
-  };
+  } | null;
 }
 
 /**
  * Type for book search results and list items
  */
 export interface BookCardType extends BaseBook {
-  subtitle?: string;
-  description?: string;
-  publicationDate?: string;
-  originalLanguage?: string;
-  originalTitle?: string;
-  genres?: string[];
+  subtitle?: string | null;
+  description?: string | null;
+  publicationDate?: string | null;
+  originalLanguage?: string | null;
+  originalTitle?: string | null;
+  genres?: string[] | null;
+  topics?: string[] | null;
   createdAt: Date;
   updatedAt: Date;
-  status?: ReadingStatus;
 }
 
 /**
