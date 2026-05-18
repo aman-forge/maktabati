@@ -100,9 +100,9 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             <div className="relative">
               {/* Outer atmospheric glow — more pronounced on mobile */}
-              <div className="absolute -inset-3 rounded-full bg-linear-to-br from-primary/30 via-primary/10 to-transparent blur-lg sm:-inset-2 sm:blur-md" />
-              {/* Spinning dashed ring — mobile only decorative */}
-              <div className="absolute -inset-1.5 rounded-full border border-dashed border-primary/20 animate-[spin_20s_linear_infinite] sm:hidden" />
+              <div className="absolute -inset-3 rounded-full bg-linear-to-br from-primary via-primary/10 to-transparent blur-lg sm:-inset-2 sm:blur-md" />
+
+              <div className="absolute -inset-1.5 rounded-full border border-dashed border-primary/50 animate-[spin_20s_linear_infinite]" />
               {/* Inner border ring */}
               <div className="absolute -inset-0.5 rounded-full bg-linear-to-br from-primary/30 to-border/20" />
               <div className="relative">

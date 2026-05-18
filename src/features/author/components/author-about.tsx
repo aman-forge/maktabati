@@ -1,5 +1,7 @@
+
 import { BookCard } from "@/features/books/components/book-card";
 import type { AuthorType } from "@features/author/server/get-author";
+import { Separator } from "@shadcn/separator";
 
 // ─── Mock books — replace with real query ────────────────────────────────────
 const MOCK_BOOKS = [
@@ -43,8 +45,9 @@ const MOCK_BOOKS = [
     coverColor: "#EFF6FF",
     barColor: "#2563EB",
   },
-
 ];
+
+
 
 export function AuthorAbout({ author }: { author: AuthorType }) {
 
@@ -78,6 +81,9 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
           ))}
 
         </div>
+      </div>
+      <div className="py-8 border-t border-border flex flex-col gap-8">
+
       </div>
     </div>
   );
