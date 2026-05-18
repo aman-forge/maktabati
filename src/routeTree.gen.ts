@@ -12,12 +12,12 @@ import { Route as rootRouteImport } from './app/__root'
 import { Route as PublicRouteImport } from './app/_public'
 import { Route as AppRouteImport } from './app/_app'
 import { Route as AdminIndexRouteImport } from './app/admin/index'
+import { Route as AppSettingsRouteImport } from './app/_app/settings'
 import { Route as AppNotificationsRouteImport } from './app/_app/notifications'
 import { Route as AppMeRouteImport } from './app/_app/me'
 import { Route as AppLibraryRouteImport } from './app/_app/library'
 import { Route as AppDashboardRouteImport } from './app/_app/dashboard'
 import { Route as PublicMarketingIndexRouteImport } from './app/_public/_marketing/index'
-import { Route as AppSettingsIndexRouteImport } from './app/_app/settings/index'
 import { Route as PublicUUserIdRouteImport } from './app/_public/u/$userId'
 import { Route as PublicPublisherIdRouteImport } from './app/_public/publisher/$id'
 import { Route as PublicDiscoverRecommendationsRouteImport } from './app/_public/discover/recommendations'
@@ -33,9 +33,14 @@ import { Route as PublicAccountPathnameRouteImport } from './app/_public/account
 import { Route as PublicMarketingTermsRouteImport } from './app/_public/_marketing/terms'
 import { Route as PublicMarketingPrivacyRouteImport } from './app/_public/_marketing/privacy'
 import { Route as PublicMarketingAboutRouteImport } from './app/_public/_marketing/about'
+import { Route as AppSettingsSocialRouteImport } from './app/_app/settings/social'
+import { Route as AppSettingsReadingPreferencesRouteImport } from './app/_app/settings/readingPreferences'
 import { Route as AppSettingsProfileRouteImport } from './app/_app/settings/profile'
 import { Route as AppSettingsPrivacyRouteImport } from './app/_app/settings/privacy'
-import { Route as AppSettingsImportExportRouteImport } from './app/_app/settings/import-export'
+import { Route as AppSettingsNotificationsRouteImport } from './app/_app/settings/notifications'
+import { Route as AppSettingsIntegrationsRouteImport } from './app/_app/settings/integrations'
+import { Route as AppSettingsDataRouteImport } from './app/_app/settings/data'
+import { Route as AppSettingsAppearanceRouteImport } from './app/_app/settings/appearance'
 import { Route as AppSettingsAccountRouteImport } from './app/_app/settings/account'
 import { Route as PublicPublisherIdBooksRouteImport } from './app/_public/publisher/$id.books'
 import { Route as PublicPublisherIdArticlesRouteImport } from './app/_public/publisher/$id.articles'
@@ -54,6 +59,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
@@ -79,11 +89,6 @@ const PublicMarketingIndexRoute = PublicMarketingIndexRouteImport.update({
   id: '/_marketing/',
   path: '/',
   getParentRoute: () => PublicRoute,
-} as any)
-const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
-  getParentRoute: () => AppRoute,
 } as any)
 const PublicUUserIdRoute = PublicUUserIdRouteImport.update({
   id: '/u/$userId',
@@ -162,25 +167,52 @@ const PublicMarketingAboutRoute = PublicMarketingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => PublicRoute,
 } as any)
+const AppSettingsSocialRoute = AppSettingsSocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsReadingPreferencesRoute =
+  AppSettingsReadingPreferencesRouteImport.update({
+    id: '/readingPreferences',
+    path: '/readingPreferences',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
 const AppSettingsProfileRoute = AppSettingsProfileRouteImport.update({
-  id: '/settings/profile',
-  path: '/settings/profile',
-  getParentRoute: () => AppRoute,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 const AppSettingsPrivacyRoute = AppSettingsPrivacyRouteImport.update({
-  id: '/settings/privacy',
-  path: '/settings/privacy',
-  getParentRoute: () => AppRoute,
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
-const AppSettingsImportExportRoute = AppSettingsImportExportRouteImport.update({
-  id: '/settings/import-export',
-  path: '/settings/import-export',
-  getParentRoute: () => AppRoute,
+const AppSettingsNotificationsRoute =
+  AppSettingsNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
+const AppSettingsIntegrationsRoute = AppSettingsIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsDataRoute = AppSettingsDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsAppearanceRoute = AppSettingsAppearanceRouteImport.update({
+  id: '/appearance',
+  path: '/appearance',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 const AppSettingsAccountRoute = AppSettingsAccountRouteImport.update({
-  id: '/settings/account',
-  path: '/settings/account',
-  getParentRoute: () => AppRoute,
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 const PublicPublisherIdBooksRoute = PublicPublisherIdBooksRouteImport.update({
   id: '/books',
@@ -210,11 +242,17 @@ export interface FileRoutesByFullPath {
   '/library': typeof AppLibraryRoute
   '/me': typeof AppMeRoute
   '/notifications': typeof AppNotificationsRoute
+  '/settings': typeof AppSettingsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
-  '/settings/import-export': typeof AppSettingsImportExportRoute
+  '/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/settings/data': typeof AppSettingsDataRoute
+  '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/settings/social': typeof AppSettingsSocialRoute
   '/about': typeof PublicMarketingAboutRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
@@ -230,7 +268,6 @@ export interface FileRoutesByFullPath {
   '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
-  '/settings/': typeof AppSettingsIndexRoute
   '/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
@@ -242,11 +279,17 @@ export interface FileRoutesByTo {
   '/library': typeof AppLibraryRoute
   '/me': typeof AppMeRoute
   '/notifications': typeof AppNotificationsRoute
+  '/settings': typeof AppSettingsRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
-  '/settings/import-export': typeof AppSettingsImportExportRoute
+  '/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/settings/data': typeof AppSettingsDataRoute
+  '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/settings/social': typeof AppSettingsSocialRoute
   '/about': typeof PublicMarketingAboutRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
@@ -262,7 +305,6 @@ export interface FileRoutesByTo {
   '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
-  '/settings': typeof AppSettingsIndexRoute
   '/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
@@ -276,11 +318,17 @@ export interface FileRoutesById {
   '/_app/library': typeof AppLibraryRoute
   '/_app/me': typeof AppMeRoute
   '/_app/notifications': typeof AppNotificationsRoute
+  '/_app/settings': typeof AppSettingsRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/_app/settings/account': typeof AppSettingsAccountRoute
-  '/_app/settings/import-export': typeof AppSettingsImportExportRoute
+  '/_app/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/_app/settings/data': typeof AppSettingsDataRoute
+  '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/_app/settings/notifications': typeof AppSettingsNotificationsRoute
   '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
   '/_app/settings/profile': typeof AppSettingsProfileRoute
+  '/_app/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/_app/settings/social': typeof AppSettingsSocialRoute
   '/_public/_marketing/about': typeof PublicMarketingAboutRoute
   '/_public/_marketing/privacy': typeof PublicMarketingPrivacyRoute
   '/_public/_marketing/terms': typeof PublicMarketingTermsRoute
@@ -296,7 +344,6 @@ export interface FileRoutesById {
   '/_public/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/_public/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/_public/u/$userId': typeof PublicUUserIdRoute
-  '/_app/settings/': typeof AppSettingsIndexRoute
   '/_public/_marketing/': typeof PublicMarketingIndexRoute
   '/_public/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/_public/author/$id/series': typeof PublicAuthorIdSeriesRoute
@@ -311,11 +358,17 @@ export interface FileRouteTypes {
     | '/library'
     | '/me'
     | '/notifications'
+    | '/settings'
     | '/admin/'
     | '/settings/account'
-    | '/settings/import-export'
+    | '/settings/appearance'
+    | '/settings/data'
+    | '/settings/integrations'
+    | '/settings/notifications'
     | '/settings/privacy'
     | '/settings/profile'
+    | '/settings/readingPreferences'
+    | '/settings/social'
     | '/about'
     | '/privacy'
     | '/terms'
@@ -331,7 +384,6 @@ export interface FileRouteTypes {
     | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
-    | '/settings/'
     | '/author/$id/books'
     | '/author/$id/series'
     | '/publisher/$id/articles'
@@ -343,11 +395,17 @@ export interface FileRouteTypes {
     | '/library'
     | '/me'
     | '/notifications'
+    | '/settings'
     | '/admin'
     | '/settings/account'
-    | '/settings/import-export'
+    | '/settings/appearance'
+    | '/settings/data'
+    | '/settings/integrations'
+    | '/settings/notifications'
     | '/settings/privacy'
     | '/settings/profile'
+    | '/settings/readingPreferences'
+    | '/settings/social'
     | '/about'
     | '/privacy'
     | '/terms'
@@ -363,7 +421,6 @@ export interface FileRouteTypes {
     | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
-    | '/settings'
     | '/author/$id/books'
     | '/author/$id/series'
     | '/publisher/$id/articles'
@@ -376,11 +433,17 @@ export interface FileRouteTypes {
     | '/_app/library'
     | '/_app/me'
     | '/_app/notifications'
+    | '/_app/settings'
     | '/admin/'
     | '/_app/settings/account'
-    | '/_app/settings/import-export'
+    | '/_app/settings/appearance'
+    | '/_app/settings/data'
+    | '/_app/settings/integrations'
+    | '/_app/settings/notifications'
     | '/_app/settings/privacy'
     | '/_app/settings/profile'
+    | '/_app/settings/readingPreferences'
+    | '/_app/settings/social'
     | '/_public/_marketing/about'
     | '/_public/_marketing/privacy'
     | '/_public/_marketing/terms'
@@ -396,7 +459,6 @@ export interface FileRouteTypes {
     | '/_public/discover/recommendations'
     | '/_public/publisher/$id'
     | '/_public/u/$userId'
-    | '/_app/settings/'
     | '/_public/_marketing/'
     | '/_public/author/$id/books'
     | '/_public/author/$id/series'
@@ -433,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/notifications': {
       id: '/_app/notifications'
       path: '/notifications'
@@ -467,13 +536,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PublicMarketingIndexRouteImport
       parentRoute: typeof PublicRoute
-    }
-    '/_app/settings/': {
-      id: '/_app/settings/'
-      path: '/settings'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof AppSettingsIndexRouteImport
-      parentRoute: typeof AppRoute
     }
     '/_public/u/$userId': {
       id: '/_public/u/$userId'
@@ -580,33 +642,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicMarketingAboutRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_app/settings/social': {
+      id: '/_app/settings/social'
+      path: '/social'
+      fullPath: '/settings/social'
+      preLoaderRoute: typeof AppSettingsSocialRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/readingPreferences': {
+      id: '/_app/settings/readingPreferences'
+      path: '/readingPreferences'
+      fullPath: '/settings/readingPreferences'
+      preLoaderRoute: typeof AppSettingsReadingPreferencesRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
     '/_app/settings/profile': {
       id: '/_app/settings/profile'
-      path: '/settings/profile'
+      path: '/profile'
       fullPath: '/settings/profile'
       preLoaderRoute: typeof AppSettingsProfileRouteImport
-      parentRoute: typeof AppRoute
+      parentRoute: typeof AppSettingsRoute
     }
     '/_app/settings/privacy': {
       id: '/_app/settings/privacy'
-      path: '/settings/privacy'
+      path: '/privacy'
       fullPath: '/settings/privacy'
       preLoaderRoute: typeof AppSettingsPrivacyRouteImport
-      parentRoute: typeof AppRoute
+      parentRoute: typeof AppSettingsRoute
     }
-    '/_app/settings/import-export': {
-      id: '/_app/settings/import-export'
-      path: '/settings/import-export'
-      fullPath: '/settings/import-export'
-      preLoaderRoute: typeof AppSettingsImportExportRouteImport
-      parentRoute: typeof AppRoute
+    '/_app/settings/notifications': {
+      id: '/_app/settings/notifications'
+      path: '/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof AppSettingsNotificationsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/integrations': {
+      id: '/_app/settings/integrations'
+      path: '/integrations'
+      fullPath: '/settings/integrations'
+      preLoaderRoute: typeof AppSettingsIntegrationsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/data': {
+      id: '/_app/settings/data'
+      path: '/data'
+      fullPath: '/settings/data'
+      preLoaderRoute: typeof AppSettingsDataRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/appearance': {
+      id: '/_app/settings/appearance'
+      path: '/appearance'
+      fullPath: '/settings/appearance'
+      preLoaderRoute: typeof AppSettingsAppearanceRouteImport
+      parentRoute: typeof AppSettingsRoute
     }
     '/_app/settings/account': {
       id: '/_app/settings/account'
-      path: '/settings/account'
+      path: '/account'
       fullPath: '/settings/account'
       preLoaderRoute: typeof AppSettingsAccountRouteImport
-      parentRoute: typeof AppRoute
+      parentRoute: typeof AppSettingsRoute
     }
     '/_public/publisher/$id/books': {
       id: '/_public/publisher/$id/books'
@@ -639,16 +736,40 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppSettingsRouteChildren {
+  AppSettingsAccountRoute: typeof AppSettingsAccountRoute
+  AppSettingsAppearanceRoute: typeof AppSettingsAppearanceRoute
+  AppSettingsDataRoute: typeof AppSettingsDataRoute
+  AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
+  AppSettingsNotificationsRoute: typeof AppSettingsNotificationsRoute
+  AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
+  AppSettingsProfileRoute: typeof AppSettingsProfileRoute
+  AppSettingsReadingPreferencesRoute: typeof AppSettingsReadingPreferencesRoute
+  AppSettingsSocialRoute: typeof AppSettingsSocialRoute
+}
+
+const AppSettingsRouteChildren: AppSettingsRouteChildren = {
+  AppSettingsAccountRoute: AppSettingsAccountRoute,
+  AppSettingsAppearanceRoute: AppSettingsAppearanceRoute,
+  AppSettingsDataRoute: AppSettingsDataRoute,
+  AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
+  AppSettingsNotificationsRoute: AppSettingsNotificationsRoute,
+  AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
+  AppSettingsProfileRoute: AppSettingsProfileRoute,
+  AppSettingsReadingPreferencesRoute: AppSettingsReadingPreferencesRoute,
+  AppSettingsSocialRoute: AppSettingsSocialRoute,
+}
+
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
+  AppSettingsRouteChildren,
+)
+
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppLibraryRoute: typeof AppLibraryRoute
   AppMeRoute: typeof AppMeRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
-  AppSettingsAccountRoute: typeof AppSettingsAccountRoute
-  AppSettingsImportExportRoute: typeof AppSettingsImportExportRoute
-  AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
-  AppSettingsProfileRoute: typeof AppSettingsProfileRoute
-  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -656,11 +777,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppLibraryRoute: AppLibraryRoute,
   AppMeRoute: AppMeRoute,
   AppNotificationsRoute: AppNotificationsRoute,
-  AppSettingsAccountRoute: AppSettingsAccountRoute,
-  AppSettingsImportExportRoute: AppSettingsImportExportRoute,
-  AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
-  AppSettingsProfileRoute: AppSettingsProfileRoute,
-  AppSettingsIndexRoute: AppSettingsIndexRoute,
+  AppSettingsRoute: AppSettingsRouteWithChildren,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
