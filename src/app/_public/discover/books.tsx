@@ -1,6 +1,5 @@
 import { BookCard } from "@components/book/book-card";
 import { BookCardDetailed } from "@components/book/book-card-detailed";
-import { BookListItem } from "@components/book/book-list-item";
 import { GenreCombobox } from "@features/books/components/genre-combobox";
 import { ViewToggle } from "@features/books/components/view-toggle";
 import {
@@ -20,6 +19,7 @@ import { z } from "zod";
 import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
 import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
 import { searchBooks } from "@/features/books/server/get-books";
+import { BookListItem } from "@/ui/components/book/book-card-list";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -113,7 +113,7 @@ function getStatusLabel(value: string) {
       Reading: "يُقرأ الآن",
       Completed: "مكتمل",
       "On Hold": "متوقف",
-      Dropped: "متروك",
+      did_not_finish: "متروك",
     }[value] ?? value
   );
 }

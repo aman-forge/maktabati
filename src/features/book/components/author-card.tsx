@@ -3,10 +3,10 @@ import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
 
-import type { BookType } from "../../books/server/get-books";
+import { DetailedBookType } from "@/features/books/types";
 
 interface AuthorCardProps {
-  author?: NonNullable<BookType>["author"];
+  author?: NonNullable<DetailedBookType>["author"];
 }
 
 export function AuthorCard({ author }: AuthorCardProps) {

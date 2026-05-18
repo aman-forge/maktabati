@@ -1,3 +1,4 @@
+// features/dashboard/pages/library-page.tsx
 import {
   ArticleIcon,
   BookmarkIcon,
@@ -13,10 +14,11 @@ import {
 } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 
-import type { BookCardBook } from "@/features/books/server/get-books";
+import { ReadingStatus } from "@/db/tables";
+import { BookCardType } from "@/features/books/types";
 import { BookCard } from "@/ui/components/book/book-card";
 import { BookCardDetailed } from "@/ui/components/book/book-card-detailed";
-import { BookListItem } from "@/ui/components/book/book-list-item";
+import { BookListItem } from "@/ui/components/book/book-card-list";
 import { Badge } from "@/ui/components/ui/badge";
 import { Button } from "@/ui/components/ui/button";
 import { Input } from "@/ui/components/ui/input";
@@ -24,12 +26,11 @@ import { cn } from "@/ui/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type ReadingStatus = "all" | "Reading" | "Unread" | "Completed" | "On Hold" | "Dropped";
 type ViewMode = "grid" | "list" | "detailed";
 type SortOption = "added_desc" | "added_asc" | "title" | "rating";
 
 interface StatusConfig {
-  value: ReadingStatus;
+  value: ReadingStatus | "all";
   label: string;
   icon: React.ElementType;
   color: string;
@@ -47,35 +48,35 @@ const STATUS_CONFIG: StatusConfig[] = [
     badgeClass: "bg-foreground/10 text-foreground",
   },
   {
-    value: "Reading",
+    value: "currently_reading",
     label: "قيد القراءة",
     icon: BookOpenIcon,
     color: "text-blue-500",
     badgeClass: "bg-blue-500/10 text-blue-500",
   },
   {
-    value: "Unread",
+    value: "want_to_read",
     label: "أخطط لقراءته",
     icon: BookmarkIcon,
     color: "text-amber-500",
     badgeClass: "bg-amber-500/10 text-amber-500",
   },
   {
-    value: "Completed",
+    value: "completed",
     label: "مكتمل",
     icon: CheckCircleIcon,
     color: "text-emerald-500",
     badgeClass: "bg-emerald-500/10 text-emerald-500",
   },
   {
-    value: "On Hold",
+    value: "on_hold",
     label: "متوقف",
     icon: PauseCircleIcon,
     color: "text-orange-500",
     badgeClass: "bg-orange-500/10 text-orange-500",
   },
   {
-    value: "Dropped",
+    value: "dropped",
     label: "متروك",
     icon: TrashIcon,
     color: "text-rose-500",
@@ -90,28 +91,11 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "rating", label: "التقييم" },
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-/**
- * Replace with real status from user-book relationship data.
- * Currently assigns a deterministic fake status for demo purposes.
- */
-function getBookStatus(book: BookCardBook, index: number): Exclude<ReadingStatus, "all"> {
-  const statuses: Exclude<ReadingStatus, "all">[] = [
-    "Reading",
-    "Unread",
-    "Completed",
-    "On Hold",
-    "Dropped",
-  ];
-  return statuses[index % statuses.length];
-}
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 interface StatusSectionProps {
   status: StatusConfig;
-  books: BookCardBook[];
+  books: BookCardType[];
   viewMode: ViewMode;
 }
 
@@ -127,7 +111,7 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
       <button
         type="button"
         onClick={() => setCollapsed((c) => !c)}
-        className="group flex w-full items-center gap-2.5 text-right"
+        className="group flex w-full items-center gap-2.5 text-right hover:bg-accent py-2 px-4 rounded-full"
       >
         <div className={cn("p-1.5 rounded-lg bg-muted/60", status.color)}>
           <Icon className="size-4" weight="duotone" />
@@ -159,10 +143,16 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
           )}
         >
           {viewMode === "grid"
-            ? books.map((book) => <BookCard key={book.id} book={book} size="lg" />)
+            ? books.map((book) => (
+                <BookCard trackingStatus={book.status} key={book.id} book={book} size="lg" />
+              ))
             : viewMode === "detailed"
-              ? books.map((book) => <BookCardDetailed key={book.id} book={book} />)
-              : books.map((book) => <BookListItem key={book.id} book={book} />)}
+              ? books.map((book) => (
+                  <BookCardDetailed trackingStatus={book.status} key={book.id} book={book} />
+                ))
+              : books.map((book) => (
+                  <BookListItem trackingStatus={book.status} key={book.id} book={book} />
+                ))}
         </div>
       )}
     </section>
@@ -174,9 +164,9 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
 interface SidebarProps {
   query: string;
   onQueryChange: (q: string) => void;
-  activeStatus: ReadingStatus;
-  onStatusChange: (s: ReadingStatus) => void;
-  counts: Record<ReadingStatus, number>;
+  activeStatus: ReadingStatus | "all";
+  onStatusChange: (s: ReadingStatus | "all") => void;
+  counts: Record<ReadingStatus | "all", number>;
   sort: SortOption;
   onSortChange: (s: SortOption) => void;
   viewMode: ViewMode;
@@ -207,7 +197,6 @@ function LibrarySidebar({
           className="h-9 pr-9 text-sm"
           autoComplete="off"
         />
-
         {query && (
           <button
             type="button"
@@ -329,46 +318,43 @@ function LibrarySidebar({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 interface LibraryBooksProps {
-  /**
-   * In production: pass books enriched with a `status` field from the
-   * user-book join table. The `getBookStatus` helper is a temporary stand-in.
-   */
-  books: BookCardBook[];
+  books: BookCardType[];
 }
 
 const LibraryBooks = ({ books }: LibraryBooksProps) => {
   // ── Local state (swap with URL params / server state as needed) ───────────
   const [query, setQuery] = useState("");
-  const [activeStatus, setActiveStatus] = useState<ReadingStatus>("all");
+  const [activeStatus, setActiveStatus] = useState<ReadingStatus | "all">("all");
   const [sort, setSort] = useState<SortOption>("added_desc");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
-  // ── Enrich books with status (replace with real data in production) ───────
-  const enrichedBooks = useMemo(
-    () => books.map((book, i) => ({ ...book, _status: getBookStatus(book, i) })),
-    [books],
-  );
-
   // ── Counts per status ─────────────────────────────────────────────────────
+  // ✅ Uses real `userBook.status` from the DB join — no fake getBookStatus()
+  // BookCardType must include `status: ReadingStatus` from the userBooks join
   const counts = useMemo(() => {
-    const base: Record<ReadingStatus, number> = {
-      all: enrichedBooks.length,
-      Reading: 0,
-      Unread: 0,
-      Completed: 0,
-      "On Hold": 0,
-      Dropped: 0,
+    const base: Record<ReadingStatus | "all", number> = {
+      all: books.length,
+      want_to_read: 0,
+      currently_reading: 0,
+      completed: 0,
+      on_hold: 0,
+      dropped: 0,
     };
-    for (const b of enrichedBooks) base[b._status]++;
+    for (const book of books) {
+      // book.status comes from the userBooks join in getUserBooks()
+      if (book.status && book.status in base) {
+        base[book.status as ReadingStatus]++;
+      }
+    }
     return base;
-  }, [enrichedBooks]);
+  }, [books]);
 
   // ── Filter + search ───────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let result = enrichedBooks;
+    let result = books;
 
     if (activeStatus !== "all") {
-      result = result.filter((b) => b._status === activeStatus);
+      result = result.filter((b) => b.status === activeStatus);
     }
 
     if (query.trim()) {
@@ -398,7 +384,7 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
     }
 
     return result;
-  }, [enrichedBooks, activeStatus, query, sort]);
+  }, [books, activeStatus, query, sort]);
 
   // ── Group by status for "all" view ────────────────────────────────────────
   const sections = useMemo(() => {
@@ -408,7 +394,7 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
     }
     return STATUS_CONFIG.filter((s) => s.value !== "all").map((config) => ({
       config,
-      books: filtered.filter((b) => b._status === config.value),
+      books: filtered.filter((b) => b.status === config.value),
     }));
   }, [activeStatus, filtered]);
 

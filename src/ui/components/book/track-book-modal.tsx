@@ -18,15 +18,49 @@ import { Input } from "@shadcn/input";
 import { Textarea } from "@shadcn/textarea";
 import React from "react";
 
+import { TrackingDataType } from "@/features/books/server/update-book";
 import { cn } from "@/ui/lib/utils";
 
-import type { BookCardBook, BookType } from "../../../features/books/server/get-books";
+import type { BaseBook } from "../../../features/books/types";
 import { Label } from "../ui/label";
 
-/* ─── Status config ───────────────────────────────────────────────── */
+// ─── helpers ──────────────────────────────────────────────────────
+
+function dateToInputValue(d: Date | string | undefined | null): string {
+  if (!d) return "";
+  const date = d instanceof Date ? d : new Date(d);
+  return isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+}
+
+function inputValueToDate(s: string): Date | null {
+  // Returns null (not undefined) so callers can distinguish "not set" from "not provided"
+  if (!s) return null;
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// ─── Date rules per status ─────────────────────────────────────────
+// Defines which date fields are active and what happens on status change.
+//
+//  want_to_read     → clear both dates (hasn't started)
+//  currently_reading → keep/set startDate, clear finishDate
+//  on_hold          → keep both (was reading, paused)
+//  completed        → keep both (both are meaningful)
+//  dropped          → keep startDate, clear finishDate (never finished)
+
+function getDateRulesForStatus(status: ReadingStatus) {
+  return {
+    showStart: status !== "want_to_read",
+    showFinish: status === "completed",
+    clearStartOnSwitch: status === "want_to_read",
+    clearFinishOnSwitch: status !== "completed",
+  };
+}
+
+/* ─── Status config ───────────────────────────────────────────── */
 const STATUSES = [
   {
-    value: "plan-to-read",
+    value: "want_to_read" as const,
     label: "أخطط للقراءة",
     icon: BookmarkSimpleIcon,
     pill: "bg-slate-500/10 text-slate-400 border-slate-500/20",
@@ -35,7 +69,7 @@ const STATUSES = [
     barColor: "bg-slate-400",
   },
   {
-    value: "reading",
+    value: "currently_reading" as const,
     label: "أقرأ حالياً",
     icon: BookOpenIcon,
     pill: "bg-sky-500/10 text-sky-400 border-sky-500/20",
@@ -44,7 +78,7 @@ const STATUSES = [
     barColor: "bg-sky-400",
   },
   {
-    value: "completed",
+    value: "completed" as const,
     label: "مكتمل",
     icon: CheckCircleIcon,
     pill: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -53,7 +87,7 @@ const STATUSES = [
     barColor: "bg-emerald-400",
   },
   {
-    value: "on-hold",
+    value: "on_hold" as const, // ✅ was missing entirely
     label: "مؤجل",
     icon: PauseIcon,
     pill: "bg-amber-500/10 text-amber-400 border-amber-500/20",
@@ -62,7 +96,7 @@ const STATUSES = [
     barColor: "bg-amber-400",
   },
   {
-    value: "dropped",
+    value: "dropped" as const,
     label: "متروك",
     icon: ProhibitIcon,
     pill: "bg-rose-500/10 text-rose-400 border-rose-500/20",
@@ -70,7 +104,17 @@ const STATUSES = [
     dot: "bg-rose-400",
     barColor: "bg-rose-400",
   },
-] as const;
+] as const satisfies ReadonlyArray<{
+  value: TrackingDataType["status"];
+  label: string;
+  icon: React.ElementType;
+  pill: string;
+  active: string;
+  dot: string;
+  barColor: string;
+}>;
+
+type ReadingStatus = TrackingDataType["status"];
 
 /* ─── Rating labels ───────────────────────────────────────────────── */
 const SCORE_LABELS: Record<number, string> = {
@@ -88,23 +132,13 @@ const SCORE_LABELS: Record<number, string> = {
 };
 
 /* ─── Types ───────────────────────────────────────────────────────── */
-export interface TrackingData {
-  status: string;
-  score: number;
-  pagesProgress: number;
-  startDate: string;
-  finishDate: string;
-  notes: string;
-  isFavorite: boolean;
-  rereadCount: number;
-}
-
 interface TrackBookModalProps {
-  book: BookCardBook | BookType | null;
+  book: BaseBook | null;
   open: boolean;
+  isSaving: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave?: (bookId: string, data: TrackingData) => void;
-  initialData?: Partial<TrackingData>;
+  onSave?: (bookId: string, data: TrackingDataType) => Promise<void>;
+  initialData?: Partial<TrackingDataType>;
 }
 
 /* ─── Component ───────────────────────────────────────────────────── */
@@ -113,55 +147,77 @@ export function TrackBookModal({
   open,
   onOpenChange,
   onSave,
+  isSaving,
   initialData,
 }: TrackBookModalProps) {
   const [isFavorite, setIsFavorite] = React.useState(initialData?.isFavorite ?? false);
-  const [status, setStatus] = React.useState(initialData?.status ?? "plan-to-read");
+  const [status, setStatus] = React.useState<ReadingStatus>(initialData?.status ?? "want_to_read");
   const [score, setScore] = React.useState(initialData?.score ?? 0);
   const [pagesProgress, setPagesProgress] = React.useState(initialData?.pagesProgress ?? 0);
-  const [startDate, setStartDate] = React.useState(
-    initialData?.startDate ?? new Date().toISOString().split("T")[0],
+  // ✅ Both dates start empty — user must explicitly set them
+  const [startDate, setStartDate] = React.useState<string>(
+    dateToInputValue(initialData?.startDate),
   );
-  const [finishDate, setFinishDate] = React.useState(initialData?.finishDate ?? "");
+  const [finishDate, setFinishDate] = React.useState<string>(
+    dateToInputValue(initialData?.finishDate),
+  );
   const [notes, setNotes] = React.useState(initialData?.notes ?? "");
   const [rereadCount, setRereadCount] = React.useState(initialData?.rereadCount ?? 0);
   const [hoveredScore, setHoveredScore] = React.useState<number | null>(null);
 
+  // ── Reset form when modal opens ───────────────────────────────────
   React.useEffect(() => {
     if (open && book) {
       setIsFavorite(initialData?.isFavorite ?? false);
-      setStatus(initialData?.status ?? "plan-to-read");
+      setStatus(initialData?.status ?? "want_to_read");
       setScore(initialData?.score ?? 0);
       setPagesProgress(initialData?.pagesProgress ?? 0);
-      setStartDate(initialData?.startDate ?? new Date().toISOString().split("T")[0]);
-      setFinishDate(initialData?.finishDate ?? "");
+      setStartDate(dateToInputValue(initialData?.startDate));
+      setFinishDate(dateToInputValue(initialData?.finishDate));
       setNotes(initialData?.notes ?? "");
       setRereadCount(initialData?.rereadCount ?? 0);
     }
-  }, [open, book, initialData]);
+  }, [open, book]);
 
-  React.useEffect(() => {
-    if (status === "completed" && book?.pageCount) {
+  // ── Status change: update pages + clear dates per rules ───────────
+  const handleStatusChange = (next: ReadingStatus) => {
+    const rules = getDateRulesForStatus(next);
+
+    setStatus(next);
+
+    // Pages
+    if (next === "completed" && book?.pageCount) {
       setPagesProgress(book.pageCount);
-    } else if (status === "plan-to-read") {
+    } else if (next === "want_to_read") {
       setPagesProgress(0);
     }
-  }, [status, book?.pageCount]);
 
-  const handleSave = () => {
-    if (book && onSave) {
-      onSave(book.id, {
-        status,
-        score,
-        pagesProgress,
-        startDate,
-        finishDate,
-        notes,
-        isFavorite,
-        rereadCount,
-      });
+    // ✅ Clear dates based on what makes sense for each status
+    if (rules.clearStartOnSwitch) setStartDate("");
+    if (rules.clearFinishOnSwitch) setFinishDate("");
+
+    // ✅ Auto-set today's start date when switching to actively reading
+    if (next === "currently_reading" && !startDate) {
+      setStartDate(new Date().toISOString().split("T")[0]);
     }
-    onOpenChange(false);
+  };
+
+  // ── Save ──────────────────────────────────────────────────────────
+  const handleSave = async () => {
+    if (!book || !onSave) return;
+
+    const rules = getDateRulesForStatus(status);
+
+    await onSave(book.id, {
+      status,
+      score,
+      pagesProgress,
+      startDate: rules.showStart ? (inputValueToDate(startDate) ?? null) : null,
+      finishDate: rules.showFinish ? (inputValueToDate(finishDate) ?? null) : null,
+      notes,
+      isFavorite,
+      rereadCount,
+    });
   };
 
   if (!book) return null;
@@ -169,7 +225,7 @@ export function TrackBookModal({
   const totalPages = book.pageCount || 0;
   const progressPercent = totalPages > 0 ? Math.min((pagesProgress / totalPages) * 100, 100) : 0;
   const currentStatus = STATUSES.find((s) => s.value === status);
-  const showFinishDate = status === "completed";
+  const dateRules = getDateRulesForStatus(status);
   const displayScore = hoveredScore ?? score;
 
   return (
@@ -188,7 +244,6 @@ export function TrackBookModal({
       >
         {/* ── Cover Hero ─────────────────────────────────────────── */}
         <div className="relative h-48 shrink-0 overflow-hidden">
-          {/* Blurred background */}
           <div
             className="absolute inset-0 scale-110"
             style={{
@@ -198,10 +253,8 @@ export function TrackBookModal({
               filter: "blur(5px) brightness(0.4) saturate(1.6)",
             }}
           />
-          {/* Bottom fade to modal bg */}
           <div className="to-card dark:to-background absolute inset-0 bg-linear-to-b from-transparent" />
 
-          {/* Controls */}
           <Button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -222,16 +275,14 @@ export function TrackBookModal({
               "absolute top-3 right-3 z-10 w-8 h-8 rounded-xl backdrop-blur-sm transition-all duration-200",
               isFavorite
                 ? "bg-rose-500 text-background! dark:text-foreground! hover:bg-rose-500/80 border-rose-500 scale-105"
-                : " bg-secondary text-secondary-foreground hover:bg-accent hover:text-rose-400",
+                : "bg-secondary text-secondary-foreground hover:bg-accent hover:text-rose-400",
             )}
             aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
           >
             <HeartIcon weight={isFavorite ? "fill" : "bold"} className="h-4 w-4" />
           </Button>
 
-          {/* Book info row */}
           <div className="absolute inset-x-0 bottom-0 flex items-end gap-4 px-5 pb-12">
-            {/* Cover */}
             <div className="z-10 h-26 w-18 shrink-0 translate-y-5 overflow-hidden rounded-lg shadow-2xl ring-1 ring-white/10">
               <img
                 src={book.coverImageUrl || "/books/book.jpg"}
@@ -239,7 +290,6 @@ export function TrackBookModal({
                 className="h-full w-full object-cover"
               />
             </div>
-
             <div className="min-w-0 flex-1 pb-1">
               <DialogTitle className="line-clamp-2 text-lg leading-snug font-bold text-white">
                 {book.title}
@@ -276,7 +326,7 @@ export function TrackBookModal({
                   <button
                     key={s.value}
                     type="button"
-                    onClick={() => setStatus(s.value)}
+                    onClick={() => handleStatusChange(s.value)} // ✅ was setStatus directly
                     className={cn(
                       "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border transition-all duration-200 text-nowrap cursor-pointer shrink-0",
                       isActive ? s.active : cn(s.pill, "hover:brightness-125"),
@@ -297,7 +347,6 @@ export function TrackBookModal({
             <SectionLabel icon={<BookOpenIcon className="h-3.5 w-3.5" />}>
               التقدم في القراءة
             </SectionLabel>
-
             <div className="flex items-center gap-3">
               <div className="relative flex-1">
                 <Input
@@ -310,7 +359,7 @@ export function TrackBookModal({
                       Math.max(0, Math.min(totalPages || 9999, parseInt(e.target.value, 10) || 0)),
                     )
                   }
-                  disabled={status === "completed" || status === "plan-to-read"}
+                  disabled={status === "completed" || status === "want_to_read" || isSaving}
                   placeholder="0"
                   className="pl-16"
                 />
@@ -331,19 +380,15 @@ export function TrackBookModal({
                 {Math.round(progressPercent)}%
               </div>
             </div>
-
-            {/* Progress bar */}
             {totalPages > 0 && (
-              <div className="space-y-1">
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/6">
-                  <div
-                    className={cn(
-                      "h-full rounded-full transition-all duration-500",
-                      progressPercent >= 100 ? "bg-emerald-400" : "bg-sky-400",
-                    )}
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/6">
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-all duration-500",
+                    progressPercent >= 100 ? "bg-emerald-400" : "bg-sky-400",
+                  )}
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
             )}
           </section>
@@ -361,27 +406,30 @@ export function TrackBookModal({
                 label="بدأت القراءة"
                 value={startDate}
                 onChange={setStartDate}
-                disabled={status === "plan-to-read"}
+                disabled={!dateRules.showStart || isSaving}
               />
               <DateField
                 id="finish-date"
                 label="انتهيت من القراءة"
                 value={finishDate}
                 onChange={setFinishDate}
-                disabled={!showFinishDate}
+                disabled={!dateRules.showFinish || isSaving}
               />
             </div>
-            {!showFinishDate && (
+            {/* Contextual hint — only show when finish date is locked */}
+            {!dateRules.showFinish && (
               <p className="text-muted-foreground/35 flex items-center gap-1.5 text-[11px]">
                 <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400/50" />
-                متاح عند تعيين الحالة إلى «مكتمل»
+                {status === "want_to_read"
+                  ? "التواريخ متاحة بعد بدء القراءة"
+                  : "تاريخ الانتهاء متاح عند تعيين الحالة إلى «مكتمل»"}
               </p>
             )}
           </section>
 
           <Divider />
 
-          {/* ── Notes ─────────────────────────────────────────────── */}
+          {/* ── Notes (hidden/TODO) ────────────────────────────────── */}
           <section className="hidden space-y-2.5 px-4">
             <SectionLabel icon={<NotePencilIcon className="h-3.5 w-3.5" />}>ملاحظاتي</SectionLabel>
             <Textarea
@@ -394,9 +442,7 @@ export function TrackBookModal({
             />
           </section>
 
-          <Divider />
-
-          {/* ── Score: 10-point scale ──────────────────────────────── */}
+          {/* ── Score (hidden/TODO) ────────────────────────────────── */}
           <section className="hidden space-y-2.5 px-4">
             <div className="flex items-center justify-between">
               <SectionLabel icon={<StarIcon className="h-3.5 w-3.5" />}>التقييم</SectionLabel>
@@ -411,16 +457,14 @@ export function TrackBookModal({
                   : SCORE_LABELS[0]}
               </span>
             </div>
-
-            {/* 10-square grid */}
-            {/* biome-ignore lint/a11y/noStaticElementInteractions: I want this*/}
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: intentional */}
             <div className="flex gap-1" onMouseLeave={() => setHoveredScore(null)}>
               {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                 <Button
                   disabled // TODO: RATING
                   key={n}
                   type="button"
-                  variant={"outline"}
+                  variant="outline"
                   onClick={() => setScore(n === score ? 0 : n)}
                   onMouseEnter={() => setHoveredScore(n)}
                   className={cn(
@@ -435,9 +479,7 @@ export function TrackBookModal({
             </div>
           </section>
 
-          <Divider />
-
-          {/* ── Reread counter ─────────────────────────────────────── */}
+          {/* ── Reread (hidden/TODO) ───────────────────────────────── */}
           <section className="hidden space-y-2.5 px-4">
             <SectionLabel icon={<ArrowCounterClockwiseIcon className="h-3.5 w-3.5" />}>
               عدد مرات القراءة
@@ -477,7 +519,6 @@ export function TrackBookModal({
 
         {/* ── Footer ──────────────────────────────────────────────── */}
         <div className="border-border/10 bg-card dark:bg-background flex shrink-0 items-center justify-between gap-3 border-t px-4 py-3">
-          {/* Status pill */}
           <div className="flex min-w-0 items-center gap-2">
             {currentStatus && (
               <span className={cn("w-2 h-2 rounded-full shrink-0", currentStatus.dot)} />
@@ -500,11 +541,17 @@ export function TrackBookModal({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <Button type="button" onClick={() => onOpenChange(false)} variant="ghost" size="sm">
+            <Button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              variant="ghost"
+              size="sm"
+              disabled={isSaving}
+            >
               إلغاء
             </Button>
-            <Button type="button" onClick={handleSave} size="sm">
-              حفظ التتبع
+            <Button type="button" onClick={handleSave} disabled={isSaving} size="sm">
+              {isSaving ? "جاري الحفظ..." : "حفظ التتبع"}
             </Button>
           </div>
         </div>
@@ -514,7 +561,6 @@ export function TrackBookModal({
 }
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
-
 function SectionLabel({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="text-muted-foreground/50 flex items-center gap-1.5 px-4 text-[11px] font-semibold tracking-widest uppercase">

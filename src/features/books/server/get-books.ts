@@ -19,13 +19,15 @@ import { bookSearchSchema } from "@/app/_public/discover/books";
 import { db } from "@/db";
 import { authors, books } from "@/db/tables";
 
+import type { BookCardType, DetailedBookType } from "../types";
+
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
-  return db.query.books.findMany({
+  return (await db.query.books.findMany({
     limit: 10,
     with: { author: true },
     orderBy: { publicationDate: "desc" },
-  });
+  })) as BookCardType[];
 });
 
 // ==== Discovery Page ==== //
@@ -66,7 +68,7 @@ export const searchBooks = createServerFn({ method: "GET" })
     const orderBy = ORDER_MAP[data.sort] ?? ORDER_MAP.newest;
     const where = conditions.length ? and(...conditions) : undefined;
 
-    const rows = await db
+    const rows = (await db
       .select({
         id: books.id,
         slug: books.slug,
@@ -94,7 +96,7 @@ export const searchBooks = createServerFn({ method: "GET" })
       .where(where)
       .orderBy(orderBy, desc(books.id))
       .limit(PAGE_SIZE)
-      .offset(offset);
+      .offset(offset)) as (BookCardType & { total: string })[];
 
     const total = Number(rows[0]?.total ?? 0);
 
@@ -104,9 +106,6 @@ export const searchBooks = createServerFn({ method: "GET" })
       hasMore: page * PAGE_SIZE < total,
     };
   });
-
-export type SearchBooksResult = Awaited<ReturnType<typeof searchBooks>>;
-export type BookCardBook = SearchBooksResult["books"][number];
 
 export const getBookById = createServerFn({ method: "GET" })
   .inputValidator((data: string) => data)
@@ -135,7 +134,5 @@ export const getBookById = createServerFn({ method: "GET" })
       },
     });
 
-    return book ?? null;
+    return (book as DetailedBookType) ?? null;
   });
-
-export type BookType = NonNullable<Awaited<ReturnType<typeof getBookById>>>;

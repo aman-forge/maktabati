@@ -1,50 +1,68 @@
 import { createServerFn } from "@tanstack/react-start";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { readingStatusEnum } from "@/db/tables";
+import { db } from "@/db";
+import { readingStatusEnum, userBooks } from "@/db/tables";
 
-const updateBookTrackingSchema = z.object({
-  bookId: z.string(),
+const TrackingData = z.object({
   status: z.enum(readingStatusEnum.enumValues),
-  score: z.number().int().min(0).max(10),
-  pagesProgress: z.number().int().min(0),
-  startDate: z.date(),
-  finishDate: z.date(),
-  notes: z.string(),
-  isFavorite: z.boolean(),
-  rereadCount: z.number().int().min(0),
+  score: z.number().int().min(0).max(10).nullable(),
+  pagesProgress: z.number().int().min(0).nullable(),
+  startDate: z.date().nullable(),
+  finishDate: z.date().nullable(),
+  notes: z.string().nullable(),
+  isFavorite: z.boolean().default(false),
+  rereadCount: z.number().int().min(0).default(0),
+});
+export type TrackingDataType = z.infer<typeof TrackingData>;
+const updateBookTrackingSchema = z.object({
+  bookId: z.uuid(),
+  userId: z.uuid(),
+  data: TrackingData,
 });
 
 export const updateBookTracking = createServerFn({ method: "POST" })
   .inputValidator(updateBookTrackingSchema)
-  .handler(async ({ data }) => {
-    // if (!session) {
-    //   throw new Error("Unauthorized");
-    // }
-    // const existingBook = await prisma.userBook.findFirst({
-    //   where: {
-    //     userId: session.user.id,
-    //     bookId,
-    //   },
-    // });
-    //   if (!existingBook) {
-    //     throw new Error("Book not found");
-    //   }
-    //   const updatedBook = await prisma.userBook.update({
-    //     where: {
-    //       id: existingBook.id,
-    //     },
-    //     data: {
-    //       status,
-    //       score,
-    //       pagesProgress,
-    //       startDate,
-    //       finishDate,
-    //       notes,
-    //       isFavorite,
-    //       rereadCount,
-    //     },
-    //   });
-    //   return updatedBook;
-    // },
+  .handler(async ({ data: { bookId, userId, data } }) => {
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+    const existingProgress = await db.query.userBooks.findFirst({
+      where: {
+        userId,
+        bookId,
+      },
+    });
+    if (!existingProgress) {
+      return await db
+        .insert(userBooks)
+        .values({
+          userId: userId,
+          bookId: bookId,
+          status: data.status,
+          startedAt: data.startDate,
+          finishedAt: data.finishDate,
+          // score: data.score,
+          // pagesProgress: data.pagesProgress,
+          // notes: data.notes,
+          // isFavorite: data.isFavorite,
+          // rereadCount: data.rereadCount,
+        })
+        .returning();
+    }
+    return await db
+      .update(userBooks)
+      .set({
+        status: data.status,
+        startedAt: data.startDate,
+        finishedAt: data.finishDate,
+        // score: data.score,
+        // pagesProgress: data.pagesProgress,
+        // notes: data.notes,
+        // isFavorite: data.isFavorite,
+        // rereadCount: data.rereadCount,
+      })
+      .where(and(eq(userBooks.userId, userId), eq(userBooks.bookId, bookId)))
+      .returning();
   });

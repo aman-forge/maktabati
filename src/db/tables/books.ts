@@ -115,8 +115,9 @@ export const series = pgTable.withRLS(
 export const readingStatusEnum = pgEnum("reading_status", [
   "want_to_read",
   "currently_reading",
-  "read",
-  "did_not_finish",
+  "completed",
+  "on_hold",
+  "dropped",
 ]);
 
 // ─────────────────────────────────────────────────────────────
@@ -147,7 +148,6 @@ export const userBooks = pgTable.withRLS(
       .$onUpdate(() => new Date()),
   },
   (t) => [
-    // ✅ anyone can read shelves; only the owner can touch their own rows
     crudPolicy({
       role: authenticatedRole,
       read: true,

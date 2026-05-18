@@ -1,3 +1,5 @@
+console.log("useProfile imported");
+
 // import { useQuery } from "@tanstack/react-query";
 // import { eq } from "drizzle-orm";
 // import { db } from "@/db";

@@ -1,5 +1,4 @@
 import { Button } from "@components/ui/button";
-import type { BookType } from "@features/books/server/get-books";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
@@ -18,6 +17,7 @@ import { useMemo, useState } from "react";
 import { BOOK_GENRES } from "@/db/constants/books";
 import type { RatingSummary } from "@/features/book/book-page-mock";
 import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { DetailedBookType } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
@@ -63,7 +63,7 @@ export function BookHero({
   book,
   ratingSummary,
 }: {
-  book: BookType;
+  book: DetailedBookType;
   ratingSummary: RatingSummary;
 }) {
   const [wishList, setWishList] = useState(false);

@@ -4,14 +4,14 @@ import { ArrowLeftIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/re
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { BookCardBook } from "@/features/books/server/get-books";
+import { BookCardType } from "@/features/books/types";
 import { Skeleton } from "@/ui/components/ui/skeleton";
 import { cn } from "@/ui/lib/utils";
 
 interface BookCarouselProps {
   title: string;
   subtitle?: string;
-  books: BookCardBook[];
+  books: BookCardType[];
   accentColor?: string;
   viewAllHref?: string;
 }
@@ -152,8 +152,8 @@ export function BookCarousel({
           style={{ scrollbarWidth: "none" }}
           aria-label={`قائمة كتب ${title}`}
         >
-          {books.map((book) => (
-            <li key={book.id} className="shrink-0 pt-1">
+          {books.map((book, index) => (
+            <li key={`${book.id}-${index.toString()}`} className="shrink-0 pt-1">
               <BookCard book={book} size="md" />
             </li>
           ))}
@@ -179,7 +179,7 @@ export function BookCarouselSkeleton() {
       </div>
       <div className="container mx-auto flex gap-5 overflow-visible px-6 lg:px-12">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={`i-${_}-${i++}`} className="h-60 w-40 shrink-0 sm:h-75 sm:w-50" />
+          <Skeleton key={`i-${i++}`} className="h-60 w-40 shrink-0 sm:h-75 sm:w-50" />
         ))}
       </div>
     </section>

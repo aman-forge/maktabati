@@ -1,18 +1,17 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
-import type { BookCardBook } from "@features/books/server/get-books";
-import { BookmarkSimpleIcon, CheckCircleIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
-import { Button } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
 
 import { BOOK_GENRES } from "@/db/constants/books";
+import { BookCardType, ReadingStatus } from "@/features/books/types";
+import { Badge } from "@/ui/components/ui/badge";
 import { cn } from "@/ui/lib/utils";
 
-import { Badge } from "../ui/badge";
+import { BookCover, RatingPill, StatusBadge, TrackButton } from "./book-card-parts";
 
 interface BookCardProps {
-  book: BookCardBook;
+  book: BookCardType;
   size?: "sm" | "md" | "lg";
-  trackingStatus?: "plan-to-read" | "reading" | "completed" | "on-hold" | "dropped" | null;
+  trackingStatus?: ReadingStatus;
 }
 
 const DIMENSIONS = {
@@ -21,118 +20,90 @@ const DIMENSIONS = {
   lg: { card: "w-48", image: "h-72" },
 } as const;
 
-const STATUS_COLORS: Record<string, string> = {
-  "plan-to-read": "bg-slate-500",
-  reading: "bg-sky-500",
-  completed: "bg-emerald-500",
-  "on-hold": "bg-amber-500",
-  dropped: "bg-rose-500",
-};
-
-const STATUS_ICONS: Record<string, React.ElementType> = {
-  "plan-to-read": BookmarkSimpleIcon,
-  reading: StarIcon,
-  completed: CheckCircleIcon,
-};
-
 export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
-  const rating = 4.5; // TODO: add rating
-  const StatusIcon = trackingStatus ? STATUS_ICONS[trackingStatus] : null;
+  const rating = 4.5; // TODO: add book.rating
 
   return (
     <article className={cn("flex flex-col gap-2.5 shrink-0 group mt-0 mb-auto", dim.card)}>
-      {/* Cover wrapper */}
+      {/* Cover */}
       <div
         className={cn(
-          "relative rounded-xl overflow-hidden bg-muted cursor-pointer",
+          "relative rounded-xl cursor-pointer",
           "transition-all duration-300 ease-out",
-          "group-hover:shadow-2xl group-hover:shadow-black/30 group-hover:-translate-y-0.5",
+          "group-hover:shadow-2xl group-hover:shadow-black/30 group-hover:-translate-y-1",
           dim.image,
         )}
       >
-        {/* Book spine — gives 3-D depth */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-3 rounded-r-xl bg-linear-to-l from-black/40 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1 rounded-l-xl bg-linear-to-r from-white/10 to-transparent" />
-
         <Link to="/book/$id" params={{ id: book.id }}>
-          <img
-            src={book.coverImageUrl ?? "/books/book.jpg"}
+          <BookCover
+            src={book.coverImageUrl}
             alt={`غلاف ${book.title}`}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          />
-          {/* Gradient overlay on hover */}
-          <div className="from-background/80 via-background/10 absolute inset-0 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            className="rounded-xl h-full w-full"
+          >
+            {/* Hover gradient */}
+            <div className="from-background/80 via-background/10 absolute inset-0 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-          {/* Hover info: genre + readers */}
-          <div className="absolute inset-x-0 bottom-0 flex translate-y-1 flex-col gap-1.5 p-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            {/* Hover genre chip */}
             {book.genres?.[0] && (
-              <Badge variant="secondary">
-                {BOOK_GENRES.find((g) => g.value === book.genres?.[0])?.label}
-              </Badge>
+              <div className="absolute inset-x-0 bottom-0 flex translate-y-1 p-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                <Badge variant="secondary" className="text-[10px]">
+                  {BOOK_GENRES.find((g) => g.value === book.genres?.[0])?.label}
+                </Badge>
+              </div>
             )}
-          </div>
+          </BookCover>
         </Link>
 
-        {/* Rating badge — top right */}
+        {/* Rating — top right */}
         {rating != null && (
           <div className="absolute top-2 right-2 z-20">
-            <div className="bg-foreground/60 dark:bg-background/60 border-border flex items-center gap-1 rounded-full px-1.5 py-0.5 shadow-lg backdrop-blur-md">
-              <StarIcon weight="fill" className="h-2.5 w-2.5 text-amber-400" />
-              <span className="text-background dark:text-foreground text-[11px] font-semibold tabular-nums">
-                {rating.toFixed(1)}
-              </span>
-            </div>
+            <RatingPill rating={rating} variant="overlay" />
           </div>
         )}
 
-        {/* Tracking status dot — top left */}
+        {/* Status — top left */}
         {trackingStatus && (
-          <div
-            className={cn(
-              "absolute top-2 left-2 z-20 flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-border backdrop-blur-md shadow-sm",
-              STATUS_COLORS[trackingStatus],
-            )}
-            title={trackingStatus}
-          >
-            {StatusIcon && <StatusIcon weight="fill" className="h-2.5 w-2.5 text-white" />}
+          <div className="absolute top-2 left-2 z-20">
+            <StatusBadge status={trackingStatus} variant="icon-only" />
           </div>
         )}
 
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            openTrackModal(book);
-          }}
-          variant="default"
-          size="icon"
+        {/* Track button — fades in on hover */}
+        <div
           className={cn(
-            "absolute bottom-2.5 left-2.5 z-20 rounded-full w-9 h-9 border-primary!",
-            "opacity-0 translate-y-1.5 scale-90",
+            "absolute bottom-2.5 left-2.5 z-20",
+            "opacity-0 translate-y-2 scale-90",
             "group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100",
             "transition-all duration-200 ease-out",
           )}
-          aria-label="إضافة إلى قائمة القراءة"
         >
-          <PlusIcon weight="bold" className="h-4 w-4" />
-        </Button>
+          <TrackButton trackingStatus={trackingStatus} onClick={() => openTrackModal(book)} />
+        </div>
       </div>
 
-      {/* Text info */}
+      {/* Text */}
       <div className="flex flex-col gap-0.5 px-0.5">
         <Link to="/book/$id" params={{ id: book.id }}>
-          <h3 className="text-foreground group-hover:text-primary line-clamp-2 text-sm leading-snug font-semibold transition-colors duration-200">
+          <h3 className="text-foreground hover:underline line-clamp-2 text-sm leading-snug font-semibold transition-colors duration-200">
             {book.title}
           </h3>
         </Link>
-        <p className="text-muted-foreground truncate text-xs">{book.author?.name}</p>
-        {book.pageCount && (
-          <p className="text-muted-foreground/60 mt-0.5 text-[10px] tabular-nums">
+        {book.author && (
+          <Link
+            to="/author/$id"
+            params={{ id: book.author?.id }}
+            className="text-muted-foreground truncate hover:underline text-xs"
+          >
+            {book.author?.name}
+          </Link>
+        )}
+        {/*{book.pageCount && (
+          <p className="text-muted-foreground/50 mt-0.5 text-[10px] tabular-nums">
             {book.pageCount} صفحة
           </p>
-        )}
+        )}*/}
       </div>
     </article>
   );

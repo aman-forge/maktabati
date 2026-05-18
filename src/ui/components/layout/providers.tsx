@@ -1,14 +1,15 @@
 import { ThemeProvider } from "@components/layout/theme-provider";
 import { DirectionProvider } from "@components/ui/direction";
 import { Toaster } from "@components/ui/sonner";
+import { TooltipProvider } from "@shadcn/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
 import AuthProvider from "@/features/auth/components/provider";
 import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 
-import { TooltipProvider } from "../ui/tooltip";
-
 const Providers = ({ children }: { children: ReactNode }) => {
+  const queryClient = new QueryClient();
   return (
     <AuthProvider>
       <DirectionProvider direction="rtl">
@@ -18,12 +19,14 @@ const Providers = ({ children }: { children: ReactNode }) => {
           enableSystem
           disableTransitionOnChange
         >
-          <BookTrackingProvider>
-            <TooltipProvider>
-              {children}
-              <Toaster richColors />
-            </TooltipProvider>
-          </BookTrackingProvider>
+          <QueryClientProvider client={queryClient}>
+            <BookTrackingProvider>
+              <TooltipProvider>
+                {children}
+                <Toaster richColors />
+              </TooltipProvider>
+            </BookTrackingProvider>
+          </QueryClientProvider>
         </ThemeProvider>
       </DirectionProvider>
     </AuthProvider>

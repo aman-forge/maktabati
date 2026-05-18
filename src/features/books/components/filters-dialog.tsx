@@ -42,8 +42,8 @@ const READING_STATUS: StatusType[] = [
   { value: "Unread", label: "غير مقروء" },
   { value: "Reading", label: "يُقرأ الآن" },
   { value: "Completed", label: "مكتمل" },
-  { value: "On Hold", label: "متوقف" },
-  { value: "Dropped", label: "متروك" },
+  { value: "on_hold", label: "متوقف" },
+  { value: "dropped", label: "متروك" },
 ] as const;
 
 const YEAR_MIN = 700;

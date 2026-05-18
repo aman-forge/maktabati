@@ -1,24 +1,36 @@
-import { createFileRoute, Await } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
 
-import { getBooks } from "@/features/books/server/get-books";
+import { useUser } from "@/features/auth/use-user";
+import { getUserBooks } from "@/features/books/server/library";
 import LibraryPageSkeleton from "@/features/dashboard/components/library-page-skeleton";
 import LibraryBooks from "@/features/dashboard/pages/library-page";
 
 export const Route = createFileRoute("/_app/library")({
   component: RouteComponent,
-  loader: () => {
-    const booksPromise = getBooks();
-    return { booksPromise };
-  },
+  // TODO: Server Auth
+  // loader: ({ userId }: { userId: string }) => {
+  //   const booksPromise = getUserBooks(userId);
+  //   return { booksPromise };
+  // },
 });
 
 function RouteComponent() {
-  const { booksPromise } = Route.useLoaderData();
+  const { user, isLoading: isUserLoading } = useUser();
+  const { data: books, isLoading: isBooksLoading } = useQuery({
+    queryKey: ["books", user?.id],
+    queryFn: () => getUserBooks({ data: user!.id }),
+    enabled: !!user?.id, // NOTE: This prevents the query from running until the client auth is ready
+  });
+
+  if (!user || isUserLoading || isBooksLoading) {
+    return <LibraryPageSkeleton />;
+  }
 
   return (
     <Suspense fallback={<LibraryPageSkeleton />}>
-      <Await promise={booksPromise}>{(books) => <LibraryBooks books={books} />}</Await>
+      {books && <LibraryBooks books={books} />}
     </Suspense>
   );
 }

@@ -1,14 +1,14 @@
-"use client";
-
-import { TrackBookModal } from "@components/book/track-book-modal";
-import { BookType, type BookCardBook } from "@features/books/server/get-books";
 import React from "react";
 import { toast } from "sonner";
 
 import { useUser } from "@/features/auth/use-user";
+import { BaseBook } from "@/features/books/types";
+import { TrackBookModal } from "@/ui/components/book/track-book-modal";
+
+import { updateBookTracking, TrackingDataType } from "../server/update-book";
 
 interface BookTrackingContextValue {
-  openTrackModal: (book: BookCardBook | BookType) => void;
+  openTrackModal: (book: BaseBook) => void;
 }
 
 const BookTrackingContext = React.createContext<BookTrackingContextValue | null>(null);
@@ -24,12 +24,14 @@ interface BookTrackingProviderProps {
 }
 
 export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
-  const [selectedBook, setSelectedBook] = React.useState<BookCardBook | BookType | null>(null);
+  const [selectedBook, setSelectedBook] = React.useState<BaseBook | null>(null);
   const [open, setOpen] = React.useState(false);
-  const { isLoggedIn, isLoading } = useUser();
+  const [isSaving, setIsSaving] = React.useState(false);
+
+  const { user, isLoggedIn, isLoading } = useUser();
 
   const openTrackModal = React.useCallback(
-    (book: BookCardBook | BookType) => {
+    (book: BaseBook) => {
       if (isLoading) return;
       if (!isLoggedIn) {
         toast.error("يجب تسجيل الدخول أولاً", {
@@ -43,10 +45,34 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
     [isLoggedIn, isLoading],
   );
 
+  const updateBookStatus = async (bookId: string, data: TrackingDataType) => {
+    if (!user) return;
+
+    setIsSaving(true);
+    try {
+      await updateBookTracking({ data: { bookId, data, userId: user.id } });
+      toast.success("تم حفظ التتبع بنجاح");
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update book tracking:", error);
+      toast.error("حدث خطأ أثناء الحفظ", {
+        description: "يرجى المحاولة مرة أخرى.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <BookTrackingContext.Provider value={{ openTrackModal }}>
       {children}
-      <TrackBookModal book={selectedBook} open={open} onOpenChange={setOpen} />
+      <TrackBookModal
+        book={selectedBook}
+        open={open}
+        onOpenChange={setOpen}
+        isSaving={isSaving}
+        onSave={updateBookStatus}
+      />
     </BookTrackingContext.Provider>
   );
 }

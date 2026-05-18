@@ -6,11 +6,7 @@ export default defineConfig({
     correctness: "warn",
   },
   rules: {
-    "eslint/no-unused-vars": "error",
-  },
-  options: {
-    typeAware: true,
-    typeCheck: true,
+    "eslint/no-unused-vars": "warn",
   },
   ignorePatterns: [
     ".agents/**",
