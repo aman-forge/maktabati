@@ -1,7 +1,5 @@
-
-import { BookCard } from "@/features/books/components/book-card";
 import type { AuthorType } from "@features/author/server/get-author";
-import { Separator } from "@shadcn/separator";
+import { BookCard } from "@/features/books/components/book-card";
 
 // ─── Mock books — replace with real query ────────────────────────────────────
 const MOCK_BOOKS = [
@@ -47,25 +45,16 @@ const MOCK_BOOKS = [
   },
 ];
 
-
-
 export function AuthorAbout({ author }: { author: AuthorType }) {
-
   return (
     <div className="flex flex-col gap-8" dir="rtl">
       {/* ── Biography ── */}
       {author.bio && (
         <div>
           <SectionTitle>السيرة الأدبية</SectionTitle>
-          <div
-            className={
-              "text-base leading-8 text-foreground/90 transition-all "
-
-            }
-          >
+          <div className={"text-base leading-8 text-foreground/90 transition-all "}>
             {author.bio}
           </div>
-
         </div>
       )}
 
@@ -73,18 +62,14 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
       <div>
         <SectionTitle>أشهر أعماله</SectionTitle>
         <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
-          {MOCK_BOOKS.map((book) => (
-            <div
-              key={book.id} className="flex shrink-0 pt-1">
-              <BookCard book={book} size="md" />
+          {author.books.map((book) => (
+            <div key={book.id} className="flex shrink-0 pt-1">
+              <BookCard book={book ?? undefined} size="md" />
             </div>
           ))}
-
         </div>
       </div>
-      <div className="py-8 border-t border-border flex flex-col gap-8">
-
-      </div>
+      <div className="py-8 border-t border-border flex flex-col gap-8"></div>
     </div>
   );
 }

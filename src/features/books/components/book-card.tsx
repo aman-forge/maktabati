@@ -1,5 +1,4 @@
 "use client";
-
 import { useBookTracking } from "@features/books/context/book-tracking-context";
 import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
@@ -8,11 +7,14 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/ui/lib/utils";
 import type { BookCardBook } from "../server/get-books";
 
+type FlexibleBook = Omit<BookCardBook, "author" | "total"> & {
+  author?: BookCardBook["author"];
+  total?: string;
+};
 interface BookCardProps {
-  book: BookCardBook;
+  book: FlexibleBook;
   size?: "sm" | "md" | "lg";
 }
-
 const DIMENSIONS = {
   sm: { card: "w-36", image: "h-52" },
   md: { card: "w-44", image: "h-64" },
@@ -25,9 +27,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
   const rating = 4.5; // replace with book.rating when available
 
   return (
-    <article
-      className={cn("flex flex-col gap-2.5 shrink-0 group m-auto", dim.card)}
-    >
+    <article className={cn("flex flex-col gap-2.5 shrink-0 group m-auto", dim.card)}>
       <div
         className={cn(
           "relative rounded-xl overflow-hidden bg-muted cursor-pointer",
@@ -77,9 +77,7 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
         <h3 className="text-sm font-medium leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200 cursor-pointer">
           {book.title}
         </h3>
-        <p className="text-xs text-muted-foreground truncate">
-          {book.author?.name ?? "NO AUHTOR"}
-        </p>
+        <p className="text-xs text-muted-foreground truncate">{book.author?.name ?? "NO AUHTOR"}</p>
       </div>
     </article>
   );

@@ -14,34 +14,41 @@ import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
 // Mock — replace with real counts from the schema when available
-const MOCK_FOLLOWER_COUNTS: Record<string, number> = {
-  "naguib-mahfouz": 84200,
-  "taha-hussein": 61500,
-};
+// const MOCK_FOLLOWER_COUNTS: Record<string, number> = {
+//   "naguib-mahfouz": 84200,
+//   "taha-hussein": 61500,
+// };
 
-const MOCK_REVIEW_COUNTS: Record<string, number> = {
-  "naguib-mahfouz": 12400,
-  "taha-hussein": 8750,
-};
+// const MOCK_REVIEW_COUNTS: Record<string, number> = {
+//   "naguib-mahfouz": 12400,
+//   "taha-hussein": 8750,
+// };
 
-function getFollowerCount(author: AuthorType): number {
-  return author.followerCount ?? MOCK_FOLLOWER_COUNTS[author.slug] ?? 3200;
-}
+//TO Do FollowerCount
 
-function getReviewCount(author: AuthorType): number {
-  return author.reviewCount ?? MOCK_REVIEW_COUNTS[author.slug] ?? 940;
-}
+// function getFollowerCount(author: AuthorType): number {
+//   return author.followerCount ?? MOCK_FOLLOWER_COUNTS[author.slug] ?? 3200;
+// }
 
-function formatNumber(n?: number | null) {
-  if (!n) return "—";
-  if (n >= 1000) return `${(n / 1000).toFixed(1)} ألف`;
-  return n.toLocaleString("ar-US");
-}
+// function getReviewCount(author: AuthorType): number {
+//   return author.reviewCount ?? MOCK_REVIEW_COUNTS[author.slug] ?? 940;
+// }
+
+// function formatNumber(n?: number | null) {
+//   if (!n) return "—";
+//   if (n >= 1000) return `${(n / 1000).toFixed(1)} ألف`;
+//   return n.toLocaleString("ar-US");
+// }
 
 // ─── Quotes shown in the desktop sidebar ─────────────────────────────────────
 const HERO_QUOTES = [
   { id: "1", text: "الإنسان لا يخشى الموت وإنما يخشى النسيان.", source: "زقاق المدق", likes: 241 },
-  { id: "2", text: "الحب لا يعني أن تجد شخصاً مثالياً بل أن تجد شخصاً تقبل عيوبه.", source: "الثلاثية", likes: 185 },
+  {
+    id: "2",
+    text: "الحب لا يعني أن تجد شخصاً مثالياً بل أن تجد شخصاً تقبل عيوبه.",
+    source: "الثلاثية",
+    likes: 185,
+  },
   { id: "3", text: "لا تعيش لتأكل بل كُل لتعيش وتفهم وتُحب.", source: "أولاد حارتنا", likes: 152 },
 ];
 
@@ -85,10 +92,8 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
       <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
         <div className="flex flex-col sm:flex-row gap-8 sm:gap-14 items-center">
-
           {/* ── Avatar column ── */}
           <div className="flex flex-col items-center gap-4 shrink-0">
-
             {/* Mobile-only eyebrow label — sits above avatar for editorial feel */}
             <div className="flex items-center gap-2 sm:hidden">
               <div className="h-px w-8 bg-primary/40" />
@@ -145,7 +150,6 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
           {/* ── Info column ── */}
           <div className="flex flex-col gap-5 flex-1 min-w-0">
-
             {/* Eyebrow label — desktop/tablet only (mobile has it above avatar) */}
             <div className="hidden sm:flex items-center gap-2.5">
               <div className="h-px w-10 bg-primary/50" />
@@ -189,10 +193,10 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                 value={author.books.length > 0 ? author.books.length.toString() : "—"}
                 mobile
               />
-              <div className="w-px bg-border/50 my-3" />
+              {/* <div className="w-px bg-border/50 my-3" />
               <StatCell label="قارئ" value={formatNumber(getFollowerCount(author))} mobile />
               <div className="w-px bg-border/50 my-3" />
-              <StatCell label="مراجعة" value={formatNumber(getReviewCount(author))} mobile />
+              <StatCell label="مراجعة" value={formatNumber(getReviewCount(author))} mobile /> */}
             </div>
 
             {/* Thin decorative rule */}
@@ -226,7 +230,12 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                   )}
                   {bookmarked ? "محفوظ" : "احفظ المؤلف"}
                 </Button>
-                <Button size="sm" variant="outline" className="size-8 p-0 shrink-0" aria-label="مشاركة">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="size-8 p-0 shrink-0"
+                  aria-label="مشاركة"
+                >
                   <ShareNetworkIcon weight="bold" className="size-3.5" />
                 </Button>
               </div>
@@ -246,14 +255,15 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                   {HERO_QUOTES[0].text}
                 </p>
                 <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-border/30">
-                  <span className="text-[10px] text-muted-foreground/50">— {HERO_QUOTES[0].source}</span>
+                  <span className="text-[10px] text-muted-foreground/50">
+                    — {HERO_QUOTES[0].source}
+                  </span>
                   <span className="text-[9px] tracking-[0.15em] uppercase text-primary/50 font-medium">
                     اقتباس
                   </span>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* ── Vertical divider — desktop only ── */}
@@ -283,7 +293,6 @@ export function AuthorHero({ author }: { author: AuthorType }) {
               </div>
             ))}
           </div>
-
         </div>
       </div>
 
@@ -296,7 +305,9 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 // ─── Stat cell ────────────────────────────────────────────────────────────────
 function StatCell({ label, value, mobile }: { label: string; value: string; mobile?: boolean }) {
   return (
-    <div className={`flex flex-col items-center gap-0.5 py-3 ${mobile ? "flex-1 px-3 sm:px-5 sm:flex-none" : "px-5"}`}>
+    <div
+      className={`flex flex-col items-center gap-0.5 py-3 ${mobile ? "flex-1 px-3 sm:px-5 sm:flex-none" : "px-5"}`}
+    >
       <span className="text-base font-semibold text-foreground tabular-nums leading-none">
         {value}
       </span>
