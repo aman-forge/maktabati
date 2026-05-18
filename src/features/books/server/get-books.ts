@@ -1,4 +1,3 @@
-import { uuidSchema } from "@features/books/lib/validators";
 import { createServerFn } from "@tanstack/react-start";
 import {
   and,

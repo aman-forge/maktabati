@@ -16,7 +16,7 @@ const updateBookTrackingSchema = z.object({
 
 export const updateBookTracking = createServerFn({ method: "POST" })
   .inputValidator(updateBookTrackingSchema)
-  .handler(async ({ data }) => {
+  .handler(async (/*{ data }*/) => {
     // if (!session) {
     //   throw new Error("Unauthorized");
     // }
