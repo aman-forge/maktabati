@@ -1,6 +1,5 @@
 import { BookCard } from "@components/book/book-card";
 import { BookCardDetailed } from "@components/book/book-card-detailed";
-import { BookListItem } from "@components/book/book-list-item";
 import { GenreCombobox } from "@features/books/components/genre-combobox";
 import { ViewToggle } from "@features/books/components/view-toggle";
 import {
@@ -13,13 +12,17 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
-import { z } from "zod";
 
 import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
+import { useUser } from "@/features/auth/use-user";
 import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
+import { bookSearchSchema, type BookSearch } from "@/features/books/lib/validators";
 import { searchBooks } from "@/features/books/server/get-books";
+import { BookListItem } from "@/ui/components/book/book-card-list";
+import { cn } from "@/ui/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -36,7 +39,7 @@ const SORT_OPTIONS = [
 const YEAR_MIN = 700;
 const YEAR_MAX = 2026;
 const PAGE_MIN = 0;
-const PAGE_MAX = 5000;
+const PAGE_MAX = 1000;
 
 const DEFAULT_FILTERS: FilterState = {
   yearRange: [YEAR_MIN, YEAR_MAX],
@@ -48,29 +51,6 @@ const DEFAULT_FILTERS: FilterState = {
 };
 
 type BookSortOption = (typeof SORT_OPTIONS)[number]["value"];
-
-// ---------------------------------------------------------------------------
-// Schema
-// ---------------------------------------------------------------------------
-
-export const bookSearchSchema = z.object({
-  q: z.string().max(100).optional(),
-  author: z.string().max(100).optional(),
-  genres: z.array(z.string()).optional().catch(undefined),
-  sort: z.enum(["newest", "oldest", "title-asc", "title-desc"]).default("newest"),
-  view: z.enum(["grid", "detailed", "list"]).default("grid"),
-  minYear: z.number().optional(),
-  maxYear: z.number().optional(),
-  minPages: z.number().optional(),
-  maxPages: z.number().optional(),
-  ratingMin: z.number().optional(),
-  publishers: z.array(z.string()).optional().catch(undefined),
-  topics: z.array(z.string()).optional().catch(undefined),
-  readingStatus: z.array(z.string()).optional().catch(undefined),
-  page: z.number().int().min(1).default(1),
-});
-
-export type BookSearch = z.infer<typeof bookSearchSchema>;
 
 // ---------------------------------------------------------------------------
 // Route
@@ -109,11 +89,11 @@ function useDebounce<T>(value: T, delay = 300): T {
 function getStatusLabel(value: string) {
   return (
     {
-      Unread: "غير مقروء",
-      Reading: "يُقرأ الآن",
-      Completed: "مكتمل",
-      "On Hold": "متوقف",
-      Dropped: "متروك",
+      want_to_read: "أخطط لقراءته",
+      currently_reading: "قيد القراءة",
+      completed: "مكتمل",
+      on_hold: "متوقف",
+      dropped: "متروك",
     }[value] ?? value
   );
 }
@@ -127,24 +107,38 @@ function BooksSearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const isNavigating = useRouterState({ select: (s) => s.isLoading });
+  const { user } = useUser();
 
-  const [books, setBooks] = React.useState(loaderData.books);
+  const userScopedSearch = React.useMemo(() => {
+    const { view: _view, ...rest } = search;
+    return rest;
+  }, [search]);
+
+  const userResultsQuery = useQuery({
+    queryKey: ["discover-books", user?.id, userScopedSearch],
+    queryFn: () => searchBooks({ data: { ...userScopedSearch, userId: user!.id } }),
+    enabled: !!user?.id,
+  });
+
+  const resultData = user?.id ? (userResultsQuery.data ?? loaderData) : loaderData;
+
+  const [books, setBooks] = React.useState(resultData.books);
   const newItemsRef = React.useRef<HTMLDivElement | null>(null);
   const [lastAddedIndex, setLastAddedIndex] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (search.page === 1 || search.page === undefined) {
-      setBooks(loaderData.books);
+      setBooks(resultData.books);
       setLastAddedIndex(null);
       return;
     }
     setBooks((prev) => {
       const seen = new Set(prev.map((b) => b.id));
-      const incoming = loaderData.books.filter((b) => !seen.has(b.id));
+      const incoming = resultData.books.filter((b) => !seen.has(b.id));
       if (incoming.length > 0) setLastAddedIndex(prev.length);
       return [...prev, ...incoming];
     });
-  }, [loaderData.books, search.page]);
+  }, [resultData.books, search.page]);
 
   React.useEffect(() => {
     if (lastAddedIndex !== null && newItemsRef.current) {
@@ -182,7 +176,7 @@ function BooksSearchPage() {
 
   React.useEffect(() => {
     setParams(() => ({ q: debouncedQ || undefined }));
-  }, [debouncedQ]);
+  }, [debouncedQ, setParams]);
 
   // Sync input if URL changes externally (e.g. back button)
   React.useEffect(() => {
@@ -202,7 +196,7 @@ function BooksSearchPage() {
       ratingMin: search.ratingMin ?? 0,
       publishers: search.publishers ?? [],
       topics: search.topics ?? [],
-      readingStatus: search.readingStatus ?? [],
+      readingStatus: user?.id ? (search.readingStatus ?? []) : [],
     }),
     [
       search.maxPages,
@@ -213,6 +207,7 @@ function BooksSearchPage() {
       search.ratingMin,
       search.readingStatus,
       search.topics,
+      user?.id,
     ],
   );
 
@@ -226,10 +221,10 @@ function BooksSearchPage() {
         ratingMin: next.ratingMin > 0 ? next.ratingMin : undefined,
         publishers: next.publishers.length > 0 ? next.publishers : undefined,
         topics: next.topics.length > 0 ? next.topics : undefined,
-        readingStatus: next.readingStatus.length > 0 ? next.readingStatus : undefined,
+        readingStatus: user?.id && next.readingStatus.length > 0 ? next.readingStatus : undefined,
       }));
     },
-    [setParams],
+    [setParams, user?.id],
   );
 
   const handleResetFilters = React.useCallback(() => {
@@ -251,14 +246,14 @@ function BooksSearchPage() {
     if (search.minYear !== undefined || search.maxYear !== undefined)
       tags.push({
         key: "year",
-        label: `${search.minYear ?? "؟"} — ${search.maxYear ?? "؟"}`,
+        label: `${search.minYear ?? YEAR_MIN} — ${search.maxYear ?? YEAR_MAX}`,
         onRemove: () => setParams(() => ({ minYear: undefined, maxYear: undefined })),
       });
 
     if (search.minPages !== undefined || search.maxPages !== undefined)
       tags.push({
         key: "pages",
-        label: `${search.minPages ?? "؟"} — ${search.maxPages ?? "؟"} صفحة`,
+        label: `${search.minPages ?? PAGE_MIN} — ${search.maxPages ?? PAGE_MAX} صفحة`,
         onRemove: () => setParams(() => ({ minPages: undefined, maxPages: undefined })),
       });
 
@@ -303,19 +298,21 @@ function BooksSearchPage() {
       });
     });
 
-    search.readingStatus?.map((value) =>
-      tags.push({
-        key: `status-${value}`,
-        label: getStatusLabel(value),
-        onRemove: () =>
-          setParams((prev) => ({
-            readingStatus: prev.readingStatus?.filter((s) => s !== value),
-          })),
-      }),
-    );
+    if (user?.id) {
+      search.readingStatus?.map((value) =>
+        tags.push({
+          key: `status-${value}`,
+          label: getStatusLabel(value),
+          onRemove: () =>
+            setParams((prev) => ({
+              readingStatus: prev.readingStatus?.filter((s) => s !== value),
+            })),
+        }),
+      );
+    }
 
     return tags;
-  }, [search, setParams]);
+  }, [search, setParams, user?.id]);
 
   const hasActiveFilters = activeFilterTags.length > 0;
 
@@ -326,8 +323,11 @@ function BooksSearchPage() {
 
   const viewConfig = {
     grid: {
-      wrapper:
-        "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-6",
+      wrapper: cn(
+        "grid grid-cols-2 justify-items-center gap-x-3 gap-y-6 min-[520px]:grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] 2lg:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]",
+        "[&>article]:w-full! [&>article]:max-w-40 lg:[&>article]:max-w-44 2lg:[&>article]:max-w-48",
+        "[&>article>div:first-child]:h-auto! [&>article>div:first-child]:aspect-2/3",
+      ),
       Component: BookCard,
     },
     detailed: {
@@ -335,36 +335,36 @@ function BooksSearchPage() {
       Component: BookCardDetailed,
     },
     list: {
-      wrapper: "divide-y divide-border/50",
+      wrapper: "p-2 flex flex-col gap-2",
       Component: BookListItem,
     },
   } as const;
 
   const currentView = viewConfig[search.view] ?? viewConfig.grid;
   const Component = currentView.Component;
-  const isSearching = isNavigating && search.page === 1;
+  const isSearching = (isNavigating || userResultsQuery.isFetching) && search.page === 1;
 
   return (
     <div className="bg-background min-h-screen overflow-x-hidden">
       {/* ── Sticky filter bar ──────────────────────────────── */}
       <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky! top-0 z-30 border-b backdrop-blur md:relative">
-        <div className="container mx-auto space-y-2.5 px-0 py-3">
+        <div className="mx-auto max-w-7xl space-y-2.5 py-3 md:px-4">
           {/* Search input */}
-          <div className="relative px-4">
-            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2" />
+          <div className="relative px-4 md:px-0">
+            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2 md:mr-0" />
             <Input
               type="search"
               placeholder="ابحث عن كتاب أو مؤلف..."
               value={qInput}
               onChange={(e) => setQInput(e.target.value)}
-              className="h-10 pr-9 text-sm"
+              className="h-10 pr-10 text-sm"
               autoComplete="off"
               autoCorrect="off"
             />
             {/* Loading spinner while debouncing */}
             {isSearching ? (
-              <div className="absolute top-1/2 left-3 ml-4 -translate-y-1/2">
-                <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
+              <div className="absolute top-1/2 left-3 -translate-y-1/2">
+                <div className="border-muted-foreground/30 border-t-muted-foreground ml-4 size-4 animate-spin rounded-full border-2 md:ml-0" />
               </div>
             ) : qInput ? (
               <button
@@ -373,7 +373,7 @@ function BooksSearchPage() {
                   setQInput("");
                   setParams(() => ({ q: undefined }));
                 }}
-                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 ml-4 -translate-y-1/2 transition-colors"
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 ml-4 -translate-y-1/2 transition-colors md:ml-0"
               >
                 <XIcon className="size-4" />
               </button>
@@ -381,7 +381,9 @@ function BooksSearchPage() {
           </div>
 
           {/* Filter row */}
-          <div className="scrollbar-none flex items-center gap-2 overflow-visible! overflow-x-auto px-4">
+          <div
+            className={cn("flex scrollbar-none items-center overflow-x-scroll gap-2 px-4 md:px-0")}
+          >
             <GenreCombobox
               selected={selectedGenres}
               onSelectionChange={(newGenres: BookGenre[]) =>
@@ -395,6 +397,7 @@ function BooksSearchPage() {
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
                 onReset={handleResetFilters}
+                showReadingStatus={!!user?.id}
               />
             </div>
 
@@ -427,7 +430,7 @@ function BooksSearchPage() {
 
           {/* Active filter tags */}
           {hasActiveFilters && (
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 px-4 md:px-0">
               {activeFilterTags.map((tag) => (
                 <Badge
                   key={tag.key}
@@ -452,11 +455,11 @@ function BooksSearchPage() {
       </div>
 
       {/* ── Results ──────────────────────────────────────────── */}
-      <main className="container mx-auto px-4 py-5">
+      <main className="mx-auto max-w-360 px-4 py-5">
         {/* Count */}
         {books.length > 0 && (
           <p className="text-muted-foreground mb-4 text-sm">
-            <span className="text-foreground font-medium">{loaderData.total}</span>
+            <span className="text-foreground font-medium">{resultData.total}</span>
             {" كتاب"}
             {hasActiveFilters && <span className="text-muted-foreground/60"> · بتصفية نشطة</span>}
           </p>
@@ -503,16 +506,16 @@ function BooksSearchPage() {
         ) : (
           <div className={currentView.wrapper}>
             {books.map((book, i) => (
-              <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
-                <Component book={book} />
-              </div>
+              // <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
+              <Component key={`${book.id}-${i.toString}`} book={book} />
+              // </div>
             ))}
           </div>
         )}
 
         {/* Load more */}
         <div className="mt-10 flex flex-col items-center gap-2">
-          {loaderData.hasMore ? (
+          {resultData.hasMore ? (
             <>
               <Button
                 variant="outline"
@@ -528,12 +531,12 @@ function BooksSearchPage() {
                 تحميل المزيد
               </Button>
               <p className="text-muted-foreground text-xs">
-                {books.length} من {loaderData.total} كتاب
+                {books.length} من {resultData.total} كتاب
               </p>
             </>
           ) : books.length > 0 ? (
             <p className="text-muted-foreground py-2 text-sm">
-              وصلت لنهاية النتائج · {loaderData.total} كتاب
+              وصلت لنهاية النتائج · {resultData.total} كتاب
             </p>
           ) : null}
         </div>

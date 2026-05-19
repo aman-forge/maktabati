@@ -579,7 +579,7 @@ export function HeroSection() {
       {/* Bottom feature strip */}
       <div className="border-border/50 border-t">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-8 lg:px-12">
-          <div className="scrollbar-none flex items-center gap-0 overflow-x-auto">
+          <div className="flex scrollbar-none items-center gap-0 overflow-x-auto">
             {[
               { icon: BookOpenIcon, text: "تتبّع قراءاتك بسهولة" },
               { icon: UsersThreeIcon, text: "انضم لمجتمع القراء" },

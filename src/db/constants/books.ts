@@ -1,5 +1,3 @@
-// db/constants/books.ts
-
 // ─────────────────────────────────────────────────────────────
 // 1. Main Genres (تصنيفات)
 // ─────────────────────────────────────────────────────────────
@@ -116,9 +114,28 @@ export const BOOK_TOPICS = [
   { value: "iman", label: "الإيمان" },
   { value: "qadar", label: "القدر" },
   { value: "sirah_nabawiyyah", label: "السيرة النبوية" },
+  { value: "tafsir_themes", label: "موضوعات التفسير" },
+  { value: "quranic_sciences", label: "علوم القرآن" },
+  { value: "usul_al_tafsir", label: "أصول التفسير" },
   { value: "fiqh_ibadat", label: "فقه العبادات" },
+  { value: "fiqh_salah", label: "فقه الصلاة" },
+  { value: "fiqh_hajj", label: "فقه الحج" },
+  { value: "fiqh_family", label: "فقه الأسرة" },
+  { value: "halal_haram", label: "الحلال والحرام" },
+  { value: "hadith_studies", label: "دراسات الحديث" },
+  { value: "mustalah", label: "مصطلح الحديث" },
+  { value: "jarh_tadil", label: "الجرح والتعديل" },
+  { value: "rijal_al_hadith", label: "رجال الحديث" },
   { value: "akhlaq_tazkiyah", label: "تزكية وأخلاق" },
+  { value: "adab_islami", label: "آداب إسلامية" },
   { value: "dawah", label: "دعوة" },
+  { value: "asma_wa_sifat", label: "الأسماء والصفات" },
+  { value: "research", label: "بحث علمي" },
+  { value: "annotated", label: "محقق ومعلق" },
+  { value: "abridged", label: "مختصر" },
+  { value: "award_winning", label: "حائز على جائزة" },
+  { value: "original_arabic", label: "أصل عربي" },
+  { value: "philosophical", label: "فلسفي" },
 
   // ── اللغة العربية ──
   { value: "grammar", label: "نحو" },
@@ -141,18 +158,3 @@ export const PUBLISHERS = [
   "دار المعارف",
   "دار القلم",
 ] as const;
-
-// ─────────────────────────────────────────────────────────────
-// 3. TypeScript Utility Types
-// ─────────────────────────────────────────────────────────────
-export type GenreValue = (typeof BOOK_GENRES)[number]["value"];
-export type TopicValue = (typeof BOOK_TOPICS)[number]["value"];
-
-export interface GenreOption {
-  value: GenreValue;
-  label: string;
-}
-export interface TopicOption {
-  value: TopicValue;
-  label: string;
-}

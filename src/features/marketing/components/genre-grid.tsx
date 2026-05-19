@@ -16,7 +16,6 @@ type Genre = {
   name: string;
   icon: React.ElementType;
   count: string;
-  /** Raw hsl values e.g. "25 90% 55%" — consumed as hsl(var) */
   hsl: string;
 };
 

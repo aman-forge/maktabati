@@ -26,6 +26,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 
@@ -90,7 +91,7 @@ function Header() {
 
   return (
     <header className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed inset-x-0 top-0 z-50 hidden h-(--header-height) border-b backdrop-blur-2xl md:flex">
-      <div className="container mx-auto flex h-full items-center gap-4 px-4">
+      <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-4 px-4">
         {/* Left */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-4">
           <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex shrink-0 items-center gap-2.5">
@@ -228,9 +229,9 @@ function CurrentlyReadingChip({ book }: { book: CurrentlyReadingBook }) {
       )}
       title={`تقرأ الآن: ${book.title}`}
     >
-      <BookOpenIcon className="size-6 bg-primary/25 p-0.75 rounded-lg shrink-0 text-primary" />
-      <div className="flex flex-col gap-0.5 min-w-0 max-w-36">
-        <span className=" font-medium text-foreground leading-none text-[10px]">{book.title}</span>
+      <BookOpenIcon className="bg-primary/25 text-primary size-6 shrink-0 rounded-lg p-0.75" />
+      <div className="flex max-w-36 min-w-0 flex-col gap-0.5">
+        <span className="text-foreground text-[10px] leading-none font-medium">{book.title}</span>
         <div className="flex items-center gap-1.5">
           {/* Progress bar */}
           <div className="bg-muted h-1 w-16 overflow-hidden rounded-full">
@@ -392,9 +393,9 @@ function NotificationsMenu({ notifications }: { notifications: NotificationItem[
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-3">
-                            <p className="text-sm font-medium leading-5">{item.title}</p>
+                            <p className="text-sm leading-5 font-medium">{item.title}</p>
                             <div className="flex shrink-0 items-center gap-1">
-                              <span className="text-[11px] text-muted-foreground">{item.time}</span>
+                              <span className="text-muted-foreground text-[11px]">{item.time}</span>
                               {item.unread && (
                                 <button
                                   type="button"
@@ -559,7 +560,7 @@ function NavListItem({ item }: { item: NavItem }) {
                 قريباً
               </Badge>
             </div>
-            <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
+            <p className="text-muted-foreground line-clamp-1 text-xs">{item.description}</p>
           </div>
         </span>
       </li>
@@ -579,7 +580,7 @@ function NavListItem({ item }: { item: NavItem }) {
             </div>
             <div className="flex-1 space-y-0.5">
               <div className="text-sm font-medium">{item.title}</div>
-              <p className="line-clamp-1 text-xs text-muted-foreground">{item.description}</p>
+              <p className="text-muted-foreground line-clamp-1 text-xs">{item.description}</p>
             </div>
           </Link>
         }

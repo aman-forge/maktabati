@@ -1,16 +1,18 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
-import type { BookCardBook } from "@features/books/server/get-books";
-import { BookmarkSimpleIcon, CheckCircleIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
-import { Button } from "@shadcn/button";
+import { BookIcon, CalendarBlankIcon } from "@phosphor-icons/react";
+import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
+
 import { BOOK_GENRES } from "@/db/constants/books";
+import { BookCardType, ReadingStatus, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
-import { Badge } from "../ui/badge";
+
+import { BookCover, RatingPill, StatusBadge, TrackButton } from "./book-card-parts";
 
 interface BookCardProps {
-  book: BookCardBook;
+  book: BookCardType;
   size?: "sm" | "md" | "lg";
-  trackingStatus?: "plan-to-read" | "reading" | "completed" | "on-hold" | "dropped" | null;
+  trackingStatus?: ReadingStatus;
 }
 
 const DIMENSIONS = {
@@ -19,117 +21,127 @@ const DIMENSIONS = {
   lg: { card: "w-48", image: "h-72" },
 } as const;
 
-const STATUS_COLORS: Record<string, string> = {
-  "plan-to-read": "bg-slate-500",
-  reading: "bg-sky-500",
-  completed: "bg-emerald-500",
-  "on-hold": "bg-amber-500",
-  dropped: "bg-rose-500",
-};
-
-const STATUS_ICONS: Record<string, React.ElementType> = {
-  "plan-to-read": BookmarkSimpleIcon,
-  reading: StarIcon,
-  completed: CheckCircleIcon,
-};
-
 export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
-  const rating = 4.5; // TODO: add rating
-  const StatusIcon = trackingStatus ? STATUS_ICONS[trackingStatus] : null;
+  const rating = 4.5; // TODO: add book.rating
+  const effectiveStatus = trackingStatus ?? book.status ?? undefined;
+  const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
 
   return (
-    <article className={cn("flex flex-col gap-2.5 shrink-0 group mt-0 mb-auto", dim.card)}>
-      {/* Cover wrapper */}
+    <article className={cn("relative flex flex-col gap-2.5 shrink-0 group mt-0 mb-auto", dim.card)}>
+      {/* Cover */}
       <div
         className={cn(
-          "relative rounded-xl overflow-hidden bg-muted cursor-pointer",
+          "relative rounded-xl cursor-pointer",
           "transition-all duration-300 ease-out",
-          "group-hover:shadow-2xl group-hover:shadow-black/30 group-hover:-translate-y-0.5",
+          "group-hover:shadow-2xl group-hover:shadow-black/30 group-hover:-translate-y-1",
           dim.image,
         )}
       >
-        {/* Book spine — gives 3-D depth */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-3 rounded-r-xl bg-linear-to-l from-black/40 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1 rounded-l-xl bg-linear-to-r from-white/10 to-transparent" />
-
+        <div
+          className={cn(
+            "w-[102%] h-[101.5%] top-[-0.75%] left-[-1%] absolute z-0 p-4 rounded-[calc(var(--radius)+6px)] opacity-100",
+            "duration-200 transition-all",
+            statusConfig && statusConfig.badgeClass,
+          )}
+        ></div>
         <Link to="/book/$id" params={{ id: book.id }}>
-          <img
-            src={book.coverImageUrl ?? "/books/book.jpg"}
+          <BookCover
+            src={book.coverImageUrl}
             alt={`غلاف ${book.title}`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          />
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Hover info: genre + readers */}
-          <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1.5 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-            {book.genres?.[0] && (
-              <Badge variant="secondary">
-                {BOOK_GENRES.find((g) => g.value === book.genres?.[0])?.label}
-              </Badge>
-            )}
-          </div>
+            className="h-full w-full rounded-xl"
+          >
+            {/* Hover gradient overlay */}
+            <div className="from-background/80 via-background/10 absolute inset-0 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          </BookCover>
         </Link>
 
-        {/* Rating badge — top right */}
+        {/* Rating — top right */}
         {rating != null && (
-          <div className="absolute top-2 right-2 z-20">
-            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-foreground/60 dark:bg-background/60 backdrop-blur-md border-border shadow-lg">
-              <StarIcon weight="fill" className="w-2.5 h-2.5 text-amber-400" />
-              <span className="text-[11px] font-semibold text-background dark:text-foreground tabular-nums">
-                {rating.toFixed(1)}
-              </span>
-            </div>
+          <div className="absolute top-1.5 right-1.5 z-20">
+            <RatingPill rating={rating} variant="overlay" />
           </div>
         )}
 
-        {/* Tracking status dot — top left */}
-        {trackingStatus && (
-          <div
-            className={cn(
-              "absolute top-2 left-2 z-20 flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-border backdrop-blur-md shadow-sm",
-              STATUS_COLORS[trackingStatus],
-            )}
-            title={trackingStatus}
-          >
-            {StatusIcon && <StatusIcon weight="fill" className="w-2.5 h-2.5 text-white" />}
-          </div>
+        {effectiveStatus && (
+          <StatusBadge
+            status={effectiveStatus}
+            variant="pill"
+            className="absolute -bottom-2 left-1/2 h-5 -translate-x-1/2 px-1.5 text-[10px] opacity-0 transition-all duration-300 sm:opacity-100 sm:group-hover:bottom-1 sm:group-hover:opacity-0"
+          />
         )}
-
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            openTrackModal(book);
-          }}
-          variant="default"
-          size="icon"
+        {/* Track button — always available on touch screens, hover-revealed on larger screens. */}
+        <div
           className={cn(
-            "absolute bottom-2.5 left-2.5 z-20 rounded-full w-9 h-9 border-primary!",
-            "opacity-0 translate-y-1.5 scale-90",
-            "group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100",
+            "absolute bottom-2.5 left-2.5 z-20",
+            "opacity-100 translate-y-0 scale-100",
+            "sm:opacity-0 sm:translate-y-2 sm:scale-90",
+            "sm:group-hover:opacity-100 sm:group-hover:translate-y-0 sm:group-hover:scale-100",
             "transition-all duration-200 ease-out",
+            "flex flex-row justify-between w-[calc(100%-20px)]",
           )}
-          aria-label="إضافة إلى قائمة القراءة"
         >
-          <PlusIcon weight="bold" className="w-4 h-4" />
-        </Button>
+          {/* Footer: status pill OR genres, always with year/pages */}
+          <div className="relative top-2 flex flex-wrap items-center gap-1">
+            {/* Year + pages — always shown */}
+            {book.publicationYear && (
+              <span className="bg-muted/60 text-muted-foreground flex h-5 items-center gap-1 rounded-md px-1.5 text-[10px] tabular-nums">
+                <CalendarBlankIcon className="h-2.5 w-2.5" />
+                {book.publicationYear}
+              </span>
+            )}
+            {book.pageCount && (
+              <span className="bg-muted/60 text-muted-foreground flex h-5 items-center gap-1 rounded-md px-1.5 text-[10px] leading-5 tabular-nums">
+                <BookIcon />
+                {book.pageCount}
+              </span>
+            )}
+
+            {/* Status pill — shown only when tracked */}
+            {!effectiveStatus &&
+              /* Genres — only when no status */
+              book.genres?.[0] && (
+                <Badge
+                  variant="secondary"
+                  className="bg-secondary/45 h-5 rounded-md px-1.5 py-0 text-[10px] font-medium"
+                >
+                  {BOOK_GENRES.find((g) => g.value === book.genres?.[0])?.label ?? book.genres[0]}
+                </Badge>
+              )}
+          </div>
+          <TrackButton
+            trackingStatus={effectiveStatus}
+            onClick={() => openTrackModal(book)}
+            className={cn(
+              "shadow-none! border-0! backdrop-blur-sm!",
+              statusConfig && statusConfig.bgColor,
+              statusConfig && statusConfig.bgHoverColor,
+            )}
+          />
+        </div>
       </div>
 
-      {/* Text info */}
-      <div className="flex flex-col gap-0.5 px-0.5">
+      {/* Text */}
+      <div className="flex flex-col gap-1 px-0.5 pt-1">
+        {/* Title */}
         <Link to="/book/$id" params={{ id: book.id }}>
-          <h3 className="text-sm font-semibold leading-snug line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200">
+          <h3 className="text-foreground line-clamp-2 text-sm leading-snug font-semibold transition-colors duration-200 hover:underline">
             {book.title}
           </h3>
         </Link>
-        <p className="text-xs text-muted-foreground truncate">{book.author?.name}</p>
-        {book.pageCount && (
-          <p className="text-[10px] text-muted-foreground/60 tabular-nums mt-0.5">
-            {book.pageCount} صفحة
-          </p>
+
+        {/* Author */}
+        {book.author ? (
+          <Link
+            to="/author/$id"
+            params={{ id: book.author.id }}
+            className="text-muted-foreground truncate text-xs hover:underline"
+          >
+            {book.author.name}
+          </Link>
+        ) : (
+          <p className="text-muted-foreground truncate text-xs">مجهول</p>
         )}
       </div>
     </article>

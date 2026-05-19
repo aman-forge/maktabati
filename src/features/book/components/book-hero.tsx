@@ -1,24 +1,24 @@
 import { Button } from "@components/ui/button";
-import type { BookType } from "@features/books/server/get-books";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
-  CaretDownIcon,
   CaretLeftIcon,
-  CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
-import { ButtonGroup } from "@shadcn/button-group";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
 import { BOOK_GENRES } from "@/db/constants/books";
+import { useUser } from "@/features/auth/use-user";
 import type { RatingSummary } from "@/features/book/book-page-mock";
-import { cn } from "@/ui/lib/utils";
 import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { getUserBookTracking } from "@/features/books/server/library";
+import { DetailedBookType, getStatusConfig } from "@/features/books/types";
+import { cn } from "@/ui/lib/utils";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [
@@ -63,12 +63,39 @@ export function BookHero({
   book,
   ratingSummary,
 }: {
-  book: BookType;
+  book: DetailedBookType;
   ratingSummary: RatingSummary;
 }) {
-  const [wishList, setWishList] = useState(false);
   const [liked, setLiked] = useState(false);
   const { openTrackModal } = useBookTracking();
+  const { user } = useUser();
+  const trackingQuery = useQuery({
+    queryKey: ["book-tracking", user?.id, book.id],
+    queryFn: () => getUserBookTracking({ data: { userId: user!.id, bookId: book.id } }),
+    enabled: !!user?.id,
+  });
+  const tracking = trackingQuery.data;
+  const trackingStatus = tracking?.status ?? undefined;
+  const statusConfig = trackingStatus ? getStatusConfig(trackingStatus) : null;
+  const StatusIcon = statusConfig?.icon ?? BookmarkSimpleIcon;
+  const trackingBook = useMemo(
+    () => ({
+      ...book,
+      status: trackingStatus,
+      pageProgress: tracking?.pageProgress ?? null,
+      notes: tracking?.notes ?? null,
+      startedAt: tracking?.startedAt ?? null,
+      finishedAt: tracking?.finishedAt ?? null,
+    }),
+    [
+      book,
+      tracking?.finishedAt,
+      tracking?.notes,
+      tracking?.pageProgress,
+      tracking?.startedAt,
+      trackingStatus,
+    ],
+  );
 
   const languageLabel = useMemo(
     () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
@@ -117,7 +144,7 @@ export function BookHero({
             <div className="flex flex-col items-center gap-4 lg:sticky lg:top-20 lg:self-start">
               <div className="relative">
                 <img
-                  src={book.coverImageUrl || "/books/placeholder.png"}
+                  src={book.coverImageUrl ?? "/books/book.jpg"}
                   alt={`غلاف ${book.title}`}
                   className="ring-border/50 w-44 rounded-xl object-cover shadow-xl ring-1 sm:w-52 lg:w-56"
                   style={{ aspectRatio: "2/3" }}
@@ -131,28 +158,33 @@ export function BookHero({
               </div>
 
               {/* Primary CTA */}
-              <div className="w-full max-w-56 space-y-2">
-                <ButtonGroup className="flex w-full">
-                  <Button className="flex-1 gap-2" onClick={() => setWishList((w) => !w)}>
-                    {wishList ? (
-                      <>
-                        <CheckIcon weight="bold" className="size-4" />
-                        أريد قراءته
-                      </>
-                    ) : (
-                      <>
-                        <BookmarkSimpleIcon weight="bold" className="size-4" />
-                        أضف إلى الرف
-                      </>
+              <div className="w-full max-w-64 space-y-2">
+                {/*<ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">*/}
+                <Button
+                  className={cn(
+                    "h-10 flex-1 gap-2 text-sm font-semibold shadow-none w-full",
+                    statusConfig?.bgColor,
+                    statusConfig?.bgHoverColor,
+                    statusConfig && "text-white",
+                  )}
+                  onClick={() => openTrackModal(trackingBook)}
+                >
+                  <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
+                  {statusConfig?.label ?? "إضافة الى المكتبة"}
+                </Button>
+                {/*<Button
+                    className={cn(
+                      "h-11 rounded-none border-r border-white/15 px-3 shadow-none",
+                      statusConfig?.bgColor,
+                      statusConfig?.bgHoverColor,
+                      statusConfig && "text-white",
                     )}
-                  </Button>
-                  <Button
-                    aria-label="خيارات الرف"
-                    onClick={() => openTrackModal(book)}
+                    aria-label="خيارات التتبع"
+                    onClick={() => openTrackModal(trackingBook)}
                   >
                     <CaretDownIcon className="size-4" />
-                  </Button>
-                </ButtonGroup>
+                  </Button>*/}
+                {/*</ButtonGroup>*/}
 
                 {/* Secondary actions */}
                 <div className="flex gap-2">

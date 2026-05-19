@@ -57,7 +57,7 @@ function AuthorsPage() {
 
           {/* Controls */}
           <div className="flex items-center gap-2">
-            <Select value={sort} onValueChange={setSort}>
+            <Select value={sort} onValueChange={(value) => value && setSort(value)}>
               <SelectTrigger className="h-8 gap-1.5 text-xs">
                 <SortAscendingIcon className="size-3.5" />
               </SelectTrigger>

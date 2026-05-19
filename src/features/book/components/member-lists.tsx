@@ -44,7 +44,7 @@ export function MemberLists({ lists = [] }: MemberListsProps) {
                 <div className="relative flex h-16 items-end gap-0">
                   {covers.slice(0, 3).map((src, i) => (
                     <div
-                      key={`${id}-${src}`}
+                      key={`${id}-${src}-${i.toString()}`}
                       className="absolute w-9 overflow-hidden rounded-lg shadow-md"
                       style={{
                         aspectRatio: "2/3",
