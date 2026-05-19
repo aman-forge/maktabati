@@ -1,6 +1,12 @@
 "use client";
 
-import { BookOpenIcon, CheckCircleIcon, PenIcon, PlusIcon, StarIcon } from "@phosphor-icons/react";
+import {
+  BookOpenIcon,
+  CheckCircleIcon,
+  PencilSimpleIcon,
+  PlusIcon,
+  StarIcon,
+} from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
 
 import { ReadingStatus, getStatusConfig } from "@/features/books/types";
@@ -97,7 +103,7 @@ export function StatusBadge({ status, variant = "pill", className }: StatusBadge
   return (
     <span
       className={cn(
-        "flex items-center gap-1 rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm",
+        "flex text-nowrap items-center gap-1 rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm",
         config.badgeClass,
         className,
       )}
@@ -119,36 +125,58 @@ interface TrackButtonProps {
   onClick: () => void;
   size?: "sm" | "md";
   className?: string;
+  children?: React.ReactElement | undefined;
 }
 
-export function TrackButton({ trackingStatus, onClick, size = "md", className }: TrackButtonProps) {
+export function TrackButton({
+  trackingStatus,
+  onClick,
+  size = "md",
+  className,
+  children,
+}: TrackButtonProps) {
   const isCompleted = trackingStatus === "completed";
   const hasStatus = Boolean(trackingStatus);
   const iconCls = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4";
 
   return (
-    <Button
-      size="icon"
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        onClick();
-      }}
-      className={cn(
-        "rounded-full shadow-md bg-primary hover:bg-primary/90 text-primary-foreground",
-        size === "sm" ? "h-8 w-8" : "h-9 w-9",
-        className,
-      )}
-      aria-label={hasStatus ? "تحديث حالة القراءة" : "إضافة إلى قائمة القراءة"}
-    >
-      {isCompleted ? (
-        <CheckCircleIcon weight="fill" className={iconCls} />
-      ) : hasStatus ? (
-        <PenIcon weight="duotone" className={iconCls} />
+    <>
+      {children ? (
+        <Button
+          className={className}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClick();
+          }}
+          aria-label={hasStatus ? "تحديث حالة القراءة" : "إضافة إلى قائمة القراءة"}
+          render={children}
+        />
       ) : (
-        <PlusIcon weight="bold" className={iconCls} />
+        <Button
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClick();
+          }}
+          className={cn(
+            "rounded-full shadow-md bg-primary hover:bg-primary/90 text-primary-foreground",
+            size === "sm" ? "h-8 w-8" : "h-9 w-9",
+            className,
+          )}
+          aria-label={hasStatus ? "تحديث حالة القراءة" : "إضافة إلى قائمة القراءة"}
+        >
+          {isCompleted ? (
+            <CheckCircleIcon weight="fill" className={iconCls} />
+          ) : hasStatus ? (
+            <PencilSimpleIcon weight="duotone" className={iconCls} />
+          ) : (
+            <PlusIcon weight="bold" className={iconCls} />
+          )}
+        </Button>
       )}
-    </Button>
+    </>
   );
 }
 
@@ -159,11 +187,17 @@ export function TrackButton({ trackingStatus, onClick, size = "md", className }:
 
 interface ReadingProgressProps {
   progress: number;
+  unknown?: boolean;
   showLabel?: boolean;
   className?: string;
 }
 
-export function ReadingProgress({ progress, showLabel = true, className }: ReadingProgressProps) {
+export function ReadingProgress({
+  progress,
+  unknown = false,
+  showLabel = true,
+  className,
+}: ReadingProgressProps) {
   return (
     <div className={cn("space-y-1", className)}>
       {showLabel && (
@@ -172,12 +206,23 @@ export function ReadingProgress({ progress, showLabel = true, className }: Readi
             <BookOpenIcon className="h-3 w-3" />
             التقدم
           </span>
-          <span className="text-[10px] font-semibold text-blue-400 tabular-nums">{progress}%</span>
+          <span
+            className={cn(
+              "text-[10px] font-semibold text-blue-400 tabular-nums",
+              unknown && "text-muted-foreground",
+            )}
+          >
+            {unknown ? "?" : `${Math.round(progress)}%`}
+          </span>
         </div>
       )}
+
       <div className="bg-muted h-1 overflow-hidden rounded-full">
         <div
-          className="h-full rounded-full bg-blue-500 transition-all duration-700 ease-out"
+          className={cn(
+            "h-full rounded-full bg-blue-500 transition-all duration-700 ease-out",
+            unknown && "bg-muted",
+          )}
           style={{ width: `${progress}%` }}
         />
       </div>

@@ -92,6 +92,8 @@ export const searchBooks = createServerFn({ method: "GET" })
         createdAt: books.createdAt,
         updatedAt: books.updatedAt,
         status: userBooks.status,
+        pageProgress: userBooks.pageProgress,
+        notes: userBooks.notes,
         startedAt: userBooks.startedAt,
         finishedAt: userBooks.finishedAt,
         author: {

@@ -22,6 +22,7 @@ import { FilterDialog, type FilterState } from "@/features/books/components/filt
 import { bookSearchSchema, type BookSearch } from "@/features/books/lib/validators";
 import { searchBooks } from "@/features/books/server/get-books";
 import { BookListItem } from "@/ui/components/book/book-card-list";
+import { cn } from "@/ui/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -38,7 +39,7 @@ const SORT_OPTIONS = [
 const YEAR_MIN = 700;
 const YEAR_MAX = 2026;
 const PAGE_MIN = 0;
-const PAGE_MAX = 5000;
+const PAGE_MAX = 1000;
 
 const DEFAULT_FILTERS: FilterState = {
   yearRange: [YEAR_MIN, YEAR_MAX],
@@ -245,14 +246,14 @@ function BooksSearchPage() {
     if (search.minYear !== undefined || search.maxYear !== undefined)
       tags.push({
         key: "year",
-        label: `${search.minYear ?? "؟"} — ${search.maxYear ?? "؟"}`,
+        label: `${search.minYear ?? YEAR_MIN} — ${search.maxYear ?? YEAR_MAX}`,
         onRemove: () => setParams(() => ({ minYear: undefined, maxYear: undefined })),
       });
 
     if (search.minPages !== undefined || search.maxPages !== undefined)
       tags.push({
         key: "pages",
-        label: `${search.minPages ?? "؟"} — ${search.maxPages ?? "؟"} صفحة`,
+        label: `${search.minPages ?? PAGE_MIN} — ${search.maxPages ?? PAGE_MAX} صفحة`,
         onRemove: () => setParams(() => ({ minPages: undefined, maxPages: undefined })),
       });
 
@@ -322,8 +323,11 @@ function BooksSearchPage() {
 
   const viewConfig = {
     grid: {
-      wrapper:
-        "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-6",
+      wrapper: cn(
+        "grid grid-cols-2 justify-items-center gap-x-3 gap-y-6 min-[520px]:grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] 2lg:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]",
+        "[&>article]:w-full! [&>article]:max-w-40 lg:[&>article]:max-w-44 2lg:[&>article]:max-w-48",
+        "[&>article>div:first-child]:h-auto! [&>article>div:first-child]:aspect-2/3",
+      ),
       Component: BookCard,
     },
     detailed: {
@@ -344,23 +348,23 @@ function BooksSearchPage() {
     <div className="bg-background min-h-screen overflow-x-hidden">
       {/* ── Sticky filter bar ──────────────────────────────── */}
       <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky! top-0 z-30 border-b backdrop-blur md:relative">
-        <div className="container mx-auto space-y-2.5 px-0 py-3">
+        <div className="mx-auto max-w-7xl space-y-2.5 py-3 md:px-4">
           {/* Search input */}
-          <div className="relative px-4">
-            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2" />
+          <div className="relative px-4 md:px-0">
+            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2 md:mr-0" />
             <Input
               type="search"
               placeholder="ابحث عن كتاب أو مؤلف..."
               value={qInput}
               onChange={(e) => setQInput(e.target.value)}
-              className="h-10 pr-9 text-sm"
+              className="h-10 pr-10 text-sm"
               autoComplete="off"
               autoCorrect="off"
             />
             {/* Loading spinner while debouncing */}
             {isSearching ? (
-              <div className="absolute top-1/2 left-3 ml-4 -translate-y-1/2">
-                <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
+              <div className="absolute top-1/2 left-3 -translate-y-1/2">
+                <div className="border-muted-foreground/30 border-t-muted-foreground ml-4 size-4 animate-spin rounded-full border-2 md:ml-0" />
               </div>
             ) : qInput ? (
               <button
@@ -369,7 +373,7 @@ function BooksSearchPage() {
                   setQInput("");
                   setParams(() => ({ q: undefined }));
                 }}
-                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 ml-4 -translate-y-1/2 transition-colors"
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 ml-4 -translate-y-1/2 transition-colors md:ml-0"
               >
                 <XIcon className="size-4" />
               </button>
@@ -377,7 +381,9 @@ function BooksSearchPage() {
           </div>
 
           {/* Filter row */}
-          <div className="flex scrollbar-none items-center gap-2 overflow-visible! overflow-x-auto px-4">
+          <div
+            className={cn("flex scrollbar-none items-center overflow-x-scroll gap-2 px-4 md:px-0")}
+          >
             <GenreCombobox
               selected={selectedGenres}
               onSelectionChange={(newGenres: BookGenre[]) =>
@@ -424,7 +430,7 @@ function BooksSearchPage() {
 
           {/* Active filter tags */}
           {hasActiveFilters && (
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 px-4 md:px-0">
               {activeFilterTags.map((tag) => (
                 <Badge
                   key={tag.key}
@@ -449,7 +455,7 @@ function BooksSearchPage() {
       </div>
 
       {/* ── Results ──────────────────────────────────────────── */}
-      <main className="container mx-auto px-4 py-5">
+      <main className="mx-auto max-w-360 px-4 py-5">
         {/* Count */}
         {books.length > 0 && (
           <p className="text-muted-foreground mb-4 text-sm">
@@ -500,9 +506,9 @@ function BooksSearchPage() {
         ) : (
           <div className={currentView.wrapper}>
             {books.map((book, i) => (
-              <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
-                <Component book={book} />
-              </div>
+              // <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
+              <Component key={`${book.id}-${i.toString}`} book={book} />
+              // </div>
             ))}
           </div>
         )}

@@ -1,5 +1,5 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
-import { CalendarBlankIcon } from "@phosphor-icons/react";
+import { CalendarBlankIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
@@ -13,7 +13,6 @@ interface BookListItemProps {
   book: BookCardType;
   rank?: number;
   trackingStatus?: ReadingStatus;
-  readingProgress?: number | null;
 }
 
 /** Top-3 rank gets a highlighted color; rest are muted. */
@@ -34,13 +33,11 @@ function RankNumber({ rank }: { rank: number }) {
   );
 }
 
-export function BookListItem({ book, rank, trackingStatus, readingProgress }: BookListItemProps) {
+export function BookListItem({ book, rank, trackingStatus }: BookListItemProps) {
   const { openTrackModal } = useBookTracking();
   const rating = 4.6; // TODO: add book.rating
   const effectiveStatus = trackingStatus ?? book.status ?? undefined;
-  const isReading = effectiveStatus === "currently_reading";
   const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
-  const StatusIcon = statusConfig?.icon;
 
   return (
     <article className="group">
@@ -71,40 +68,30 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
         </Link>
 
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <div className="flex min-w-0 items-start gap-3">
-            <div className="min-w-0 flex-1">
-              <Link
-                to="/book/$id"
-                params={{ id: book.id }}
-                className="text-foreground hover:text-primary block truncate text-sm leading-tight font-semibold transition-colors"
-              >
-                {book.title}
-              </Link>
-              <p className="text-muted-foreground/75 mt-0.5 truncate text-xs">
-                {book.author?.name ?? "مؤلف غير معروف"}
-              </p>
-            </div>
-
-            {statusConfig && (
-              <span
-                className={cn(
-                  "hidden h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11px] font-medium sm:inline-flex",
-                  statusConfig.badgeClass,
-                )}
-              >
-                {StatusIcon && <StatusIcon weight="fill" className="size-3" />}
-                {statusConfig.label}
-              </span>
-            )}
+          <div className="min-w-0 flex-1">
+            <Link
+              to="/book/$id"
+              params={{ id: book.id }}
+              className="text-foreground hover:text-primary block truncate text-sm leading-tight font-semibold transition-colors"
+            >
+              {book.title}
+            </Link>
+            <p className="text-muted-foreground/75 mt-0.5 truncate text-xs">
+              {book.author?.name ?? "مؤلف غير معروف"}
+            </p>
           </div>
 
-          {isReading && readingProgress != null && (
-            <ReadingProgress
-              progress={readingProgress}
-              showLabel={false}
-              className="max-w-sm [&>div]:h-1"
-            />
-          )}
+          {/* Reading progress */}
+          {book.status === "currently_reading" &&
+            (book.pageCount ? (
+              <ReadingProgress
+                className="mt-auto"
+                progress={((book.pageProgress ?? 0) / book.pageCount) * 100}
+                showLabel={false}
+              />
+            ) : (
+              <ReadingProgress className="mt-auto" unknown progress={100} showLabel={false} />
+            ))}
 
           <div className="flex min-w-0 flex-wrap items-center gap-1.5">
             {book.publicationYear && (
@@ -129,18 +116,6 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
                 +{book.genres.length - 2}
               </span>
             )}
-
-            {statusConfig && (
-              <span
-                className={cn(
-                  "inline-flex h-5 items-center gap-1 rounded px-1.5 text-[10px] font-medium sm:hidden",
-                  statusConfig.badgeClass,
-                )}
-              >
-                {StatusIcon && <StatusIcon weight="fill" className="size-3" />}
-                {statusConfig.label}
-              </span>
-            )}
           </div>
         </div>
 
@@ -148,18 +123,41 @@ export function BookListItem({ book, rank, trackingStatus, readingProgress }: Bo
           <RatingPill rating={rating} variant="overlay" />
         </div>
 
-        <TrackButton
-          trackingStatus={effectiveStatus}
-          onClick={() => openTrackModal(book)}
-          size="sm"
-          className={cn(
-            "shrink-0 transition-all duration-150",
-            statusConfig
-              ? cn(statusConfig.bgColor, statusConfig.bgHoverColor)
-              : "bg-primary hover:bg-primary/90",
-            "opacity-75 group-hover:opacity-100",
-          )}
-        />
+        {statusConfig ? (
+          <TrackButton
+            trackingStatus={effectiveStatus}
+            onClick={() => openTrackModal(book)}
+            size="sm"
+            className={cn(
+              "shrink-0 transition-all duration-150",
+              statusConfig
+                ? cn(statusConfig.bgColor, statusConfig.bgHoverColor)
+                : "bg-primary hover:bg-primary/90",
+              "opacity-75 group-hover:opacity-100 rounded-full!",
+            )}
+          >
+            <span
+              className={cn(
+                "hidden h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11px] font-medium sm:inline-flex",
+                statusConfig.badgeClass,
+              )}
+            >
+              <PencilSimpleIcon className="size-3.5" />
+              {statusConfig.label}
+            </span>
+          </TrackButton>
+        ) : (
+          <TrackButton
+            trackingStatus={effectiveStatus}
+            onClick={() => openTrackModal(book)}
+            size="sm"
+            className={cn(
+              "shrink-0 transition-all duration-150",
+              "bg-primary hover:bg-primary/90",
+              "opacity-75 group-hover:opacity-100",
+            )}
+          />
+        )}
       </div>
     </article>
   );

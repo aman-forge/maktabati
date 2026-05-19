@@ -91,7 +91,7 @@ function Header() {
 
   return (
     <header className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed inset-x-0 top-0 z-50 hidden h-(--header-height) border-b backdrop-blur-2xl md:flex">
-      <div className="container mx-auto flex h-full items-center gap-4 px-4">
+      <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-4 px-4">
         {/* Left */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-4">
           <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex shrink-0 items-center gap-2.5">

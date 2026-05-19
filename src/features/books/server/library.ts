@@ -29,6 +29,8 @@ export const getUserBooks = createServerFn({ method: "GET" })
         createdAt: books.createdAt,
         updatedAt: books.updatedAt,
         status: userBooks.status,
+        pageProgress: userBooks.pageProgress,
+        notes: userBooks.notes,
         startedAt: userBooks.startedAt,
         finishedAt: userBooks.finishedAt,
         author: {
@@ -57,6 +59,8 @@ export const getUserBookTracking = createServerFn({ method: "GET" })
     const [row] = await db
       .select({
         status: userBooks.status,
+        pageProgress: userBooks.pageProgress,
+        notes: userBooks.notes,
         startedAt: userBooks.startedAt,
         finishedAt: userBooks.finishedAt,
       })

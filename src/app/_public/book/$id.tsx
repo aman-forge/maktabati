@@ -1,6 +1,7 @@
 import { Separator } from "@shadcn/separator";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
+import { BOOK_GENRES, BOOK_TOPICS } from "@/db/constants/books";
 import { getBookPageMock } from "@/features/book/book-page-mock";
 import { AuthorCard } from "@/features/book/components/author-card";
 import { BookDescription } from "@/features/book/components/book-description";
@@ -23,9 +24,22 @@ export const Route = createFileRoute("/_public/book/$id")({
   },
 });
 
+const genreLabels = new Map(BOOK_GENRES.map((genre) => [genre.value, genre.label]));
+const topicLabels = new Map(BOOK_TOPICS.map((topic) => [topic.value, topic.label]));
+
+function getGenreLabel(value: string) {
+  return genreLabels.get(value) ?? value;
+}
+
+function getTopicLabel(value: string) {
+  return topicLabels.get(value) ?? value;
+}
+
 function RouteComponent() {
   const book = Route.useLoaderData();
   const mock = getBookPageMock(book);
+  const genreTags =
+    book.genres && book.genres.length > 0 ? book.genres.map(getGenreLabel) : ["لا يوجد تصنيف"];
   const bookDetails = [
     {
       label: "السلسلة",
@@ -59,10 +73,10 @@ function RouteComponent() {
       label: "العنوان الأصلي",
       value: book.originalTitle ?? "",
     },
-    {
-      label: "المترجم",
-      value: book.translator ?? "",
-    },
+    // {
+    //   label: "المترجم",
+    //   value: book.translator ?? "", // TODO: TRANLSATOR
+    // },
     {
       label: "ISBN",
       value: book.isbn ?? "",
@@ -73,7 +87,7 @@ function RouteComponent() {
     },
     {
       label: "الموضوعات",
-      value: book.topics && book.topics.length > 0 ? book.topics.join("، ") : "",
+      value: book.topics && book.topics.length > 0 ? book.topics.map(getTopicLabel).join("، ") : "",
     },
   ].filter((field) => field.value && field.value.trim().length > 0);
 
@@ -87,10 +101,7 @@ function RouteComponent() {
             <div className="lg:hidden">
               <BookDetailsSidebar details={bookDetails} otherEditions={[]} />
             </div>
-            <BookDescription
-              paragraphs={book.description || "لا يوجد وصف"}
-              tags={book.genres || ["لا يوجد تصنيف"]}
-            />
+            <BookDescription paragraphs={book.description || "لا يوجد وصف"} tags={genreTags} />
             <Separator className="bg-border" />
             <BookEditions editions={mock.editions} />
             <Separator className="bg-border" />

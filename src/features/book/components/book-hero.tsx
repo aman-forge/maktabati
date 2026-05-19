@@ -2,14 +2,12 @@ import { Button } from "@components/ui/button";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
-  CaretDownIcon,
   CaretLeftIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
-import { ButtonGroup } from "@shadcn/button-group";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
@@ -84,10 +82,19 @@ export function BookHero({
     () => ({
       ...book,
       status: trackingStatus,
+      pageProgress: tracking?.pageProgress ?? null,
+      notes: tracking?.notes ?? null,
       startedAt: tracking?.startedAt ?? null,
       finishedAt: tracking?.finishedAt ?? null,
     }),
-    [book, tracking?.finishedAt, tracking?.startedAt, trackingStatus],
+    [
+      book,
+      tracking?.finishedAt,
+      tracking?.notes,
+      tracking?.pageProgress,
+      tracking?.startedAt,
+      trackingStatus,
+    ],
   );
 
   const languageLabel = useMemo(
@@ -137,7 +144,7 @@ export function BookHero({
             <div className="flex flex-col items-center gap-4 lg:sticky lg:top-20 lg:self-start">
               <div className="relative">
                 <img
-                  src={book.coverImageUrl || "/books/placeholder.png"}
+                  src={book.coverImageUrl ?? "/books/book.jpg"}
                   alt={`غلاف ${book.title}`}
                   className="ring-border/50 w-44 rounded-xl object-cover shadow-xl ring-1 sm:w-52 lg:w-56"
                   style={{ aspectRatio: "2/3" }}
@@ -152,20 +159,20 @@ export function BookHero({
 
               {/* Primary CTA */}
               <div className="w-full max-w-64 space-y-2">
-                <ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">
-                  <Button
-                    className={cn(
-                      "h-11 flex-1 gap-2 rounded-none text-sm font-semibold shadow-none",
-                      statusConfig?.bgColor,
-                      statusConfig?.bgHoverColor,
-                      statusConfig && "text-white",
-                    )}
-                    onClick={() => openTrackModal(trackingBook)}
-                  >
-                    <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
-                    {statusConfig?.label ?? "أريد قراءته"}
-                  </Button>
-                  <Button
+                {/*<ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">*/}
+                <Button
+                  className={cn(
+                    "h-10 flex-1 gap-2 text-sm font-semibold shadow-none w-full",
+                    statusConfig?.bgColor,
+                    statusConfig?.bgHoverColor,
+                    statusConfig && "text-white",
+                  )}
+                  onClick={() => openTrackModal(trackingBook)}
+                >
+                  <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
+                  {statusConfig?.label ?? "إضافة الى المكتبة"}
+                </Button>
+                {/*<Button
                     className={cn(
                       "h-11 rounded-none border-r border-white/15 px-3 shadow-none",
                       statusConfig?.bgColor,
@@ -176,8 +183,8 @@ export function BookHero({
                     onClick={() => openTrackModal(trackingBook)}
                   >
                     <CaretDownIcon className="size-4" />
-                  </Button>
-                </ButtonGroup>
+                  </Button>*/}
+                {/*</ButtonGroup>*/}
 
                 {/* Secondary actions */}
                 <div className="flex gap-2">

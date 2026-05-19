@@ -1,5 +1,5 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
-import { CalendarBlankIcon } from "@phosphor-icons/react";
+import { BookIcon, CalendarBlankIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
@@ -18,14 +18,12 @@ import {
 interface BookCardDetailedProps {
   book: BookCardType;
   trackingStatus?: ReadingStatus;
-  readingProgress?: number | null;
 }
 
-export function BookCardDetailed({ book, trackingStatus, readingProgress }: BookCardDetailedProps) {
+export function BookCardDetailed({ book, trackingStatus }: BookCardDetailedProps) {
   const { openTrackModal } = useBookTracking();
   const rating = 4.2; // TODO: add book.rating
   const effectiveStatus = trackingStatus ?? book.status ?? undefined;
-  const isReading = effectiveStatus === "currently_reading";
   const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
 
   return (
@@ -91,7 +89,15 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
           )}
 
           {/* Reading progress */}
-          {isReading && readingProgress != null && <ReadingProgress progress={readingProgress} />}
+          {book.status === "currently_reading" &&
+            (book.pageCount ? (
+              <ReadingProgress
+                className="mt-auto"
+                progress={((book.pageProgress ?? 0) / book.pageCount) * 100}
+              />
+            ) : (
+              <ReadingProgress className="mt-auto" unknown progress={100} />
+            ))}
 
           {/* Footer: status + metadata + genres */}
           <div className="mt-auto flex min-w-0 flex-col gap-2">
@@ -104,8 +110,9 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
                   </span>
                 )}
                 {book.pageCount && (
-                  <span className="bg-muted/60 text-muted-foreground h-6 rounded-md px-2 text-[11px] leading-6 tabular-nums">
-                    {book.pageCount} ص
+                  <span className="bg-muted/60 text-muted-foreground flex h-6 items-center gap-1 rounded-md px-2 text-[11px] leading-6 tabular-nums">
+                    <BookIcon />
+                    {book.pageCount}
                   </span>
                 )}
               </div>
@@ -113,12 +120,12 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
                 <StatusBadge
                   status={effectiveStatus}
                   variant="pill"
-                  className="relative top-0.5 h-6 shrink-0 px-2 text-[11px] transition-all duration-200 group-hover:pl-8"
+                  className="relative top-0.5 h-6 shrink-0 px-2 pl-8 text-[11px] transition-all duration-200 sm:pl-2 sm:group-hover:pl-8"
                 />
               ) : (
                 book.genres &&
                 book.genres.length > 0 && (
-                  <div className="flex min-w-0 flex-wrap gap-1.5 transition-all duration-200 group-hover:pl-8.5">
+                  <div className="flex min-w-0 flex-wrap gap-1.5 pl-8 transition-all duration-200 sm:pl-0 sm:group-hover:pl-8.5">
                     {book.genres.slice(0, 2).map((genre) => (
                       <Badge
                         key={genre}
@@ -152,8 +159,9 @@ export function BookCardDetailed({ book, trackingStatus, readingProgress }: Book
           size="sm"
           className={cn(
             "transition-all duration-200 shadow-none! border-0!",
-            "opacity-0 scale-90 translate-y-1 backdrop-blur-sm!",
-            "group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0",
+            "opacity-100 scale-100 translate-y-0 backdrop-blur-sm!",
+            "sm:opacity-0 sm:scale-90 sm:translate-y-1",
+            "sm:group-hover:opacity-100 sm:group-hover:scale-100 sm:group-hover:translate-y-0",
             statusConfig && statusConfig.bgColor,
             statusConfig && statusConfig.bgHoverColor,
           )}

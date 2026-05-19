@@ -1,34 +1,32 @@
 import {
+  BookIcon,
   BookOpenIcon,
+  CalendarIcon,
   CaretRightIcon,
   ChartBarIcon,
   ChatCircleIcon,
   ClockIcon,
   FireIcon,
   type Icon,
-  PlusIcon,
+  PenIcon,
   StarIcon,
   TargetIcon,
   UserIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
+import { Skeleton } from "@shadcn/skeleton";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
+
+import { useUser } from "@/features/auth/use-user";
+import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { getUserBooks } from "@/features/books/server/library";
+import type { BookCardType } from "@/features/books/types";
+import { ReadingProgress } from "@/ui/components/book/book-card-parts";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-type ReadingBook = {
-  id: string;
-  title: string;
-  author: string;
-  authorId: string;
-  currentPage: number;
-  totalPages: number;
-  progress: number;
-  tone: string;
-  coverUrl?: string;
-};
 
 type ActivityItem = {
   userId: string;
@@ -50,39 +48,6 @@ type GoalItem = {
 };
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-
-const inProgressBooks: ReadingBook[] = [
-  {
-    id: "way-of-kings",
-    title: "طريق الملوك",
-    author: "براندون ساندرسون",
-    authorId: "brandon-sanderson",
-    progress: 68,
-    currentPage: 542,
-    totalPages: 800,
-    tone: "فانتازيا ملحمية",
-  },
-  {
-    id: "lies-of-locke",
-    title: "أكاذيب لوك لامورا",
-    author: "سكوت لينش",
-    authorId: "scott-lynch",
-    progress: 41,
-    currentPage: 190,
-    totalPages: 460,
-    tone: "فانتازيا",
-  },
-  {
-    id: "fifth-season",
-    title: "الموسم الخامس",
-    author: "ن. ك. جيمي سين",
-    authorId: "nk-jemisin",
-    progress: 22,
-    currentPage: 84,
-    totalPages: 380,
-    tone: "خيال علمي",
-  },
-];
 
 const activityFeed: ActivityItem[] = [
   {
@@ -200,18 +165,7 @@ export default function DashboardHome() {
       <div className="space-y-6 xl:hidden">
         <StreakCard streak={streak} />
 
-        <PanelCard
-          title="قيد القراءة"
-          subtitle={`${inProgressBooks.length} كتب تقرأها الآن`}
-          actionLabel="مكتبتي"
-          actionHref="/library"
-        >
-          <div className="grid gap-3 sm:grid-cols-2">
-            {inProgressBooks.map((book) => (
-              <ReadingCard key={book.id} book={book} />
-            ))}
-          </div>
-        </PanelCard>
+        <CurrentlyReadingPanel />
 
         <PanelCard
           title="الأهداف"
@@ -261,18 +215,7 @@ export default function DashboardHome() {
       <div className="hidden xl:grid xl:grid-cols-[1.7fr_1fr] xl:gap-6">
         {/* First column */}
         <div className="space-y-6">
-          <PanelCard
-            title="قيد القراءة"
-            subtitle={`${inProgressBooks.length} كتب تقرأها الآن`}
-            actionLabel="مكتبتي"
-            actionHref="/library"
-          >
-            <div className="grid gap-3 sm:grid-cols-2">
-              {inProgressBooks.map((book) => (
-                <ReadingCard key={book.id} book={book} />
-              ))}
-            </div>
-          </PanelCard>
+          <CurrentlyReadingPanel />
 
           <PanelCard
             title="النشاط"
@@ -366,54 +309,130 @@ function PanelCard({
   );
 }
 
-// ─── Reading card ─────────────────────────────────────────────────────────────
+// ─── Currently reading ────────────────────────────────────────────────────────
 
-function ReadingCard({ book }: { book: ReadingBook }) {
+function CurrentlyReadingPanel() {
+  const { user, isLoading: isUserLoading } = useUser();
+  const { data: libraryBooks, isLoading: isBooksLoading } = useQuery({
+    queryKey: ["library-books", user?.id],
+    // Temporary auth boundary: use the client session id until Neon Auth can be
+    // read reliably from TanStack Start server functions.
+    queryFn: () => getUserBooks({ data: user!.id }),
+    enabled: !!user?.id,
+  });
+
+  const currentlyReading = useMemo(
+    () => (libraryBooks ?? []).filter((book) => book.status === "currently_reading").slice(0, 4),
+    [libraryBooks],
+  );
+  const isResolving = isUserLoading || (!!user?.id && isBooksLoading);
+  const subtitle = isResolving
+    ? "نرتب كتبك الحالية"
+    : currentlyReading.length > 0
+      ? `${currentlyReading.length} كتب تقرأها الآن`
+      : "لا توجد كتب قيد القراءة";
+
   return (
-    <article className="group bg-background hover:border-border/80 relative rounded-xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <PanelCard title="قيد القراءة" subtitle={subtitle} actionLabel="مكتبتي" actionHref="/library">
+      {isResolving ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <ReadingCardSkeleton key={i.toString()} />
+          ))}
+        </div>
+      ) : currentlyReading.length > 0 ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {currentlyReading.map((book) => (
+            <ReadingCard key={book.id} book={book} />
+          ))}
+        </div>
+      ) : (
+        <CurrentlyReadingEmpty />
+      )}
+    </PanelCard>
+  );
+}
+
+function ReadingCard({ book }: { book: BookCardType }) {
+  const { openTrackModal } = useBookTracking();
+  const startedAt = formatStartedAt(book.startedAt);
+
+  return (
+    <article className="group bg-background hover:border-border/80 relative overflow-hidden rounded-xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex gap-3">
-        <img
-          src={book.coverUrl ?? "/books/book.jpg"}
-          alt={book.title}
-          loading="lazy"
-          decoding="async"
-          className="bg-muted aspect-2/3 h-auto w-16 rounded-lg object-cover"
-        />
+        <Link to="/book/$id" params={{ id: book.id }} className="shrink-0">
+          <img
+            src={book.coverImageUrl ?? "/books/book.jpg"}
+            alt={`غلاف ${book.title}`}
+            loading="lazy"
+            decoding="async"
+            className="bg-muted aspect-2/3 h-auto w-16 rounded-lg object-cover shadow-sm"
+          />
+        </Link>
 
         <div className="flex min-w-0 flex-1 flex-col justify-between">
           <div>
-            <Link to={`/book/$id`} params={{ id: book.id }}>
-              <h3 className="hover:text-primary truncate text-sm leading-snug font-semibold transition-colors">
+            <Link to="/book/$id" params={{ id: book.id }}>
+              <h3 className="truncate text-sm leading-snug font-semibold transition-colors hover:underline">
                 {book.title}
               </h3>
             </Link>
-            {/*TODO: UPDATE URL*/}
-            <Link to={`/`}>
+            {book.author ? (
+              <Link to="/author/$id" params={{ id: book.author.id }}>
+                <p className="text-muted-foreground hover:text-foreground mt-0.5 truncate text-xs transition-colors hover:underline">
+                  {book.author.name}
+                </p>
+              </Link>
+            ) : (
               <p className="text-muted-foreground hover:text-foreground mt-0.5 text-xs transition-colors hover:underline">
-                {book.author}
+                مجهول
               </p>
-            </Link>
+            )}
           </div>
+          {/* Reading progress */}
+          {book.status === "currently_reading" &&
+            (book.pageCount ? (
+              <ReadingProgress
+                className="mt-auto"
+                progress={((book.pageProgress ?? 0) / book.pageCount) * 100}
+                showLabel={false}
+              />
+            ) : (
+              <ReadingProgress className="mt-auto" unknown progress={100} showLabel={false} />
+            ))}
 
-          <div className="mt-3 flex w-full gap-2">
-            <div className="flex-1">
-              <div className="text-muted-foreground mb-1.5 flex items-center justify-between text-[11px]">
-                <span>
-                  صفحة {book.currentPage} من {book.totalPages}
-                </span>
-                <span className="text-foreground font-medium">{book.progress}٪</span>
+          <div className="mt-2 flex w-full items-end gap-2">
+            <div className="min-w-0 flex-1 space-y-1">
+              <div className="relative top-1 flex flex-wrap items-center gap-1.5">
+                {book.pageCount && (
+                  <span className="bg-muted/50 text-muted-foreground flex items-center gap-1 rounded-md px-2 py-1 text-[11px]">
+                    <BookIcon />
+                    {book.pageCount}
+                  </span>
+                )}
+                {book.publicationYear && (
+                  <span className="bg-muted/50 text-muted-foreground flex items-center gap-1 rounded-md px-2 py-1 text-[11px] tabular-nums">
+                    <CalendarIcon />
+                    {book.publicationYear}
+                  </span>
+                )}
               </div>
-              <div className="bg-muted h-1.5 overflow-hidden rounded-full">
-                <div
-                  className="bg-primary h-1.5 rounded-full transition-all"
-                  style={{ width: `${book.progress}%` }}
-                />
-              </div>
+              {startedAt && (
+                <p className="text-muted-foreground bg-accent/50 absolute top-2 left-2 truncate rounded-full px-1.5 py-0.5 text-[11px]">
+                  بدأت القراءة {startedAt}
+                </p>
+              )}
             </div>
 
             <div className="mt-1 flex justify-end">
-              <Button type="button" variant="ghost" size="xs" className="gap-0.5 px-2 text-xs">
-                <PlusIcon weight="bold" className="h-3 w-3 rotate-180" />
+              <Button
+                type="button"
+                variant="secondary"
+                size="xs"
+                className="gap-1 px-2 text-xs"
+                onClick={() => openTrackModal(book)}
+              >
+                <PenIcon weight="regular" className="h-3 w-3 rotate-0" />
                 تحديث
               </Button>
             </div>
@@ -422,6 +441,53 @@ function ReadingCard({ book }: { book: ReadingBook }) {
       </div>
     </article>
   );
+}
+
+function ReadingCardSkeleton() {
+  return (
+    <div className="bg-background flex gap-3 rounded-xl border p-3">
+      <Skeleton className="aspect-2/3 w-16 shrink-0 rounded-lg" />
+      <div className="flex min-w-0 flex-1 flex-col justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-4/5 rounded-md" />
+          <Skeleton className="h-3 w-2/5 rounded-md" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-5 w-32 rounded-md" />
+          <Skeleton className="h-3 w-24 rounded-md" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CurrentlyReadingEmpty() {
+  return (
+    <div className="bg-background flex flex-col items-center rounded-xl border border-dashed px-4 py-8 text-center">
+      <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+        <BookOpenIcon weight="duotone" className="size-5" />
+      </div>
+      <p className="text-sm font-medium">لا يوجد كتاب قيد القراءة الآن</p>
+      <p className="text-muted-foreground mt-1 max-w-xs text-xs leading-relaxed">
+        اختر حالة «قيد القراءة» من بطاقة أي كتاب ليظهر هنا في لوحة التحكم.
+      </p>
+      <Button variant="outline" size="sm" className="mt-4" render={<Link to="/discover/books" />}>
+        استكشف الكتب
+      </Button>
+    </div>
+  );
+}
+
+function formatStartedAt(value?: string | null) {
+  if (!value) return null;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return new Intl.DateTimeFormat("ar", {
+    month: "long",
+    day: "numeric",
+  }).format(date);
 }
 
 // ─── Activity row ─────────────────────────────────────────────────────────────

@@ -11,13 +11,10 @@ const dateStringSchema = z
 
 const TrackingData = z.object({
   status: z.enum(readingStatusEnum.enumValues),
-  score: z.number().int().min(0).max(10).nullable(),
-  pagesProgress: z.number().int().min(0).nullable(),
-  startDate: dateStringSchema,
-  finishDate: dateStringSchema,
-  notes: z.string().nullable(),
-  isFavorite: z.boolean().default(false),
-  rereadCount: z.number().int().min(0).default(0),
+  pageProgress: z.number().int().min(0).nullable(),
+  notes: z.string().trim().nullable(),
+  startedAt: dateStringSchema,
+  finishedAt: dateStringSchema,
 });
 export type TrackingDataType = z.infer<typeof TrackingData>;
 const updateBookTrackingSchema = z.object({
@@ -41,15 +38,19 @@ export const updateBookTracking = createServerFn({ method: "POST" })
         userId,
         bookId,
         status: data.status,
-        startedAt: data.startDate,
-        finishedAt: data.finishDate,
+        pageProgress: data.pageProgress,
+        notes: data.notes,
+        startedAt: data.startedAt,
+        finishedAt: data.finishedAt,
       })
       .onConflictDoUpdate({
         target: [userBooks.userId, userBooks.bookId],
         set: {
           status: data.status,
-          startedAt: data.startDate,
-          finishedAt: data.finishDate,
+          pageProgress: data.pageProgress,
+          notes: data.notes,
+          startedAt: data.startedAt,
+          finishedAt: data.finishedAt,
           updatedAt: new Date(),
         },
       })

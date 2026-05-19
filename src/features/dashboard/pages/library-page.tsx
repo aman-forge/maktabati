@@ -1,4 +1,3 @@
-// features/dashboard/pages/library-page.tsx
 import {
   ArticleIcon,
   BookmarkIcon,
@@ -7,6 +6,7 @@ import {
   ListIcon,
   MagnifyingGlassIcon,
   PauseCircleIcon,
+  SlidersHorizontalIcon,
   SquaresFourIcon,
   TrashIcon,
   XIcon,
@@ -20,12 +20,21 @@ import { BookListItem } from "@/ui/components/book/book-card-list";
 import { Badge } from "@/ui/components/ui/badge";
 import { Button } from "@/ui/components/ui/button";
 import { Input } from "@/ui/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/components/ui/select";
+import { Separator } from "@/ui/components/ui/separator";
 import { cn } from "@/ui/lib/utils";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type ViewMode = "grid" | "list" | "detailed";
-type SortOption = "added_desc" | "added_asc" | "title" | "rating";
+type SortOption = "added_desc" | "added_asc" | "title";
 
 interface StatusConfig {
   value: ReadingStatus | "all";
@@ -86,8 +95,13 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "added_desc", label: "الأحدث إضافةً" },
   { value: "added_asc", label: "الأقدم إضافةً" },
   { value: "title", label: "العنوان" },
-  { value: "rating", label: "التقييم" },
 ];
+
+const VIEW_OPTIONS = [
+  { value: "grid", icon: SquaresFourIcon, label: "شبكة" },
+  { value: "detailed", icon: ArticleIcon, label: "مفصل" },
+  { value: "list", icon: ListIcon, label: "قائمة" },
+] as const;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -122,10 +136,14 @@ function StatusSection({ status, books, viewMode }: StatusSectionProps) {
       <div
         className={cn(
           viewMode === "grid"
-            ? "flex flex-wrap gap-3 justify-center w-fit"
+            ? [
+                "grid grid-cols-2 justify-items-center gap-x-3 gap-y-6 min-[520px]:grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] 2lg:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]",
+                "[&>article]:w-full! [&>article]:max-w-40 lg:[&>article]:max-w-44 2lg:[&>article]:max-w-48",
+                "[&>article>div:first-child]:h-auto! [&>article>div:first-child]:aspect-2/3",
+              ]
             : viewMode === "detailed"
-              ? "grid grid-cols-1 lg:grid-cols-2 gap-4"
-              : "flex flex-col gap-1",
+              ? "grid grid-cols-1 gap-3 md:gap-4 lg:grid-cols-2"
+              : "flex flex-col gap-2",
         )}
       >
         {viewMode === "grid"
@@ -178,36 +196,183 @@ function LibrarySidebar({
   viewMode,
   onViewModeChange,
 }: SidebarProps) {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   return (
-    <aside className="sticky top-20 flex h-[calc(100vh-6rem)] w-64 shrink-0 scrollbar-none flex-col gap-6 self-start overflow-y-visible pb-6">
-      {/* Search */}
-      <div className="relative">
-        <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
-        <Input
-          type="search"
-          placeholder="ابحث في مكتبتك..."
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-          className="h-9 pr-9 text-sm"
-          autoComplete="off"
-        />
-        {query && (
+    <>
+      {/*Desktop SidebarProps*/}
+      <aside className="hidden w-full shrink-0 flex-col gap-4 self-start lg:sticky lg:top-20 lg:flex lg:h-[calc(100vh-6rem)] lg:w-64 lg:gap-6 lg:overflow-y-visible lg:pb-6">
+        {/* Search */}
+        <div className="relative">
+          <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
+          <Input
+            type="search"
+            placeholder="ابحث في مكتبتك..."
+            value={query}
+            onChange={(e) => onQueryChange(e.target.value)}
+            className="pr-9 text-sm"
+            autoComplete="off"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => onQueryChange("")}
+              className="text-muted-foreground hover:text-foreground absolute top-1/2 left-[13.4px] -translate-y-1/2 transition-colors"
+            >
+              <XIcon className="size-3.5" weight="bold" />
+            </button>
+          )}
+        </div>
+
+        {/* Status filter */}
+        <div className="flex flex-col space-y-1 lg:block">
+          <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
+            حالة القراءة
+          </p>
+          <nav className="-mx-1 flex scrollbar-none gap-1 overflow-x-auto px-1 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0">
+            {STATUS_CONFIG.map((s) => {
+              const Icon = s.icon;
+              const isActive = activeStatus === s.value;
+              const count = counts[s.value];
+              return (
+                <button
+                  key={s.value}
+                  type="button"
+                  onClick={() => onStatusChange(s.value)}
+                  className={cn(
+                    "flex min-w-max items-center gap-2.5 rounded-2xl cursor-pointer px-3 py-2 text-right text-sm transition-all duration-150 lg:w-full lg:min-w-0 group/button",
+                    isActive
+                      ? "bg-primary/10 border border-primary text-primary font-medium hover:bg-primary/20"
+                      : "border border-transparent! text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                  )}
+                >
+                  <Icon
+                    className={cn("size-4 shrink-0", isActive ? "text-primary " : s.color)}
+                    weight={isActive ? "duotone" : "regular"}
+                  />
+                  <span className="flex-1 text-right">{s.label}</span>
+                  {count > 0 && (
+                    <span
+                      className={cn(
+                        "text-xs tabular-nums min-w-5 text-center",
+                        isActive ? "text-primary font-semibold " : "text-muted-foreground",
+                      )}
+                    >
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Divider */}
+        <Separator className="hidden lg:block" />
+
+        {/* View & Sort */}
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(10rem,14rem)] lg:flex lg:flex-col">
+          {/* View toggle */}
+          <div>
+            <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
+              طريقة العرض
+            </p>
+            <div className="bg-muted/40 flex gap-0.5 rounded-lg border p-0.5">
+              {VIEW_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => onViewModeChange(opt.value)}
+                  className={cn(
+                    "flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md px-1 py-1.5 text-xs transition-all duration-150",
+                    viewMode === opt.value
+                      ? "bg-background text-foreground shadow-sm font-medium"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <opt.icon className="size-3.5" />
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sort */}
+          <div>
+            <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
+              الترتيب
+            </p>
+            <Select value={sort} onValueChange={(value) => onSortChange(value as SortOption)}>
+              <SelectTrigger className="h-9 w-full rounded-lg text-xs">
+                <SelectValue>{SORT_OPTIONS.find((o) => o.value === sort)?.label}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {SORT_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </aside>
+      {/*Mobile Bar*/}
+      <div className="bg-background border-border sticky top-0 z-50 border-b lg:hidden">
+        {/* Row 1: Search + Filter toggle */}
+        <div className="flex items-center gap-2 py-2">
+          <div className="relative flex-1">
+            <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
+            <Input
+              type="search"
+              placeholder="ابحث في مكتبتك..."
+              value={query}
+              onChange={(e) => onQueryChange(e.target.value)}
+              className="bg-muted/50 rounded-xl pr-9 text-sm"
+              autoComplete="off"
+              dir="rtl"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => onQueryChange("")}
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 left-3 -translate-y-1/2 transition-colors"
+              >
+                <XIcon className="size-3.5" weight="bold" />
+              </button>
+            )}
+          </div>
+
+          {/* Sort/View toggle button */}
           <button
             type="button"
-            onClick={() => onQueryChange("")}
-            className="text-muted-foreground hover:text-foreground absolute top-1/2 left-[13.4px] -translate-y-1/2 transition-colors"
+            onClick={() => setFiltersOpen((v) => !v)}
+            className={cn(
+              "flex items-center gap-1.5 h-9 px-3 rounded-xl border text-sm font-medium transition-all shrink-0",
+              filtersOpen
+                ? "bg-primary/10 border-primary text-primary"
+                : "bg-muted/50 border-transparent text-muted-foreground hover:text-foreground",
+            )}
           >
-            <XIcon className="size-3.5" weight="bold" />
+            <SlidersHorizontalIcon className="size-4" />
+            فرز
+            {/* Active filter badge */}
+            {sort !== "added_desc" && (
+              <span className="bg-primary text-primary-foreground flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold">
+                1
+              </span>
+            )}
           </button>
-        )}
-      </div>
+        </div>
 
-      {/* Status filter */}
-      <div className="space-y-1">
-        <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
-          حالة القراءة
-        </p>
-        <nav className="space-y-0.5">
+        {/* Row 2: Status chips — horizontal scroll */}
+        <div
+          className="flex scrollbar-none gap-1.5 overflow-x-auto px-0 pb-2.5"
+          role="tablist"
+          aria-label="حالة القراءة"
+        >
           {STATUS_CONFIG.map((s) => {
             const Icon = s.icon;
             const isActive = activeStatus === s.value;
@@ -216,24 +381,26 @@ function LibrarySidebar({
               <button
                 key={s.value}
                 type="button"
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => onStatusChange(s.value)}
                 className={cn(
-                  "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-right",
+                  "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm shrink-0 transition-all",
                   isActive
-                    ? "bg-primary/10 border border-primary text-primary font-medium"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    ? "bg-primary/10 border-primary text-primary font-medium"
+                    : "border-border/60 text-muted-foreground hover:text-foreground hover:border-border",
                 )}
               >
                 <Icon
-                  className={cn("size-4 shrink-0", isActive ? "text-primary" : s.color)}
+                  className={cn("size-3.5 shrink-0", isActive ? "text-primary" : s.color)}
                   weight={isActive ? "duotone" : "regular"}
                 />
-                <span className="flex-1 text-right">{s.label}</span>
+                {s.label}
                 {count > 0 && (
                   <span
                     className={cn(
-                      "text-xs tabular-nums min-w-5 text-center",
-                      isActive ? "text-primary font-semibold" : "text-muted-foreground",
+                      "text-xs tabular-nums",
+                      isActive ? "text-primary font-semibold" : "text-muted-foreground/70",
                     )}
                   >
                     {count}
@@ -242,70 +409,60 @@ function LibrarySidebar({
               </button>
             );
           })}
-        </nav>
-      </div>
-
-      {/* Divider */}
-      <div className="bg-border h-px" />
-
-      {/* View & Sort */}
-      <div className="space-y-4">
-        {/* View toggle */}
-        <div>
-          <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
-            طريقة العرض
-          </p>
-          <div className="bg-muted/40 flex gap-0.5 rounded-lg border p-0.5">
-            {(
-              [
-                { value: "grid", icon: SquaresFourIcon, label: "شبكة" },
-                { value: "detailed", icon: ArticleIcon, label: "مفصل" },
-                { value: "list", icon: ListIcon, label: "قائمة" },
-              ] as const
-            ).map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => onViewModeChange(opt.value)}
-                className={cn(
-                  "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs transition-all duration-150",
-                  viewMode === opt.value
-                    ? "bg-background text-foreground shadow-sm font-medium"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <opt.icon className="size-3.5" />
-                {opt.label}
-              </button>
-            ))}
-          </div>
         </div>
 
-        {/* Sort */}
-        <div>
-          <p className="text-muted-foreground mb-2 px-1 text-xs font-medium tracking-wider uppercase">
-            الترتيب
-          </p>
-          <div className="space-y-0.5">
-            {SORT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => onSortChange(opt.value)}
-                className={cn(
-                  "w-full text-right px-3 py-1.5 rounded-lg text-sm transition-all duration-150",
-                  sort === opt.value
-                    ? "bg-primary/10 text-primary font-medium"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-              >
-                {opt.label}
-              </button>
-            ))}
+        {/* Expandable panel: View + Sort */}
+        {filtersOpen && (
+          <div className="border-border/50 grid grid-cols-2 gap-3 border-t px-0 py-3">
+            {/* View toggle */}
+            <div>
+              <p className="text-muted-foreground mb-1.5 px-0.5 text-[11px] font-medium tracking-wider uppercase">
+                طريقة العرض
+              </p>
+              <div className="bg-muted/40 flex gap-0.5 rounded-lg border p-0.5">
+                {VIEW_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => onViewModeChange(opt.value)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-1 rounded-md px-1 py-1.5 text-xs transition-all",
+                      viewMode === opt.value
+                        ? "bg-background text-foreground shadow-sm font-medium"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <opt.icon className="size-3.5" />
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sort select */}
+            <div>
+              <p className="text-muted-foreground mb-1.5 px-0.5 text-[11px] font-medium tracking-wider uppercase">
+                الترتيب
+              </p>
+              <Select value={sort} onValueChange={(value) => onSortChange(value as SortOption)}>
+                <SelectTrigger className="h-9 w-full rounded-lg text-xs">
+                  <SelectValue>{SORT_OPTIONS.find((o) => o.value === sort)?.label}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {SORT_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    </aside>
+    </>
   );
 }
 
@@ -320,11 +477,8 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
   const [query, setQuery] = useState("");
   const [activeStatus, setActiveStatus] = useState<ReadingStatus | "all">("all");
   const [sort, setSort] = useState<SortOption>("added_desc");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("detailed");
 
-  // ── Counts per status ─────────────────────────────────────────────────────
-  // ✅ Uses real `userBook.status` from the DB join — no fake getBookStatus()
-  // BookCardType must include `status: ReadingStatus` from the userBooks join
   const counts = useMemo(() => {
     const base: Record<ReadingStatus | "all", number> = {
       all: books.length,
@@ -363,17 +517,18 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
       case "title":
         result = [...result].sort((a, b) => (a.title ?? "").localeCompare(b.title ?? ""));
         break;
-      // case "rating":
-      //   result = [...result].sort((a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0));
-      //   break;
       case "added_asc":
-        // Replace with real `addedAt` timestamp when available
-        result = [...result];
+        result = [...result].sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
         break;
       case "added_desc":
+        result = [...result].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
         break;
       default:
-        result = [...result].reverse();
+        result = [...result];
         break;
     }
 
@@ -396,8 +551,8 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex gap-4">
+    <div className="mx-auto max-w-360 px-3 py-4 sm:px-4 sm:py-6 lg:px-6 lg:py-8">
+      <div className="flex flex-col gap-6 lg:flex-row lg:gap-6">
         {/* Sidebar */}
         <LibrarySidebar
           query={query}
@@ -412,12 +567,12 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
         />
 
         {/* Main content */}
-        <main className="min-w-0 flex-1 space-y-10">
+        <main className="min-w-0 flex-1 space-y-8 md:space-y-10">
           {/* Active query banner */}
           {query && (
-            <div className="text-muted-foreground flex items-center gap-2 text-sm">
+            <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-sm">
               <MagnifyingGlassIcon className="size-4 shrink-0" />
-              <span className="flex gap-2">
+              <span className="flex min-w-0 flex-wrap gap-2">
                 نتائج البحث عن <span className="text-foreground font-medium">"{query}"</span>
                 <span>{" · "}</span>
                 <span>

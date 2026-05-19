@@ -102,6 +102,8 @@ export interface BaseBook {
   pageCount?: number | null;
   publicationYear?: number | null;
   status?: ReadingStatus | null;
+  pageProgress?: number | null;
+  notes?: string | null;
   startedAt?: string | null;
   finishedAt?: string | null;
   author?: {

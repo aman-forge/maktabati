@@ -3,11 +3,11 @@ import { useRouter } from "@tanstack/react-router";
 import React from "react";
 
 import { useUser } from "@/features/auth/use-user";
-import { BaseBook } from "@/features/books/types";
+import type { BaseBook } from "@/features/books/types";
 import { TrackBookModal } from "@/ui/components/book/track-book-modal";
 import { toast } from "@/ui/components/ui/sonner";
 
-import { updateBookTracking, TrackingDataType } from "../server/update-book";
+import { updateBookTracking, type TrackingDataType } from "../server/update-book";
 
 interface BookTrackingContextValue {
   openTrackModal: (book: BaseBook) => void;
@@ -38,11 +38,19 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
       selectedBook?.status
         ? {
             status: selectedBook.status,
-            startDate: selectedBook.startedAt ?? null,
-            finishDate: selectedBook.finishedAt ?? null,
+            pageProgress: selectedBook.pageProgress ?? null,
+            notes: selectedBook.notes ?? null,
+            startedAt: selectedBook.startedAt ?? null,
+            finishedAt: selectedBook.finishedAt ?? null,
           }
         : undefined,
-    [selectedBook?.finishedAt, selectedBook?.startedAt, selectedBook?.status],
+    [
+      selectedBook?.finishedAt,
+      selectedBook?.notes,
+      selectedBook?.pageProgress,
+      selectedBook?.startedAt,
+      selectedBook?.status,
+    ],
   );
 
   const openTrackModal = React.useCallback(
@@ -71,8 +79,10 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
           ? {
               ...book,
               status: data.status,
-              startedAt: data.startDate,
-              finishedAt: data.finishDate,
+              pageProgress: data.pageProgress,
+              notes: data.notes,
+              startedAt: data.startedAt,
+              finishedAt: data.finishedAt,
             }
           : book,
       );

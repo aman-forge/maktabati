@@ -50,7 +50,7 @@ const READING_STATUS: StatusType[] = [
 const YEAR_MIN = 700;
 const YEAR_MAX = 2026;
 const PAGE_MIN = 0;
-const PAGE_MAX = 5000;
+const PAGE_MAX = 1000;
 
 // ---------------------------------------------------------------------------
 // Types

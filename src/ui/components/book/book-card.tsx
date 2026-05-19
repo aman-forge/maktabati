@@ -1,5 +1,5 @@
 import { useBookTracking } from "@features/books/context/book-tracking-context";
-import { CalendarBlankIcon } from "@phosphor-icons/react";
+import { BookIcon, CalendarBlankIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
@@ -68,21 +68,22 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
           <StatusBadge
             status={effectiveStatus}
             variant="pill"
-            className="absolute -bottom-2 left-1/2 h-5 -translate-x-1/2 px-1.5 text-[10px] transition-all duration-300 group-hover:bottom-1 group-hover:opacity-0"
+            className="absolute -bottom-2 left-1/2 h-5 -translate-x-1/2 px-1.5 text-[10px] opacity-0 transition-all duration-300 sm:opacity-100 sm:group-hover:bottom-1 sm:group-hover:opacity-0"
           />
         )}
-        {/* Track button — fades in on hover, bottom-left */}
+        {/* Track button — always available on touch screens, hover-revealed on larger screens. */}
         <div
           className={cn(
             "absolute bottom-2.5 left-2.5 z-20",
-            "opacity-0 translate-y-2 scale-90",
-            "group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100",
+            "opacity-100 translate-y-0 scale-100",
+            "sm:opacity-0 sm:translate-y-2 sm:scale-90",
+            "sm:group-hover:opacity-100 sm:group-hover:translate-y-0 sm:group-hover:scale-100",
             "transition-all duration-200 ease-out",
             "flex flex-row justify-between w-[calc(100%-20px)]",
           )}
         >
           {/* Footer: status pill OR genres, always with year/pages */}
-          <div className="mt-1 flex flex-wrap items-center gap-1">
+          <div className="relative top-2 flex flex-wrap items-center gap-1">
             {/* Year + pages — always shown */}
             {book.publicationYear && (
               <span className="bg-muted/60 text-muted-foreground flex h-5 items-center gap-1 rounded-md px-1.5 text-[10px] tabular-nums">
@@ -91,8 +92,9 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
               </span>
             )}
             {book.pageCount && (
-              <span className="bg-muted/60 text-muted-foreground h-5 rounded-md px-1.5 text-[10px] leading-5 tabular-nums">
-                {book.pageCount} ص
+              <span className="bg-muted/60 text-muted-foreground flex h-5 items-center gap-1 rounded-md px-1.5 text-[10px] leading-5 tabular-nums">
+                <BookIcon />
+                {book.pageCount}
               </span>
             )}
 
