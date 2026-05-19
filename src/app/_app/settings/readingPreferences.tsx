@@ -11,17 +11,12 @@ import {
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Label } from "@shadcn/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@shadcn/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shadcn/select";
 import { Slider } from "@shadcn/slider";
 import { Switch } from "@shadcn/switch";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+
 import {
   SectionWrapper,
   SettingCard,
@@ -33,9 +28,20 @@ export const Route = createFileRoute("/_app/settings/readingPreferences")({
 });
 
 const allGenres = [
-  "خيال", "أدب تاريخي", "غموض", "خيال علمي", "أدب روائي",
-  "رومانسية", "إثارة", "رعب", "غير خيالي", "سيرة ذاتية",
-  "تطوير الذات", "شعر", "رواية مصورة", "أدب الشباب",
+  "خيال",
+  "أدب تاريخي",
+  "غموض",
+  "خيال علمي",
+  "أدب روائي",
+  "رومانسية",
+  "إثارة",
+  "رعب",
+  "غير خيالي",
+  "سيرة ذاتية",
+  "تطوير الذات",
+  "شعر",
+  "رواية مصورة",
+  "أدب الشباب",
 ];
 
 const bookFormats = [
@@ -48,7 +54,11 @@ const bookFormats = [
 function ReadingPreferencesSection() {
   const [readingGoal, setReadingGoal] = useState(52);
   const [selectedGenres, setSelectedGenres] = useState([
-    "خيال", "أدب تاريخي", "غموض", "خيال علمي", "أدب روائي",
+    "خيال",
+    "أدب تاريخي",
+    "غموض",
+    "خيال علمي",
+    "أدب روائي",
   ]);
   const [selectedFormats, setSelectedFormats] = useState(["print", "ebook"]);
   const [preferences, setPreferences] = useState({
@@ -81,17 +91,14 @@ function ReadingPreferencesSection() {
   const progress = Math.round((booksRead / readingGoal) * 100);
 
   return (
-    <SectionWrapper
-      title="تفضيلات القراءة"
-      description="خصّص تجربة القراءة وحدد أهدافك السنوية."
-    >
+    <SectionWrapper title="تفضيلات القراءة" description="خصّص تجربة القراءة وحدد أهدافك السنوية.">
       {/* Reading Goal */}
       <SettingCard
         title="تحدي القراءة السنوي"
         description="حدد هدفك وتابع تقدمك."
         icon={<TargetIcon className="h-4 w-4" weight="fill" />}
         action={
-          <Badge className="gap-1 bg-primary/15 text-primary border-primary/30 text-[11px]">
+          <Badge className="bg-primary/15 text-primary border-primary/30 gap-1 text-[11px]">
             <TargetIcon className="h-3 w-3" weight="fill" />
             {booksRead}/{readingGoal} كتاب
           </Badge>
@@ -99,24 +106,24 @@ function ReadingPreferencesSection() {
       >
         <div className="space-y-5">
           {/* Goal display */}
-          <div className="flex items-center gap-4 rounded-xl bg-muted/40 px-4 py-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/15">
-              <BookOpenIcon className="h-7 w-7 text-primary" weight="fill" />
+          <div className="bg-muted/40 flex items-center gap-4 rounded-xl px-4 py-4">
+            <div className="bg-primary/15 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl">
+              <BookOpenIcon className="text-primary h-7 w-7" weight="fill" />
             </div>
             <div className="flex-1">
               <div className="flex items-end gap-1">
-                <span className="text-3xl font-black text-foreground">{readingGoal}</span>
-                <span className="mb-1 text-sm text-muted-foreground">كتاب / السنة</span>
+                <span className="text-foreground text-3xl font-black">{readingGoal}</span>
+                <span className="text-muted-foreground mb-1 text-sm">كتاب / السنة</span>
               </div>
               {/* Progress bar */}
               <div className="mt-2">
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                <div className="text-muted-foreground flex items-center justify-between text-[11px]">
                   <span>{booksRead} منجز</span>
                   <span>{progress}%</span>
                 </div>
-                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="bg-muted mt-1 h-1.5 w-full overflow-hidden rounded-full">
                   <div
-                    className="h-full rounded-full bg-primary transition-all"
+                    className="bg-primary h-full rounded-full transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -140,7 +147,7 @@ function ReadingPreferencesSection() {
               step={1}
               className="**:[[role=slider]]:bg-primary"
             />
-            <div className="flex justify-between text-[10px] text-muted-foreground">
+            <div className="text-muted-foreground flex justify-between text-[10px]">
               <span>1</span>
               <span>25</span>
               <span>50</span>
@@ -149,7 +156,7 @@ function ReadingPreferencesSection() {
             </div>
           </div>
 
-          <Button size="sm" className="w-full h-9 text-sm">
+          <Button size="sm" className="h-9 w-full text-sm">
             تحديث الهدف
           </Button>
         </div>
@@ -175,8 +182,8 @@ function ReadingPreferencesSection() {
                   isSelected
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : isDisabled
-                      ? "cursor-not-allowed border border-border/40 text-muted-foreground/40"
-                      : "border border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
+                      ? "border-border/40 text-muted-foreground/40 cursor-not-allowed border"
+                      : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary border"
                 }`}
               >
                 {isSelected && <CheckIcon className="h-3 w-3" weight="bold" />}
@@ -221,12 +228,32 @@ function ReadingPreferencesSection() {
         description="خصّص كيفية عرض تقدم قراءتك."
         icon={<ListBulletsIcon className="h-4 w-4" weight="fill" />}
       >
-        <div className="divide-y divide-border/40">
+        <div className="divide-border/40 divide-y">
           {[
-            { key: "showPageCount" as const, label: "عرض عدد الصفحات", desc: "عرض إجمالي الصفحات على بطاقات الكتب", icon: <ListBulletsIcon className="h-4 w-4" /> },
-            { key: "trackReadingTime" as const, label: "تتبع وقت القراءة", desc: "تسجيل الوقت المستغرق في كل جلسة", icon: <ClockIcon className="h-4 w-4" /> },
-            { key: "showProgress" as const, label: "عرض نسبة التقدم", desc: "عرض نسبة الإكمال على الكتب", icon: null },
-            { key: "autoMarkComplete" as const, label: "التحديد التلقائي كمكتمل", desc: "تحديد الكتب كمنتهية عند 100%", icon: null },
+            {
+              key: "showPageCount" as const,
+              label: "عرض عدد الصفحات",
+              desc: "عرض إجمالي الصفحات على بطاقات الكتب",
+              icon: <ListBulletsIcon className="h-4 w-4" />,
+            },
+            {
+              key: "trackReadingTime" as const,
+              label: "تتبع وقت القراءة",
+              desc: "تسجيل الوقت المستغرق في كل جلسة",
+              icon: <ClockIcon className="h-4 w-4" />,
+            },
+            {
+              key: "showProgress" as const,
+              label: "عرض نسبة التقدم",
+              desc: "عرض نسبة الإكمال على الكتب",
+              icon: null,
+            },
+            {
+              key: "autoMarkComplete" as const,
+              label: "التحديد التلقائي كمكتمل",
+              desc: "تحديد الكتب كمنتهية عند 100%",
+              icon: null,
+            },
           ].map((item) => (
             <SettingRow key={item.key} label={item.label} description={item.desc}>
               <div className="flex items-center gap-3">
@@ -248,7 +275,7 @@ function ReadingPreferencesSection() {
         icon={<StarIcon className="h-4 w-4" weight="fill" />}
       >
         <Select defaultValue="5-star">
-          <SelectTrigger className="h-9 bg-muted/30 text-sm">
+          <SelectTrigger className="bg-muted/30 h-9 text-sm">
             <SelectValue placeholder="اختر مقياس التقييم" />
           </SelectTrigger>
           <SelectContent className="bg-popover">
@@ -272,11 +299,11 @@ function ReadingPreferencesSection() {
       >
         <div className="space-y-4">
           <div className="grid gap-1.5">
-            <Label htmlFor="language" className="text-xs font-semibold text-foreground">
+            <Label htmlFor="language" className="text-foreground text-xs font-semibold">
               اللغة المفضلة
             </Label>
             <Select defaultValue="ar">
-              <SelectTrigger id="language" className="h-9 bg-muted/30 text-sm">
+              <SelectTrigger id="language" className="bg-muted/30 h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-popover">
@@ -294,10 +321,7 @@ function ReadingPreferencesSection() {
               </SelectContent>
             </Select>
           </div>
-          <SettingRow
-            label="عرض العناوين الأصلية"
-            description="عرض عناوين الكتب بلغتها الأصلية"
-          >
+          <SettingRow label="عرض العناوين الأصلية" description="عرض عناوين الكتب بلغتها الأصلية">
             <Switch defaultChecked />
           </SettingRow>
         </div>
@@ -309,16 +333,14 @@ function ReadingPreferencesSection() {
         description="اقتراحات كتب مخصصة مدعومة بالذكاء الاصطناعي."
         icon={<SparkleIcon className="h-4 w-4" weight="fill" />}
       >
-        <div className="flex items-center justify-between rounded-xl bg-gradient-to-l from-primary/10 to-violet-500/10 px-4 py-4 ring-1 ring-primary/20">
+        <div className="from-primary/10 ring-primary/20 flex items-center justify-between rounded-xl bg-gradient-to-l to-violet-500/10 px-4 py-4 ring-1">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/20">
-              <SparkleIcon className="h-5 w-5 text-primary" weight="fill" />
+            <div className="bg-primary/20 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
+              <SparkleIcon className="text-primary h-5 w-5" weight="fill" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-foreground">
-                توصيات ذكية بالذكاء الاصطناعي
-              </p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
+              <p className="text-foreground text-sm font-semibold">توصيات ذكية بالذكاء الاصطناعي</p>
+              <p className="text-muted-foreground mt-0.5 text-[11px]">
                 اقتراحات مخصصة بناءً على تاريخ قراءتك وذوقك
               </p>
             </div>

@@ -1,5 +1,6 @@
-import { SettingsSidebar } from "@/features/settings/components/settings-sidebar";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+
+import { SettingsSidebar } from "@/features/settings/components/settings-sidebar";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsLayout,

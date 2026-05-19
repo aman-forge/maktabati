@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import {
   BellIcon,
   ChatCircleDotsIcon,
@@ -13,7 +12,9 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+
 import {
   SectionWrapper,
   SettingCard,
@@ -85,30 +86,25 @@ function SocialSection() {
       >
         <div className="space-y-3">
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="البحث عن قراء..."
-              className="h-9 bg-muted/30 pe-9 text-sm"
-            />
+            <MagnifyingGlassIcon className="text-muted-foreground absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+            <Input placeholder="البحث عن قراء..." className="bg-muted/30 h-9 pe-9 text-sm" />
           </div>
           <div className="space-y-2">
             {suggestedFriends.map((friend) => (
               <div
                 key={friend.username}
-                className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/20 px-3 py-3 transition-colors hover:bg-muted/30"
+                className="border-border/60 bg-muted/20 hover:bg-muted/30 flex items-center justify-between rounded-xl border px-3 py-3 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9 ring-2 ring-border/40">
+                  <Avatar className="ring-border/40 h-9 w-9 ring-2">
                     <AvatarImage src={friend.avatar} />
                     <AvatarFallback className="bg-muted text-xs">
                       {friend.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">
-                      {friend.name}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-foreground text-sm font-semibold">{friend.name}</p>
+                    <p className="text-muted-foreground text-[11px]">
                       @{friend.username} • {friend.mutualBooks} كتاب مشترك
                     </p>
                   </div>
@@ -123,7 +119,7 @@ function SocialSection() {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full text-xs text-primary hover:bg-primary/5"
+            className="text-primary hover:bg-primary/5 w-full text-xs"
           >
             عرض المزيد من المقترحين
           </Button>
@@ -136,7 +132,7 @@ function SocialSection() {
         description="تحكم في كيفية تفاعل الآخرين معك."
         icon={<UsersIcon className="h-4 w-4" weight="fill" />}
       >
-        <div className="divide-y divide-border/40">
+        <div className="divide-border/40 divide-y">
           {[
             {
               key: "autoFollow" as const,
@@ -160,10 +156,7 @@ function SocialSection() {
             <SettingRow key={item.key} label={item.label} description={item.desc}>
               <div className="flex items-center gap-3">
                 <span className="text-muted-foreground">{item.icon}</span>
-                <Switch
-                  checked={social[item.key]}
-                  onCheckedChange={() => toggle(item.key)}
-                />
+                <Switch checked={social[item.key]} onCheckedChange={() => toggle(item.key)} />
               </div>
             </SettingRow>
           ))}
@@ -181,7 +174,7 @@ function SocialSection() {
           description="نشر المراجعات والإنجازات تلقائياً على حساباتك المرتبطة"
         >
           <div className="flex items-center gap-3">
-            <ShareNetworkIcon className="h-4 w-4 text-muted-foreground" />
+            <ShareNetworkIcon className="text-muted-foreground h-4 w-4" />
             <Switch
               checked={social.shareToSocial}
               onCheckedChange={() => toggle("shareToSocial")}
@@ -196,9 +189,7 @@ function SocialSection() {
         description="إدارة عضوياتك في نوادي القراءة."
         icon={<UsersIcon className="h-4 w-4" weight="fill" />}
         action={
-          <Badge className="bg-primary/15 text-primary border-primary/30 text-[10px]">
-            2 نشط
-          </Badge>
+          <Badge className="bg-primary/15 text-primary border-primary/30 text-[10px]">2 نشط</Badge>
         }
       >
         <div className="space-y-2">
@@ -206,20 +197,18 @@ function SocialSection() {
             <div
               key={club.name}
               className={`flex items-center justify-between rounded-xl border px-4 py-3 ${
-                club.active
-                  ? "border-primary/30 bg-primary/5"
-                  : "border-border/60 bg-muted/20"
+                club.active ? "border-primary/30 bg-primary/5" : "border-border/60 bg-muted/20"
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${club.active ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                <div
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${club.active ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}
+                >
                   <UsersIcon className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">
-                    {club.name}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-foreground text-sm font-semibold">{club.name}</p>
+                  <p className="text-muted-foreground text-[11px]">
                     {club.members} عضو • اللقاء القادم: {club.nextMeeting}
                   </p>
                 </div>
@@ -227,7 +216,7 @@ function SocialSection() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground h-7 w-7 p-0"
               >
                 <BellIcon className="h-4 w-4" />
               </Button>
