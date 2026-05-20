@@ -32,6 +32,7 @@ import { Route as PublicAuthPathnameRouteImport } from './app/_public/auth/$path
 import { Route as PublicAccountPathnameRouteImport } from './app/_public/account.$pathname'
 import { Route as PublicMarketingTermsRouteImport } from './app/_public/_marketing/terms'
 import { Route as PublicMarketingPrivacyRouteImport } from './app/_public/_marketing/privacy'
+import { Route as PublicMarketingChangelogRouteImport } from './app/_public/_marketing/changelog'
 import { Route as PublicMarketingAboutRouteImport } from './app/_public/_marketing/about'
 import { Route as AppSettingsSocialRouteImport } from './app/_app/settings/social'
 import { Route as AppSettingsReadingPreferencesRouteImport } from './app/_app/settings/readingPreferences'
@@ -162,6 +163,12 @@ const PublicMarketingPrivacyRoute = PublicMarketingPrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicMarketingChangelogRoute =
+  PublicMarketingChangelogRouteImport.update({
+    id: '/_marketing/changelog',
+    path: '/changelog',
+    getParentRoute: () => PublicRoute,
+  } as any)
 const PublicMarketingAboutRoute = PublicMarketingAboutRouteImport.update({
   id: '/_marketing/about',
   path: '/about',
@@ -254,6 +261,7 @@ export interface FileRoutesByFullPath {
   '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
   '/settings/social': typeof AppSettingsSocialRoute
   '/about': typeof PublicMarketingAboutRoute
+  '/changelog': typeof PublicMarketingChangelogRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
   '/account/$pathname': typeof PublicAccountPathnameRoute
@@ -291,6 +299,7 @@ export interface FileRoutesByTo {
   '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
   '/settings/social': typeof AppSettingsSocialRoute
   '/about': typeof PublicMarketingAboutRoute
+  '/changelog': typeof PublicMarketingChangelogRoute
   '/privacy': typeof PublicMarketingPrivacyRoute
   '/terms': typeof PublicMarketingTermsRoute
   '/account/$pathname': typeof PublicAccountPathnameRoute
@@ -330,6 +339,7 @@ export interface FileRoutesById {
   '/_app/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
   '/_app/settings/social': typeof AppSettingsSocialRoute
   '/_public/_marketing/about': typeof PublicMarketingAboutRoute
+  '/_public/_marketing/changelog': typeof PublicMarketingChangelogRoute
   '/_public/_marketing/privacy': typeof PublicMarketingPrivacyRoute
   '/_public/_marketing/terms': typeof PublicMarketingTermsRoute
   '/_public/account/$pathname': typeof PublicAccountPathnameRoute
@@ -370,6 +380,7 @@ export interface FileRouteTypes {
     | '/settings/readingPreferences'
     | '/settings/social'
     | '/about'
+    | '/changelog'
     | '/privacy'
     | '/terms'
     | '/account/$pathname'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/settings/readingPreferences'
     | '/settings/social'
     | '/about'
+    | '/changelog'
     | '/privacy'
     | '/terms'
     | '/account/$pathname'
@@ -445,6 +457,7 @@ export interface FileRouteTypes {
     | '/_app/settings/readingPreferences'
     | '/_app/settings/social'
     | '/_public/_marketing/about'
+    | '/_public/_marketing/changelog'
     | '/_public/_marketing/privacy'
     | '/_public/_marketing/terms'
     | '/_public/account/$pathname'
@@ -635,6 +648,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicMarketingPrivacyRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/_marketing/changelog': {
+      id: '/_public/_marketing/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof PublicMarketingChangelogRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/_marketing/about': {
       id: '/_public/_marketing/about'
       path: '/about'
@@ -811,6 +831,7 @@ const PublicPublisherIdRouteWithChildren =
 
 interface PublicRouteChildren {
   PublicMarketingAboutRoute: typeof PublicMarketingAboutRoute
+  PublicMarketingChangelogRoute: typeof PublicMarketingChangelogRoute
   PublicMarketingPrivacyRoute: typeof PublicMarketingPrivacyRoute
   PublicMarketingTermsRoute: typeof PublicMarketingTermsRoute
   PublicAccountPathnameRoute: typeof PublicAccountPathnameRoute
@@ -830,6 +851,7 @@ interface PublicRouteChildren {
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicMarketingAboutRoute: PublicMarketingAboutRoute,
+  PublicMarketingChangelogRoute: PublicMarketingChangelogRoute,
   PublicMarketingPrivacyRoute: PublicMarketingPrivacyRoute,
   PublicMarketingTermsRoute: PublicMarketingTermsRoute,
   PublicAccountPathnameRoute: PublicAccountPathnameRoute,
