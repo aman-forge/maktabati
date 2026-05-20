@@ -21,11 +21,7 @@ import { books } from "./books";
 // ENUMS
 // ─────────────────────────────────────────────────────────────
 
-export const profileVisibilityEnum = pgEnum("profile_visibility", [
-  "public",
-  "private",
-  "followers_only", // enforced at app layer until follows table exists
-]);
+export const profileVisibilityEnum = pgEnum("profile_visibility", ["public", "private", "friends"]);
 
 // ─────────────────────────────────────────────────────────────
 // PROFILES
