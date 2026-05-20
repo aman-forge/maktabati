@@ -15,7 +15,9 @@ ALTER TABLE "publishers" ADD COLUMN "country" text;--> statement-breakpoint
 ALTER TABLE "series" ADD COLUMN "author_id" uuid;--> statement-breakpoint
 ALTER TABLE "user_books" ADD COLUMN "page_progress" integer;--> statement-breakpoint
 ALTER TABLE "user_books" ADD COLUMN "notes" text;--> statement-breakpoint
-ALTER TABLE "profiles" ADD COLUMN "username" text NOT NULL;--> statement-breakpoint
+ALTER TABLE "profiles" ADD COLUMN "username" text;--> statement-breakpoint
+UPDATE "profiles" SET "username" = 'user_' || substr(md5("id"), 1, 12) WHERE "username" IS NULL;--> statement-breakpoint
+ALTER TABLE "profiles" ALTER COLUMN "username" SET NOT NULL;--> statement-breakpoint
 ALTER TABLE "reviews" ADD COLUMN "spoiler" boolean DEFAULT false NOT NULL;--> statement-breakpoint
 ALTER TABLE "books" DROP COLUMN "translator";--> statement-breakpoint
 ALTER TABLE "books" ALTER COLUMN "original_language" SET NOT NULL;--> statement-breakpoint
