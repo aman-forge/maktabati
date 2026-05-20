@@ -27,8 +27,8 @@ import {
 import { Slider } from "@shadcn/slider";
 import * as React from "react";
 
-import { BOOK_TOPICS, PUBLISHERS } from "@/db/constants/books";
-import type { ReadingStatus } from "@/features/books/types";
+import { BOOK_TOPICS } from "@/features/books/constants";
+import type { PublisherOption, ReadingStatus } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -69,6 +69,7 @@ interface FilterDialogProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
   onReset: () => void;
+  publisherOptions: PublisherOption[];
   showReadingStatus?: boolean;
 }
 
@@ -83,6 +84,7 @@ export function FilterDialog({
   filters,
   onFiltersChange,
   onReset,
+  publisherOptions,
   showReadingStatus = true,
 }: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
@@ -166,6 +168,10 @@ export function FilterDialog({
       (topic) => topic.label.toLowerCase().includes(q) || topic.value.toLowerCase().includes(q),
     );
   }, [topicSearch]);
+  const publisherLabels = React.useMemo(
+    () => new Map(publisherOptions.map((publisher) => [publisher.id, publisher.name])),
+    [publisherOptions],
+  );
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -266,14 +272,14 @@ export function FilterDialog({
                     <CommandList>
                       <CommandEmpty>لا يوجد</CommandEmpty>
                       <CommandGroup>
-                        {PUBLISHERS.map((publisher) => {
-                          const isSelected = localFilters.publishers.includes(publisher);
+                        {publisherOptions.map((publisher) => {
+                          const isSelected = localFilters.publishers.includes(publisher.id);
 
                           return (
                             <CommandItem
-                              key={publisher}
-                              value={publisher}
-                              onSelect={() => toggleArrayFilter("publishers", publisher)}
+                              key={publisher.id}
+                              value={publisher.name}
+                              onSelect={() => toggleArrayFilter("publishers", publisher.id)}
                               className="cursor-pointer rounded-2xl px-0"
                             >
                               <div
@@ -286,7 +292,7 @@ export function FilterDialog({
                               >
                                 {isSelected && <CheckIcon className="size-3" />}
                               </div>
-                              {publisher}
+                              {publisher.name}
                             </CommandItem>
                           );
                         })}
@@ -304,7 +310,7 @@ export function FilterDialog({
                       onClick={() => toggleArrayFilter("publishers", publisher)}
                       className="cursor-pointer"
                     >
-                      {publisher}
+                      {publisherLabels.get(publisher) ?? publisher}
                       <XIcon className="h-3 w-3" />
                     </Badge>
                   ))}

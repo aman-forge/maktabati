@@ -12,15 +12,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import { BOOK_GENRES } from "@/db/constants/books";
 import { useUser } from "@/features/auth/use-user";
-import type { RatingSummary } from "@/features/book/book-page-mock";
+import { BOOK_GENRES } from "@/features/books/constants";
 import { useBookTracking } from "@/features/books/context/book-tracking-context";
 import { getUserBookTracking } from "@/features/books/server/library";
-import { DetailedBookType, getStatusConfig } from "@/features/books/types";
+import { DetailedBookType, type BookRatingSummary, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
-// ─── Fake friends data — replace with real query ──────────────────────────────
+// TODO: Replace with database-backed friends activity once social/follow tables exist.
 const FAKE_FRIENDS = [
   {
     id: "1",
@@ -64,7 +63,7 @@ export function BookHero({
   ratingSummary,
 }: {
   book: DetailedBookType;
-  ratingSummary: RatingSummary;
+  ratingSummary: BookRatingSummary;
 }) {
   const [liked, setLiked] = useState(false);
   const { openTrackModal } = useBookTracking();
@@ -101,6 +100,11 @@ export function BookHero({
     () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
     [book.originalLanguage],
   );
+  const primaryAuthor = book.primaryAuthor;
+  const translatorLabel = useMemo(
+    () => book.translators.map((translator) => translator.name).join("، "),
+    [book.translators],
+  );
 
   const genreLabels = useMemo(
     () =>
@@ -121,7 +125,7 @@ export function BookHero({
           value: book.pageCount ? `${book.pageCount} صفحة` : undefined,
         },
         { label: "اللغة الأصلية", value: languageLabel },
-        { label: "المترجم", value: book.translator },
+        { label: "المترجم", value: translatorLabel },
         {
           label: "السلسلة",
           value: book.series
@@ -131,7 +135,7 @@ export function BookHero({
             : undefined,
         },
       ].filter((item) => item.value) as { label: string; value: string }[],
-    [book, languageLabel],
+    [book, languageLabel, translatorLabel],
   );
 
   return (
@@ -208,8 +212,7 @@ export function BookHero({
 
             {/* Info column */}
             <div className="flex flex-col gap-6">
-              {/* Award pill — show if any */}
-              {/* Replace with real awards data */}
+              {/* TODO: Replace with database-backed awards once awards tables exist. */}
               <div className="flex w-fit items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200">
                 <TrophyIcon weight="duotone" className="size-3.5 text-amber-500" />
                 أفضل ترجمة عربية 2023
@@ -226,13 +229,17 @@ export function BookHero({
                   )}
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                     <span className="text-muted-foreground">بقلم</span>
-                    <Link
-                      to="/author/$id" // TODO: CHANGE TO SLUG?
-                      params={{ id: book.author?.slug ?? "" }}
-                      className="text-primary font-semibold hover:underline"
-                    >
-                      {book.author?.name ?? "غير معروف"}
-                    </Link>
+                    {primaryAuthor ? (
+                      <Link
+                        to="/author/$id"
+                        params={{ id: primaryAuthor.id }}
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        {primaryAuthor.name}
+                      </Link>
+                    ) : (
+                      <span className="text-primary font-semibold">غير معروف</span>
+                    )}
                     {book.series && (
                       <>
                         <span className="text-muted-foreground/50">·</span>

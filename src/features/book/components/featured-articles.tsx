@@ -3,14 +3,100 @@ import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react/dist/ssr";
 
-import type { FeaturedArticleItem, OfficialListItem } from "@/features/book/book-page-mock";
+import type { DetailedBookType } from "@/features/books/types";
 
-interface FeaturedArticlesProps {
-  articles?: FeaturedArticleItem[];
-  officialLists?: OfficialListItem[];
+interface FeaturedArticleItem {
+  id: string;
+  tag: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  readTime: string;
+  cover: string;
 }
 
-export function FeaturedArticles({ articles = [], officialLists = [] }: FeaturedArticlesProps) {
+interface OfficialListItem {
+  id: string;
+  title: string;
+  bookCount: number;
+  rank: number;
+  cover: string;
+}
+
+interface FeaturedArticlesProps {
+  book: DetailedBookType;
+}
+
+function getPlaceholderFeaturedArticles(book: DetailedBookType) {
+  // TODO: Replace with database-backed articles and editorial lists once publishing tables exist.
+  const cover = book.coverImageUrl ?? "/books/book.jpg";
+
+  return {
+    articles: [
+      {
+        id: "article-1",
+        tag: "تحليل",
+        title: `قراءة في ${book.title}`,
+        excerpt: "مساحة تحريرية مؤقتة لتحليل العمل وسياقه وأثره على تجربة القارئ العربي.",
+        author: "فريق مكتباتي",
+        readTime: "6 دقائق",
+        cover,
+      },
+      {
+        id: "article-2",
+        tag: "دليل قراءة",
+        title: "ماذا تقرأ بعد هذا الكتاب؟",
+        excerpt: "اقتراحات تحريرية مؤقتة تظهر هنا إلى أن تتوفر مقالات فعلية من قاعدة البيانات.",
+        author: "محررو مكتباتي",
+        readTime: "4 دقائق",
+        cover,
+      },
+      {
+        id: "article-3",
+        tag: "مقارنة",
+        title: "ملاحظات على الطبعة والترجمة",
+        excerpt: "نموذج محتوى مؤقت يحافظ على تجربة الصفحة لحين إضافة نظام المقالات.",
+        author: "فريق المحتوى",
+        readTime: "5 دقائق",
+        cover,
+      },
+    ] satisfies FeaturedArticleItem[],
+    officialLists: [
+      {
+        id: "official-1",
+        title: "مختارات مكتباتي لهذا الشهر",
+        bookCount: 30,
+        rank: 4,
+        cover,
+      },
+      {
+        id: "official-2",
+        title: "كتب نوصي بها لمحبي هذا التصنيف",
+        bookCount: 60,
+        rank: 12,
+        cover,
+      },
+      {
+        id: "official-3",
+        title: "قراءات طويلة لعشاق التفاصيل",
+        bookCount: 20,
+        rank: 7,
+        cover,
+      },
+      {
+        id: "official-4",
+        title: "أعمال بارزة في المكتبة العربية",
+        bookCount: 100,
+        rank: 16,
+        cover,
+      },
+    ] satisfies OfficialListItem[],
+  };
+}
+
+export function FeaturedArticles({ book }: FeaturedArticlesProps) {
+  const { articles, officialLists } = getPlaceholderFeaturedArticles(book);
+
   if (articles.length === 0 && officialLists.length === 0) return null;
 
   return (

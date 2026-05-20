@@ -230,7 +230,7 @@ export function TrackBookModal({
                 {book.title}
               </DialogTitle>
               <DialogDescription className="mt-0.5 text-sm text-white/50">
-                {book.author?.name}
+                {book.primaryAuthor?.name}
               </DialogDescription>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {book.publicationYear && (

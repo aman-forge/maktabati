@@ -38,7 +38,7 @@ export const Route = createFileRoute("/_app/settings/account")({
   component: AccountPage,
 });
 
-export function AccountPage() {
+function AccountPage() {
   const [email, setEmail] = useState("ahmed@example.com");
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 

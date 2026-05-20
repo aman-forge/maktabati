@@ -176,12 +176,18 @@ function Header() {
           ) : (
             <div className="flex items-center gap-2">
               <Button
+                type="button"
                 variant="ghost"
+                nativeButton={false}
                 render={<Link to="/auth/$pathname" params={{ pathname: "login" }} />}
               >
                 تسجيل الدخول
               </Button>
-              <Button render={<Link to="/auth/$pathname" params={{ pathname: "register" }} />}>
+              <Button
+                type="button"
+                nativeButton={false}
+                render={<Link to="/auth/$pathname" params={{ pathname: "register" }} />}
+              >
                 إنشاء حساب
               </Button>
             </div>

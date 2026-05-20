@@ -4,6 +4,8 @@ import * as z from "zod";
 export const env = createEnv({
   server: {
     DATABASE_URL: z.url(),
+    DATABASE_MIGRATION_URL: z.url().optional(),
+    DATABASE_URL_UNPOOLED: z.url().optional(),
     NEON_AUTH_BASE_URL: z.url(),
     NEON_AUTH_COOKIE_SECRET: z.string().min(32, "Secret should be at least 32 characters"),
   },

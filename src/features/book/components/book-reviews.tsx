@@ -4,7 +4,7 @@ import { Separator } from "@components/ui/separator";
 import { CaretDownIcon, ChatCircleIcon, StarIcon, ThumbsUpIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
-import type { BookReviewItem } from "@/features/book/book-page-mock";
+import type { BookReviewItem } from "@/features/books/types";
 
 const SORT_OPTIONS = ["الأكثر إعجابًا", "الأحدث", "الأعلى تقييمًا"] as const;
 
@@ -13,6 +13,7 @@ interface BookReviewsProps {
 }
 
 export function BookReviews({ reviews = [] }: BookReviewsProps) {
+  // TODO: Replace local helpful-state and zero like counts once review-like tables exist.
   const [sort, setSort] = useState<string>(SORT_OPTIONS[0]);
   const [showAll, setShowAll] = useState(false);
   const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set());
