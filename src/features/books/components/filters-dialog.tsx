@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  CaretUpDownIcon,
-  CheckIcon,
-  FunnelIcon,
-  StarIcon,
-  XIcon,
-} from "@phosphor-icons/react";
+import { CaretUpDownIcon, CheckIcon, FunnelIcon, StarIcon, XIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import {
@@ -32,7 +26,9 @@ import {
 } from "@shadcn/sheet";
 import { Slider } from "@shadcn/slider";
 import * as React from "react";
+
 import { BOOK_TOPICS, PUBLISHERS } from "@/db/constants/books";
+import type { ReadingStatus } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -40,21 +36,21 @@ import { cn } from "@/ui/lib/utils";
 // ---------------------------------------------------------------------------
 
 interface StatusType {
-  value: string;
+  value: ReadingStatus;
   label: string;
 }
 const READING_STATUS: StatusType[] = [
-  { value: "Unread", label: "غير مقروء" },
-  { value: "Reading", label: "يُقرأ الآن" },
-  { value: "Completed", label: "مكتمل" },
-  { value: "On Hold", label: "متوقف" },
-  { value: "Dropped", label: "متروك" },
+  { value: "want_to_read", label: "أخطط لقراءته" },
+  { value: "currently_reading", label: "قيد القراءة" },
+  { value: "completed", label: "مكتمل" },
+  { value: "on_hold", label: "متوقف" },
+  { value: "dropped", label: "متروك" },
 ] as const;
 
 const YEAR_MIN = 700;
 const YEAR_MAX = 2026;
 const PAGE_MIN = 0;
-const PAGE_MAX = 5000;
+const PAGE_MAX = 1000;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -66,16 +62,17 @@ export interface FilterState {
   ratingMin: number;
   publishers: string[];
   topics: string[];
-  readingStatus: string[];
+  readingStatus: ReadingStatus[];
 }
 
 interface FilterDialogProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
   onReset: () => void;
+  showReadingStatus?: boolean;
 }
 
-type ArrayFilterKey = "publishers" | "topics" | "readingStatus";
+type ArrayFilterKey = "publishers" | "topics";
 type RangeValue = [number, number];
 
 // ---------------------------------------------------------------------------
@@ -86,6 +83,7 @@ export function FilterDialog({
   filters,
   onFiltersChange,
   onReset,
+  showReadingStatus = true,
 }: FilterDialogProps) {
   const [open, setOpen] = React.useState(false);
   const [localFilters, setLocalFilters] = React.useState<FilterState>(filters);
@@ -110,21 +108,29 @@ export function FilterDialog({
     setOpen(false);
   }, [onReset]);
 
-  const toggleArrayFilter = React.useCallback(
-    (key: ArrayFilterKey, value: string) => {
-      setLocalFilters((prev) => {
-        const exists = prev[key].includes(value);
+  const toggleArrayFilter = React.useCallback((key: ArrayFilterKey, value: string) => {
+    setLocalFilters((prev) => {
+      const exists = prev[key].includes(value);
 
-        return {
-          ...prev,
-          [key]: exists
-            ? prev[key].filter((v) => v !== value)
-            : [...prev[key], value],
-        };
-      });
-    },
-    [],
-  );
+      return {
+        ...prev,
+        [key]: exists ? prev[key].filter((v) => v !== value) : [...prev[key], value],
+      };
+    });
+  }, []);
+
+  const toggleReadingStatus = React.useCallback((value: ReadingStatus) => {
+    setLocalFilters((prev) => {
+      const exists = prev.readingStatus.includes(value);
+
+      return {
+        ...prev,
+        readingStatus: exists
+          ? prev.readingStatus.filter((status) => status !== value)
+          : [...prev.readingStatus, value],
+      };
+    });
+  }, []);
 
   const setRangeValue = React.useCallback(
     (key: "yearRange" | "pageRange", value: number | readonly number[]) => {
@@ -142,16 +148,14 @@ export function FilterDialog({
 
   const activeFiltersCount = React.useMemo(() => {
     let count = 0;
-    if (filters.yearRange[0] !== YEAR_MIN || filters.yearRange[1] !== YEAR_MAX)
-      count++;
-    if (filters.pageRange[0] !== PAGE_MIN || filters.pageRange[1] !== PAGE_MAX)
-      count++;
+    if (filters.yearRange[0] !== YEAR_MIN || filters.yearRange[1] !== YEAR_MAX) count++;
+    if (filters.pageRange[0] !== PAGE_MIN || filters.pageRange[1] !== PAGE_MAX) count++;
     if (filters.ratingMin > 0) count++;
     if (filters.publishers.length > 0) count++;
     if (filters.topics.length > 0) count++;
-    if (filters.readingStatus.length > 0) count++;
+    if (showReadingStatus && filters.readingStatus.length > 0) count++;
     return count;
-  }, [filters]);
+  }, [filters, showReadingStatus]);
 
   const filteredTopics = React.useMemo(() => {
     if (!topicSearch) return BOOK_TOPICS;
@@ -159,9 +163,7 @@ export function FilterDialog({
     const q = topicSearch.toLowerCase();
 
     return BOOK_TOPICS.filter(
-      (topic) =>
-        topic.label.toLowerCase().includes(q) ||
-        topic.value.toLowerCase().includes(q),
+      (topic) => topic.label.toLowerCase().includes(q) || topic.value.toLowerCase().includes(q),
     );
   }, [topicSearch]);
 
@@ -176,11 +178,11 @@ export function FilterDialog({
               activeFiltersCount > 0 && "text-primary border-primary/30",
             )}
           >
-            <FunnelIcon weight="bold" className="w-4 h-4" />
+            <FunnelIcon weight="bold" className="h-4 w-4" />
             <span className="hidden sm:inline">تصفية</span>
 
             {activeFiltersCount > 0 && (
-              <Badge className="absolute -top-1.5 -right-1.5 h-5 w-5 p-0 text-[10px] justify-center">
+              <Badge className="absolute -top-1.5 -right-1.5 h-5 w-5 justify-center p-0 text-[10px]">
                 {activeFiltersCount}
               </Badge>
             )}
@@ -190,16 +192,16 @@ export function FilterDialog({
 
       <SheetContent
         side="right"
-        className="w-full sm:max-w-md p-0 flex flex-col rounded-2xl m-4 max-h-[calc(100vh-2rem)] overflow-hidden"
+        className="m-4 flex max-h-[calc(100vh-2rem)] w-full flex-col overflow-hidden rounded-2xl p-0 sm:max-w-md"
         dir="rtl"
       >
-        <SheetHeader className="px-6 pt-6 pb-4 border-b shrink-0">
+        <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
           <SheetTitle>تصفية متقدمة</SheetTitle>
           <SheetDescription>حسّن بحثك باستخدام فلاتر دقيقة</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex-1 max-h-[calc(100vh-11rem)]">
-          <div className="px-6 pt-5 space-y-7">
+        <ScrollArea className="max-h-[calc(100vh-11rem)] flex-1">
+          <div className="space-y-7 px-6 pt-5">
             <RangeSection
               label="سنة النشر"
               value={localFilters.yearRange}
@@ -222,28 +224,22 @@ export function FilterDialog({
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">
-                  الحد الأدنى للتقييم
-                </Label>
+                <Label className="text-sm font-medium">الحد الأدنى للتقييم</Label>
                 {localFilters.ratingMin > 0 ? (
-                  <span className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded-md">
-                    <StarIcon
-                      weight="fill"
-                      className="w-3 h-3 text-amber-400"
-                    />
+                  <span className="text-primary bg-primary/10 flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium">
+                    <StarIcon weight="fill" className="h-3 w-3 text-amber-400" />
                     {localFilters.ratingMin}+
                   </span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">
-                    أي تقييم
-                  </span>
+                  <span className="text-muted-foreground text-xs">أي تقييم</span>
                 )}
               </div>
               <Slider
                 value={[localFilters.ratingMin]}
-                onValueChange={([v]) =>
-                  setLocalFilters((prev) => ({ ...prev, ratingMin: v ?? 0 }))
-                }
+                onValueChange={(value) => {
+                  if (!Array.isArray(value)) return;
+                  setLocalFilters((prev) => ({ ...prev, ratingMin: value[0] ?? 0 }));
+                }}
                 min={0}
                 max={5}
                 step={0.5}
@@ -256,39 +252,28 @@ export function FilterDialog({
               <Popover open={publisherOpen} onOpenChange={setPublisherOpen}>
                 <PopoverTrigger
                   render={
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between"
-                    >
+                    <Button variant="outline" className="w-full justify-between">
                       {localFilters.publishers.length > 0
                         ? `${localFilters.publishers.length} محدد`
                         : "اختر الناشرين..."}
-                      <CaretUpDownIcon className="w-4 h-4 opacity-50" />
+                      <CaretUpDownIcon className="h-4 w-4 opacity-50" />
                     </Button>
                   }
                 />
-                <PopoverContent
-                  align="center"
-                  dir="rtl"
-                  side="left"
-                  className="p-0"
-                >
+                <PopoverContent align="center" dir="rtl" side="left" className="p-0">
                   <Command>
                     <CommandInput placeholder="ابحث..." />
                     <CommandList>
                       <CommandEmpty>لا يوجد</CommandEmpty>
                       <CommandGroup>
                         {PUBLISHERS.map((publisher) => {
-                          const isSelected =
-                            localFilters.publishers.includes(publisher);
+                          const isSelected = localFilters.publishers.includes(publisher);
 
                           return (
                             <CommandItem
                               key={publisher}
                               value={publisher}
-                              onSelect={() =>
-                                toggleArrayFilter("publishers", publisher)
-                              }
+                              onSelect={() => toggleArrayFilter("publishers", publisher)}
                               className="cursor-pointer rounded-2xl px-0"
                             >
                               <div
@@ -320,19 +305,21 @@ export function FilterDialog({
                       className="cursor-pointer"
                     >
                       {publisher}
-                      <XIcon className="w-3 h-3" />
+                      <XIcon className="h-3 w-3" />
                     </Badge>
                   ))}
                 </div>
               )}
             </div>
 
-            <ChipSection
-              label="حالة القراءة"
-              items={READING_STATUS}
-              selected={localFilters.readingStatus}
-              onToggle={(v) => toggleArrayFilter("readingStatus", v)}
-            />
+            {showReadingStatus && (
+              <ChipSection
+                label="حالة القراءة"
+                items={READING_STATUS}
+                selected={localFilters.readingStatus}
+                onToggle={toggleReadingStatus}
+              />
+            )}
 
             <div className="space-y-3">
               <Label>الوسوم</Label>
@@ -343,7 +330,7 @@ export function FilterDialog({
                 onChange={(e) => setTopicSearch(e.target.value)}
               />
 
-              <div className="flex flex-wrap gap-2 max-h-48 pb-2 overflow-y-scroll">
+              <div className="flex max-h-48 flex-wrap gap-2 overflow-y-scroll pb-2">
                 {filteredTopics.map((tag) => (
                   <button
                     type="button"
@@ -364,7 +351,7 @@ export function FilterDialog({
           </div>
         </ScrollArea>
 
-        <SheetFooter className="flex gap-2 p-2 border-t h-13 flex-row shrink-0">
+        <SheetFooter className="flex h-13 shrink-0 flex-row gap-2 border-t p-2">
           <Button variant="outline" onClick={handleReset} className="flex-1">
             إعادة تعيين
           </Button>
@@ -402,21 +389,15 @@ function RangeSection({
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <Label className="text-sm font-medium">{label}</Label>
-        <span className="text-xs text-primary font-medium tabular-nums bg-primary/10 px-2 py-1 rounded-md">
+        <span className="text-primary bg-primary/10 rounded-md px-2 py-1 text-xs font-medium tabular-nums">
           {value[0]} - {value[1]}
           {suffix}
         </span>
       </div>
 
-      <Slider
-        value={value}
-        onValueChange={onChange}
-        min={min}
-        max={max}
-        step={step}
-      />
+      <Slider value={value} onValueChange={onChange} min={min} max={max} step={step} />
 
-      <div className="flex justify-between text-[10px] text-muted-foreground">
+      <div className="text-muted-foreground flex justify-between text-[10px]">
         <span>{min}</span>
         <span>
           {max}
@@ -435,8 +416,8 @@ function ChipSection({
 }: {
   label: string;
   items: StatusType[];
-  selected: string[];
-  onToggle: (v: string) => void;
+  selected: ReadingStatus[];
+  onToggle: (v: ReadingStatus) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -449,9 +430,7 @@ function ChipSection({
             onClick={() => onToggle(item.value)}
             className={cn(
               "px-3 py-1.5 rounded-full text-sm transition-colors",
-              selected.includes(item.value)
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted",
+              selected.includes(item.value) ? "bg-primary text-primary-foreground" : "bg-muted",
             )}
           >
             {item.label}

@@ -10,7 +10,7 @@ function Auth() {
   const isSignUpView = pathname.includes("sign-up") || pathname.includes("register");
 
   return (
-    <div className="flex items-center justify-center h-full min-h-[calc(100vh-var(--header-height))]">
+    <div className="flex h-full min-h-[calc(100vh-var(--header-height))] items-center justify-center">
       <AuthView
         pathname={pathname}
         classNames={{

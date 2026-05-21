@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_public/account/$pathname")({
 function Account() {
   const { pathname } = Route.useParams();
   return (
-    <div className="flex items-start py-12 h-full min-h-[calc(100vh-var(--header-height))] container mx-auto">
+    <div className="container mx-auto flex h-full min-h-[calc(100vh-var(--header-height))] items-start py-12">
       <AccountView pathname={pathname} />
     </div>
   );

@@ -1,146 +1,194 @@
 import { Button } from "@components/ui/button";
-import { Separator } from "@components/ui/separator";
-import { ArrowLeftIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowLeftIcon,
+  BookOpenIcon,
+  MapPinIcon,
+  UsersThreeIcon,
+  BookmarkSimpleIcon,
+  CalendarBlankIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
-import type { BookType } from "../../books/server/get-books";
+
+import { DetailedBookType } from "@/features/books/types";
 
 interface AuthorCardProps {
-  author?: NonNullable<BookType>["author"];
+  author?: NonNullable<DetailedBookType>["author"];
 }
 
 export function AuthorCard({ author }: AuthorCardProps) {
   if (!author) return null;
-  const stats = [
-    { label: "مواليد", value: author.birthYear || "لا يوجد" },
-    { label: "عدد الكتب", value: author.totalBooks },
-    { label: "المتابعين", value: "403.609" },
-  ];
-  return (
-    <section id="author" dir="rtl" className="flex flex-col gap-6 sticky top-6">
-      <h2
-        className="text-xl font-bold text-foreground"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        عن المؤلف
-      </h2>
 
-      <div className="rounded-2xl overflow-hidden bg-card border border-border">
-        {/* Banner */}
-        <div className="h-20 relative bg-primary overflow-hidden">
+  const stats = [
+    {
+      label: "مواليد",
+      value: author.birthYear || "—",
+      icon: <CalendarBlankIcon weight="duotone" className="h-4 w-4" />,
+    },
+    {
+      label: "الكتب",
+      value: author.totalBooks,
+      icon: <BookmarkSimpleIcon weight="duotone" className="h-4 w-4" />,
+    },
+    {
+      label: "المتابعون",
+      value: "403K",
+      icon: <UsersThreeIcon weight="duotone" className="h-4 w-4" />,
+    },
+  ];
+
+  return (
+    <section
+      id="author"
+      dir="rtl"
+      className="sticky top-7 flex max-h-[calc(100vh-40px)] flex-col gap-2"
+    >
+      {/* Section header */}
+      <div className="flex items-center gap-2">
+        <div className="bg-primary h-5 w-1 rounded-full" />
+        <h2
+          className="text-foreground text-lg font-bold tracking-tight"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          عن المؤلف
+        </h2>
+      </div>
+
+      <div className="bg-card border-border overflow-hidden overflow-y-scroll! rounded-2xl border shadow-sm transition-shadow hover:shadow-md">
+        {/* ── Banner ── */}
+        <div className="relative h-24 overflow-hidden">
+          {/* Rich gradient banner instead of flat primary */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-20"
+            className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse at 70% 50%, hsl(var(--primary) / 0.6) 0%, transparent 60%)",
+                "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.7) 50%, hsl(var(--primary) / 0.4) 100%)",
             }}
+          />
+          {/* Decorative circles for depth */}
+          <div
+            className="absolute -top-6 -left-6 h-28 w-28 rounded-full opacity-20"
+            style={{ background: "hsl(var(--primary-foreground))" }}
+          />
+          <div
+            className="absolute -bottom-4 left-16 h-16 w-16 rounded-full opacity-10"
+            style={{ background: "hsl(var(--primary-foreground))" }}
+          />
+          <div
+            className="absolute top-2 right-8 h-10 w-10 rounded-full opacity-15"
+            style={{ background: "hsl(var(--primary-foreground))" }}
           />
         </div>
 
-        <div className="px-2 pb-6">
-          {/* Avatar + follow row */}
-          <div className="flex items-end justify-between -mt-10 mb-5">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 ring-[3px] ring-card shadow-md">
-              <img
-                src={author.profileImage || "/books/نهج الملوك.png"}
-                alt={author.name || "لا يوجد"}
-                className="object-cover"
-              />
+        <div className="px-5 pb-6">
+          {/* ── Avatar + CTA row ── */}
+          <div className="-mt-20 mb-4 flex items-center justify-center">
+            {/* Avatar with status ring */}
+            <div className="relative">
+              <div
+                className="ring-card w-full overflow-hidden rounded-2xl shadow-lg ring-[3px]"
+                style={{ borderRadius: "16px" }}
+              >
+                <img
+                  src={author.profileImage ?? "/books/book.jpg"}
+                  alt={author.name ?? "المؤلف"}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
-            <Button
-              variant="default"
-              size="default"
-              // className="gap-1.5 rounded-xl mt-0.5 bg-primary"
-            >
-              معرفة المزيد
-              <ArrowLeftIcon weight="bold" className="w-3.5 h-3.5" />
-            </Button>
           </div>
 
-          {/* Name, location, stats, bio, tags */}
-          <div className="flex flex-col gap-4">
+          <div className="mb-4 flex items-center justify-between">
+            {/* ── Name & location ── */}
             <div>
               <h3
-                className="text-lg font-bold text-foreground"
+                className="text-foreground text-base leading-tight font-bold"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                {author.name || "لا يوجد"}
+                {author.name || "—"}
               </h3>
-              <p className="text-sm text-muted-foreground">{author.nationality || "لا يوجد"}</p>
+              {author.nationality && (
+                <p className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[13px]">
+                  <MapPinIcon weight="fill" className="h-3.5 w-3.5 shrink-0 opacity-60" />
+                  {author.nationality}
+                </p>
+              )}
             </div>
-
-            {/* Stats */}
-            <div className="flex items-center gap-6">
-              {stats.map(({ label, value }) => (
-                <div key={label} className="flex flex-col items-center">
-                  <span className="text-[12px] tracking-wider font-semibold text-muted-foreground/80">
-                    {label}
-                  </span>
-                  <span className="text-lg font-semibold text-foreground tabular-nums  ">
-                    {value}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-xs leading-relaxed text-muted-foreground text-justify line-clamp-6">
-              {author.bio || "لا يوجد"}
-            </p>
-
-            {/*<div className="flex flex-wrap gap-2 mt-1">
-              {author.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="outline"
-                  className="text-xs rounded-full border-border text-muted-foreground"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>*/}
+            <Button
+              variant="outline"
+              render={
+                <Link to="/author/$id" params={{ id: author.id }}>
+                  <span>معرفة المزيد</span>
+                  <ArrowLeftIcon weight="bold" className="h-3.5 w-3.5" />
+                </Link>
+              }
+            />
           </div>
 
-          <Separator className="my-5 bg-border" />
+          {/* ── Stats ── */}
+          <div className="bg-muted/50 border-border/50 mb-4 flex items-stretch overflow-hidden rounded-xl border divide-x-reverse">
+            {stats.map(({ label, value, icon }) => (
+              <div
+                key={label}
+                className="flex flex-1 flex-col items-center gap-1 border-l px-3 py-2.5 last:border-l-0"
+              >
+                <span className="text-primary opacity-80">{icon}</span>
+                <span className="text-foreground text-sm leading-none font-bold tabular-nums">
+                  {value}
+                </span>
+                <span className="text-muted-foreground text-[11px] leading-none">{label}</span>
+              </div>
+            ))}
+          </div>
 
-          {/* Other books */}
-          <div className="flex flex-col gap-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              أعمال أخرى للمؤلف
+          {/* ── Bio ── */}
+          {author.bio && (
+            <p className="text-muted-foreground mb-5 line-clamp-5 text-right text-[13px] leading-[1.7]">
+              {author.bio}
             </p>
+          )}
 
-            <div className="flex gap-3 w-full justify-between">
-              {author?.books?.map((b) => {
-                return (
-                  <Link
-                    key={b.id}
-                    to={"/book/$id"}
-                    params={{ id: b.id }}
-                    className="group flex flex-col gap-1.5 shrink-0"
-                  >
-                    <img
-                      className="aspect-3/4 object-cover relative w-14 rounded-lg overflow-hidden shadow-sm transition-shadow group-hover:shadow-md"
-                      src={b.coverImageUrl || "/books/نهج الملوك.png"}
-                      alt={b.title || "لا يوجد"}
-                    />
-                    <p className="text-[11px] leading-tight line-clamp-2 text-balance text-muted-foreground max-w-14">
-                      {b.title || "لا يوجد"}
-                    </p>
-                  </Link>
-                );
-              })}
-              {/* "View all" slot */}
-              {/* TODO: we should make author`s book page */}
-              <Link to="/" className="flex flex-col items-center gap-1.5 w-14 shrink-0">
-                <div
-                  className="w-14 rounded-lg flex items-center justify-center bg-secondary border border-dashed border-border text-muted-foreground transition-colors hover:text-foreground"
-                  style={{ aspectRatio: "2/3" }}
-                >
-                  <BookOpenIcon className="w-5 h-5" />
+          {/* ── Divider with label ── */}
+          <div className="relative mb-4 flex items-center">
+            <div className="border-border flex-1 border-t" />
+            <span className="text-muted-foreground bg-card mx-3 text-[11px] font-semibold tracking-widest whitespace-nowrap uppercase">
+              أعمال أخرى
+            </span>
+            <div className="border-border flex-1 border-t" />
+          </div>
+
+          {/* ── Other books grid ── */}
+          <div className="flex w-full items-start gap-2">
+            {author?.books?.slice(0, 3).map((b) => (
+              <Link
+                key={b.id}
+                to="/book/$id"
+                params={{ id: b.id }}
+                className="group flex flex-1 flex-col items-center gap-1.5"
+              >
+                <div className="relative w-full overflow-hidden rounded-xl shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md">
+                  <img
+                    className="aspect-2/3 w-full object-cover"
+                    src={b.coverImageUrl ?? "/books/book.jpg"}
+                    alt={b.title ?? "كتاب"}
+                  />
+                  {/* Hover overlay */}
+                  <div className="bg-primary/10 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-                <p className="text-[11px] leading-tight text-center text-muted-foreground">
-                  عرض الكل
+                <p className="text-muted-foreground group-hover:text-foreground line-clamp-2 w-full text-center text-[11px] leading-tight transition-colors">
+                  {b.title || "—"}
                 </p>
               </Link>
-            </div>
+            ))}
+
+            {/* "View all" tile */}
+            <Link to="/" className="group flex flex-1 flex-col items-center gap-1.5">
+              <div className="bg-muted border-border hover:border-primary/40 hover:bg-primary/5 flex aspect-2/3 w-full items-center justify-center rounded-xl border border-dashed transition-all duration-200 group-hover:-translate-y-0.5">
+                <BookOpenIcon className="text-muted-foreground group-hover:text-primary h-5 w-5 transition-colors" />
+              </div>
+              <p className="text-muted-foreground group-hover:text-foreground text-center text-[11px] leading-tight transition-colors">
+                عرض الكل
+              </p>
+            </Link>
           </div>
         </div>
       </div>

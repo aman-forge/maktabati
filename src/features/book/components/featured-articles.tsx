@@ -2,6 +2,7 @@ import { Badge } from "@components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 import { Separator } from "@components/ui/separator";
 import { ArrowLeftIcon, FileTextIcon, ListIcon } from "@phosphor-icons/react/dist/ssr";
+
 import type { FeaturedArticleItem, OfficialListItem } from "@/features/book/book-page-mock";
 
 interface FeaturedArticlesProps {
@@ -18,14 +19,14 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
         <div className="flex flex-col gap-7">
           <div className="flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <FileTextIcon className="w-4 h-4 text-primary" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+              <div className="mb-1 flex items-center gap-2">
+                <FileTextIcon className="text-primary h-4 w-4" />
+                <span className="text-primary text-xs font-semibold tracking-widest uppercase">
                   من فوليو
                 </span>
               </div>
               <h2
-                className="text-2xl font-bold text-foreground"
+                className="text-foreground text-2xl font-bold"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 مقالات ومميزات
@@ -33,37 +34,37 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
             </div>
             <a
               href="/"
-              className="hidden sm:flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-70"
+              className="text-primary hidden items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70 sm:flex"
             >
-              جميع المقالات <ArrowLeftIcon className="w-4 h-4" />
+              جميع المقالات <ArrowLeftIcon className="h-4 w-4" />
             </a>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid gap-6 sm:grid-cols-3">
             {articles.map((article) => (
               <a key={article.id} href="/" className="group">
-                <Card className="overflow-hidden rounded-2xl border-border transition-all group-hover:-translate-y-0.5">
-                  <div className="relative w-full overflow-hidden aspect-video">
+                <Card className="border-border overflow-hidden rounded-2xl transition-all group-hover:-translate-y-0.5">
+                  <div className="relative aspect-video w-full overflow-hidden">
                     <img
                       src={article.cover}
                       alt={article.title}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-background/70 to-transparent" />
-                    <Badge className="absolute top-3 right-3 text-[10px] px-2.5 py-0.5 font-semibold">
+                    <div className="from-background/70 absolute inset-0 bg-linear-to-t to-transparent" />
+                    <Badge className="absolute top-3 right-3 px-2.5 py-0.5 text-[10px] font-semibold">
                       {article.tag}
                     </Badge>
                   </div>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm leading-snug text-balance line-clamp-2 group-hover:underline underline-offset-2">
+                    <CardTitle className="line-clamp-2 text-sm leading-snug text-balance underline-offset-2 group-hover:underline">
                       {article.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <p className="text-xs leading-relaxed line-clamp-2 text-muted-foreground">
+                    <p className="text-muted-foreground line-clamp-2 text-xs leading-relaxed">
                       {article.excerpt}
                     </p>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
                       <span className="font-medium">{article.author}</span>
                       <span>·</span>
                       <span>{article.readTime}</span>
@@ -82,14 +83,14 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
         <div className="flex flex-col gap-7">
           <div className="flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <ListIcon className="w-4 h-4 text-primary" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+              <div className="mb-1 flex items-center gap-2">
+                <ListIcon className="text-primary h-4 w-4" />
+                <span className="text-primary text-xs font-semibold tracking-widest uppercase">
                   من فوليو
                 </span>
               </div>
               <h2
-                className="text-2xl font-bold text-foreground"
+                className="text-foreground text-2xl font-bold"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 مميز في قوائمنا الرسمية
@@ -97,31 +98,31 @@ export function FeaturedArticles({ articles = [], officialLists = [] }: Featured
             </div>
             <a
               href="/"
-              className="hidden sm:flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-70"
+              className="text-primary hidden items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70 sm:flex"
             >
-              جميع القوائم <ArrowLeftIcon className="w-4 h-4" />
+              جميع القوائم <ArrowLeftIcon className="h-4 w-4" />
             </a>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {officialLists.map(({ id, title, bookCount, rank, cover }) => (
               <a key={id} href="/" className="group">
-                <Card className="rounded-2xl border-border transition-all group-hover:-translate-y-0.5">
-                  <CardContent className="p-4 flex items-center gap-4">
+                <Card className="border-border rounded-2xl transition-all group-hover:-translate-y-0.5">
+                  <CardContent className="flex items-center gap-4 p-4">
                     <div className="relative shrink-0">
-                      <div className="relative w-14 rounded-xl overflow-hidden shadow-sm aspect-2/3">
+                      <div className="relative aspect-2/3 w-14 overflow-hidden rounded-xl shadow-sm">
                         <img src={cover} alt={title} className="object-cover" />
                       </div>
-                      <div className="absolute -top-2 -left-2 size-5 rounded-full flex items-center justify-center text-[10px] font-bold bg-secondary text-secondary-foreground">
+                      <div className="bg-secondary text-secondary-foreground absolute -top-2 -left-2 flex size-5 items-center justify-center rounded-full text-[10px] font-bold">
                         #{rank}
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 min-w-0">
-                      <p className="text-xs font-semibold leading-snug line-clamp-3 text-balance group-hover:underline underline-offset-2 text-foreground">
+                    <div className="flex min-w-0 flex-col gap-1">
+                      <p className="text-foreground line-clamp-3 text-xs leading-snug font-semibold text-balance underline-offset-2 group-hover:underline">
                         {title}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">{bookCount} كتاب</p>
+                      <p className="text-muted-foreground text-[11px]">{bookCount} كتاب</p>
                     </div>
                   </CardContent>
                 </Card>

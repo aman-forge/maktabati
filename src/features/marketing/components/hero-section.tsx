@@ -179,7 +179,7 @@ const CoverArt = memo(function CoverArt({ book, className = "", showMeta = true 
           >
             {book.genre}
           </p>
-          <h3 className="mb-0.5 line-clamp-2 text-sm font-bold leading-snug text-white">
+          <h3 className="mb-0.5 line-clamp-2 text-sm leading-snug font-bold text-white">
             {book.title}
           </h3>
           <p className="text-xs text-white/55">{book.author}</p>
@@ -228,7 +228,7 @@ function useAutoSlider(length: number) {
 
 export function HeroSection() {
   const [query, setQuery] = useState("");
-  const { index: activeIdx, goTo } = useAutoSlider(FEATURED.length);
+  const { index: activeIdx } = useAutoSlider(FEATURED.length); // goTo
 
   const book = FEATURED[activeIdx];
 
@@ -246,7 +246,7 @@ export function HeroSection() {
   );
 
   return (
-    <section dir="rtl" className="relative w-full overflow-hidden bg-background">
+    <section dir="rtl" className="bg-background relative w-full overflow-hidden">
       {/* Ambient background */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 transition-all duration-700 ease-in-out"
@@ -269,14 +269,14 @@ export function HeroSection() {
       />
 
       {/* Top meta bar */}
-      <div className="border-b border-border/50">
+      <div className="border-border/50 border-b">
         <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-8 lg:px-12">
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2">
             <TrendUpIcon className="h-3.5 w-3.5 shrink-0" />
             <span className="text-xs">الموسم الربيعي · 2025</span>
           </div>
 
-          <div className="hidden items-center gap-3 text-xs text-muted-foreground sm:flex">
+          <div className="text-muted-foreground hidden items-center gap-3 text-xs sm:flex">
             <span>+2.4 مليون كتاب</span>
             <Separator orientation="vertical" className="h-3" />
             <span>منصة القراء العرب</span>
@@ -291,20 +291,20 @@ export function HeroSection() {
           <div className="order-1 flex flex-col gap-7 text-center md:text-start lg:order-1">
             <Badge
               variant="outline"
-              className="mx-auto self-start gap-1.5 rounded-full border-border/70 px-3 py-1.5 text-xs font-semibold md:mx-0"
+              className="border-border/70 mx-auto gap-1.5 self-start rounded-full px-3 py-1.5 text-xs font-semibold md:mx-0"
             >
-              <SparkleIcon weight="fill" className="h-3 w-3 text-primary" />
+              <SparkleIcon weight="fill" className="text-primary h-3 w-3" />
               كونك القرائي
             </Badge>
 
             <div className="flex flex-col gap-6">
-              <h1 className="text-5xl font-semibold leading-[0.6] tracking-tight text-foreground lg:text-6xl">
+              <h1 className="text-foreground text-5xl leading-[0.6] font-semibold tracking-tight lg:text-6xl">
                 اكتشف كتباً
               </h1>
 
-              <div className="mt-1 text-5xl font-semibold leading-[0.6] tracking-tight text-foreground lg:text-6xl">
+              <div className="text-foreground mt-1 text-5xl leading-[0.6] font-semibold tracking-tight lg:text-6xl">
                 <em
-                  className="not-italic font-medium transition-colors duration-700"
+                  className="font-medium not-italic transition-colors duration-700"
                   style={{ color: book.accent }}
                 >
                   تسكن فيك
@@ -312,19 +312,19 @@ export function HeroSection() {
                 للأبد.
               </div>
 
-              <p className="mx-auto mt-2 max-w-100 text-[15px] leading-relaxed text-muted-foreground md:mx-0 sm:text-base">
-                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابنِ رفّاً رقمياً يعكس شخصيتك — مع مجتمع من
-                القراء العرب.
+              <p className="text-muted-foreground mx-auto mt-2 max-w-100 text-[15px] leading-relaxed sm:text-base md:mx-0">
+                تتبّع قراءاتك، واكتشف مؤلفين جدد، وابنِ رفّاً رقمياً يعكس شخصيتك — مع مجتمع من القراء
+                العرب.
               </p>
             </div>
 
             <div className="flex items-center justify-center gap-6 sm:gap-10 md:justify-start">
               {STATS.map(({ icon: Icon, value, label }) => (
                 <div key={label} className="flex flex-col gap-0.5">
-                  <span className="text-xl font-black leading-none tabular-nums text-foreground sm:text-2xl">
+                  <span className="text-foreground text-xl leading-none font-black tabular-nums sm:text-2xl">
                     {value}
                   </span>
-                  <div className="flex items-center gap-1 text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-1">
                     <Icon className="h-3 w-3 shrink-0" />
                     <span className="text-xs">{label}</span>
                   </div>
@@ -334,7 +334,7 @@ export function HeroSection() {
 
             <div className="mx-auto flex w-full max-w-120 flex-col gap-2.5 md:mx-0">
               <div className="group relative flex items-center">
-                <MagnifyingGlassIcon className="pointer-events-none absolute right-3.5 z-10 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-foreground" />
+                <MagnifyingGlassIcon className="text-muted-foreground group-focus-within:text-foreground pointer-events-none absolute right-3.5 z-10 h-4 w-4 transition-colors" />
                 <Input
                   dir="rtl"
                   type="text"
@@ -342,7 +342,7 @@ export function HeroSection() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="ابحث بالعنوان أو المؤلف أو ISBN…"
                   aria-label="ابحث عن كتب"
-                  className="h-12 rounded-xl border-border/70 bg-card pl-26 pr-10 text-sm transition-all placeholder:text-muted-foreground/50 focus-visible:ring-2"
+                  className="border-border/70 bg-card placeholder:text-muted-foreground/50 h-12 rounded-xl pr-10 pl-26 text-sm transition-all focus-visible:ring-2"
                   style={searchRingStyle}
                 />
                 <Button
@@ -355,13 +355,13 @@ export function HeroSection() {
               </div>
 
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="ml-0.5 shrink-0 text-[11px] text-muted-foreground/50">رائج:</span>
+                <span className="text-muted-foreground/50 ml-0.5 shrink-0 text-[11px]">رائج:</span>
                 {TRENDING_TAGS.map((tag) => (
                   <button
                     key={tag}
                     type="button"
                     onClick={() => setQuery(tag)}
-                    className="rounded-full border border-border/60 px-2.5 py-1 text-[11px] text-muted-foreground transition-all hover:border-border hover:bg-muted hover:text-foreground"
+                    className="border-border/60 text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground rounded-full border px-2.5 py-1 text-[11px] transition-all"
                   >
                     {tag}
                   </button>
@@ -381,7 +381,7 @@ export function HeroSection() {
               <Button
                 variant="ghost"
                 size="lg"
-                className="h-11 rounded-xl gap-2 px-5 text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground h-11 gap-2 rounded-xl px-5 text-sm font-medium"
               >
                 تصفّح المكتبة
                 <ArrowLeftIcon className="h-4 w-4" />
@@ -407,7 +407,7 @@ export function HeroSection() {
 
               {/* Main cover */}
               <div
-                className="relative z-10 transition-all duration-500 right-[-4%]"
+                className="relative right-[-4%] z-10 transition-all duration-500"
                 style={{ width: "min(350px, 72vw)" }}
               >
                 <CoverArt
@@ -420,7 +420,7 @@ export function HeroSection() {
               {/* Floating card: Genre + Score */}
               <div className="absolute top-0 right-[8%] z-20 flex flex-col gap-2 sm:right-[12%] lg:right-[4%]">
                 <div
-                  className="self-start backdrop-blur-sm rounded-full px-3 py-1.5 text-[11px] font-bold tracking-wide transition-all duration-500"
+                  className="self-start rounded-full px-3 py-1.5 text-[11px] font-bold tracking-wide backdrop-blur-sm transition-all duration-500"
                   style={{
                     background: book.accentBg,
                     color: book.accent,
@@ -430,7 +430,7 @@ export function HeroSection() {
                   {book.genre}
                 </div>
 
-                <div className="min-w-32.5 rounded-2xl border border-border/60 bg-card/95 px-4 py-3.5 shadow-xl backdrop-blur-md">
+                <div className="border-border/60 bg-card/95 min-w-32.5 rounded-2xl border px-4 py-3.5 shadow-xl backdrop-blur-md">
                   <div className="mb-2 flex items-center gap-0.5">
                     {stars.map((filled, i) => (
                       <StarIcon
@@ -445,18 +445,18 @@ export function HeroSection() {
                   </div>
 
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl font-black leading-none tabular-nums text-foreground">
+                    <span className="text-foreground text-2xl leading-none font-black tabular-nums">
                       {book.score}
                     </span>
-                    <span className="text-xs text-muted-foreground">/ 5</span>
+                    <span className="text-muted-foreground text-xs">/ 5</span>
                   </div>
 
-                  <p className="mt-1 text-[11px] text-muted-foreground">{book.reviews} مراجعة</p>
+                  <p className="text-muted-foreground mt-1 text-[11px]">{book.reviews} مراجعة</p>
                 </div>
               </div>
 
               {/* Floating card: Reading progress */}
-              <div className="absolute bottom-0 left-[8%] z-20 min-w-40 max-w-45 rounded-2xl border border-border/60 bg-card/95 px-4 py-4 shadow-xl backdrop-blur-md sm:left-[12%] lg:left-[8%]">
+              <div className="border-border/60 bg-card/95 absolute bottom-0 left-[8%] z-20 max-w-45 min-w-40 rounded-2xl border px-4 py-4 shadow-xl backdrop-blur-md sm:left-[12%] lg:left-[8%]">
                 <div
                   className="mb-3 inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase"
                   style={{ color: book.accent }}
@@ -468,13 +468,13 @@ export function HeroSection() {
                   يقرأ الآن
                 </div>
 
-                <p className="mb-0.5 line-clamp-2 text-sm font-bold leading-tight text-card-foreground">
+                <p className="text-card-foreground mb-0.5 line-clamp-2 text-sm leading-tight font-bold">
                   {book.title}
                 </p>
-                <p className="mb-3 text-xs text-muted-foreground">{book.author}</p>
+                <p className="text-muted-foreground mb-3 text-xs">{book.author}</p>
 
                 <div className="space-y-1.5">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="bg-muted h-1.5 overflow-hidden rounded-full">
                     <div
                       className="h-full rounded-full transition-all duration-700 ease-out"
                       style={{
@@ -485,7 +485,7 @@ export function HeroSection() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-muted-foreground">التقدم</span>
+                    <span className="text-muted-foreground text-[10px]">التقدم</span>
                     <span
                       className="text-[11px] font-bold tabular-nums"
                       style={{ color: book.accent }}
@@ -497,12 +497,12 @@ export function HeroSection() {
               </div>
 
               {/* Floating pill: Reader count */}
-              <div className="absolute bottom-8 right-[6%] z-20 flex items-center gap-2 rounded-full border border-border/60 bg-card/95 px-3.5 py-2 shadow-lg backdrop-blur-md sm:right-[10%] lg:right-[6%]">
-                <UsersThreeIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                <span className="text-xs font-bold tabular-nums text-foreground">
+              <div className="border-border/60 bg-card/95 absolute right-[6%] bottom-8 z-20 flex items-center gap-2 rounded-full border px-3.5 py-2 shadow-lg backdrop-blur-md sm:right-[10%] lg:right-[6%]">
+                <UsersThreeIcon className="text-muted-foreground h-3.5 w-3.5 shrink-0" />
+                <span className="text-foreground text-xs font-bold tabular-nums">
                   {book.readers}
                 </span>
-                <span className="text-[11px] text-muted-foreground">قارئ</span>
+                <span className="text-muted-foreground text-[11px]">قارئ</span>
               </div>
             </div>
 
@@ -577,9 +577,9 @@ export function HeroSection() {
       </div>
 
       {/* Bottom feature strip */}
-      <div className="border-t border-border/50">
+      <div className="border-border/50 border-t">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-8 lg:px-12">
-          <div className="flex items-center gap-0 overflow-x-auto scrollbar-none">
+          <div className="flex scrollbar-none items-center gap-0 overflow-x-auto">
             {[
               { icon: BookOpenIcon, text: "تتبّع قراءاتك بسهولة" },
               { icon: UsersThreeIcon, text: "انضم لمجتمع القراء" },
@@ -588,9 +588,9 @@ export function HeroSection() {
             ].map(({ icon: Icon, text }, i) => (
               <div key={text} className="flex shrink-0 items-center">
                 {i > 0 ? <Separator orientation="vertical" className="mx-5 h-3 shrink-0" /> : null}
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
-                  <span className="whitespace-nowrap text-xs">{text}</span>
+                <div className="text-muted-foreground flex items-center gap-2">
+                  <Icon className="text-primary h-3.5 w-3.5 shrink-0" />
+                  <span className="text-xs whitespace-nowrap">{text}</span>
                 </div>
               </div>
             ))}

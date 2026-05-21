@@ -1,4 +1,4 @@
-import type { BookType } from "@/features/books/server/get-books";
+import { DetailedBookType } from "@/features/books/types";
 
 export interface RatingSummary {
   average: number;
@@ -72,7 +72,7 @@ export interface BookPageMockData {
   editions: BibliographicEdition[];
 }
 
-export function getBookPageMock(book: BookType): BookPageMockData {
+export function getBookPageMock(book: DetailedBookType): BookPageMockData {
   const cover = book.coverImageUrl ?? "/books/نهج الملوك.png";
 
   return {

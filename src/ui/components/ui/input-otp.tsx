@@ -3,6 +3,7 @@
 import { MinusIcon } from "@phosphor-icons/react";
 import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
+
 import { cn } from "@/ui/lib/utils";
 
 function InputOTP({
@@ -62,7 +63,7 @@ function InputOTPSlot({
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
         </div>
       )}
     </div>

@@ -1,0 +1,31 @@
+import { z } from "zod";
+
+import { readingStatusEnum } from "@/db/tables";
+
+export const uuidSchema = z.string().uuid();
+
+export const bookSearchSchema = z.object({
+  q: z.string().max(100).optional(),
+  author: z.string().max(100).optional(),
+  genres: z.array(z.string()).optional().catch(undefined),
+  sort: z.enum(["newest", "oldest", "title-asc", "title-desc"]).default("newest"),
+  view: z.enum(["grid", "detailed", "list"]).default("grid"),
+  minYear: z.number().optional(),
+  maxYear: z.number().optional(),
+  minPages: z.number().optional(),
+  maxPages: z.number().optional(),
+  ratingMin: z.number().optional(),
+  publishers: z.array(z.string()).optional().catch(undefined),
+  topics: z.array(z.string()).optional().catch(undefined),
+  readingStatus: z.array(z.enum(readingStatusEnum.enumValues)).optional().catch(undefined),
+  page: z.number().int().min(1).default(1),
+});
+
+export const bookSearchInputSchema = bookSearchSchema.extend({
+  // Temporary auth boundary: Neon Auth does not yet give this TanStack Start app
+  // a reliable server-session primitive, so client code passes the current user id.
+  userId: z.string().min(1).optional(),
+});
+
+export type BookSearch = z.infer<typeof bookSearchSchema>;
+export type BookSearchInput = z.infer<typeof bookSearchInputSchema>;

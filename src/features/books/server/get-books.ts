@@ -13,18 +13,20 @@ import {
   type SQL,
   sql,
 } from "drizzle-orm";
-import { bookSearchSchema } from "@/app/_public/discover/books";
+
 import { db } from "@/db";
-import { authors, books } from "@/db/tables";
-import { uuidSchema } from "@/ui/lib/validators";
+import { authors, books, userBooks } from "@/db/tables";
+import { bookSearchInputSchema } from "@/features/books/lib/validators";
+
+import type { BookCardType, DetailedBookType } from "../types";
 
 // ==== Home/Browse Page ==== //
 export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
-  return db.query.books.findMany({
+  return (await db.query.books.findMany({
     limit: 10,
     with: { author: true },
     orderBy: { publicationDate: "desc" },
-  });
+  })) as BookCardType[];
 });
 
 // ==== Discovery Page ==== //
@@ -36,8 +38,15 @@ const ORDER_MAP = {
   "title-desc": desc(books.title),
 } satisfies Record<string, SQL>;
 
+const ORDER_MAP = {
+  newest: desc(books.publicationYear),
+  oldest: asc(books.publicationYear),
+  "title-asc": asc(books.title),
+  "title-desc": desc(books.title),
+} satisfies Record<string, SQL>;
+
 export const searchBooks = createServerFn({ method: "GET" })
-  .inputValidator(bookSearchSchema)
+  .inputValidator(bookSearchInputSchema)
   .handler(async ({ data }) => {
     const conditions: SQL[] = [];
 
@@ -58,11 +67,17 @@ export const searchBooks = createServerFn({ method: "GET" })
     if (data.genres?.length) conditions.push(arrayOverlaps(books.genres, data.genres));
     if (data.topics?.length) conditions.push(arrayOverlaps(books.topics, data.topics));
     if (data.publishers?.length) conditions.push(inArray(books.publisherId, data.publishers));
+    if (data.userId && data.readingStatus?.length) {
+      conditions.push(inArray(userBooks.status, data.readingStatus));
+    }
 
     const page = data.page ?? 1;
     const offset = (page - 1) * PAGE_SIZE;
     const orderBy = ORDER_MAP[data.sort] ?? ORDER_MAP.newest;
     const where = conditions.length ? and(...conditions) : undefined;
+    const trackingJoin = data.userId
+      ? and(eq(userBooks.bookId, books.id), eq(userBooks.userId, data.userId))
+      : sql`false`;
 
     const rows = await db
       .select({
@@ -78,8 +93,14 @@ export const searchBooks = createServerFn({ method: "GET" })
         originalLanguage: books.originalLanguage,
         originalTitle: books.originalTitle,
         genres: books.genres,
+        topics: books.topics,
         createdAt: books.createdAt,
         updatedAt: books.updatedAt,
+        status: userBooks.status,
+        pageProgress: userBooks.pageProgress,
+        notes: userBooks.notes,
+        startedAt: userBooks.startedAt,
+        finishedAt: userBooks.finishedAt,
         author: {
           id: authors.id,
           name: authors.name,
@@ -88,27 +109,29 @@ export const searchBooks = createServerFn({ method: "GET" })
         total: sql<string>`count(*) over()`,
       })
       .from(books)
-      .leftJoin(authors, eq(books.authorId, authors.id))
+      .innerJoin(authors, eq(books.authorId, authors.id))
+      .leftJoin(userBooks, trackingJoin)
       .where(where)
       .orderBy(orderBy, desc(books.id))
       .limit(PAGE_SIZE)
       .offset(offset);
 
     const total = Number(rows[0]?.total ?? 0);
+    const resultBooks: BookCardType[] = rows.map(({ total: _total, ...book }) => book);
 
     return {
-      books: rows,
+      books: resultBooks,
       total,
       hasMore: page * PAGE_SIZE < total,
     };
   });
 
-export type SearchBooksResult = Awaited<ReturnType<typeof searchBooks>>;
-export type BookCardBook = SearchBooksResult["books"][number];
-
 export const getBookById = createServerFn({ method: "GET" })
-  .inputValidator(uuidSchema)
+  .inputValidator((data: string) => data)
   .handler(async ({ data: bookId }) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(bookId)) return null;
+
     const book = await db.query.books.findFirst({
       where: { id: bookId },
       with: {
@@ -130,7 +153,5 @@ export const getBookById = createServerFn({ method: "GET" })
       },
     });
 
-    return book ?? null;
+    return (book as DetailedBookType) ?? null;
   });
-
-export type BookType = NonNullable<Awaited<ReturnType<typeof getBookById>>>;

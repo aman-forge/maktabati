@@ -1,13 +1,15 @@
 import { Separator } from "@shadcn/separator";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+
+import { BOOK_GENRES, BOOK_TOPICS } from "@/db/constants/books";
 import { getBookPageMock } from "@/features/book/book-page-mock";
 import { AuthorCard } from "@/features/book/components/author-card";
 import { BookDescription } from "@/features/book/components/book-description";
 import { BookDetailsSidebar } from "@/features/book/components/book-details-sidebar";
 import { BookEditions } from "@/features/book/components/book-editions";
-import { FeaturedArticles } from "@/features/book/components/featured-articles";
 import { BookHero } from "@/features/book/components/book-hero";
 import { BookReviews } from "@/features/book/components/book-reviews";
+import { FeaturedArticles } from "@/features/book/components/featured-articles";
 import { MemberLists } from "@/features/book/components/member-lists";
 import { WriteReview } from "@/features/book/components/write-review";
 import { getBookById } from "@/features/books/server/get-books";
@@ -22,9 +24,22 @@ export const Route = createFileRoute("/_public/book/$id")({
   },
 });
 
+const genreLabels = new Map(BOOK_GENRES.map((genre) => [genre.value, genre.label]));
+const topicLabels = new Map(BOOK_TOPICS.map((topic) => [topic.value, topic.label]));
+
+function getGenreLabel(value: string) {
+  return genreLabels.get(value) ?? value;
+}
+
+function getTopicLabel(value: string) {
+  return topicLabels.get(value) ?? value;
+}
+
 function RouteComponent() {
   const book = Route.useLoaderData();
   const mock = getBookPageMock(book);
+  const genreTags =
+    book.genres && book.genres.length > 0 ? book.genres.map(getGenreLabel) : ["لا يوجد تصنيف"];
   const bookDetails = [
     {
       label: "السلسلة",
@@ -58,10 +73,10 @@ function RouteComponent() {
       label: "العنوان الأصلي",
       value: book.originalTitle ?? "",
     },
-    {
-      label: "المترجم",
-      value: book.translator ?? "",
-    },
+    // {
+    //   label: "المترجم",
+    //   value: book.translator ?? "", // TODO: TRANLSATOR
+    // },
     {
       label: "ISBN",
       value: book.isbn ?? "",
@@ -72,25 +87,21 @@ function RouteComponent() {
     },
     {
       label: "الموضوعات",
-      value:
-        book.topics && book.topics.length > 0 ? book.topics.join("، ") : "",
+      value: book.topics && book.topics.length > 0 ? book.topics.map(getTopicLabel).join("، ") : "",
     },
   ].filter((field) => field.value && field.value.trim().length > 0);
 
   return (
-    <main className="min-h-screen font-sans bg-background pb-6">
-      <BookHero book={book ?? undefined} ratingSummary={mock.ratingSummary} />
+    <main className="bg-background min-h-screen pb-6 font-sans">
+      <BookHero book={book} ratingSummary={mock.ratingSummary} />
 
-      <div className="container mx-auto flex flex-col gap-8 px-4 md:px-0 py-12">
-        <div className="lg:grid lg:grid-cols-[1fr_340px] gap-10 lg:gap-14">
-          <div className="flex flex-col gap-10 min-w-0">
+      <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:px-0">
+        <div className="gap-10 lg:grid lg:grid-cols-[1fr_340px] lg:gap-14">
+          <div className="flex min-w-0 flex-col gap-10">
             <div className="lg:hidden">
               <BookDetailsSidebar details={bookDetails} otherEditions={[]} />
             </div>
-            <BookDescription
-              paragraphs={book.description || "لا يوجد وصف"}
-              tags={book.genres || ["لا يوجد تصنيف"]}
-            />
+            <BookDescription paragraphs={book.description || "لا يوجد وصف"} tags={genreTags} />
             <Separator className="bg-border" />
             <BookEditions editions={mock.editions} />
             <Separator className="bg-border" />
@@ -99,12 +110,12 @@ function RouteComponent() {
             <BookReviews reviews={mock.reviews} />
           </div>
 
-          <aside className="hidden lg:flex flex-col gap-10">
+          <aside className="hidden flex-col gap-10 lg:flex">
             <BookDetailsSidebar details={bookDetails} otherEditions={[]} />
             <AuthorCard author={book.author ?? undefined} />
           </aside>
         </div>
-        <div className="py-8 border-t border-border flex flex-col gap-8">
+        <div className="border-border flex flex-col gap-8 border-t py-8">
           <MemberLists lists={mock.memberLists} />
           <Separator className="bg-border" />
         </div>
@@ -116,11 +127,8 @@ function RouteComponent() {
         accentColor="var(--primary)"
         // viewAllHref="#"
       />
-      <div className="container mx-auto flex flex-col gap-8 px-4 md:px-0 py-12">
-        <FeaturedArticles
-          articles={mock.featuredArticles}
-          officialLists={mock.officialLists}
-        />
+      <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:px-0">
+        <FeaturedArticles articles={mock.featuredArticles} officialLists={mock.officialLists} />
       </div>
     </main>
   );

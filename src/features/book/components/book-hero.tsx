@@ -2,28 +2,44 @@ import { Button } from "@components/ui/button";
 import {
   BookmarkSimpleIcon,
   BooksIcon,
-  CaretDownIcon,
   CaretLeftIcon,
-  CheckIcon,
   HeartIcon,
   ShareNetworkIcon,
   StarIcon,
   TrophyIcon,
 } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+
 import { BOOK_GENRES } from "@/db/constants/books";
+import { useUser } from "@/features/auth/use-user";
 import type { RatingSummary } from "@/features/book/book-page-mock";
-import { ButtonGroup } from "@/ui/components/ui/button-group";
+import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { getUserBookTracking } from "@/features/books/server/library";
+import { DetailedBookType, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
-import { TrackBookModal } from "../../books/components/track-book-modal";
-import type { BookType } from "../../books/server/get-books";
 
 // ─── Fake friends data — replace with real query ──────────────────────────────
 const FAKE_FRIENDS = [
-  { id: "1", name: "عمر خالد", initials: "ع", color: "bg-emerald-100 text-emerald-800" },
-  { id: "2", name: "سارة محمد", initials: "س", color: "bg-violet-100 text-violet-800" },
-  { id: "3", name: "محمد علي", initials: "م", color: "bg-amber-100 text-amber-800" },
+  {
+    id: "1",
+    name: "عمر خالد",
+    initials: "ع",
+    color: "bg-emerald-100 text-emerald-800",
+  },
+  {
+    id: "2",
+    name: "سارة محمد",
+    initials: "س",
+    color: "bg-violet-100 text-violet-800",
+  },
+  {
+    id: "3",
+    name: "محمد علي",
+    initials: "م",
+    color: "bg-amber-100 text-amber-800",
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -47,12 +63,39 @@ export function BookHero({
   book,
   ratingSummary,
 }: {
-  book: BookType;
+  book: DetailedBookType;
   ratingSummary: RatingSummary;
 }) {
-  const [wishList, setWishList] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [trackOpen, setTrackOpen] = useState(false);
+  const { openTrackModal } = useBookTracking();
+  const { user } = useUser();
+  const trackingQuery = useQuery({
+    queryKey: ["book-tracking", user?.id, book.id],
+    queryFn: () => getUserBookTracking({ data: { userId: user!.id, bookId: book.id } }),
+    enabled: !!user?.id,
+  });
+  const tracking = trackingQuery.data;
+  const trackingStatus = tracking?.status ?? undefined;
+  const statusConfig = trackingStatus ? getStatusConfig(trackingStatus) : null;
+  const StatusIcon = statusConfig?.icon ?? BookmarkSimpleIcon;
+  const trackingBook = useMemo(
+    () => ({
+      ...book,
+      status: trackingStatus,
+      pageProgress: tracking?.pageProgress ?? null,
+      notes: tracking?.notes ?? null,
+      startedAt: tracking?.startedAt ?? null,
+      finishedAt: tracking?.finishedAt ?? null,
+    }),
+    [
+      book,
+      tracking?.finishedAt,
+      tracking?.notes,
+      tracking?.pageProgress,
+      tracking?.startedAt,
+      trackingStatus,
+    ],
+  );
 
   const languageLabel = useMemo(
     () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
@@ -61,9 +104,10 @@ export function BookHero({
 
   const genreLabels = useMemo(
     () =>
-      (book.genres ?? [])
-        .slice(0, 5)
-        .map((g) => ({ value: g, label: BOOK_GENRES.find((bg) => bg.value === g)?.label ?? g })),
+      (book.genres ?? []).slice(0, 5).map((g) => ({
+        value: g,
+        label: BOOK_GENRES.find((bg) => bg.value === g)?.label ?? g,
+      })),
     [book.genres],
   );
 
@@ -72,9 +116,12 @@ export function BookHero({
       [
         { label: "الناشر", value: book.publisher?.name },
         { label: "سنة النشر", value: book.publicationYear?.toString() },
-        { label: "عدد الصفحات", value: book.pageCount ? `${book.pageCount} صفحة` : undefined },
+        {
+          label: "عدد الصفحات",
+          value: book.pageCount ? `${book.pageCount} صفحة` : undefined,
+        },
         { label: "اللغة الأصلية", value: languageLabel },
-        { label: "المترجم", value: book.translator },
+        // { label: "المترجم", value: book.translator },
         {
           label: "السلسلة",
           value: book.series
@@ -97,9 +144,9 @@ export function BookHero({
             <div className="flex flex-col items-center gap-4 lg:sticky lg:top-20 lg:self-start">
               <div className="relative">
                 <img
-                  src={book.coverImageUrl || "/books/placeholder.png"}
+                  src={book.coverImageUrl ?? "/books/book.jpg"}
                   alt={`غلاف ${book.title}`}
-                  className="w-44 rounded-xl object-cover shadow-xl ring-1 ring-border/50 sm:w-52 lg:w-56"
+                  className="ring-border/50 w-44 rounded-xl object-cover shadow-xl ring-1 sm:w-52 lg:w-56"
                   style={{ aspectRatio: "2/3" }}
                 />
                 {/* Edition badge */}
@@ -111,25 +158,33 @@ export function BookHero({
               </div>
 
               {/* Primary CTA */}
-              <div className="w-full max-w-56 space-y-2">
-                <ButtonGroup className="flex w-full">
-                  <Button className="flex-1 gap-2" onClick={() => setWishList((w) => !w)}>
-                    {wishList ? (
-                      <>
-                        <CheckIcon weight="bold" className="size-4" />
-                        أريد قراءته
-                      </>
-                    ) : (
-                      <>
-                        <BookmarkSimpleIcon weight="bold" className="size-4" />
-                        أضف إلى الرف
-                      </>
+              <div className="w-full max-w-64 space-y-2">
+                {/*<ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">*/}
+                <Button
+                  className={cn(
+                    "h-10 flex-1 gap-2 text-sm font-semibold shadow-none w-full",
+                    statusConfig?.bgColor,
+                    statusConfig?.bgHoverColor,
+                    statusConfig && "text-white",
+                  )}
+                  onClick={() => openTrackModal(trackingBook)}
+                >
+                  <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
+                  {statusConfig?.label ?? "إضافة الى المكتبة"}
+                </Button>
+                {/*<Button
+                    className={cn(
+                      "h-11 rounded-none border-r border-white/15 px-3 shadow-none",
+                      statusConfig?.bgColor,
+                      statusConfig?.bgHoverColor,
+                      statusConfig && "text-white",
                     )}
-                  </Button>
-                  <Button aria-label="خيارات الرف" onClick={() => setTrackOpen(true)}>
+                    aria-label="خيارات التتبع"
+                    onClick={() => openTrackModal(trackingBook)}
+                  >
                     <CaretDownIcon className="size-4" />
-                  </Button>
-                </ButtonGroup>
+                  </Button>*/}
+                {/*</ButtonGroup>*/}
 
                 {/* Secondary actions */}
                 <div className="flex gap-2">
@@ -155,33 +210,33 @@ export function BookHero({
             <div className="flex flex-col gap-6">
               {/* Award pill — show if any */}
               {/* Replace with real awards data */}
-              <div className="flex items-center gap-1.5 w-fit rounded-full bg-amber-50 dark:bg-amber-950 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-200">
+              <div className="flex w-fit items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200">
                 <TrophyIcon weight="duotone" className="size-3.5 text-amber-500" />
                 أفضل ترجمة عربية 2023
               </div>
 
               {/* Title + author */}
               <div className="flex items-end justify-between">
-                <div className="space-y-2 w-full">
-                  <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+                <div className="w-full space-y-2">
+                  <h1 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl lg:text-4xl">
                     {book.title}
                   </h1>
                   {book.subtitle && (
-                    <p className="text-base text-muted-foreground">{book.subtitle}</p>
+                    <p className="text-muted-foreground text-base">{book.subtitle}</p>
                   )}
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                     <span className="text-muted-foreground">بقلم</span>
                     <Link
                       to="/author/$id" // TODO: CHANGE TO SLUG?
                       params={{ id: book.author?.id ?? "" }}
-                      className="font-semibold text-primary hover:underline"
+                      className="text-primary font-semibold hover:underline"
                     >
                       {book.author?.name ?? "غير معروف"}
                     </Link>
                     {book.series && (
                       <>
                         <span className="text-muted-foreground/50">·</span>
-                        <span className="inline-flex items-center gap-1 rounded-full border bg-background px-2.5 py-0.5 text-xs text-muted-foreground">
+                        <span className="bg-background text-muted-foreground inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs">
                           <BooksIcon className="size-3" />
                           {book.seriesPosition
                             ? `ج${book.seriesPosition} — ${book.series.name}`
@@ -195,10 +250,10 @@ export function BookHero({
               </div>
 
               {/* Rating */}
-              <div className="rounded-2xl border border-border bg-card p-4">
+              <div className="border-border bg-card rounded-2xl border p-4">
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap items-center gap-3">
-                    <div className="text-4xl font-black tabular-nums text-foreground">
+                    <div className="text-foreground text-4xl font-black tabular-nums">
                       {ratingSummary?.average?.toFixed(1)}
                     </div>
                     <div className="flex flex-col gap-1">
@@ -209,11 +264,11 @@ export function BookHero({
                             weight={
                               star <= Math.round(ratingSummary?.average ?? 0) ? "fill" : "regular"
                             }
-                            className="w-4 h-4 text-primary"
+                            className="text-primary h-4 w-4"
                           />
                         ))}
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         {formatNumber(ratingSummary?.totalRatings)} تقييم
                         <span className="px-2">·</span>
                         {formatNumber(ratingSummary?.totalReviews)} مراجعة
@@ -224,16 +279,16 @@ export function BookHero({
                   <div className="flex flex-col gap-2.5">
                     {ratingSummary?.distribution?.map(({ stars, percent }) => (
                       <div key={stars} className="flex items-center gap-2.5">
-                        <span className="w-4 text-xs text-muted-foreground tabular-nums">
+                        <span className="text-muted-foreground w-4 text-xs tabular-nums">
                           {stars}
                         </span>
-                        <div className="h-2 flex-1 rounded-full bg-secondary overflow-hidden">
+                        <div className="bg-secondary h-2 flex-1 overflow-hidden rounded-full">
                           <div
-                            className="h-full rounded-full bg-primary"
+                            className="bg-primary h-full rounded-full"
                             style={{ width: `${percent}%` }}
                           />
                         </div>
-                        <span className="w-10 text-xs text-muted-foreground tabular-nums text-left">
+                        <span className="text-muted-foreground w-10 text-left text-xs tabular-nums">
                           %{percent}
                         </span>
                       </div>
@@ -247,13 +302,13 @@ export function BookHero({
                 <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
                   {meta.map(({ label, value }) => (
                     <div key={label} className="flex flex-col gap-0.5">
-                      <span className="text-[11px] text-muted-foreground">{label}</span>
+                      <span className="text-muted-foreground text-[11px]">{label}</span>
                       <span className="text-sm font-medium">{value}</span>
                     </div>
                   ))}
                   {/* Genre chips */}
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] text-muted-foreground">التصنيفات</span>
+                    <span className="text-muted-foreground text-[11px]">التصنيفات</span>
                     <span className="text-sm font-medium">
                       {genreLabels.length > 0 && (
                         <div className="flex flex-wrap gap-2">
@@ -262,7 +317,7 @@ export function BookHero({
                               key={value}
                               to="/discover/books"
                               search={{ genres: [value] }}
-                              className="rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                              className="bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground rounded-full border px-3 py-1 text-xs transition-colors"
                             >
                               {label}
                             </Link>
@@ -277,8 +332,6 @@ export function BookHero({
           </div>
         </div>
       </div>
-
-      <TrackBookModal book={book} open={trackOpen} onOpenChange={setTrackOpen} />
     </section>
   );
 }
@@ -293,7 +346,7 @@ function FriendsWhoRead({ friends }: { friends: typeof FAKE_FRIENDS }) {
   return (
     <button
       type="button"
-      className="flex w-full items-center gap-3 rounded-xl border bg-muted/30 px-4 py-3 text-right transition-colors hover:bg-muted/60"
+      className="bg-muted/30 hover:bg-muted/60 flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-right transition-colors"
     >
       {/* Stacked avatars */}
       <div className="flex items-center">
@@ -310,12 +363,12 @@ function FriendsWhoRead({ friends }: { friends: typeof FAKE_FRIENDS }) {
           </div>
         ))}
       </div>
-      <span className="flex-1 text-sm text-muted-foreground">
-        <span className="font-medium text-foreground">{display}</span>
+      <span className="text-muted-foreground flex-1 text-sm">
+        <span className="text-foreground font-medium">{display}</span>
         {friends.length > 3 && ` و${friends.length - 3} آخرون`}
         {" قرأوا هذا الكتاب"}
       </span>
-      <CaretLeftIcon className="size-4 text-muted-foreground" />
+      <CaretLeftIcon className="text-muted-foreground size-4" />
     </button>
   );
 }
