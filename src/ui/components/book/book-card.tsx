@@ -22,7 +22,7 @@ const DIMENSIONS = {
   lg: { card: "w-48", image: "h-72" },
 } as const;
 
-export function BookCard({ book, author = false, size = "lg", trackingStatus }: BookCardProps) {
+export function BookCard({ book, author = true, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
   const rating = book.averageRating;
