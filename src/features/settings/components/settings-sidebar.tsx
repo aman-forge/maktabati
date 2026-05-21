@@ -1,4 +1,17 @@
 import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+} from "@/ui/components/ui/sidebar";
+import { cn } from "@/ui/lib/utils";
+import {
   BellRingingIcon,
   BookOpenIcon,
   CaretLeftIcon,
@@ -13,22 +26,7 @@ import {
   UserIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
-import { Button } from "@shadcn/button";
 import { Link, useMatchRoute } from "@tanstack/react-router";
-
-import { cn } from "@/ui/lib/utils";
-
-export type SettingsSection =
-  | "profile"
-  | "account"
-  | "notifications"
-  | "privacy"
-  | "reading"
-  | "social"
-  | "appearance"
-  | "integrations"
-  | "data";
 
 const sidebarSections = [
   {
@@ -59,7 +57,7 @@ const sidebarSections = [
     title: "التفضيلات",
     items: [
       {
-        id: "reading" as const,
+        id: "readingPreferences" as const,
         label: "القراءة",
         icon: BookOpenIcon,
         description: "عادات القراءة",
@@ -104,154 +102,55 @@ const sidebarSections = [
 
 export function SettingsSidebar() {
   const matchRoute = useMatchRoute();
-
   return (
-    <aside className="border-border/60 bg-sidebar sticky top-0 hidden h-[calc(100vh-64px)] w-72 shrink-0 border-e lg:flex lg:flex-col">
-      {/* Header */}
-      <div className="border-border/60 border-b px-5 py-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-lg">
-            <GearIcon className="text-primary h-4 w-4" weight="fill" />
-          </div>
-          <div>
-            <p className="text-foreground text-sm font-semibold">الإعدادات</p>
-            <p className="text-muted-foreground text-xs">إدارة حسابك</p>
-          </div>
-        </div>
-      </div>
+    <Sidebar dir="rtl" side="right" variant="floating" className="pt-16">
+      <SidebarHeader className="flex flex-row items-center gap-2 px-4 py-3 border-b border-sidebar-border/50">
+        <GearIcon className="h-5 w-5 text-muted-foreground" />
 
-      {/* User Profile Quick Link */}
-      <div className="border-border/60 border-b px-4 py-3">
-        <Link
-          to="/settings/profile"
-          className={cn(
-            "group flex w-full items-center gap-3 rounded-xl p-2.5 transition-all duration-150",
-            matchRoute({ to: "/settings/profile" })
-              ? "bg-primary/10 ring-1 ring-primary/20"
-              : "hover:bg-muted/60",
-          )}
-        >
-          <Avatar className="ring-border h-9 w-9 ring-2">
-            <AvatarImage
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
-              alt="المستخدم"
-            />
-            <AvatarFallback className="bg-emerald-600 text-xs font-bold text-white">
-              أح
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0 flex-1 text-start">
-            <p
-              className={cn(
-                "truncate text-sm font-semibold transition-colors",
-                matchRoute({ to: "/settings/profile" }) ? "text-primary" : "text-foreground",
-              )}
-            >
-              أحمد محمد
-            </p>
-            <p className="text-muted-foreground truncate text-xs">ahmed_reads</p>
-          </div>
-          <CaretLeftIcon
-            className={cn(
-              "h-3.5 w-3.5 shrink-0 transition-all",
-              matchRoute({ to: "/settings/profile" })
-                ? "text-primary"
-                : "text-muted-foreground/50 group-hover:text-muted-foreground",
-            )}
-          />
-        </Link>
-      </div>
-
-      {/* Navigation Sections */}
-      <nav className="flex-1 overflow-y-auto px-3 py-3">
-        {sidebarSections.map((section, sectionIndex) => (
-          <div key={section.title} className={cn(sectionIndex > 0 && "mt-5")}>
-            <p className="text-muted-foreground/70 mb-1.5 px-2 text-[10px] font-semibold tracking-widest uppercase">
-              {section.title}
-            </p>
-            <div className="space-y-0.5">
-              {section.items.map((item) => {
-                const Icon = item.icon;
-                const routePath = `/settings/${item.id}`;
-                const isActive = matchRoute({ to: routePath });
-
-                return (
-                  <Link
-                    key={item.id}
-                    to={routePath}
-                    className={cn(
-                      "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-right transition-all duration-150",
-                      isActive
-                        ? "bg-primary/10 text-primary ring-1 ring-primary/20"
-                        : "text-sidebar-foreground/80 hover:bg-muted/60 hover:text-foreground",
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors",
-                        isActive
-                          ? "bg-primary/15 text-primary"
-                          : "bg-muted/40 text-muted-foreground group-hover:bg-muted group-hover:text-foreground",
-                      )}
-                    >
-                      <Icon className="h-4 w-4" weight={isActive ? "fill" : "regular"} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p
-                        className={cn(
-                          "text-sm font-medium leading-none",
-                          isActive ? "text-primary" : "",
-                        )}
-                      >
-                        {item.label}
-                      </p>
-                      <p className="text-muted-foreground/70 mt-0.5 truncate text-[11px]">
-                        {item.description}
-                      </p>
-                    </div>
-                    {isActive && <div className="bg-primary h-1.5 w-1.5 shrink-0 rounded-full" />}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* Footer — 2FA Prompt */}
-      <div className="border-border/60 border-t p-4">
-        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 p-4">
-          <div className="absolute -top-4 -left-4 h-16 w-16 rounded-full bg-emerald-500/10 blur-xl" />
-          <div className="relative">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20">
-                <ShieldCheckIcon className="h-4 w-4 text-emerald-500" weight="fill" />
-              </div>
-              <div>
-                <p className="text-foreground text-xs font-semibold">فعّل الحماية الثنائية</p>
-                <p className="text-muted-foreground text-[10px] leading-relaxed">
-                  اجعل حسابك أكثر أماناً
-                </p>
-              </div>
-            </div>
-            <Button
-              size="sm"
-              className="mt-3 h-7 w-full bg-emerald-600 text-xs text-white hover:bg-emerald-700"
-            >
-              تفعيل الآن
-            </Button>
-          </div>
-        </div>
-
-        {/* Sign Out */}
-        <button
-          type="button"
-          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive mt-3 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs transition-colors"
-        >
-          <SignOutIcon className="h-4 w-4" />
-          <span>تسجيل الخروج</span>
-        </button>
-      </div>
-    </aside>
+        <SidebarGroupLabel className="text-base px-0.5 font-semibold tracking-tight select-none">
+          الإعدادات
+        </SidebarGroupLabel>
+      </SidebarHeader>
+      <SidebarContent>
+        {sidebarSections.map((s, index) => {
+          return (
+            <>
+              <SidebarGroup key={index}>
+                <SidebarGroupLabel className=" text-muted-foreground/70">
+                  {s.title}
+                </SidebarGroupLabel>
+                <SidebarMenu>
+                  {s.items.map((i) => {
+                    const routePath = `/settings/${i.id}`;
+                    const isActive = !!matchRoute({ to: routePath });
+                    const Icon = i.icon;
+                    return (
+                      <SidebarMenuItem className="py-0" key={i.id}>
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          className={cn(
+                            " transition-colors duration-200 select-none ",
+                            isActive
+                              ? "border border-primary"
+                              : " hover:bg-accent/40 hover:text-foreground",
+                          )}
+                          render={
+                            <Link className=" " to={routePath}>
+                              <Icon className="h-4 w-4" weight={isActive ? "fill" : "regular"} />
+                              <span>{i.label}</span>
+                            </Link>
+                          }
+                        />
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroup>
+            </>
+          );
+        })}
+      </SidebarContent>
+      <SidebarFooter />
+    </Sidebar>
   );
 }
