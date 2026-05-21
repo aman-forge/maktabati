@@ -508,7 +508,10 @@ const LibraryBooks = ({ books }: LibraryBooksProps) => {
     if (query.trim()) {
       const q = query.trim().toLowerCase();
       result = result.filter(
-        (b) => b.title?.toLowerCase().includes(q) || b.author?.name?.toLowerCase().includes(q),
+        (b) =>
+          b.title?.toLowerCase().includes(q) ||
+          b.primaryAuthor?.name?.toLowerCase().includes(q) ||
+          b.contributors?.some((contributor) => contributor.author.name.toLowerCase().includes(q)),
       );
     }
 

@@ -144,17 +144,3 @@ export const BOOK_TOPICS = [
   { value: "classical_arabic", label: "لغة تراثية" },
   { value: "modern_arabic", label: "لغة معاصرة" },
 ];
-
-// TODO: DELETE
-export const PUBLISHERS = [
-  "دار الكتب العلمية",
-  "دار الفكر",
-  "دار السلام",
-  "دار ابن حزم",
-  "دار المنهاج",
-  "دار التقوى",
-  "دار الحديث",
-  "مؤسسة الرسالة",
-  "دار المعارف",
-  "دار القلم",
-] as const;

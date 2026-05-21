@@ -1,13 +1,64 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 import { ArrowLeftIcon, ThumbsUpIcon, UsersIcon } from "@phosphor-icons/react";
 
-import type { MemberListItem } from "@/features/book/book-page-mock";
+import type { DetailedBookType } from "@/features/books/types";
 
-interface MemberListsProps {
-  lists?: MemberListItem[];
+interface MemberListItem {
+  id: string;
+  title: string;
+  curator: string;
+  avatar: string;
+  votes: number;
+  bookCount: number;
+  covers: string[];
+  rank: number;
 }
 
-export function MemberLists({ lists = [] }: MemberListsProps) {
+interface MemberListsProps {
+  book: DetailedBookType;
+}
+
+function getPlaceholderMemberLists(book: DetailedBookType): MemberListItem[] {
+  // TODO: Replace with database-backed member lists once list/collection tables exist.
+  const cover = book.coverImageUrl ?? "/books/book.jpg";
+
+  return [
+    {
+      id: "list-1",
+      title: "أفضل ترشيحات القرّاء لهذا التصنيف",
+      curator: "maktabati_reads",
+      avatar: cover,
+      votes: 1280,
+      bookCount: 40,
+      covers: [cover, "/books/book.jpg", cover],
+      rank: 2,
+    },
+    {
+      id: "list-2",
+      title: "كتب طويلة تستحق كل صفحة",
+      curator: "omar_library",
+      avatar: cover,
+      votes: 842,
+      bookCount: 25,
+      covers: ["/books/book.jpg", cover, "/books/book.jpg"],
+      rank: 5,
+    },
+    {
+      id: "list-3",
+      title: "ترشيحات نادي القراءة الشهري",
+      curator: "bookclub_ar",
+      avatar: cover,
+      votes: 603,
+      bookCount: 18,
+      covers: [cover, "/books/book.jpg", cover],
+      rank: 1,
+    },
+  ];
+}
+
+export function MemberLists({ book }: MemberListsProps) {
+  const lists = getPlaceholderMemberLists(book);
+
   if (lists.length === 0) return null;
 
   return (

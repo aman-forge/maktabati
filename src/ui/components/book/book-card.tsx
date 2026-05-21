@@ -3,7 +3,7 @@ import { BookIcon, CalendarBlankIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
-import { BOOK_GENRES } from "@/db/constants/books";
+import { BOOK_GENRES } from "@/features/books/constants";
 import { BookCardType, ReadingStatus, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
@@ -24,9 +24,10 @@ const DIMENSIONS = {
 export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
-  const rating = 4.5; // TODO: add book.rating
+  const rating = book.averageRating;
   const effectiveStatus = trackingStatus ?? book.status ?? undefined;
   const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
+  const primaryAuthor = book.primaryAuthor;
 
   return (
     <article className={cn("relative flex flex-col gap-2.5 shrink-0 group mt-0 mb-auto", dim.card)}>
@@ -58,7 +59,7 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
         </Link>
 
         {/* Rating — top right */}
-        {rating != null && (
+        {rating != null && rating > 0 && (
           <div className="absolute top-1.5 right-1.5 z-20">
             <RatingPill rating={rating} variant="overlay" />
           </div>
@@ -132,13 +133,13 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
         </Link>
 
         {/* Author */}
-        {book.author ? (
+        {primaryAuthor ? (
           <Link
             to="/author/$id"
-            params={{ id: book.author.id }}
+            params={{ id: primaryAuthor.id }}
             className="text-muted-foreground truncate text-xs hover:underline"
           >
-            {book.author.name}
+            {primaryAuthor.name}
           </Link>
         ) : (
           <p className="text-muted-foreground truncate text-xs">مجهول</p>

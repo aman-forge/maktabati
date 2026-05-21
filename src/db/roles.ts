@@ -14,7 +14,7 @@ export {
 // (t) => [
 //    crudPolicy({
 //      role: authenticatedRole,
-//      read: isOwner(t.authorId),
-//      modify: isOwner(t.authorId)
+//      read: isOwner(t.userId),
+//      modify: isOwner(t.userId)
 //    })
 // ]

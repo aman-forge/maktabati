@@ -143,6 +143,7 @@ export function TrackButton({
     <>
       {children ? (
         <Button
+          type="button"
           className={className}
           onClick={(e) => {
             e.stopPropagation();
@@ -154,6 +155,7 @@ export function TrackButton({
         />
       ) : (
         <Button
+          type="button"
           size="icon"
           onClick={(e) => {
             e.stopPropagation();
