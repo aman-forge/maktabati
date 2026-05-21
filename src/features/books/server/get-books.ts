@@ -38,13 +38,6 @@ const ORDER_MAP = {
   "title-desc": desc(books.title),
 } satisfies Record<string, SQL>;
 
-const ORDER_MAP = {
-  newest: desc(books.publicationYear),
-  oldest: asc(books.publicationYear),
-  "title-asc": asc(books.title),
-  "title-desc": desc(books.title),
-} satisfies Record<string, SQL>;
-
 export const searchBooks = createServerFn({ method: "GET" })
   .inputValidator(bookSearchInputSchema)
   .handler(async ({ data }) => {
