@@ -45,8 +45,6 @@ import { Route as AppSettingsAppearanceRouteImport } from './app/_app/settings/a
 import { Route as AppSettingsAccountRouteImport } from './app/_app/settings/account'
 import { Route as PublicPublisherIdBooksRouteImport } from './app/_public/publisher/$id.books'
 import { Route as PublicPublisherIdArticlesRouteImport } from './app/_public/publisher/$id.articles'
-import { Route as PublicAuthorIdSeriesRouteImport } from './app/_public/author/$id.series'
-import { Route as PublicAuthorIdBooksRouteImport } from './app/_public/author/$id.books'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -232,16 +230,6 @@ const PublicPublisherIdArticlesRoute =
     path: '/articles',
     getParentRoute: () => PublicPublisherIdRoute,
   } as any)
-const PublicAuthorIdSeriesRoute = PublicAuthorIdSeriesRouteImport.update({
-  id: '/series',
-  path: '/series',
-  getParentRoute: () => PublicAuthorIdRoute,
-} as any)
-const PublicAuthorIdBooksRoute = PublicAuthorIdBooksRouteImport.update({
-  id: '/books',
-  path: '/books',
-  getParentRoute: () => PublicAuthorIdRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicMarketingIndexRoute
@@ -267,7 +255,7 @@ export interface FileRoutesByFullPath {
   '/account/$pathname': typeof PublicAccountPathnameRoute
   '/auth/$pathname': typeof PublicAuthPathnameRoute
   '/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/author/$id': typeof PublicAuthorIdRoute
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
@@ -276,8 +264,6 @@ export interface FileRoutesByFullPath {
   '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
-  '/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
   '/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
@@ -305,7 +291,7 @@ export interface FileRoutesByTo {
   '/account/$pathname': typeof PublicAccountPathnameRoute
   '/auth/$pathname': typeof PublicAuthPathnameRoute
   '/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/author/$id': typeof PublicAuthorIdRoute
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
@@ -314,8 +300,6 @@ export interface FileRoutesByTo {
   '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
-  '/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
   '/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
@@ -345,7 +329,7 @@ export interface FileRoutesById {
   '/_public/account/$pathname': typeof PublicAccountPathnameRoute
   '/_public/auth/$pathname': typeof PublicAuthPathnameRoute
   '/_public/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/_public/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/_public/author/$id': typeof PublicAuthorIdRoute
   '/_public/book/$id': typeof PublicBookIdRoute
   '/_public/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/_public/discover/books': typeof PublicDiscoverBooksRoute
@@ -355,8 +339,6 @@ export interface FileRoutesById {
   '/_public/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/_public/u/$userId': typeof PublicUUserIdRoute
   '/_public/_marketing/': typeof PublicMarketingIndexRoute
-  '/_public/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/_public/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/_public/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
   '/_public/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
@@ -395,8 +377,6 @@ export interface FileRouteTypes {
     | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
-    | '/author/$id/books'
-    | '/author/$id/series'
     | '/publisher/$id/articles'
     | '/publisher/$id/books'
   fileRoutesByTo: FileRoutesByTo
@@ -433,8 +413,6 @@ export interface FileRouteTypes {
     | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
-    | '/author/$id/books'
-    | '/author/$id/series'
     | '/publisher/$id/articles'
     | '/publisher/$id/books'
   id:
@@ -473,8 +451,6 @@ export interface FileRouteTypes {
     | '/_public/publisher/$id'
     | '/_public/u/$userId'
     | '/_public/_marketing/'
-    | '/_public/author/$id/books'
-    | '/_public/author/$id/series'
     | '/_public/publisher/$id/articles'
     | '/_public/publisher/$id/books'
   fileRoutesById: FileRoutesById
@@ -739,20 +715,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicPublisherIdArticlesRouteImport
       parentRoute: typeof PublicPublisherIdRoute
     }
-    '/_public/author/$id/series': {
-      id: '/_public/author/$id/series'
-      path: '/series'
-      fullPath: '/author/$id/series'
-      preLoaderRoute: typeof PublicAuthorIdSeriesRouteImport
-      parentRoute: typeof PublicAuthorIdRoute
-    }
-    '/_public/author/$id/books': {
-      id: '/_public/author/$id/books'
-      path: '/books'
-      fullPath: '/author/$id/books'
-      preLoaderRoute: typeof PublicAuthorIdBooksRouteImport
-      parentRoute: typeof PublicAuthorIdRoute
-    }
   }
 }
 
@@ -802,20 +764,6 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
-interface PublicAuthorIdRouteChildren {
-  PublicAuthorIdBooksRoute: typeof PublicAuthorIdBooksRoute
-  PublicAuthorIdSeriesRoute: typeof PublicAuthorIdSeriesRoute
-}
-
-const PublicAuthorIdRouteChildren: PublicAuthorIdRouteChildren = {
-  PublicAuthorIdBooksRoute: PublicAuthorIdBooksRoute,
-  PublicAuthorIdSeriesRoute: PublicAuthorIdSeriesRoute,
-}
-
-const PublicAuthorIdRouteWithChildren = PublicAuthorIdRoute._addFileChildren(
-  PublicAuthorIdRouteChildren,
-)
-
 interface PublicPublisherIdRouteChildren {
   PublicPublisherIdArticlesRoute: typeof PublicPublisherIdArticlesRoute
   PublicPublisherIdBooksRoute: typeof PublicPublisherIdBooksRoute
@@ -837,7 +785,7 @@ interface PublicRouteChildren {
   PublicAccountPathnameRoute: typeof PublicAccountPathnameRoute
   PublicAuthPathnameRoute: typeof PublicAuthPathnameRoute
   PublicAuthWelcomeRoute: typeof PublicAuthWelcomeRoute
-  PublicAuthorIdRoute: typeof PublicAuthorIdRouteWithChildren
+  PublicAuthorIdRoute: typeof PublicAuthorIdRoute
   PublicBookIdRoute: typeof PublicBookIdRoute
   PublicDiscoverAuthorsRoute: typeof PublicDiscoverAuthorsRoute
   PublicDiscoverBooksRoute: typeof PublicDiscoverBooksRoute
@@ -857,7 +805,7 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicAccountPathnameRoute: PublicAccountPathnameRoute,
   PublicAuthPathnameRoute: PublicAuthPathnameRoute,
   PublicAuthWelcomeRoute: PublicAuthWelcomeRoute,
-  PublicAuthorIdRoute: PublicAuthorIdRouteWithChildren,
+  PublicAuthorIdRoute: PublicAuthorIdRoute,
   PublicBookIdRoute: PublicBookIdRoute,
   PublicDiscoverAuthorsRoute: PublicDiscoverAuthorsRoute,
   PublicDiscoverBooksRoute: PublicDiscoverBooksRoute,
