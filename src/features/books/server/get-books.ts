@@ -31,6 +31,12 @@ export const getBooks = createServerFn({ method: "GET" }).handler(async () => {
 
 // ==== Discovery Page ==== //
 const PAGE_SIZE = 24 as const;
+const ORDER_MAP = {
+  newest: desc(books.publicationYear),
+  oldest: asc(books.publicationYear),
+  "title-asc": asc(books.title),
+  "title-desc": desc(books.title),
+} satisfies Record<string, SQL>;
 
 const ORDER_MAP = {
   newest: desc(books.publicationYear),
@@ -80,7 +86,7 @@ export const searchBooks = createServerFn({ method: "GET" })
         title: books.title,
         subtitle: books.subtitle,
         description: books.description,
-        coverImageUrl: books.coverImageUrl, // apply fallback in the component
+        coverImageUrl: books.coverImageUrl, // fallback in the component
         pageCount: books.pageCount,
         publicationYear: books.publicationYear,
         publicationDate: books.publicationDate,

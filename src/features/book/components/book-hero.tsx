@@ -121,7 +121,7 @@ export function BookHero({
           value: book.pageCount ? `${book.pageCount} صفحة` : undefined,
         },
         { label: "اللغة الأصلية", value: languageLabel },
-        { label: "المترجم", value: book.translator },
+        // { label: "المترجم", value: book.translator },
         {
           label: "السلسلة",
           value: book.series
@@ -228,7 +228,7 @@ export function BookHero({
                     <span className="text-muted-foreground">بقلم</span>
                     <Link
                       to="/author/$id" // TODO: CHANGE TO SLUG?
-                      params={{ id: book.author?.slug ?? "" }}
+                      params={{ id: book.author?.id ?? "" }}
                       className="text-primary font-semibold hover:underline"
                     >
                       {book.author?.name ?? "غير معروف"}
