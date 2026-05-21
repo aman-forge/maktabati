@@ -3,7 +3,7 @@ export function QuoteSection() {
     <section className="bg-secondary relative container mx-auto overflow-hidden rounded-xl px-6 py-16 lg:px-12">
       {/* العلامة الزخرفية الكبيرة للاقتباس */}
       <div
-        className="text-primary pointer-events-none absolute -top-6 left-8 font-serif text-[160px] leading-none select-none"
+        className="text-primary pointer-events-none absolute -top-6 left-8   text-[160px] leading-none select-none"
         style={{
           opacity: 0.12,
           fontFamily: "var(--font-display)",

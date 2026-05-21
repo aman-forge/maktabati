@@ -34,7 +34,7 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-4 flex items-center gap-3">
-      <h2 className="text-foreground font-serif text-lg font-normal whitespace-nowrap">
+      <h2 className="text-foreground   text-lg font-normal whitespace-nowrap">
         {children}
       </h2>
       <div className="bg-border h-px flex-1" />

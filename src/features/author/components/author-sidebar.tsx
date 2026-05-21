@@ -58,7 +58,7 @@ export function AuthorSidebar({ author: _author }: { author: AuthorType }) {
       </SidebarCard>
 
       {/* Friends */}
-      <SidebarCard title="أصدقاء يقرؤون له">
+      <SidebarCard title="أصدقاء يتابعون المؤلف">
         <div className="mb-2 flex flex-wrap gap-1.5">
           {MOCK_FRIENDS.map((f) => (
             <div

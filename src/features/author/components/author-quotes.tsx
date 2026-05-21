@@ -48,7 +48,7 @@ export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
           key={quote.id}
           className="border-r-primary border-border bg-primary/5 rounded-xl border border-r-[3px] px-5 py-4"
         >
-          <p className="text-foreground font-serif text-base leading-8 italic">{quote.text}</p>
+          <p className="text-foreground   text-base leading-8 italic">{quote.text}</p>
           <p className="text-muted-foreground mt-2 text-xs">— {quote.source}</p>
           <button
             type="button"

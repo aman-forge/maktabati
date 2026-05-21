@@ -1,11 +1,9 @@
 import type { AuthorType } from "@features/author/server/get-author";
 import {
-  BookmarkSimpleIcon,
   BookOpenIcon,
   CheckIcon,
   MapPinIcon,
   QuotesIcon,
-  ShareNetworkIcon,
   TrophyIcon,
   UserPlusIcon,
 } from "@phosphor-icons/react";
@@ -115,11 +113,11 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                   <img
                     src={author.profileImage}
                     alt={author.name ?? ""}
-                    className="border-background h-40 w-40 rounded-full border-2 object-cover shadow-2xl sm:h-55 sm:w-55"
+                    className="border-background h-40 w-40 rounded-full border-2 object-cover shadow-2xl sm:h-65 sm:w-65"
                   />
                 ) : (
                   <div className="border-background flex h-40 w-40 items-center justify-center rounded-full border-2 bg-violet-50 shadow-2xl sm:h-44 sm:w-44 dark:bg-violet-950">
-                    <span className="font-serif text-5xl font-light tracking-tight text-violet-700 sm:text-5xl dark:text-violet-300">
+                    <span className="  text-5xl font-light tracking-tight text-violet-700 sm:text-5xl dark:text-violet-300">
                       {initials}
                     </span>
                   </div>
@@ -127,25 +125,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
               </div>
             </div>
 
-            {/* Follow button */}
-            <Button
-              size="sm"
-              variant={following ? "outline" : "default"}
-              className="w-full max-w-45 gap-1.5 text-xs"
-              onClick={() => setFollowing((f) => !f)}
-            >
-              {following ? (
-                <>
-                  <CheckIcon weight="bold" className="size-3.5" />
-                  تتابعه
-                </>
-              ) : (
-                <>
-                  <UserPlusIcon weight="bold" className="size-3.5" />
-                  متابعة
-                </>
-              )}
-            </Button>
+
           </div>
 
           {/* ── Info column ── */}
@@ -160,7 +140,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             {/* Name + location */}
             <div className="space-y-2 text-center sm:text-start">
-              <h1 className="text-foreground font-serif text-4xl leading-[1.1] font-light tracking-tight sm:text-5xl">
+              <h1 className="text-foreground   text-4xl leading-[1.1] font-light tracking-tight sm:text-5xl">
                 {author.name}
               </h1>
               {author.nationality && (
@@ -204,40 +184,39 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             {/* Actions row */}
             {/* Mobile: primary button full-width; secondary row below */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              {/* Follow button */}
               <Button
-                type="button"
                 size="sm"
-                className="w-full gap-2 text-xs sm:w-auto"
-                render={
-                  <Link to="/discover/books" search={{ author: author.slug }}>
-                    <BookOpenIcon weight="bold" className="size-3.5" />
-                    استكشف الكتب
-                  </Link>
-                }
-              />
+                variant={following ? "outline" : "default"}
+                className="w-full sm:max-w-45 gap-1.5 text-xs"
+                onClick={() => setFollowing((f) => !f)}
+              >
+                {following ? (
+                  <>
+                    <CheckIcon weight="bold" className="size-3.5" />
+                    تتابعه
+                  </>
+                ) : (
+                  <>
+                    <UserPlusIcon weight="bold" className="size-3.5" />
+                    متابعة المؤلف
+                  </>
+                )}
+              </Button>
               <div className="flex gap-2 sm:contents">
                 <Button
+                  type="button"
                   size="sm"
                   variant="outline"
-                  className="flex-1 gap-2 text-xs sm:flex-none"
-                  onClick={() => setBookmarked((b) => !b)}
-                >
-                  {bookmarked ? (
-                    <CheckIcon weight="bold" className="size-3.5" />
-                  ) : (
-                    <BookmarkSimpleIcon weight="bold" className="size-3.5" />
-                  )}
-                  {bookmarked ? "محفوظ" : "احفظ المؤلف"}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="size-8 shrink-0 p-0"
-                  aria-label="مشاركة"
-                >
-                  <ShareNetworkIcon weight="bold" className="size-3.5" />
-                </Button>
+                  className="w-full gap-2 text-xs sm:w-auto"
+                  render={
+                    <Link to="/discover/books" search={{ author: author.slug }}>
+                      <BookOpenIcon weight="bold" className="size-3.5" />
+                      استكشف الكتب
+                    </Link>
+                  }
+                />
               </div>
             </div>
 

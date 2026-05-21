@@ -7,7 +7,6 @@ import { AuthorAbout } from "@/features/author/components/author-about";
 import { AuthorBooks } from "@/features/author/components/author-books";
 import { AuthorNews } from "@/features/author/components/author-news";
 import { AuthorQuotes } from "@/features/author/components/author-quotes";
-import { AuthorReviews } from "@/features/author/components/author-reviews";
 import { AuthorSeries } from "@/features/author/components/author-series";
 import { AuthorSidebar } from "@/features/author/components/author-sidebar";
 
@@ -24,7 +23,6 @@ const TAB_CONFIG = [
   { value: "about", label: "نبذة" },
   { value: "books", label: "الكتب" },
   { value: "series", label: "السلاسل" },
-  { value: "reviews", label: "المراجعات" },
   { value: "quotes", label: "الاقتباسات" },
   { value: "news", label: "أخبار وفعاليات" },
 ];
@@ -44,7 +42,7 @@ function RouteComponent() {
               <TabsTrigger
                 key={value}
                 value={value}
-                className="text-muted-foreground relative rounded-none border-none bg-transparent px-4 pt-0 pb-3 text-sm font-medium whitespace-nowrap shadow-none"
+                className="text-muted-foreground relative rounded-none border-none bg-transparent px-4 pt-0 pb-3 text-sm font-medium whitespace-nowrap shadow-none cursor-pointer"
               >
                 {label}
               </TabsTrigger>
@@ -68,9 +66,6 @@ function RouteComponent() {
             <AuthorSeries author={author} />
           </TabsContent>
 
-          <TabsContent value="reviews">
-            <AuthorReviews author={author} />
-          </TabsContent>
 
           <TabsContent value="quotes">
             <AuthorQuotes author={author} />
