@@ -1,8 +1,6 @@
 import { Separator } from "@shadcn/separator";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
-import { BOOK_GENRES, BOOK_TOPICS } from "@/db/constants/books";
-import { getBookPageMock } from "@/features/book/book-page-mock";
 import { AuthorCard } from "@/features/book/components/author-card";
 import { BookDescription } from "@/features/book/components/book-description";
 import { BookDetailsSidebar } from "@/features/book/components/book-details-sidebar";
@@ -12,6 +10,7 @@ import { BookReviews } from "@/features/book/components/book-reviews";
 import { FeaturedArticles } from "@/features/book/components/featured-articles";
 import { MemberLists } from "@/features/book/components/member-lists";
 import { WriteReview } from "@/features/book/components/write-review";
+import { BOOK_GENRES, BOOK_TOPICS } from "@/features/books/constants";
 import { getBookById } from "@/features/books/server/get-books";
 import { BookCarousel } from "@/features/marketing/components/book-carousel";
 
@@ -37,9 +36,9 @@ function getTopicLabel(value: string) {
 
 function RouteComponent() {
   const book = Route.useLoaderData();
-  const mock = getBookPageMock(book);
   const genreTags =
     book.genres && book.genres.length > 0 ? book.genres.map(getGenreLabel) : ["لا يوجد تصنيف"];
+  const translatorNames = book.translators.map((translator) => translator.name).join("، ");
   const bookDetails = [
     {
       label: "السلسلة",
@@ -73,10 +72,10 @@ function RouteComponent() {
       label: "العنوان الأصلي",
       value: book.originalTitle ?? "",
     },
-    // {
-    //   label: "المترجم",
-    //   value: book.translator ?? "", // TODO: TRANLSATOR
-    // },
+    {
+      label: "المترجم",
+      value: translatorNames,
+    },
     {
       label: "ISBN",
       value: book.isbn ?? "",
@@ -93,7 +92,7 @@ function RouteComponent() {
 
   return (
     <main className="bg-background min-h-screen pb-6 font-sans">
-      <BookHero book={book} ratingSummary={mock.ratingSummary} />
+      <BookHero book={book} ratingSummary={book.ratingSummary} />
 
       <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:px-0">
         <div className="gap-10 lg:grid lg:grid-cols-[1fr_340px] lg:gap-14">
@@ -103,32 +102,32 @@ function RouteComponent() {
             </div>
             <BookDescription paragraphs={book.description || "لا يوجد وصف"} tags={genreTags} />
             <Separator className="bg-border" />
-            <BookEditions editions={mock.editions} />
+            <BookEditions book={book} />
             <Separator className="bg-border" />
             <WriteReview />
             <Separator className="bg-border" />
-            <BookReviews reviews={mock.reviews} />
+            <BookReviews reviews={book.reviews} />
           </div>
 
           <aside className="hidden flex-col gap-10 lg:flex">
             <BookDetailsSidebar details={bookDetails} otherEditions={[]} />
-            <AuthorCard author={book.author ?? undefined} />
+            <AuthorCard author={book.primaryAuthor} />
           </aside>
         </div>
         <div className="border-border flex flex-col gap-8 border-t py-8">
-          <MemberLists lists={mock.memberLists} />
+          <MemberLists book={book} />
           <Separator className="bg-border" />
         </div>
       </div>
-      <BookCarousel
-        title="قد يعجبك أيضا"
-        // subtitle="Books loved by fans of The Ember Court"
-        books={[book, book, book, book, book, book]}
-        accentColor="var(--primary)"
-        // viewAllHref="#"
-      />
+      {book.relatedBooks.length > 0 && (
+        <BookCarousel
+          title="قد يعجبك أيضا"
+          books={book.relatedBooks}
+          accentColor="var(--primary)"
+        />
+      )}
       <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:px-0">
-        <FeaturedArticles articles={mock.featuredArticles} officialLists={mock.officialLists} />
+        <FeaturedArticles book={book} />
       </div>
     </main>
   );

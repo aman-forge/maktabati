@@ -42,7 +42,7 @@ export const authors = pgTable.withRLS(
 );
 
 // ─────────────────────────────────────────────────────────────
-// PUBLISHERS
+// PUBLISHER RECORDS
 // ─────────────────────────────────────────────────────────────
 export const publishers = pgTable.withRLS(
   "publishers",

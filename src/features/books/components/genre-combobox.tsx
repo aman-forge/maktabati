@@ -15,7 +15,7 @@ import * as React from "react";
 
 import { cn } from "@/ui/lib/utils";
 
-import { BOOK_GENRES, type BookGenre } from "../../../db/constants/books";
+import { BOOK_GENRES, type BookGenre } from "../constants";
 
 interface GenreComboboxProps {
   selected: BookGenre[];

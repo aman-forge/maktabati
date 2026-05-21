@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { readingStatusEnum } from "@/db/tables";
+import { READING_STATUSES } from "@/features/books/types";
 
 export const uuidSchema = z.string().uuid();
 
@@ -17,7 +17,7 @@ export const bookSearchSchema = z.object({
   ratingMin: z.number().optional(),
   publishers: z.array(z.string()).optional().catch(undefined),
   topics: z.array(z.string()).optional().catch(undefined),
-  readingStatus: z.array(z.enum(readingStatusEnum.enumValues)).optional().catch(undefined),
+  readingStatus: z.array(z.enum(READING_STATUSES)).optional().catch(undefined),
   page: z.number().int().min(1).default(1),
 });
 

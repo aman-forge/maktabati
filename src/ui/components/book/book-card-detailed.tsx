@@ -3,7 +3,7 @@ import { BookIcon, CalendarBlankIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
-import { BOOK_GENRES } from "@/db/constants/books";
+import { BOOK_GENRES } from "@/features/books/constants";
 import { BookCardType, ReadingStatus, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
@@ -22,9 +22,10 @@ interface BookCardDetailedProps {
 
 export function BookCardDetailed({ book, trackingStatus }: BookCardDetailedProps) {
   const { openTrackModal } = useBookTracking();
-  const rating = 4.2; // TODO: add book.rating
+  const rating = book.averageRating;
   const effectiveStatus = trackingStatus ?? book.status ?? undefined;
   const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
+  const primaryAuthor = book.primaryAuthor;
 
   return (
     <article className="group relative h-full">
@@ -65,20 +66,20 @@ export function BookCardDetailed({ book, trackingStatus }: BookCardDetailedProps
               >
                 {book.title}
               </Link>
-              {book.author ? (
+              {primaryAuthor ? (
                 <Link
                   to="/author/$id"
-                  params={{ id: book.author.id }}
+                  params={{ id: primaryAuthor.id }}
                   className="text-muted-foreground mt-1 w-fit truncate text-sm hover:underline"
                 >
-                  {book.author.name}
+                  {primaryAuthor.name}
                 </Link>
               ) : (
                 <p className="text-muted-foreground mt-0.5 truncate text-sm">مجهول</p>
               )}
             </div>
 
-            {rating && <RatingPill rating={rating} variant="inline" className="shrink-0" />}
+            {rating ? <RatingPill rating={rating} variant="inline" className="shrink-0" /> : null}
           </div>
 
           {/* Description */}

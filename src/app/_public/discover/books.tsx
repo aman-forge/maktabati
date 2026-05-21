@@ -16,11 +16,12 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
 
-import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/db/constants/books";
 import { useUser } from "@/features/auth/use-user";
 import { FilterDialog, type FilterState } from "@/features/books/components/filters-dialog";
+import { BOOK_GENRES, BOOK_TOPICS, type BookGenre } from "@/features/books/constants";
 import { bookSearchSchema, type BookSearch } from "@/features/books/lib/validators";
 import { searchBooks } from "@/features/books/server/get-books";
+import { getPublisherOptions } from "@/features/books/server/publishers";
 import { BookListItem } from "@/ui/components/book/book-card-list";
 import { cn } from "@/ui/lib/utils";
 
@@ -60,7 +61,14 @@ export const Route = createFileRoute("/_public/discover/books")({
   validateSearch: bookSearchSchema,
   component: BooksSearchPage,
   loaderDeps: ({ search: { view: _view, ...rest } }) => rest,
-  loader: ({ deps }) => searchBooks({ data: deps }),
+  loader: async ({ deps }) => {
+    const [result, publisherOptions] = await Promise.all([
+      searchBooks({ data: deps }),
+      getPublisherOptions(),
+    ]);
+
+    return { result, publisherOptions };
+  },
 });
 
 // ---------------------------------------------------------------------------
@@ -103,7 +111,7 @@ function getStatusLabel(value: string) {
 // ---------------------------------------------------------------------------
 
 function BooksSearchPage() {
-  const loaderData = Route.useLoaderData();
+  const { result: loaderData, publisherOptions } = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const isNavigating = useRouterState({ select: (s) => s.isLoading });
@@ -186,6 +194,10 @@ function BooksSearchPage() {
   const selectedGenres = React.useMemo(
     () => BOOK_GENRES.filter((g) => search.genres?.includes(g.value)),
     [search.genres],
+  );
+  const publisherLabels = React.useMemo(
+    () => new Map(publisherOptions.map((publisher) => [publisher.id, publisher.name])),
+    [publisherOptions],
   );
 
   const filters: FilterState = React.useMemo(
@@ -277,14 +289,14 @@ function BooksSearchPage() {
       });
     });
 
-    // search.publishers?.forEach((value) =>
-    //   tags.push({
-    //     key: `pub-${value}`,
-    //     label: value,
-    //     onRemove: () =>
-    //       setParams((prev) => ({ publishers: prev.publishers?.filter((p) => p !== value) })),
-    //   }),
-    // );
+    search.publishers?.forEach((value) =>
+      tags.push({
+        key: `pub-${value}`,
+        label: publisherLabels.get(value) ?? value,
+        onRemove: () =>
+          setParams((prev) => ({ publishers: prev.publishers?.filter((p) => p !== value) })),
+      }),
+    );
 
     search.topics?.forEach((value) => {
       const topic = BOOK_TOPICS.find((t) => t.value === value);
@@ -312,7 +324,7 @@ function BooksSearchPage() {
     }
 
     return tags;
-  }, [search, setParams, user?.id]);
+  }, [publisherLabels, search, setParams, user?.id]);
 
   const hasActiveFilters = activeFilterTags.length > 0;
 
@@ -397,6 +409,7 @@ function BooksSearchPage() {
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
                 onReset={handleResetFilters}
+                publisherOptions={publisherOptions}
                 showReadingStatus={!!user?.id}
               />
             </div>

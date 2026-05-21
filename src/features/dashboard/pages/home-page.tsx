@@ -49,6 +49,7 @@ type GoalItem = {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
+// TODO: Replace with database-backed social activity once activity/follow tables exist.
 const activityFeed: ActivityItem[] = [
   {
     userId: "abdulrahman",
@@ -102,6 +103,7 @@ const activityFeed: ActivityItem[] = [
   },
 ];
 
+// TODO: Replace with database-backed streaks once reading-session tables exist.
 const streak = {
   days: 13,
   todayDone: false,
@@ -109,6 +111,7 @@ const streak = {
   completedDays: [true, true, true, true, true, true, false], // اليوم = الجمعة
 };
 
+// TODO: Replace with database-backed goals once reading-goal tables exist.
 const goals: GoalItem[] = [
   {
     label: "كتب هذا العام",
@@ -124,6 +127,7 @@ const goals: GoalItem[] = [
   },
 ];
 
+// TODO: Replace with database-backed dashboard stats once reading analytics are modeled.
 const stats = [
   { label: "كتب منتهية", value: "34", icon: BookOpenIcon },
   { label: "صفحات مقروءة", value: "8430", icon: ChartBarIcon },
@@ -377,10 +381,10 @@ function ReadingCard({ book }: { book: BookCardType }) {
                 {book.title}
               </h3>
             </Link>
-            {book.author ? (
-              <Link to="/author/$id" params={{ id: book.author.id }}>
+            {book.primaryAuthor ? (
+              <Link to="/author/$id" params={{ id: book.primaryAuthor.id }}>
                 <p className="text-muted-foreground hover:text-foreground mt-0.5 truncate text-xs transition-colors hover:underline">
-                  {book.author.name}
+                  {book.primaryAuthor.name}
                 </p>
               </Link>
             ) : (

@@ -3,7 +3,7 @@ import { CalendarBlankIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Link } from "@tanstack/react-router";
 
-import { BOOK_GENRES } from "@/db/constants/books";
+import { BOOK_GENRES } from "@/features/books/constants";
 import { BookCardType, ReadingStatus, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
@@ -35,9 +35,10 @@ function RankNumber({ rank }: { rank: number }) {
 
 export function BookListItem({ book, rank, trackingStatus }: BookListItemProps) {
   const { openTrackModal } = useBookTracking();
-  const rating = 4.6; // TODO: add book.rating
+  const rating = book.averageRating;
   const effectiveStatus = trackingStatus ?? book.status ?? undefined;
   const statusConfig = effectiveStatus ? getStatusConfig(effectiveStatus) : null;
+  const primaryAuthor = book.primaryAuthor;
 
   return (
     <article className="group">
@@ -77,7 +78,7 @@ export function BookListItem({ book, rank, trackingStatus }: BookListItemProps) 
               {book.title}
             </Link>
             <p className="text-muted-foreground/75 mt-0.5 truncate text-xs">
-              {book.author?.name ?? "مؤلف غير معروف"}
+              {primaryAuthor?.name ?? "مؤلف غير معروف"}
             </p>
           </div>
 
@@ -119,9 +120,11 @@ export function BookListItem({ book, rank, trackingStatus }: BookListItemProps) 
           </div>
         </div>
 
-        <div className="hidden w-14 shrink-0 justify-center sm:flex">
-          <RatingPill rating={rating} variant="overlay" />
-        </div>
+        {rating ? (
+          <div className="hidden w-14 shrink-0 justify-center sm:flex">
+            <RatingPill rating={rating} variant="overlay" />
+          </div>
+        ) : null}
 
         {statusConfig ? (
           <TrackButton

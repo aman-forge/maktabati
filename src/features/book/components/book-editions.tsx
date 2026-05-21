@@ -2,14 +2,16 @@ import { Badge } from "@components/ui/badge";
 import { BookOpenTextIcon, IdentificationCardIcon, TranslateIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
-import type { BibliographicEdition } from "@/features/book/book-page-mock";
+import type { DetailedBookType } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
 
 interface BookEditionsProps {
-  editions: BibliographicEdition[];
+  book: DetailedBookType;
 }
 
-export function BookEditions({ editions }: BookEditionsProps) {
+export function BookEditions({ book }: BookEditionsProps) {
+  // TODO: Replace this current-book fallback with database-backed editions once an editions table exists.
+  const editions = book.editions;
   const [selected, setSelected] = useState(editions[0]?.id ?? "");
 
   if (editions.length === 0) return null;

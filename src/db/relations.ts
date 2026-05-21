@@ -3,23 +3,39 @@
 
 import { defineRelations } from "drizzle-orm";
 
-import { authors, books, profiles, publishers, reviews, series, userBooks } from "./tables";
+import {
+  authors,
+  bookAuthors,
+  books,
+  profiles,
+  publishers,
+  reviews,
+  series,
+  userBooks,
+} from "./tables";
 
 export const relations = defineRelations(
-  { authors, books, publishers, reviews, series, userBooks, profiles },
+  { authors, bookAuthors, books, publishers, reviews, series, userBooks, profiles },
   (r) => ({
     books: {
-      author: r.one.authors({ from: r.books.authorId, to: r.authors.id }),
       publisher: r.one.publishers({
         from: r.books.publisherId,
         to: r.publishers.id,
       }),
       series: r.one.series({ from: r.books.seriesId, to: r.series.id }),
+      bookAuthors: r.many.bookAuthors({ from: r.books.id, to: r.bookAuthors.bookId }),
       userBooks: r.many.userBooks({ from: r.books.id, to: r.userBooks.bookId }),
       reviews: r.many.reviews({ from: r.books.id, to: r.reviews.bookId }),
     },
+    bookAuthors: {
+      book: r.one.books({ from: r.bookAuthors.bookId, to: r.books.id }),
+      author: r.one.authors({ from: r.bookAuthors.authorId, to: r.authors.id }),
+    },
     authors: {
-      books: r.many.books({ from: r.authors.id, to: r.books.authorId }),
+      bookAuthors: r.many.bookAuthors({
+        from: r.authors.id,
+        to: r.bookAuthors.authorId,
+      }),
     },
     publishers: {
       books: r.many.books({ from: r.publishers.id, to: r.books.publisherId }),

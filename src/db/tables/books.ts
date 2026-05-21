@@ -46,12 +46,6 @@ export const books = pgTable.withRLS(
 
     slug: text("slug").notNull().unique(),
 
-    // Denormalised primary author — avoids joining book_authors for the common
-    // "books by author" query. Must stay in sync with book_authors (app layer).
-    authorId: uuid("author_id")
-      .notNull()
-      .references(() => authors.id, { onDelete: "cascade" }),
-
     publisherId: uuid("publisher_id").references(() => publishers.id, {
       onDelete: "set null",
     }),
@@ -97,7 +91,6 @@ export const books = pgTable.withRLS(
     crudPolicy({ role: anonymousRole, read: true, modify: false }),
 
     uniqueIndex("books_slug_idx").on(t.slug),
-    index("books_author_idx").on(t.authorId),
     index("books_series_idx").on(t.seriesId),
     index("books_publisher_idx").on(t.publisherId),
     index("books_publication_year_idx").on(t.publicationYear),
@@ -146,12 +139,13 @@ export const bookAuthors = pgTable.withRLS(
     crudPolicy({ role: authenticatedRole, read: true, modify: false }),
     crudPolicy({ role: anonymousRole, read: true, modify: false }),
 
-    primaryKey({ columns: [t.bookId, t.authorId] }),
+    primaryKey({ columns: [t.bookId, t.authorId, t.role] }),
     index("book_authors_book_idx").on(t.bookId),
     index("book_authors_author_idx").on(t.authorId),
 
     // Lets you query all books translated by a given person efficiently
     index("book_authors_author_role_idx").on(t.authorId, t.role),
+    index("book_authors_book_role_order_idx").on(t.bookId, t.role, t.order),
   ],
 );
 

@@ -9,11 +9,14 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Link } from "@tanstack/react-router";
 
-import { DetailedBookType } from "@/features/books/types";
+import type { AuthorSummary } from "@/features/books/types";
 
 interface AuthorCardProps {
-  author?: NonNullable<DetailedBookType>["author"];
+  author?: AuthorSummary | null;
 }
+
+// TODO: Replace with database-backed follower counts once follow tables exist.
+const PLACEHOLDER_FOLLOWERS = "403K";
 
 export function AuthorCard({ author }: AuthorCardProps) {
   if (!author) return null;
@@ -31,7 +34,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
     },
     {
       label: "المتابعون",
-      value: "403K",
+      value: PLACEHOLDER_FOLLOWERS,
       icon: <UsersThreeIcon weight="duotone" className="h-4 w-4" />,
     },
   ];
@@ -114,7 +117,9 @@ export function AuthorCard({ author }: AuthorCardProps) {
               )}
             </div>
             <Button
+              type="button"
               variant="outline"
+              nativeButton={false}
               render={
                 <Link to="/author/$id" params={{ id: author.id }}>
                   <span>معرفة المزيد</span>

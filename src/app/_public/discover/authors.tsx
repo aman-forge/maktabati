@@ -1,14 +1,23 @@
-import { MagnifyingGlassIcon, SortAscendingIcon, XIcon } from "@phosphor-icons/react";
+import {
+  BookOpenIcon,
+  ListBulletsIcon,
+  MagnifyingGlassIcon,
+  SortAscendingIcon,
+  SquaresFourIcon,
+  XIcon,
+} from "@phosphor-icons/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
+import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
-import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 
-// TODO: replace later
-function AuthorCard({ author }: { author: any }) {
-  return <div className="rounded-xl border p-4">{author.name}</div>;
-}
+import { searchAuthors } from "@/features/books/server/authors";
+import type { AuthorListItem } from "@/features/books/types";
+import { cn } from "@/ui/lib/utils";
 
 const SORT_OPTIONS = [
   { value: "name-asc", label: "الاسم أ-ي" },
@@ -16,26 +25,76 @@ const SORT_OPTIONS = [
   { value: "books", label: "عدد الكتب" },
 ] as const;
 
+type AuthorSort = (typeof SORT_OPTIONS)[number]["value"];
+
 export const Route = createFileRoute("/_public/discover/authors")({
   component: AuthorsPage,
+  loader: () => searchAuthors({ data: { sort: "name-asc" } }),
 });
 
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("");
+}
+
+function AuthorCard({ author, view }: { author: AuthorListItem; view: "grid" | "list" }) {
+  return (
+    <Link
+      to="/author/$id"
+      params={{ id: author.id }}
+      className={cn(
+        "group rounded-xl border bg-card p-4 transition-all hover:-translate-y-0.5 hover:shadow-sm",
+        view === "list" && "flex items-center gap-4",
+      )}
+    >
+      <Avatar className={cn("size-16 rounded-xl", view === "list" && "size-12")}>
+        <AvatarImage src={author.profileImage ?? undefined} alt={author.name} />
+        <AvatarFallback className="rounded-xl">{getInitials(author.name)}</AvatarFallback>
+      </Avatar>
+      <div className={cn("mt-3 flex min-w-0 flex-col gap-1", view === "list" && "mt-0 flex-1")}>
+        <h2 className="text-foreground truncate text-sm font-semibold group-hover:underline">
+          {author.name}
+        </h2>
+        {author.nameEn ? (
+          <p className="text-muted-foreground truncate text-xs">{author.nameEn}</p>
+        ) : null}
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <Badge variant="secondary" className="gap-1 text-xs">
+            <BookOpenIcon className="size-3" />
+            {author.bookCount.toLocaleString("ar")} كتاب
+          </Badge>
+          {author.nationality ? (
+            <span className="text-muted-foreground text-xs">{author.nationality}</span>
+          ) : null}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function AuthorsPage() {
+  const initialAuthors = Route.useLoaderData();
   const [q, setQ] = React.useState("");
-  const [sort, setSort] = React.useState("name-asc");
+  const [sort, setSort] = React.useState<AuthorSort>("name-asc");
   const [view, setView] = React.useState<"grid" | "list">("grid");
+  const debouncedQ = React.useDeferredValue(q.trim());
+  const authorsQuery = useQuery({
+    queryKey: ["discover-authors", debouncedQ, sort],
+    queryFn: () => searchAuthors({ data: { q: debouncedQ || undefined, sort } }),
+    initialData: debouncedQ || sort !== "name-asc" ? undefined : initialAuthors,
+  });
 
-  // mock data
-  const authors: any[] = [];
-
+  const authors = authorsQuery.data ?? [];
   const isEmpty = authors.length === 0;
 
   return (
     <div className="bg-background min-h-screen">
-      {/* Top bar */}
       <div className="bg-background/95 sticky top-0 z-30 border-b backdrop-blur">
         <div className="container mx-auto space-y-2.5 px-4 py-3">
-          {/* Search */}
           <div className="relative">
             <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 right-3 size-4 -translate-y-1/2" />
             <Input
@@ -55,16 +114,16 @@ function AuthorsPage() {
             )}
           </div>
 
-          {/* Controls */}
           <div className="flex items-center gap-2">
-            <Select value={sort} onValueChange={(value) => value && setSort(value)}>
+            <Select value={sort} onValueChange={(value) => setSort(value as AuthorSort)}>
               <SelectTrigger className="h-8 gap-1.5 text-xs">
                 <SortAscendingIcon className="size-3.5" />
+                {SORT_OPTIONS.find((option) => option.value === sort)?.label}
               </SelectTrigger>
               <SelectContent>
-                {SORT_OPTIONS.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>
-                    {o.label}
+                {SORT_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -77,40 +136,39 @@ function AuthorsPage() {
                 size="sm"
                 variant={view === "grid" ? "default" : "outline"}
                 onClick={() => setView("grid")}
+                aria-label="عرض شبكي"
               >
-                Grid
+                <SquaresFourIcon />
               </Button>
               <Button
                 size="sm"
                 variant={view === "list" ? "default" : "outline"}
                 onClick={() => setView("list")}
+                aria-label="عرض قائمة"
               >
-                List
+                <ListBulletsIcon />
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Content */}
       <main className="container mx-auto px-4 py-6">
         {isEmpty ? (
           <div className="py-24 text-center">
             <MagnifyingGlassIcon className="text-muted-foreground/40 mx-auto mb-3 size-8" />
             <p className="text-muted-foreground text-sm">لا توجد نتائج</p>
           </div>
-        ) : view === "grid" ? (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {authors.map((a) => (
-              <AuthorCard key={a.id} author={a} />
-            ))}
-          </div>
         ) : (
-          <div className="divide-y rounded-xl border">
-            {authors.map((a) => (
-              <div key={a.id} className="p-4">
-                <AuthorCard author={a} />
-              </div>
+          <div
+            className={
+              view === "grid"
+                ? "grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-5"
+                : "grid grid-cols-1 gap-3 md:grid-cols-2"
+            }
+          >
+            {authors.map((author) => (
+              <AuthorCard key={author.id} author={author} view={view} />
             ))}
           </div>
         )}

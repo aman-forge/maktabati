@@ -1,8 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { db } from "@/db";
-import { readingStatusEnum, userBooks } from "@/db/tables";
+import { READING_STATUSES } from "../types";
 
 const dateStringSchema = z
   .string()
@@ -10,13 +9,15 @@ const dateStringSchema = z
   .nullable();
 
 const TrackingData = z.object({
-  status: z.enum(readingStatusEnum.enumValues),
+  status: z.enum(READING_STATUSES),
   pageProgress: z.number().int().min(0).nullable(),
   notes: z.string().trim().nullable(),
   startedAt: dateStringSchema,
   finishedAt: dateStringSchema,
 });
+
 export type TrackingDataType = z.infer<typeof TrackingData>;
+
 const updateBookTrackingSchema = z.object({
   bookId: z.uuid(),
   // Temporary auth boundary: client session id is passed until Neon Auth exposes
@@ -25,34 +26,11 @@ const updateBookTrackingSchema = z.object({
   data: TrackingData,
 });
 
+export type UpdateBookTrackingInput = z.infer<typeof updateBookTrackingSchema>;
+
 export const updateBookTracking = createServerFn({ method: "POST" })
   .inputValidator(updateBookTrackingSchema)
-  .handler(async ({ data: { bookId, userId, data } }) => {
-    if (!userId) {
-      throw new Error("Unauthorized");
-    }
-
-    return await db
-      .insert(userBooks)
-      .values({
-        userId,
-        bookId,
-        status: data.status,
-        pageProgress: data.pageProgress,
-        notes: data.notes,
-        startedAt: data.startedAt,
-        finishedAt: data.finishedAt,
-      })
-      .onConflictDoUpdate({
-        target: [userBooks.userId, userBooks.bookId],
-        set: {
-          status: data.status,
-          pageProgress: data.pageProgress,
-          notes: data.notes,
-          startedAt: data.startedAt,
-          finishedAt: data.finishedAt,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
+  .handler(async ({ data }) => {
+    const { updateBookTrackingImpl } = await import("./update-book.impl");
+    return await updateBookTrackingImpl(data);
   });
