@@ -17,11 +17,11 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 
       {/* ── Featured books ── */}
       <div>
-        <SectionTitle>أشهر أعماله</SectionTitle>
+        <SectionTitle>أشهر أعمل المؤلف</SectionTitle>
         <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
           {author.bookAuthors.map((item) => (
             <div key={`${item.authorId}-${item.bookId}`} className="flex shrink-0 pt-1">
-              {item.book ? <BookCard book={item.book} size="lg" /> : <>ERRORR</>}
+              {item.book ? <BookCard author={false} book={item.book} size="lg" /> : <>ERRORR</>}
             </div>
           ))}
         </div>
@@ -34,9 +34,7 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-4 flex items-center gap-3">
-      <h2 className="text-foreground   text-lg font-normal whitespace-nowrap">
-        {children}
-      </h2>
+      <h2 className="text-foreground text-lg font-normal whitespace-nowrap">{children}</h2>
       <div className="bg-border h-px flex-1" />
     </div>
   );
