@@ -8,21 +8,17 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
 } from "@/ui/components/ui/sidebar";
 import { cn } from "@/ui/lib/utils";
 import {
   BellRingingIcon,
   BookOpenIcon,
-  CaretLeftIcon,
   DatabaseIcon,
   EyeIcon,
   GearIcon,
   LockIcon,
   PaintBrushIcon,
   PlugsIcon,
-  ShieldCheckIcon,
-  SignOutIcon,
   UserIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
