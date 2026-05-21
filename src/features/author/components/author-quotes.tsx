@@ -1,6 +1,7 @@
 import type { AuthorType } from "@features/author/server/get-author";
 import { HeartIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+
 import { cn } from "@/ui/lib/utils";
 
 const MOCK_QUOTES = [
@@ -45,10 +46,10 @@ export function AuthorQuotes({ author: _author }: { author: AuthorType }) {
       {MOCK_QUOTES.map((quote) => (
         <div
           key={quote.id}
-          className="rounded-xl border-r-[3px] border-r-primary border border-border bg-primary/5 px-5 py-4"
+          className="border-r-primary border-border bg-primary/5 rounded-xl border border-r-[3px] px-5 py-4"
         >
-          <p className="font-serif text-base italic leading-8 text-foreground">{quote.text}</p>
-          <p className="text-xs text-muted-foreground mt-2">— {quote.source}</p>
+          <p className="text-foreground font-serif text-base leading-8 italic">{quote.text}</p>
+          <p className="text-muted-foreground mt-2 text-xs">— {quote.source}</p>
           <button
             type="button"
             onClick={() => toggleLike(quote.id)}

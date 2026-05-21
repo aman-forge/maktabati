@@ -5,7 +5,7 @@
 
 import type { AuthorType } from "@features/author/server/get-author";
 
-import { BookCard } from "@/features/books/components/book-card";
+import { BookCard } from "@/ui/components/book/book-card";
 
 // type Filter = "all" | "novel" | "story" | "series";
 
@@ -92,7 +92,7 @@ import { BookCard } from "@/features/books/components/book-card";
 //   },
 // ];
 
-export function AuthorBooks({ author: _author }: { author: AuthorType }) {
+export function AuthorBooks({ author }: { author: AuthorType }) {
   // const [filter, setFilter] = useState<Filter>("all");
   // const filtered =
   //   filter === "all" ? MOCK_ALL_BOOKS : MOCK_ALL_BOOKS.filter((b) => b.type === filter);
@@ -124,10 +124,10 @@ export function AuthorBooks({ author: _author }: { author: AuthorType }) {
         </select>*/}
       {/*</div>*/}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-4 ">
-        {_author.books.map((book) => (
-          <div key={book.id} className="flex flex-wrap shrink-0 pt-1">
-            <BookCard book={book ?? undefined} size="md" />
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 sm:gap-4 md:grid-cols-6">
+        {author.bookAuthors.map((item) => (
+          <div key={`${item.authorId}-${item.bookId}`} className="flex shrink-0 flex-wrap pt-1">
+            {item.book ? <BookCard author={false} book={item.book} size="md" /> : <>ERROR</>}
           </div>
         ))}
       </div>

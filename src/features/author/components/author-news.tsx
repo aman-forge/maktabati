@@ -62,15 +62,15 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
             return (
               <div
                 key={item.id}
-                className="flex gap-3 items-start rounded-xl border border-border bg-card p-4"
+                className="border-border bg-card flex items-start gap-3 rounded-xl border p-4"
               >
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Icon className="size-4 text-primary" />
+                <div className="bg-primary/10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg">
+                  <Icon className="text-primary size-4" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-primary mb-1">{item.source}</p>
-                  <p className="text-sm font-medium text-foreground leading-snug">{item.title}</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">{item.date}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-primary mb-1 text-xs font-medium">{item.source}</p>
+                  <p className="text-foreground text-sm leading-snug font-medium">{item.title}</p>
+                  <p className="text-muted-foreground mt-1 text-[11px]">{item.date}</p>
                 </div>
               </div>
             );
@@ -85,22 +85,22 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
           {MOCK_EVENTS.map((event) => (
             <div
               key={event.id}
-              className="grid grid-cols-[52px_1fr_auto] gap-3 items-center rounded-xl border border-border bg-card p-4"
+              className="border-border bg-card grid grid-cols-[52px_1fr_auto] items-center gap-3 rounded-xl border p-4"
             >
               <div className="text-center">
-                <p className="text-xl font-semibold leading-none text-primary">{event.day}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">
+                <p className="text-primary text-xl leading-none font-semibold">{event.day}</p>
+                <p className="text-muted-foreground mt-1 text-[10px] tracking-wide uppercase">
                   {event.month}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">{event.title}</p>
-                <p className="flex items-center gap-1 text-[11px] text-muted-foreground mt-0.5">
+                <p className="text-foreground text-sm font-medium">{event.title}</p>
+                <p className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[11px]">
                   <MapPinIcon className="size-3 shrink-0" />
                   {event.location}
                 </p>
               </div>
-              <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium shrink-0">
+              <span className="bg-primary/10 text-primary shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium">
                 {event.type}
               </span>
             </div>
@@ -113,11 +113,11 @@ export function AuthorNews({ author: _author }: { author: AuthorType }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-3 mb-4">
-      <h2 className="font-serif text-lg font-normal text-foreground whitespace-nowrap">
+    <div className="mb-4 flex items-center gap-3">
+      <h2 className="text-foreground font-serif text-lg font-normal whitespace-nowrap">
         {children}
       </h2>
-      <div className="flex-1 h-px bg-border" />
+      <div className="bg-border h-px flex-1" />
     </div>
   );
 }

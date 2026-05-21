@@ -79,47 +79,47 @@ export function AuthorHero({ author }: { author: AuthorType }) {
   );
 
   return (
-    <section className="relative border-b overflow-hidden" dir="rtl">
+    <section className="relative overflow-hidden border-b" dir="rtl">
       {/* ── Atmospheric background layers ── */}
-      <div className="absolute inset-0 bg-linear-to-b from-muted/10 via-muted/25 to-muted/40 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_80%_0%,color-mix(in srgb, var(--primary) 22%, transparent),transparent)] pointer-events-none" />
+      <div className="from-muted/10 via-muted/25 to-muted/40 pointer-events-none absolute inset-0 bg-linear-to-b" />
+      <div className="bg-[radial-gradient(ellipse_80%_60%_at_80%_0%,color-mix(in srgb, var(--primary) 22%, transparent),transparent)] pointer-events-none absolute inset-0" />
 
       {/* Mobile-only: strong radial behind avatar area */}
-      <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_100%_80%_at_50%_0%,color-mix(in srgb,var(--primary)_18%,transparent),transparent)] pointer-events-none sm:hidden" />
+      <div className="bg-[radial-gradient(ellipse_100%_80%_at_50%_0%,color-mix(in srgb,var(--primary)_18%,transparent),transparent)] pointer-events-none absolute inset-x-0 top-0 h-72 sm:hidden" />
 
       {/* Subtle top accent line */}
-      <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
+      <div className="via-primary/40 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent" />
 
       <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-        <div className="flex flex-col sm:flex-row gap-8 sm:gap-14 items-center">
+        <div className="flex flex-col items-center gap-8 sm:flex-row sm:gap-14">
           {/* ── Avatar column ── */}
-          <div className="flex flex-col items-center gap-4 shrink-0">
+          <div className="flex shrink-0 flex-col items-center gap-4">
             {/* Mobile-only eyebrow label — sits above avatar for editorial feel */}
             <div className="flex items-center gap-2 sm:hidden">
-              <div className="h-px w-8 bg-primary/40" />
-              <span className="text-[9px] font-bold tracking-[0.25em] uppercase text-primary/60">
+              <div className="bg-primary/40 h-px w-8" />
+              <span className="text-primary/60 text-[9px] font-bold tracking-[0.25em] uppercase">
                 مؤلف
               </span>
-              <div className="h-px w-8 bg-primary/40" />
+              <div className="bg-primary/40 h-px w-8" />
             </div>
 
             <div className="relative">
               {/* Outer atmospheric glow — more pronounced on mobile */}
-              <div className="absolute -inset-3 rounded-full bg-linear-to-br from-primary via-primary/10 to-transparent blur-lg sm:-inset-2 sm:blur-md" />
+              <div className="from-primary via-primary/10 absolute -inset-3 rounded-full bg-linear-to-br to-transparent blur-lg sm:-inset-2 sm:blur-md" />
 
-              <div className="absolute -inset-1.5 rounded-full border border-dashed border-primary/50 animate-[spin_20s_linear_infinite]" />
+              <div className="border-primary/50 absolute -inset-1.5 animate-[spin_20s_linear_infinite] rounded-full border border-dashed" />
               {/* Inner border ring */}
-              <div className="absolute -inset-0.5 rounded-full bg-linear-to-br from-primary/30 to-border/20" />
+              <div className="from-primary/30 to-border/20 absolute -inset-0.5 rounded-full bg-linear-to-br" />
               <div className="relative">
                 {author.profileImage ? (
                   <img
                     src={author.profileImage}
                     alt={author.name ?? ""}
-                    className="w-40 h-40 rounded-full object-cover border-2 border-background shadow-2xl sm:w-55 sm:h-55"
+                    className="border-background h-40 w-40 rounded-full border-2 object-cover shadow-2xl sm:h-55 sm:w-55"
                   />
                 ) : (
-                  <div className="w-40 h-40 rounded-full bg-violet-50 dark:bg-violet-950 border-2 border-background flex items-center justify-center shadow-2xl sm:w-44 sm:h-44">
-                    <span className="font-serif text-5xl font-light text-violet-700 dark:text-violet-300 tracking-tight sm:text-5xl">
+                  <div className="border-background flex h-40 w-40 items-center justify-center rounded-full border-2 bg-violet-50 shadow-2xl sm:h-44 sm:w-44 dark:bg-violet-950">
+                    <span className="font-serif text-5xl font-light tracking-tight text-violet-700 sm:text-5xl dark:text-violet-300">
                       {initials}
                     </span>
                   </div>
@@ -149,23 +149,23 @@ export function AuthorHero({ author }: { author: AuthorType }) {
           </div>
 
           {/* ── Info column ── */}
-          <div className="flex flex-col gap-5 flex-1 min-w-0">
+          <div className="flex min-w-0 flex-1 flex-col gap-5">
             {/* Eyebrow label — desktop/tablet only (mobile has it above avatar) */}
-            <div className="hidden sm:flex items-center gap-2.5">
-              <div className="h-px w-10 bg-primary/50" />
-              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-primary/70">
+            <div className="hidden items-center gap-2.5 sm:flex">
+              <div className="bg-primary/50 h-px w-10" />
+              <span className="text-primary/70 text-[10px] font-semibold tracking-[0.2em] uppercase">
                 مؤلف
               </span>
             </div>
 
             {/* Name + location */}
             <div className="space-y-2 text-center sm:text-start">
-              <h1 className="text-4xl font-serif font-light leading-[1.1] tracking-tight text-foreground sm:text-5xl">
+              <h1 className="text-foreground font-serif text-4xl leading-[1.1] font-light tracking-tight sm:text-5xl">
                 {author.name}
               </h1>
               {author.nationality && (
                 <p className="flex items-center justify-center gap-1.5 text-xs sm:justify-start">
-                  <MapPinIcon className="size-3.5 shrink-0 text-primary/60" />
+                  <MapPinIcon className="text-primary/60 size-3.5 shrink-0" />
                   <span className="text-muted-foreground">{author.nationality}</span>
                   {author.birthYear && (
                     <span className="text-muted-foreground/70">
@@ -179,7 +179,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             {/* Award pill */}
             {notableAward && (
-              <div className="flex items-center justify-center gap-2 w-fit rounded-full border border-amber-500/20 bg-amber-50/80 dark:bg-amber-950/40 px-3.5 py-1.5 text-xs font-medium text-amber-700 dark:text-amber-300 shadow-sm mx-auto sm:mx-0 sm:justify-start">
+              <div className="mx-auto flex w-fit items-center justify-center gap-2 rounded-full border border-amber-500/20 bg-amber-50/80 px-3.5 py-1.5 text-xs font-medium text-amber-700 shadow-sm sm:mx-0 sm:justify-start dark:bg-amber-950/40 dark:text-amber-300">
                 <TrophyIcon weight="duotone" className="size-3.5 text-amber-500" />
                 {notableAward}
               </div>
@@ -187,10 +187,10 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             {/* Stats row */}
             {/* Mobile: full-width with more padding; tablet+: unchanged compact pill */}
-            <div className="flex items-stretch gap-0 w-full rounded-xl border border-border/50 bg-background/40 backdrop-blur-sm overflow-hidden shadow-sm sm:w-fit">
+            <div className="border-border/50 bg-background/40 flex w-full items-stretch gap-0 overflow-hidden rounded-xl border shadow-sm backdrop-blur-sm sm:w-fit">
               <StatCell
                 label="كتاباً"
-                value={author.books.length > 0 ? author.books.length.toString() : "—"}
+                value={author.bookAuthors.length > 0 ? author.bookAuthors.length.toString() : "—"}
                 mobile
               />
               {/* <div className="w-px bg-border/50 my-3" />
@@ -200,7 +200,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
             </div>
 
             {/* Thin decorative rule */}
-            <div className="h-px bg-linear-to-l from-transparent via-border/60 to-transparent -mx-1" />
+            <div className="via-border/60 -mx-1 h-px bg-linear-to-l from-transparent to-transparent" />
 
             {/* Actions row */}
             {/* Mobile: primary button full-width; secondary row below */}
@@ -233,7 +233,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="size-8 p-0 shrink-0"
+                  className="size-8 shrink-0 p-0"
                   aria-label="مشاركة"
                 >
                   <ShareNetworkIcon weight="bold" className="size-3.5" />
@@ -242,23 +242,23 @@ export function AuthorHero({ author }: { author: AuthorType }) {
             </div>
 
             {/* ── Mobile-only: Featured quote strip ── */}
-            <div className="sm:hidden mt-1">
-              <div className="relative rounded-xl border border-primary/15 bg-background/30 backdrop-blur-sm px-4 py-3.5 overflow-hidden">
+            <div className="mt-1 sm:hidden">
+              <div className="border-primary/15 bg-background/30 relative overflow-hidden rounded-xl border px-4 py-3.5 backdrop-blur-sm">
                 {/* Decorative quote mark */}
                 <QuotesIcon
                   weight="fill"
-                  className="absolute top-2 left-3 size-8 text-primary/8 rotate-180"
+                  className="text-primary/8 absolute top-2 left-3 size-8 rotate-180"
                 />
                 {/* Accent bar */}
-                <div className="absolute inset-y-0 right-0 w-[3px] rounded-full bg-linear-to-b from-primary/50 via-primary/30 to-transparent" />
-                <p className="text-[15px] leading-[1.75] text-foreground/80 font-light relative z-10 text-right">
+                <div className="from-primary/50 via-primary/30 absolute inset-y-0 right-0 w-0.75 rounded-full bg-linear-to-b to-transparent" />
+                <p className="text-foreground/80 relative z-10 text-right text-[15px] leading-[1.75] font-light">
                   {HERO_QUOTES[0].text}
                 </p>
-                <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-border/30">
-                  <span className="text-[10px] text-muted-foreground/50">
+                <div className="border-border/30 mt-3 flex items-center justify-between border-t pt-2.5">
+                  <span className="text-muted-foreground/50 text-[10px]">
                     — {HERO_QUOTES[0].source}
                   </span>
-                  <span className="text-[9px] tracking-[0.15em] uppercase text-primary/50 font-medium">
+                  <span className="text-primary/50 text-[9px] font-medium tracking-[0.15em] uppercase">
                     اقتباس
                   </span>
                 </div>
@@ -267,28 +267,28 @@ export function AuthorHero({ author }: { author: AuthorType }) {
           </div>
 
           {/* ── Vertical divider — desktop only ── */}
-          <div className="hidden lg:block w-px self-stretch bg-linear-to-b from-transparent via-border/50 to-transparent mx-1" />
+          <div className="via-border/50 mx-1 hidden w-px self-stretch bg-linear-to-b from-transparent to-transparent lg:block" />
 
           {/* ── Quotes sidebar — desktop only ── */}
-          <div className="hidden lg:flex flex-col gap-3 w-90 shrink-0 self-stretch justify-center py-2">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[15px] font-semibold tracking-[0.15em] uppercase text-muted-foreground/60">
+          <div className="hidden w-90 shrink-0 flex-col justify-center gap-3 self-stretch py-2 lg:flex">
+            <div className="mb-1 flex items-center gap-2">
+              <span className="text-muted-foreground/60 text-[15px] font-semibold tracking-[0.15em] uppercase">
                 اقتباسات
               </span>
-              <div className="h-px flex-1 bg-border/30" />
+              <div className="bg-border/30 h-px flex-1" />
             </div>
 
             {HERO_QUOTES.map((quote) => (
               <div
                 key={quote.id}
-                className="group relative rounded-lg border border-border/40 bg-background/30 backdrop-blur-sm px-3 py-2 hover:border-border/70 hover:bg-background/50 transition-all duration-200"
+                className="group border-border/40 bg-background/30 hover:border-border/70 hover:bg-background/50 relative rounded-lg border px-3 py-2 backdrop-blur-sm transition-all duration-200"
               >
-                <div className="absolute top-3 bottom-3 inset-e-0 w-[3px] rounded-full bg-primary/30 group-hover:bg-primary/60 transition-colors" />
-                <p className="text-[18px] leading-[1.65] text-foreground/80 line-clamp-3">
+                <div className="bg-primary/30 group-hover:bg-primary/60 absolute inset-e-0 top-3 bottom-3 w-0.75 rounded-full transition-colors" />
+                <p className="text-foreground/80 line-clamp-3 text-[18px] leading-[1.65]">
                   {quote.text}
                 </p>
-                <div className="flex items-center justify-between mt-2.5">
-                  <span className="text-[10px] text-muted-foreground/50">— {quote.source}</span>
+                <div className="mt-2.5 flex items-center justify-between">
+                  <span className="text-muted-foreground/50 text-[10px]">— {quote.source}</span>
                 </div>
               </div>
             ))}
@@ -297,7 +297,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 inset-x-0 h-px bg-linear-to-r from-transparent via-border/60 to-transparent" />
+      <div className="via-border/60 absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent to-transparent" />
     </section>
   );
 }
@@ -306,12 +306,12 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 function StatCell({ label, value, mobile }: { label: string; value: string; mobile?: boolean }) {
   return (
     <div
-      className={`flex flex-col items-center gap-0.5 py-3 ${mobile ? "flex-1 px-3 sm:px-5 sm:flex-none" : "px-5"}`}
+      className={`flex flex-col items-center gap-0.5 py-3 ${mobile ? "flex-1 px-3 sm:flex-none sm:px-5" : "px-5"}`}
     >
-      <span className="text-base font-semibold text-foreground tabular-nums leading-none">
+      <span className="text-foreground text-base leading-none font-semibold tabular-nums">
         {value}
       </span>
-      <span className="text-[10px] tracking-wide text-muted-foreground/70 mt-1">{label}</span>
+      <span className="text-muted-foreground/70 mt-1 text-[10px] tracking-wide">{label}</span>
     </div>
   );
 }

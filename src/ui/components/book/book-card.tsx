@@ -11,6 +11,7 @@ import { BookCover, RatingPill, StatusBadge, TrackButton } from "./book-card-par
 
 interface BookCardProps {
   book: BookCardType;
+  author?: boolean;
   size?: "sm" | "md" | "lg";
   trackingStatus?: ReadingStatus;
 }
@@ -21,7 +22,7 @@ const DIMENSIONS = {
   lg: { card: "w-48", image: "h-72" },
 } as const;
 
-export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
+export function BookCard({ book, author = false, size = "lg", trackingStatus }: BookCardProps) {
   const { openTrackModal } = useBookTracking();
   const dim = DIMENSIONS[size];
   const rating = book.averageRating;
@@ -101,6 +102,8 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
 
             {/* Status pill — shown only when tracked */}
             {!effectiveStatus &&
+              !book.pageCount &&
+              !book.publicationYear &&
               /* Genres — only when no status */
               book.genres?.[0] && (
                 <Badge
@@ -133,17 +136,18 @@ export function BookCard({ book, size = "lg", trackingStatus }: BookCardProps) {
         </Link>
 
         {/* Author */}
-        {primaryAuthor ? (
-          <Link
-            to="/author/$id"
-            params={{ id: primaryAuthor.id }}
-            className="text-muted-foreground truncate text-xs hover:underline"
-          >
-            {primaryAuthor.name}
-          </Link>
-        ) : (
-          <p className="text-muted-foreground truncate text-xs">مجهول</p>
-        )}
+        {author &&
+          (primaryAuthor ? (
+            <Link
+              to="/author/$id"
+              params={{ id: primaryAuthor.id }}
+              className="text-muted-foreground truncate text-xs hover:underline"
+            >
+              {primaryAuthor.name}
+            </Link>
+          ) : (
+            <p className="text-muted-foreground truncate text-xs">مجهول</p>
+          ))}
       </div>
     </article>
   );

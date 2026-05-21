@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+
 import { db } from "@/db";
 import { uuidSchema } from "@/ui/lib/validators";
 
@@ -10,7 +11,11 @@ export const getAuthorById = createServerFn({ method: "GET" })
         id: authorId,
       },
       with: {
-        books: true,
+        bookAuthors: {
+          with: {
+            book: true,
+          },
+        },
       },
     });
 
