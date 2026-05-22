@@ -24,7 +24,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
             <BookTrackingProvider>
               <TooltipProvider>
                 {children}
-                <Toaster richColors />
+                <Toaster richColors position="top-right" />
               </TooltipProvider>
             </BookTrackingProvider>
           </QueryClientProvider>

@@ -38,7 +38,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
         },
       }}
       id="main-app-toaster"
-      richColors
       {...props}
     />
   );

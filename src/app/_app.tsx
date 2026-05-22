@@ -1,21 +1,24 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { authClient } from "@/features/auth/client";
+import {
+  clearHasSessionHint,
+  readHasSessionHint,
+  writeHasSessionHint,
+} from "@/features/auth/session-storage";
 import MainLayout from "@/ui/components/layout";
-
-const HAS_SESSION_KEY = "auth:hasSession";
 
 export const Route = createFileRoute("/_app")({
   beforeLoad: async ({ location }) => {
     // SSR has no auth state — skip and let client handle it
     if (typeof window === "undefined") return {};
 
-    const likelyLoggedIn = localStorage.getItem(HAS_SESSION_KEY) === "1";
+    const likelyLoggedIn = readHasSessionHint();
     const { data: session } = await authClient.getSession();
     const user = session?.user ?? null;
 
     if (!user) {
-      localStorage.removeItem(HAS_SESSION_KEY);
+      clearHasSessionHint();
       // Only redirect if we're sure they're not logged in
       // (i.e. no localStorage hint either)
       if (!likelyLoggedIn) {
@@ -26,7 +29,7 @@ export const Route = createFileRoute("/_app")({
         });
       }
     } else {
-      localStorage.setItem(HAS_SESSION_KEY, "1");
+      writeHasSessionHint();
     }
 
     return { session: session ?? null, user };

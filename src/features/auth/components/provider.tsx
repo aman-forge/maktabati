@@ -3,20 +3,21 @@ import { Link, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 import { authClient } from "@/features/auth/client";
+import { clearHasSessionHint, writeHasSessionHint } from "@/features/auth/session-storage";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const handleNavigate = (href: string) => {
     if (!href.includes("/auth/")) {
-      localStorage.setItem("auth:hasSession", "1");
+      writeHasSessionHint();
     }
     router.navigate({ href });
   };
 
   const handleReplace = (href: string) => {
     if (href.includes("/auth/logout")) {
-      localStorage.removeItem("auth:hasSession");
+      clearHasSessionHint();
     }
     router.navigate({ href, replace: true });
   };
