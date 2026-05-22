@@ -17,7 +17,7 @@ export function AuthorAbout({ author }: { author: AuthorType }) {
 
       {/* ── Featured books ── */}
       <div>
-        <SectionTitle>أشهر أعمل المؤلف</SectionTitle>
+        <SectionTitle>أشهر أعمال المؤلف</SectionTitle>
         <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
           {author.bookAuthors.map((item) => (
             <div key={`${item.authorId}-${item.bookId}`} className="flex shrink-0 pt-1">

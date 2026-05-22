@@ -63,7 +63,6 @@ function getNotableAward(author: AuthorType): string | null {
 // ─── Main component ───────────────────────────────────────────────────────────
 export function AuthorHero({ author }: { author: AuthorType }) {
   const [following, setFollowing] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
   const notableAward = getNotableAward(author);
 
   const initials = useMemo(
@@ -88,19 +87,10 @@ export function AuthorHero({ author }: { author: AuthorType }) {
       {/* Subtle top accent line */}
       <div className="via-primary/40 absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent" />
 
-      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
+      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
         <div className="flex flex-col items-center gap-8 sm:flex-row sm:gap-14">
           {/* ── Avatar column ── */}
           <div className="flex shrink-0 flex-col items-center gap-4">
-            {/* Mobile-only eyebrow label — sits above avatar for editorial feel */}
-            <div className="flex items-center gap-2 sm:hidden">
-              <div className="bg-primary/40 h-px w-8" />
-              <span className="text-primary/60 text-[9px] font-bold tracking-[0.25em] uppercase">
-                مؤلف
-              </span>
-              <div className="bg-primary/40 h-px w-8" />
-            </div>
-
             <div className="relative">
               {/* Outer atmospheric glow — more pronounced on mobile */}
               <div className="from-primary via-primary/10 absolute -inset-3 rounded-full bg-linear-to-br to-transparent blur-lg sm:-inset-2 sm:blur-md" />
@@ -113,38 +103,26 @@ export function AuthorHero({ author }: { author: AuthorType }) {
                   <img
                     src={author.profileImage}
                     alt={author.name ?? ""}
-                    className="border-background h-40 w-40 rounded-full border-2 object-cover shadow-2xl sm:h-65 sm:w-65"
+                    className="border-background size-48 rounded-3xl border-2 object-cover shadow-2xl sm:size-64"
                   />
                 ) : (
-                  <div className="border-background flex h-40 w-40 items-center justify-center rounded-full border-2 bg-violet-50 shadow-2xl sm:h-44 sm:w-44 dark:bg-violet-950">
-                    <span className="  text-5xl font-light tracking-tight text-violet-700 sm:text-5xl dark:text-violet-300">
+                  <div className="border-background bg-primary/30 flex size-48 items-center justify-center rounded-full border-2 shadow-2xl sm:size-64">
+                    <span className="text-primary text-5xl font-light tracking-tight sm:text-5xl">
                       {initials}
                     </span>
                   </div>
                 )}
               </div>
             </div>
-
-
           </div>
 
           {/* ── Info column ── */}
           <div className="flex min-w-0 flex-1 flex-col gap-5">
-            {/* Eyebrow label — desktop/tablet only (mobile has it above avatar) */}
-            <div className="hidden items-center gap-2.5 sm:flex">
-              <div className="bg-primary/50 h-px w-10" />
-              <span className="text-primary/70 text-[10px] font-semibold tracking-[0.2em] uppercase">
-                مؤلف
-              </span>
-            </div>
-
             {/* Name + location */}
-            <div className="space-y-2 text-center sm:text-start">
-              <h1 className="text-foreground   text-4xl leading-[1.1] font-light tracking-tight sm:text-5xl">
-                {author.name}
-              </h1>
+            <div className="space-y-3 text-center sm:text-start">
+              <h1 className="text-foreground text-3xl tracking-tight md:text-4xl">{author.name}</h1>
               {author.nationality && (
-                <p className="flex items-center justify-center gap-1.5 text-xs sm:justify-start">
+                <p className="flex items-center justify-center gap-1.5 text-sm sm:justify-start">
                   <MapPinIcon className="text-primary/60 size-3.5 shrink-0" />
                   <span className="text-muted-foreground">{author.nationality}</span>
                   {author.birthYear && (
@@ -184,12 +162,12 @@ export function AuthorHero({ author }: { author: AuthorType }) {
 
             {/* Actions row */}
             {/* Mobile: primary button full-width; secondary row below */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="flex flex-row items-center gap-2">
               {/* Follow button */}
               <Button
                 size="sm"
                 variant={following ? "outline" : "default"}
-                className="w-full sm:max-w-45 gap-1.5 text-xs"
+                className="w-full gap-1.5 text-xs sm:max-w-45"
                 onClick={() => setFollowing((f) => !f)}
               >
                 {following ? (
@@ -249,7 +227,7 @@ export function AuthorHero({ author }: { author: AuthorType }) {
           <div className="via-border/50 mx-1 hidden w-px self-stretch bg-linear-to-b from-transparent to-transparent lg:block" />
 
           {/* ── Quotes sidebar — desktop only ── */}
-          <div className="hidden w-90 shrink-0 flex-col justify-center gap-3 self-stretch py-2 lg:flex">
+          <div className="hidden w-90 shrink-0 flex-col justify-center gap-3 self-stretch py-2 xl:flex">
             <div className="mb-1 flex items-center gap-2">
               <span className="text-muted-foreground/60 text-[15px] font-semibold tracking-[0.15em] uppercase">
                 اقتباسات

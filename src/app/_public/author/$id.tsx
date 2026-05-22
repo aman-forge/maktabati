@@ -30,7 +30,7 @@ function RouteComponent() {
   const author = Route.useLoaderData();
 
   return (
-    <main className="bg-background min-h-screen overflow-auto pb-12" dir="rtl">
+    <main className="bg-background min-h-screen overflow-auto" dir="rtl">
       <AuthorHero author={author} />
       <div className="container mx-auto max-w-6xl overflow-hidden px-4 py-10 md:px-0">
         <Tabs defaultValue="about" dir="rtl">
@@ -42,7 +42,7 @@ function RouteComponent() {
               <TabsTrigger
                 key={value}
                 value={value}
-                className="text-muted-foreground relative rounded-none border-none bg-transparent px-4 pt-0 pb-3 text-sm font-medium whitespace-nowrap shadow-none cursor-pointer"
+                className="text-muted-foreground relative cursor-pointer rounded-none border-none bg-transparent px-4 pt-0 pb-3 text-sm font-medium whitespace-nowrap shadow-none"
               >
                 {label}
               </TabsTrigger>
@@ -65,7 +65,6 @@ function RouteComponent() {
           <TabsContent value="series">
             <AuthorSeries author={author} />
           </TabsContent>
-
 
           <TabsContent value="quotes">
             <AuthorQuotes author={author} />
