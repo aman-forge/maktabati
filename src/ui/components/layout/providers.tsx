@@ -5,32 +5,34 @@ import { TooltipProvider } from "@shadcn/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 
-import AuthProvider from "@/features/auth/components/provider";
 import { BookTrackingProvider } from "@/features/books/context/book-tracking-context";
 
 const Providers = ({ children }: { children: ReactNode }) => {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            staleTime: 30_000,
+          },
+        },
+      }),
+  );
 
   return (
-    <AuthProvider>
-      <DirectionProvider direction="rtl">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryClientProvider client={queryClient}>
-            <BookTrackingProvider>
-              <TooltipProvider>
-                {children}
-                <Toaster richColors position="top-right" />
-              </TooltipProvider>
-            </BookTrackingProvider>
-          </QueryClientProvider>
-        </ThemeProvider>
-      </DirectionProvider>
-    </AuthProvider>
+    <DirectionProvider direction="rtl">
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <QueryClientProvider client={queryClient}>
+          <BookTrackingProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster richColors position="top-right" />
+            </TooltipProvider>
+          </BookTrackingProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </DirectionProvider>
   );
 };
 

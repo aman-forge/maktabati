@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
 
@@ -9,24 +9,22 @@ import LibraryBooks from "@/features/dashboard/pages/library-page";
 
 export const Route = createFileRoute("/_app/library")({
   component: RouteComponent,
-  // TODO: Server Auth
-  // loader: ({ userId }: { userId: string }) => {
-  //   const booksPromise = getUserBooks(userId);
-  //   return { booksPromise };
-  // },
 });
+
+const LIBRARY_BOOKS_STALE_TIME = 60_000;
 
 function RouteComponent() {
   const { user, isLoading: isUserLoading } = useUser();
-  const { data: books, isLoading: isBooksLoading } = useQuery({
+  const booksQuery = useQuery({
     queryKey: ["library-books", user?.id],
-    // Temporary auth boundary: use the client session id until Neon Auth can be
-    // read reliably from TanStack Start server functions.
-    queryFn: () => getUserBooks({ data: user!.id }),
-    enabled: !!user?.id, // NOTE: This prevents the query from running until the client auth is ready
+    queryFn: () => getUserBooks(),
+    enabled: !!user?.id,
+    placeholderData: keepPreviousData,
+    staleTime: LIBRARY_BOOKS_STALE_TIME,
   });
+  const books = booksQuery.data;
 
-  if (!user || isUserLoading || isBooksLoading) {
+  if (!user || isUserLoading || (booksQuery.isPending && !books)) {
     return <LibraryPageSkeleton />;
   }
 

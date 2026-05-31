@@ -26,7 +26,7 @@ export async function getUserBooksImpl(userId: string): Promise<BookCardType[]> 
     .filter((book): book is BookCardType => !!book);
 }
 
-export async function getUserBookTrackingImpl(data: UserBookTrackingInput) {
+export async function getUserBookTrackingImpl(data: UserBookTrackingInput & { userId: string }) {
   const [row] = await db
     .select({
       status: userBooks.status,

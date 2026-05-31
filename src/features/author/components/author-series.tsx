@@ -1,8 +1,7 @@
-import { BooksIcon } from "@phosphor-icons/react";
-import { Badge } from "@shadcn/badge";
-// import { Link } from "@tanstack/react-router";
-
 import type { AuthorType } from "@features/author/server/get-author";
+import { BooksIcon } from "@phosphor-icons/react";
+// import { Link } from "@tanstack/react-router";
+import { Badge } from "@shadcn/badge";
 
 const MOCK_SERIES = [
   {
@@ -37,14 +36,14 @@ export function AuthorSeries({ author: _author }: { author: AuthorType }) {
       {MOCK_SERIES.map((series) => (
         <div
           key={series.id}
-          className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 hover:bg-muted/40 transition-colors"
+          className="border-border bg-card hover:bg-muted/40 flex items-center gap-4 rounded-xl border p-4 transition-colors"
         >
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-            <BooksIcon className="size-5 text-primary" />
+          <div className="bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+            <BooksIcon className="text-primary size-5" />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground">{series.name}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{series.description}</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-foreground text-sm font-medium">{series.name}</p>
+            <p className="text-muted-foreground mt-0.5 text-xs">{series.description}</p>
           </div>
           <Badge
             variant="secondary"

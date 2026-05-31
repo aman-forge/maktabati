@@ -28,14 +28,13 @@ import {
 import {
   emptyRatingSummary,
   groupContributorsByBookId,
-  groupRatingSummariesByBookId,
+  mapRatingSummaryRow,
   mapBookCard,
   mapBookReview,
   mapDetailedBook,
   selectPrimaryAuthor,
   toPublisherSummary,
   type ContributorRow,
-  type RatingSourceRow,
 } from "@/features/books/lib/mappers";
 
 import type { BookSearchInput } from "../lib/validators";
@@ -151,16 +150,25 @@ export async function getRatingSummariesForBookIds(
 ): Promise<Map<string, BookRatingSummary>> {
   if (bookIds.length === 0) return new Map();
 
-  const rows: RatingSourceRow[] = await db
+  const rows = await db
     .select({
       bookId: reviews.bookId,
-      rating: reviews.rating,
-      body: reviews.body,
+      average: sql<string>`coalesce(avg(${reviews.rating}), 0)`,
+      totalRatings: sql<string>`count(${reviews.rating})`,
+      totalReviews: sql<string>`count(*) filter (
+        where ${reviews.body} is not null and trim(${reviews.body}) <> ''
+      )`,
+      star1: sql<string>`count(*) filter (where ${reviews.rating} = 1)`,
+      star2: sql<string>`count(*) filter (where ${reviews.rating} = 2)`,
+      star3: sql<string>`count(*) filter (where ${reviews.rating} = 3)`,
+      star4: sql<string>`count(*) filter (where ${reviews.rating} = 4)`,
+      star5: sql<string>`count(*) filter (where ${reviews.rating} = 5)`,
     })
     .from(reviews)
-    .where(inArray(reviews.bookId, bookIds));
+    .where(inArray(reviews.bookId, bookIds))
+    .groupBy(reviews.bookId);
 
-  return groupRatingSummariesByBookId(rows);
+  return new Map(rows.map((row) => [row.bookId, mapRatingSummaryRow(row)]));
 }
 
 async function getTrackingByBookIds(userId: string | undefined, bookIds: string[]) {
@@ -213,7 +221,10 @@ export async function getBooksImpl(): Promise<BookCardType[]> {
 }
 
 // ==== Discovery Page ==== //
-export async function searchBooksImpl(data: BookSearchInput): Promise<{
+export async function searchBooksImpl(
+  data: BookSearchInput,
+  userId?: string,
+): Promise<{
   books: BookCardType[];
   total: number;
   hasMore: boolean;
@@ -251,8 +262,8 @@ export async function searchBooksImpl(data: BookSearchInput): Promise<{
           and ${reviews.rating} is not null
       ), 0) >= ${data.ratingMin}`);
   }
-  if (data.userId && data.readingStatus?.length) {
-    conditions.push(readingStatusCondition(data.userId, data.readingStatus));
+  if (userId && data.readingStatus?.length) {
+    conditions.push(readingStatusCondition(userId, data.readingStatus));
   }
 
   const page = data.page ?? 1;
@@ -275,7 +286,7 @@ export async function searchBooksImpl(data: BookSearchInput): Promise<{
   const bookRows = rows.map(({ total: _total, ...book }) => book);
 
   return {
-    books: await hydrateBookCards(bookRows, data.userId),
+    books: await hydrateBookCards(bookRows, userId),
     total,
     hasMore: page * PAGE_SIZE < total,
   };

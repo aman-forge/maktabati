@@ -4,7 +4,9 @@ import { PlusIcon, StarIcon } from "@phosphor-icons/react";
 import { Badge } from "@shadcn/badge";
 import { Button, buttonVariants } from "@shadcn/button";
 import { Link } from "@tanstack/react-router";
+
 import { cn } from "@/ui/lib/utils";
+
 import type { BookCardBook } from "../server/get-books";
 
 type FlexibleBook = Omit<BookCardBook, "author" | "total"> & {
@@ -40,15 +42,15 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           <img
             src={book.coverImageUrl ?? "/books/book.jpg"}
             alt={`Cover of ${book.title}`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-101"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-101"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-50" />
         </Link>
 
         {rating != null && (
           <div className="absolute top-2.5 left-2.5 z-10">
-            <Badge className="text-[11px] px-2 py-0.5 font-semibold bg-black/60 backdrop-blur-md text-white border-0 gap-1 shadow-lg">
-              <StarIcon weight="fill" className="w-3 h-3 text-amber-400" />
+            <Badge className="gap-1 border-0 bg-black/60 px-2 py-0.5 text-[11px] font-semibold text-white shadow-lg backdrop-blur-md">
+              <StarIcon weight="fill" className="h-3 w-3 text-amber-400" />
               {rating.toFixed(1)}
             </Badge>
           </div>
@@ -69,15 +71,15 @@ export function BookCard({ book, size = "md" }: BookCardProps) {
           )}
           aria-label="Add to reading list"
         >
-          <PlusIcon weight="bold" className="w-5 h-5" />
+          <PlusIcon weight="bold" className="h-5 w-5" />
         </Button>
       </div>
 
       <div className="flex flex-col gap-1 px-0.5">
-        <h3 className="text-sm font-medium leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors duration-200 cursor-pointer">
+        <h3 className="text-foreground group-hover:text-primary line-clamp-2 cursor-pointer text-sm leading-tight font-medium transition-colors duration-200">
           {book.title}
         </h3>
-        <p className="text-xs text-muted-foreground truncate">{book.author?.name ?? "NO AUHTOR"}</p>
+        <p className="text-muted-foreground truncate text-xs">{book.author?.name ?? "NO AUHTOR"}</p>
       </div>
     </article>
   );

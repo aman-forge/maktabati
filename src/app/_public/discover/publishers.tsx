@@ -17,6 +17,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 
+import {
+  DiscoverDirectoryPageSkeleton,
+  DiscoverDirectorySkeleton,
+} from "@/features/books/components/discover-directory-skeleton";
 import { searchPublishers } from "@/features/books/server/publishers";
 import type { PublisherListItem } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
@@ -31,6 +35,9 @@ type PublisherSort = (typeof SORT_OPTIONS)[number]["value"];
 
 export const Route = createFileRoute("/_public/discover/publishers")({
   component: PublishersPage,
+  pendingComponent: DiscoverDirectoryPageSkeleton,
+  pendingMs: 0,
+  pendingMinMs: 250,
   loader: () => searchPublishers({ data: { sort: "name-asc" } }),
 });
 
@@ -99,6 +106,8 @@ function PublishersPage() {
   });
 
   const publishers = publishersQuery.data ?? [];
+  const isLoading =
+    publishersQuery.isPending || (publishersQuery.isFetching && !publishersQuery.data);
   const isEmpty = publishers.length === 0;
 
   return (
@@ -164,7 +173,9 @@ function PublishersPage() {
       </div>
 
       <main className="container mx-auto px-4 py-6">
-        {isEmpty ? (
+        {isLoading ? (
+          <DiscoverDirectorySkeleton view={view} />
+        ) : isEmpty ? (
           <div className="py-24 text-center">
             <MagnifyingGlassIcon className="text-muted-foreground/40 mx-auto mb-3 size-8" />
             <p className="text-muted-foreground text-sm">لا توجد نتائج</p>

@@ -1,4 +1,3 @@
-import { UserAvatar } from "@neondatabase/auth/react/ui";
 import {
   BookmarkSimpleIcon,
   CompassIcon,
@@ -8,6 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
+import { UserAvatar } from "@/features/auth/components/user-avatar";
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 
@@ -56,10 +56,10 @@ const navItems: NavItem[] = [
   },
 ];
 
-function isActiveRoute(pathname: string, item: NavItem, isLoggedIn: boolean) {
+function isActiveRoute(pathname: string, item: NavItem) {
   switch (item.kind) {
     case "home":
-      return isLoggedIn ? pathname === "/dashboard" : pathname === "/";
+      return pathname === "/";
     case "discover":
       return pathname.startsWith("/discover");
     case "search":
@@ -89,14 +89,9 @@ function BottomBar() {
     >
       <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-1">
         {navItems.map((item) => {
-          const to =
-            item.kind === "profile" && !isLoggedIn
-              ? "/auth/login"
-              : item.kind === "home" && isLoggedIn
-                ? "/dashboard"
-                : item.href;
+          const to = item.kind === "profile" && !isLoggedIn ? "/auth/login" : item.href;
 
-          const active = isActiveRoute(pathname, item, isLoggedIn);
+          const active = isActiveRoute(pathname, item);
 
           if (item.kind === "search") {
             return (
@@ -140,7 +135,7 @@ function BottomBar() {
                     active ? "ring-primary" : "ring-transparent",
                   )}
                 >
-                  <UserAvatar />
+                  <UserAvatar user={user} className="size-7" />
                 </div>
               ) : (
                 <div className="relative">

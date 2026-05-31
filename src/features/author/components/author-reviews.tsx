@@ -72,14 +72,14 @@ export function AuthorReviews({ author: _author }: { author: AuthorType }) {
 
   return (
     <div dir="rtl">
-      <div className="flex gap-2 flex-wrap mb-6">
+      <div className="mb-6 flex flex-wrap gap-2">
         {(Object.keys(FILTER_LABELS) as ReviewFilter[]).map((f) => (
           <button
             type="button"
             key={f}
             onClick={() => setFilter(f)}
             className={
-              "text-xs px-3 py-1.5 rounded-full border transition-colors " +
+              "rounded-full border px-3 py-1.5 text-xs transition-colors " +
               (filter === f
                 ? "bg-primary text-primary-foreground border-primary"
                 : "border-border text-muted-foreground hover:text-foreground bg-background")
@@ -92,36 +92,36 @@ export function AuthorReviews({ author: _author }: { author: AuthorType }) {
 
       <div className="flex flex-col gap-4">
         {filtered.map((review) => (
-          <div key={review.id} className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center gap-2.5 mb-3">
+          <div key={review.id} className="border-border bg-card rounded-xl border p-4">
+            <div className="mb-3 flex items-center gap-2.5">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${review.reviewer.bg} ${review.reviewer.text}`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium ${review.reviewer.bg} ${review.reviewer.text}`}
               >
                 {review.reviewer.initials}
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground leading-none">
+                <p className="text-foreground text-sm leading-none font-medium">
                   {review.reviewer.name}
                 </p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{review.date}</p>
+                <p className="text-muted-foreground mt-0.5 text-[11px]">{review.date}</p>
               </div>
               {review.isFriend && (
-                <span className="mr-auto text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                <span className="bg-primary/10 text-primary mr-auto rounded-full px-2 py-0.5 text-[10px]">
                   صديق
                 </span>
               )}
             </div>
-            <div className="flex gap-0.5 mb-2.5">
+            <div className="mb-2.5 flex gap-0.5">
               {[1, 2, 3, 4, 5].map((s) => (
                 <StarIcon
                   key={s}
                   weight={s <= review.stars ? "fill" : "regular"}
-                  className="w-4 h-4 text-amber-500"
+                  className="h-4 w-4 text-amber-500"
                 />
               ))}
             </div>
-            <p className="font-serif text-sm leading-7 text-foreground/85">{review.body}</p>
-            <div className="flex items-center gap-1 mt-2.5 text-[11px] text-primary">
+            <p className="text-foreground/85 font-serif text-sm leading-7">{review.body}</p>
+            <div className="text-primary mt-2.5 flex items-center gap-1 text-[11px]">
               <BookIcon className="size-3" />
               {review.book}
             </div>

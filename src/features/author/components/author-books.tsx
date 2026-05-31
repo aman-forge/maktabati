@@ -124,9 +124,9 @@ export function AuthorBooks({ author: _author }: { author: AuthorType }) {
         </select>*/}
       {/*</div>*/}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-4 ">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-6">
         {_author.books.map((book) => (
-          <div key={book.id} className="flex flex-wrap shrink-0 pt-1">
+          <div key={book.id} className="flex shrink-0 flex-wrap pt-1">
             <BookCard book={book ?? undefined} size="md" />
           </div>
         ))}

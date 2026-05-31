@@ -6,7 +6,6 @@ import {
   FireIcon,
   type Icon,
   ListBulletsIcon,
-  SparkleIcon,
   StarIcon,
   TrophyIcon,
   UserCircleIcon,
@@ -21,29 +20,6 @@ export type NavItem = {
   disabled?: boolean;
   badge?: string; // e.g. "جديد", "قريباً"
 };
-
-// export const libraryItems: NavItem[] = [
-//   {
-//     title: "مكتبتي",
-//     href: "/library",
-//     description: "كتبك، حالات القراءة، والتنظيم",
-//     icon: BooksIcon,
-//   },
-//   {
-//     title: "قوائم القراءة",
-//     href: "/lists",
-//     description: "قوائمك المخصصة والمحفوظة",
-//     icon: CheckIcon,
-//     disabled: true, // coming soon
-//   },
-//   {
-//     title: "الإحصائيات",
-//     href: "/stats",
-//     description: "تحليل عاداتك القرائية",
-//     icon: ChartLineIcon,
-//     disabled: true, // coming soon
-//   },
-// ];
 
 export const discoverItems: NavItem[] = [
   {
@@ -69,20 +45,15 @@ export const discoverItems: NavItem[] = [
     href: "/lists",
     description: "قوائم القراءة المنتقاة من المجتمع",
     icon: ListBulletsIcon,
+    disabled: true,
   },
   {
     title: "الجوائز",
     href: "/awards-2026",
     description: "أفضل الكتب لعام 2026 بالتصويت الشعبي",
     icon: TrophyIcon,
-    badge: "2026",
-  },
-  {
-    title: "التوصيات",
-    href: "/discover/recommendations",
-    description: "اقتراحات مخصصة بناءً على ذوقك",
-    icon: SparkleIcon,
     disabled: true,
+    badge: "2026",
   },
 ];
 
@@ -92,6 +63,7 @@ export const communityItems: NavItem[] = [
     href: "/challenges",
     description: "تحديات القراءة الشهرية والسنوية",
     icon: FireIcon,
+    disabled: true,
     badge: "جديد",
   },
   {

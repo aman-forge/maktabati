@@ -16,7 +16,7 @@ import {
 } from "@phosphor-icons/react";
 import { Button } from "@shadcn/button";
 import { Skeleton } from "@shadcn/skeleton";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, type ReactNode } from "react";
 
@@ -135,6 +135,8 @@ const stats = [
   { label: "أصدقاء نشطون", value: "18", icon: UsersIcon },
 ];
 
+const LIBRARY_BOOKS_STALE_TIME = 60_000;
+
 // ─── Activity config ──────────────────────────────────────────────────────────
 
 const activityConfig = {
@@ -164,9 +166,9 @@ const activityConfig = {
 
 export default function DashboardHome() {
   return (
-    <main className="container mx-auto min-h-screen px-4 py-6">
+    <main className="mx-auto min-h-screen max-w-7xl p-4">
       {/* Mobile */}
-      <div className="space-y-6 xl:hidden">
+      <div className="space-y-6 lg:hidden">
         <StreakCard streak={streak} />
 
         <CurrentlyReadingPanel />
@@ -216,7 +218,7 @@ export default function DashboardHome() {
       </div>
 
       {/* Desktop */}
-      <div className="hidden xl:grid xl:grid-cols-[1.7fr_1fr] xl:gap-6">
+      <div className="hidden lg:grid lg:grid-cols-[1.7fr_1fr] lg:gap-6">
         {/* First column */}
         <div className="space-y-6">
           <CurrentlyReadingPanel />
@@ -317,19 +319,20 @@ function PanelCard({
 
 function CurrentlyReadingPanel() {
   const { user, isLoading: isUserLoading } = useUser();
-  const { data: libraryBooks, isLoading: isBooksLoading } = useQuery({
+  const libraryBooksQuery = useQuery({
     queryKey: ["library-books", user?.id],
-    // Temporary auth boundary: use the client session id until Neon Auth can be
-    // read reliably from TanStack Start server functions.
-    queryFn: () => getUserBooks({ data: user!.id }),
+    queryFn: () => getUserBooks(),
     enabled: !!user?.id,
+    placeholderData: keepPreviousData,
+    staleTime: LIBRARY_BOOKS_STALE_TIME,
   });
+  const libraryBooks = libraryBooksQuery.data;
 
   const currentlyReading = useMemo(
     () => (libraryBooks ?? []).filter((book) => book.status === "currently_reading").slice(0, 4),
     [libraryBooks],
   );
-  const isResolving = isUserLoading || (!!user?.id && isBooksLoading);
+  const isResolving = isUserLoading || (!!user?.id && libraryBooksQuery.isPending && !libraryBooks);
   const subtitle = isResolving
     ? "نرتب كتبك الحالية"
     : currentlyReading.length > 0

@@ -11,12 +11,10 @@ import {
   NavigationMenuTrigger,
 } from "@components/ui/navigation-menu";
 import { communityItems, discoverItems, type NavItem } from "@config/nav";
-import { UserButton } from "@neondatabase/auth/react/ui";
 import {
   BellIcon,
   BookOpenIcon,
   BooksIcon,
-  ChartBarIcon,
   CheckCircleIcon,
   FireIcon,
   MagnifyingGlassIcon,
@@ -27,6 +25,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
+import { UserMenu } from "@/features/auth/components/user-menu";
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 
@@ -87,14 +86,14 @@ const currentlyReading = {
 const readingStreak = 7; // days
 
 function Header() {
-  const { isLoggedIn, isLoading } = useUser();
+  const { user, isLoggedIn, isLoading } = useUser();
 
   return (
     <header className="bg-background/95 supports-backdrop-filter:bg-background/80 fixed inset-x-0 top-0 z-50 hidden h-(--header-height) border-b backdrop-blur-2xl md:flex">
       <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-4 px-4">
         {/* Left */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-4">
-          <Link to={isLoggedIn ? "/dashboard" : "/"} className="flex shrink-0 items-center gap-2.5">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5">
             <img src="/logo.png" alt="logo" className="size-8 rounded-md" />
             <span className="inline-block text-lg font-bold tracking-tight">مكتبتي</span>
           </Link>
@@ -129,50 +128,8 @@ function Header() {
             <Skeleton className="flex size-8 items-center justify-center border">
               <UserIcon className="size-4" />
             </Skeleton>
-          ) : isLoggedIn ? (
-            <UserButton
-              size="icon"
-              classNames={{
-                content: {
-                  base: "min-w-42 direction-rtl rounded-xl!",
-                  user: { base: "direction-rtl rounded-xl!" },
-                },
-                trigger: {
-                  avatar: {
-                    base: "rounded-xl! border size-9! cursor-pointer!",
-                  },
-                },
-              }}
-              align="start"
-              side="bottom"
-              additionalLinks={[
-                {
-                  href: "/dashboard",
-                  icon: <BooksIcon className="size-4" />,
-                  label: "الصفحة الرئيسية",
-                  signedIn: true,
-                },
-                {
-                  href: "/me",
-                  icon: <UserIcon className="size-4" />,
-                  label: "الملف الشخصي",
-                  signedIn: true,
-                },
-                {
-                  href: "/stats",
-                  icon: <ChartBarIcon className="size-4" />,
-                  label: "الإحصاءات",
-                  signedIn: true,
-                },
-                {
-                  href: "/awards-2026",
-                  icon: <TrophyIcon className="size-4" />,
-                  label: "جوائز 2026",
-                  signedIn: true,
-                  separator: true,
-                },
-              ]}
-            />
+          ) : user ? (
+            <UserMenu user={user} />
           ) : (
             <div className="flex items-center gap-2">
               <Button

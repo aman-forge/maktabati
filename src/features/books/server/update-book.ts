@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { requireAuthMiddleware } from "@/features/auth/server/session";
+
 import { READING_STATUSES } from "../types";
 
 const dateStringSchema = z
@@ -20,17 +22,16 @@ export type TrackingDataType = z.infer<typeof TrackingData>;
 
 const updateBookTrackingSchema = z.object({
   bookId: z.uuid(),
-  // Temporary auth boundary: client session id is passed until Neon Auth exposes
-  // the server-session support we need for TanStack Start.
-  userId: z.string().min(1),
   data: TrackingData,
 });
 
-export type UpdateBookTrackingInput = z.infer<typeof updateBookTrackingSchema>;
+export type UpdateBookTrackingData = z.infer<typeof updateBookTrackingSchema>;
+export type UpdateBookTrackingInput = UpdateBookTrackingData & { userId: string };
 
 export const updateBookTracking = createServerFn({ method: "POST" })
+  .middleware([requireAuthMiddleware])
   .inputValidator(updateBookTrackingSchema)
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     const { updateBookTrackingImpl } = await import("./update-book.impl");
-    return await updateBookTrackingImpl(data);
+    return await updateBookTrackingImpl({ ...data, userId: context.user.id });
   });

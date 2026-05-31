@@ -25,7 +25,7 @@ export const profileVisibilityEnum = pgEnum("profile_visibility", ["public", "pr
 
 // ─────────────────────────────────────────────────────────────
 // PROFILES
-// One row per Neon Auth user. id mirrors neon_auth.users_sync.
+// One row per Neon Auth user. id mirrors the provider user id.
 // ─────────────────────────────────────────────────────────────
 export const profiles = pgTable.withRLS(
   "profiles",

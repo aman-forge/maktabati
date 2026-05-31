@@ -2,7 +2,7 @@ import { SpinnerGapIcon } from "@phosphor-icons/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { authClient } from "@/features/auth/client";
+import { useUser } from "@/features/auth/use-user";
 
 export const Route = createFileRoute("/_app/me")({
   component: MeRoute,
@@ -10,18 +10,17 @@ export const Route = createFileRoute("/_app/me")({
 
 function MeRoute() {
   const navigate = useNavigate();
-  const { data } = authClient.useSession();
+  const { user } = useUser();
 
   useEffect(() => {
-    const userId = data?.user?.id;
-    if (userId) {
+    if (user?.id) {
       navigate({
         to: "/u/$userId",
-        params: { userId },
+        params: { userId: user.id },
         replace: true,
       });
     }
-  }, [data, navigate]);
+  }, [navigate, user?.id]);
 
   return (
     <div className="text-foreground flex min-h-[calc(100vh-4rem)] items-center justify-center">

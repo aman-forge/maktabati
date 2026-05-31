@@ -12,7 +12,8 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@shadcn/select";
-import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@shadcn/skeleton";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
 
@@ -25,14 +26,9 @@ import { getPublisherOptions } from "@/features/books/server/publishers";
 import { BookListItem } from "@/ui/components/book/book-card-list";
 import { cn } from "@/ui/lib/utils";
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
 const SORT_OPTIONS = [
   { value: "newest", label: "الأحدث" },
   { value: "oldest", label: "الأقدم" },
-  // { value: "rating", label: "الأعلى تقييماً" },
   { value: "title-asc", label: "العنوان أ-ي" },
   { value: "title-desc", label: "العنوان ي-أ" },
 ] as const;
@@ -51,15 +47,17 @@ const DEFAULT_FILTERS: FilterState = {
   readingStatus: [],
 };
 
-type BookSortOption = (typeof SORT_OPTIONS)[number]["value"];
+const DISCOVER_BOOKS_STALE_TIME = 60_000;
 
-// ---------------------------------------------------------------------------
-// Route
-// ---------------------------------------------------------------------------
+type BookSortOption = (typeof SORT_OPTIONS)[number]["value"];
 
 export const Route = createFileRoute("/_public/discover/books")({
   validateSearch: bookSearchSchema,
   component: BooksSearchPage,
+  pendingComponent: BooksSearchPageSkeleton,
+  pendingMs: 300,
+  pendingMinMs: 0,
+  staleTime: DISCOVER_BOOKS_STALE_TIME,
   loaderDeps: ({ search: { view: _view, ...rest } }) => rest,
   loader: async ({ deps }) => {
     const [result, publisherOptions] = await Promise.all([
@@ -71,10 +69,6 @@ export const Route = createFileRoute("/_public/discover/books")({
   },
 });
 
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
-
 function useDebounce<T>(value: T, delay = 300): T {
   const [debounced, setDebounced] = React.useState(value);
 
@@ -85,14 +79,6 @@ function useDebounce<T>(value: T, delay = 300): T {
 
   return debounced;
 }
-
-// ---------------------------------------------------------------------------
-// Small helpers
-// ---------------------------------------------------------------------------
-
-// function getTagLabel(value: string) {
-//   return BOOK_TOPICS.find((topic) => topic.value === value)?.label ?? value;
-// }
 
 function getStatusLabel(value: string) {
   return (
@@ -106,9 +92,115 @@ function getStatusLabel(value: string) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page component
-// ---------------------------------------------------------------------------
+type BooksView = NonNullable<BookSearch["view"]>;
+
+function FilterBarSkeleton() {
+  return (
+    <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky! top-0 z-30 border-b backdrop-blur md:relative">
+      <div className="mx-auto max-w-7xl space-y-2.5 py-3 md:px-4">
+        <div className="px-4 md:px-0">
+          <Skeleton className="h-10 w-full rounded-xl" />
+        </div>
+        <div className="flex items-center gap-2 overflow-hidden px-4 md:px-0">
+          <Skeleton className="h-8 w-28 shrink-0 rounded-xl" />
+          <Skeleton className="h-8 w-24 shrink-0 rounded-xl" />
+          <Skeleton className="h-5 w-px shrink-0 rounded-none" />
+          <Skeleton className="h-8 w-24 shrink-0 rounded-xl" />
+          <div className="flex-1" />
+          <Skeleton className="h-8 w-20 shrink-0 rounded-xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BookGridSkeleton({ count = 12 }: { count?: number }) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-2 justify-items-center gap-x-3 gap-y-6 min-[520px]:grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] 2lg:grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]",
+        "[&>div]:w-full [&>div]:max-w-40 lg:[&>div]:max-w-44 2lg:[&>div]:max-w-48",
+      )}
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className="flex flex-col gap-2.5">
+          <Skeleton className="aspect-2/3 w-full rounded-xl" />
+          <Skeleton className="h-4 w-4/5 rounded-md" />
+          <Skeleton className="h-3.5 w-3/5 rounded-md" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BookDetailedSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className="bg-card flex min-h-48 rounded-2xl border">
+          <Skeleton className="aspect-2/3 h-auto w-28 shrink-0 rounded-r-2xl" />
+          <div className="flex flex-1 flex-col gap-3 p-4">
+            <Skeleton className="h-5 w-4/5 rounded-md" />
+            <Skeleton className="h-4 w-2/5 rounded-md" />
+            <Skeleton className="h-16 w-full rounded-lg" />
+            <div className="mt-auto flex gap-2">
+              <Skeleton className="h-6 w-16 rounded-md" />
+              <Skeleton className="h-6 w-20 rounded-md" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BookListSkeleton({ count = 8 }: { count?: number }) {
+  return (
+    <div className="bg-card overflow-visible rounded-xl border">
+      <div className="bg-muted/40 hidden items-center gap-4 border-b px-4 py-2.5 sm:flex">
+        <Skeleton className="h-4 w-10 rounded-md" />
+        <Skeleton className="h-4 flex-1 rounded-md" />
+        <Skeleton className="hidden h-4 w-36 rounded-md md:block" />
+        <Skeleton className="hidden h-4 w-12 rounded-md sm:block" />
+        <Skeleton className="h-4 w-14 rounded-md" />
+      </div>
+      <div className="flex flex-col gap-2 p-2">
+        {Array.from({ length: count }, (_, index) => (
+          <div key={index} className="bg-card/45 flex items-center gap-3 rounded-xl px-3 py-3">
+            <Skeleton className="h-16 w-10 shrink-0 rounded-md" />
+            <div className="flex flex-1 flex-col gap-2">
+              <Skeleton className="h-4 w-2/3 rounded-md" />
+              <Skeleton className="h-3.5 w-1/3 rounded-md" />
+              <div className="flex gap-1.5">
+                <Skeleton className="h-5 w-12 rounded-md" />
+                <Skeleton className="h-5 w-16 rounded-md" />
+              </div>
+            </div>
+            <Skeleton className="hidden h-7 w-14 rounded-full sm:block" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BookResultsSkeleton({ view = "grid" }: { view?: BooksView }) {
+  if (view === "list") return <BookListSkeleton />;
+  if (view === "detailed") return <BookDetailedSkeleton />;
+  return <BookGridSkeleton />;
+}
+
+function BooksSearchPageSkeleton() {
+  return (
+    <div className="bg-background min-h-screen overflow-x-hidden">
+      <FilterBarSkeleton />
+      <main className="mx-auto max-w-360 px-4 py-5">
+        <Skeleton className="mb-4 h-5 w-36 rounded-md" />
+        <BookResultsSkeleton />
+      </main>
+    </div>
+  );
+}
 
 function BooksSearchPage() {
   const { result: loaderData, publisherOptions } = Route.useLoaderData();
@@ -121,16 +213,21 @@ function BooksSearchPage() {
     const { view: _view, ...rest } = search;
     return rest;
   }, [search]);
+  const searchSignature = React.useMemo(() => JSON.stringify(userScopedSearch), [userScopedSearch]);
 
   const userResultsQuery = useQuery({
     queryKey: ["discover-books", user?.id, userScopedSearch],
-    queryFn: () => searchBooks({ data: { ...userScopedSearch, userId: user!.id } }),
+    queryFn: () => searchBooks({ data: userScopedSearch }),
     enabled: !!user?.id,
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+    staleTime: DISCOVER_BOOKS_STALE_TIME,
   });
 
   const resultData = user?.id ? (userResultsQuery.data ?? loaderData) : loaderData;
 
   const [books, setBooks] = React.useState(resultData.books);
+  const [loadedSearchSignature, setLoadedSearchSignature] = React.useState(searchSignature);
   const newItemsRef = React.useRef<HTMLDivElement | null>(null);
   const [lastAddedIndex, setLastAddedIndex] = React.useState<number | null>(null);
 
@@ -147,6 +244,12 @@ function BooksSearchPage() {
       return [...prev, ...incoming];
     });
   }, [resultData.books, search.page]);
+
+  React.useEffect(() => {
+    if (!isNavigating && !userResultsQuery.isFetching) {
+      setLoadedSearchSignature(searchSignature);
+    }
+  }, [isNavigating, searchSignature, userResultsQuery.isFetching]);
 
   React.useEffect(() => {
     if (lastAddedIndex !== null && newItemsRef.current) {
@@ -178,15 +281,25 @@ function BooksSearchPage() {
     });
   }, [navigate]);
 
-  // Local input state with debounce
+  const setView = React.useCallback(
+    (view: BooksView) => {
+      navigate({
+        search: (prev) => ({ ...prev, view }),
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
   const [qInput, setQInput] = React.useState(search.q ?? "");
   const debouncedQ = useDebounce(qInput, 350);
 
   React.useEffect(() => {
-    setParams(() => ({ q: debouncedQ || undefined }));
-  }, [debouncedQ, setParams]);
+    if ((search.q ?? "") === debouncedQ) return;
 
-  // Sync input if URL changes externally (e.g. back button)
+    setParams(() => ({ q: debouncedQ || undefined }));
+  }, [debouncedQ, search.q, setParams]);
+
   React.useEffect(() => {
     setQInput(search.q ?? "");
   }, [search.q]);
@@ -354,14 +467,14 @@ function BooksSearchPage() {
 
   const currentView = viewConfig[search.view] ?? viewConfig.grid;
   const Component = currentView.Component;
-  const isSearching = (isNavigating || userResultsQuery.isFetching) && search.page === 1;
+  const hasPendingSearchChange = searchSignature !== loadedSearchSignature;
+  const isSearching = isNavigating && hasPendingSearchChange && search.page === 1;
+  const isLoadingMore = isNavigating && hasPendingSearchChange && search.page > 1;
 
   return (
     <div className="bg-background min-h-screen overflow-x-hidden">
-      {/* ── Sticky filter bar ──────────────────────────────── */}
       <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky! top-0 z-30 border-b backdrop-blur md:relative">
         <div className="mx-auto max-w-7xl space-y-2.5 py-3 md:px-4">
-          {/* Search input */}
           <div className="relative px-4 md:px-0">
             <MagnifyingGlassIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 mr-4 size-4 -translate-y-1/2 md:mr-0" />
             <Input
@@ -373,7 +486,6 @@ function BooksSearchPage() {
               autoComplete="off"
               autoCorrect="off"
             />
-            {/* Loading spinner while debouncing */}
             {isSearching ? (
               <div className="absolute top-1/2 left-3 -translate-y-1/2">
                 <div className="border-muted-foreground/30 border-t-muted-foreground ml-4 size-4 animate-spin rounded-full border-2 md:ml-0" />
@@ -392,7 +504,6 @@ function BooksSearchPage() {
             ) : null}
           </div>
 
-          {/* Filter row */}
           <div
             className={cn("flex scrollbar-none items-center overflow-x-scroll gap-2 px-4 md:px-0")}
           >
@@ -403,7 +514,6 @@ function BooksSearchPage() {
               }
             />
 
-            {/* FilterDialog with badge count */}
             <div className="relative shrink-0">
               <FilterDialog
                 filters={filters}
@@ -438,10 +548,9 @@ function BooksSearchPage() {
 
             <div className="flex-1" />
 
-            <ViewToggle value={search.view} onValueChange={(v) => setParams(() => ({ view: v }))} />
+            <ViewToggle value={search.view} onValueChange={setView} />
           </div>
 
-          {/* Active filter tags */}
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-1.5 px-4 md:px-0">
               {activeFilterTags.map((tag) => (
@@ -467,19 +576,21 @@ function BooksSearchPage() {
         </div>
       </div>
 
-      {/* ── Results ──────────────────────────────────────────── */}
       <main className="mx-auto max-w-360 px-4 py-5">
-        {/* Count */}
-        {books.length > 0 && (
+        {isSearching ? (
+          <>
+            <Skeleton className="mb-4 h-5 w-36 rounded-md" />
+            <BookResultsSkeleton view={search.view} />
+          </>
+        ) : books.length > 0 ? (
           <p className="text-muted-foreground mb-4 text-sm">
             <span className="text-foreground font-medium">{resultData.total}</span>
             {" كتاب"}
             {hasActiveFilters && <span className="text-muted-foreground/60"> · بتصفية نشطة</span>}
           </p>
-        )}
+        ) : null}
 
-        {/* Empty state */}
-        {books.length === 0 && !isSearching ? (
+        {!isSearching && books.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="bg-muted mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
               <MagnifyingGlassIcon className="text-muted-foreground/40 size-7" />
@@ -498,7 +609,7 @@ function BooksSearchPage() {
               </Button>
             )}
           </div>
-        ) : search.view === "list" ? (
+        ) : !isSearching && search.view === "list" ? (
           <div className="bg-card overflow-visible rounded-xl border">
             <div className="text-muted-foreground bg-muted/40 hidden items-center gap-4 border-b px-4 py-2.5 text-xs font-medium sm:flex">
               <div className="w-10 shrink-0" />
@@ -516,43 +627,42 @@ function BooksSearchPage() {
               ))}
             </div>
           </div>
-        ) : (
+        ) : !isSearching ? (
           <div className={currentView.wrapper}>
-            {books.map((book, i) => (
-              // <div key={book.id} ref={i === lastAddedIndex ? newItemsRef : null}>
-              <Component key={`${book.id}-${i.toString}`} book={book} />
-              // </div>
+            {books.map((book) => (
+              <Component key={book.id} book={book} />
             ))}
           </div>
-        )}
+        ) : null}
 
-        {/* Load more */}
-        <div className="mt-10 flex flex-col items-center gap-2">
-          {resultData.hasMore ? (
-            <>
-              <Button
-                variant="outline"
-                className="w-full max-w-xs"
-                onClick={loadMore}
-                disabled={isNavigating}
-              >
-                {isNavigating && search.page > 1 ? (
-                  <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
-                ) : (
-                  <FileMagnifyingGlassIcon className="size-4" />
-                )}
-                تحميل المزيد
-              </Button>
-              <p className="text-muted-foreground text-xs">
-                {books.length} من {resultData.total} كتاب
+        {!isSearching && (
+          <div className="mt-10 flex flex-col items-center gap-2">
+            {resultData.hasMore ? (
+              <>
+                <Button
+                  variant="outline"
+                  className="w-full max-w-xs"
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                >
+                  {isLoadingMore ? (
+                    <div className="border-muted-foreground/30 border-t-muted-foreground size-4 animate-spin rounded-full border-2" />
+                  ) : (
+                    <FileMagnifyingGlassIcon className="size-4" />
+                  )}
+                  تحميل المزيد
+                </Button>
+                <p className="text-muted-foreground text-xs">
+                  {books.length} من {resultData.total} كتاب
+                </p>
+              </>
+            ) : books.length > 0 ? (
+              <p className="text-muted-foreground py-2 text-sm">
+                وصلت لنهاية النتائج · {resultData.total} كتاب
               </p>
-            </>
-          ) : books.length > 0 ? (
-            <p className="text-muted-foreground py-2 text-sm">
-              وصلت لنهاية النتائج · {resultData.total} كتاب
-            </p>
-          ) : null}
-        </div>
+            ) : null}
+          </div>
+        )}
       </main>
     </div>
   );

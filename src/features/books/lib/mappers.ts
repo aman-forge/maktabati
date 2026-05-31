@@ -29,6 +29,18 @@ export interface RatingSourceRow {
   body?: string | null;
 }
 
+export interface RatingSummaryRow {
+  bookId: string;
+  average: string | number | null;
+  totalRatings: string | number;
+  totalReviews: string | number;
+  star1: string | number;
+  star2: string | number;
+  star3: string | number;
+  star4: string | number;
+  star5: string | number;
+}
+
 export interface ReviewSourceRow {
   id: string;
   rating: number | null;
@@ -152,6 +164,28 @@ export function groupRatingSummariesByBookId(
       calculateRatingSummary(bookRows),
     ]),
   );
+}
+
+export function mapRatingSummaryRow(row: RatingSummaryRow): BookRatingSummary {
+  const totalRatings = Number(row.totalRatings);
+  const totalReviews = Number(row.totalReviews);
+  const counts = {
+    1: Number(row.star1),
+    2: Number(row.star2),
+    3: Number(row.star3),
+    4: Number(row.star4),
+    5: Number(row.star5),
+  } satisfies Record<1 | 2 | 3 | 4 | 5, number>;
+
+  return {
+    average: Number(row.average ?? 0),
+    totalRatings,
+    totalReviews,
+    distribution: ([5, 4, 3, 2, 1] as const).map((stars) => ({
+      stars,
+      percent: totalRatings > 0 ? Math.round((counts[stars] / totalRatings) * 100) : 0,
+    })),
+  };
 }
 
 export function emptyRatingSummary(): BookRatingSummary {

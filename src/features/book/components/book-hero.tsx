@@ -69,8 +69,8 @@ export function BookHero({
   const { openTrackModal } = useBookTracking();
   const { user } = useUser();
   const trackingQuery = useQuery({
-    queryKey: ["book-tracking", user?.id, book.id],
-    queryFn: () => getUserBookTracking({ data: { userId: user!.id, bookId: book.id } }),
+    queryKey: ["book-tracking", book.id],
+    queryFn: () => getUserBookTracking({ data: { bookId: book.id } }),
     enabled: !!user?.id,
   });
   const tracking = trackingQuery.data;

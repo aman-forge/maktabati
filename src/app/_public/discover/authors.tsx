@@ -15,6 +15,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 
+import {
+  DiscoverDirectoryPageSkeleton,
+  DiscoverDirectorySkeleton,
+} from "@/features/books/components/discover-directory-skeleton";
 import { searchAuthors } from "@/features/books/server/authors";
 import type { AuthorListItem } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
@@ -29,6 +33,9 @@ type AuthorSort = (typeof SORT_OPTIONS)[number]["value"];
 
 export const Route = createFileRoute("/_public/discover/authors")({
   component: AuthorsPage,
+  pendingComponent: DiscoverDirectoryPageSkeleton,
+  pendingMs: 0,
+  pendingMinMs: 250,
   loader: () => searchAuthors({ data: { sort: "name-asc" } }),
 });
 
@@ -89,6 +96,7 @@ function AuthorsPage() {
   });
 
   const authors = authorsQuery.data ?? [];
+  const isLoading = authorsQuery.isPending || (authorsQuery.isFetching && !authorsQuery.data);
   const isEmpty = authors.length === 0;
 
   return (
@@ -154,7 +162,9 @@ function AuthorsPage() {
       </div>
 
       <main className="container mx-auto px-4 py-6">
-        {isEmpty ? (
+        {isLoading ? (
+          <DiscoverDirectorySkeleton view={view} />
+        ) : isEmpty ? (
           <div className="py-24 text-center">
             <MagnifyingGlassIcon className="text-muted-foreground/40 mx-auto mb-3 size-8" />
             <p className="text-muted-foreground text-sm">لا توجد نتائج</p>

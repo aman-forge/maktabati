@@ -21,11 +21,7 @@ export const bookSearchSchema = z.object({
   page: z.number().int().min(1).default(1),
 });
 
-export const bookSearchInputSchema = bookSearchSchema.extend({
-  // Temporary auth boundary: Neon Auth does not yet give this TanStack Start app
-  // a reliable server-session primitive, so client code passes the current user id.
-  userId: z.string().min(1).optional(),
-});
+export const bookSearchInputSchema = bookSearchSchema.extend({});
 
 export type BookSearch = z.infer<typeof bookSearchSchema>;
 export type BookSearchInput = z.infer<typeof bookSearchInputSchema>;

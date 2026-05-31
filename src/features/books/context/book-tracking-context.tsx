@@ -73,7 +73,7 @@ export function BookTrackingProvider({ children }: BookTrackingProviderProps) {
 
     setIsSaving(true);
     try {
-      await updateBookTracking({ data: { bookId, data, userId: user.id } });
+      await updateBookTracking({ data: { bookId, data } });
       setSelectedBook((book) =>
         book?.id === bookId
           ? {

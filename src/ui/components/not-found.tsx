@@ -4,6 +4,15 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 
 export default function NotFound() {
+  const goBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.location.assign("/");
+  };
+
   return (
     <div className="bg-background relative min-h-screen overflow-hidden">
       <Grid />
@@ -22,11 +31,11 @@ export default function NotFound() {
         </p>
 
         <div className="mt-8 flex items-center gap-2">
-          <Button variant="outline" size="default">
+          <Button variant="outline" size="default" onClick={goBack}>
             <ArrowRightIcon />
             العودة
           </Button>
-          <Button size="default" render={<Link to="/dashboard" />}>
+          <Button size="default" nativeButton={false} render={<Link to="/dashboard" />}>
             <HouseIcon />
             الصفحة الرئيسية
           </Button>

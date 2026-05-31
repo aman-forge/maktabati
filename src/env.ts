@@ -16,7 +16,7 @@ export const env = createEnv({
    */
   clientPrefix: "VITE_",
   client: {
-    VITE_NEON_AUTH_URL: z.url(),
+    VITE_NEON_AUTH_URL: z.url().optional(),
     VITE_NEON_DATA_API_URL: z.url(),
     VITE_APP_URL: z.url(),
   },

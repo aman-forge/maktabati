@@ -4,10 +4,6 @@ import { userBooks } from "@/db/tables";
 import type { UpdateBookTrackingInput } from "./update-book";
 
 export async function updateBookTrackingImpl({ bookId, userId, data }: UpdateBookTrackingInput) {
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
   return await db
     .insert(userBooks)
     .values({

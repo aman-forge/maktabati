@@ -11,18 +11,16 @@
 import { Route as rootRouteImport } from './app/__root'
 import { Route as PublicRouteImport } from './app/_public'
 import { Route as AppRouteImport } from './app/_app'
-import { Route as AdminIndexRouteImport } from './app/admin/index'
 import { Route as AppSettingsRouteImport } from './app/_app/settings'
 import { Route as AppNotificationsRouteImport } from './app/_app/notifications'
 import { Route as AppMeRouteImport } from './app/_app/me'
 import { Route as AppLibraryRouteImport } from './app/_app/library'
 import { Route as AppDashboardRouteImport } from './app/_app/dashboard'
 import { Route as PublicMarketingIndexRouteImport } from './app/_public/_marketing/index'
+import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
 import { Route as PublicUUserIdRouteImport } from './app/_public/u/$userId'
 import { Route as PublicPublisherIdRouteImport } from './app/_public/publisher/$id'
-import { Route as PublicDiscoverRecommendationsRouteImport } from './app/_public/discover/recommendations'
 import { Route as PublicDiscoverPublishersRouteImport } from './app/_public/discover/publishers'
-import { Route as PublicDiscoverGenresRouteImport } from './app/_public/discover/genres'
 import { Route as PublicDiscoverBooksRouteImport } from './app/_public/discover/books'
 import { Route as PublicDiscoverAuthorsRouteImport } from './app/_public/discover/authors'
 import { Route as PublicBookIdRouteImport } from './app/_public/book/$id'
@@ -56,11 +54,6 @@ const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -91,6 +84,11 @@ const PublicMarketingIndexRoute = PublicMarketingIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRoute,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicUUserIdRoute = PublicUUserIdRouteImport.update({
   id: '/u/$userId',
   path: '/u/$userId',
@@ -101,23 +99,12 @@ const PublicPublisherIdRoute = PublicPublisherIdRouteImport.update({
   path: '/publisher/$id',
   getParentRoute: () => PublicRoute,
 } as any)
-const PublicDiscoverRecommendationsRoute =
-  PublicDiscoverRecommendationsRouteImport.update({
-    id: '/discover/recommendations',
-    path: '/discover/recommendations',
-    getParentRoute: () => PublicRoute,
-  } as any)
 const PublicDiscoverPublishersRoute =
   PublicDiscoverPublishersRouteImport.update({
     id: '/discover/publishers',
     path: '/discover/publishers',
     getParentRoute: () => PublicRoute,
   } as any)
-const PublicDiscoverGenresRoute = PublicDiscoverGenresRouteImport.update({
-  id: '/discover/genres',
-  path: '/discover/genres',
-  getParentRoute: () => PublicRoute,
-} as any)
 const PublicDiscoverBooksRoute = PublicDiscoverBooksRouteImport.update({
   id: '/discover/books',
   path: '/discover/books',
@@ -250,7 +237,6 @@ export interface FileRoutesByFullPath {
   '/me': typeof AppMeRoute
   '/notifications': typeof AppNotificationsRoute
   '/settings': typeof AppSettingsRouteWithChildren
-  '/admin/': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
   '/settings/data': typeof AppSettingsDataRoute
@@ -271,11 +257,10 @@ export interface FileRoutesByFullPath {
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
-  '/discover/genres': typeof PublicDiscoverGenresRoute
   '/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
@@ -288,7 +273,6 @@ export interface FileRoutesByTo {
   '/me': typeof AppMeRoute
   '/notifications': typeof AppNotificationsRoute
   '/settings': typeof AppSettingsRouteWithChildren
-  '/admin': typeof AdminIndexRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
   '/settings/data': typeof AppSettingsDataRoute
@@ -309,11 +293,10 @@ export interface FileRoutesByTo {
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
-  '/discover/genres': typeof PublicDiscoverGenresRoute
   '/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/author/$id/series': typeof PublicAuthorIdSeriesRoute
   '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
@@ -328,7 +311,6 @@ export interface FileRoutesById {
   '/_app/me': typeof AppMeRoute
   '/_app/notifications': typeof AppNotificationsRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
-  '/admin/': typeof AdminIndexRoute
   '/_app/settings/account': typeof AppSettingsAccountRoute
   '/_app/settings/appearance': typeof AppSettingsAppearanceRoute
   '/_app/settings/data': typeof AppSettingsDataRoute
@@ -349,11 +331,10 @@ export interface FileRoutesById {
   '/_public/book/$id': typeof PublicBookIdRoute
   '/_public/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/_public/discover/books': typeof PublicDiscoverBooksRoute
-  '/_public/discover/genres': typeof PublicDiscoverGenresRoute
   '/_public/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/_public/discover/recommendations': typeof PublicDiscoverRecommendationsRoute
   '/_public/publisher/$id': typeof PublicPublisherIdRouteWithChildren
   '/_public/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/_marketing/': typeof PublicMarketingIndexRoute
   '/_public/author/$id/books': typeof PublicAuthorIdBooksRoute
   '/_public/author/$id/series': typeof PublicAuthorIdSeriesRoute
@@ -369,7 +350,6 @@ export interface FileRouteTypes {
     | '/me'
     | '/notifications'
     | '/settings'
-    | '/admin/'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/data'
@@ -390,11 +370,10 @@ export interface FileRouteTypes {
     | '/book/$id'
     | '/discover/authors'
     | '/discover/books'
-    | '/discover/genres'
     | '/discover/publishers'
-    | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
+    | '/api/auth/$'
     | '/author/$id/books'
     | '/author/$id/series'
     | '/publisher/$id/articles'
@@ -407,7 +386,6 @@ export interface FileRouteTypes {
     | '/me'
     | '/notifications'
     | '/settings'
-    | '/admin'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/data'
@@ -428,11 +406,10 @@ export interface FileRouteTypes {
     | '/book/$id'
     | '/discover/authors'
     | '/discover/books'
-    | '/discover/genres'
     | '/discover/publishers'
-    | '/discover/recommendations'
     | '/publisher/$id'
     | '/u/$userId'
+    | '/api/auth/$'
     | '/author/$id/books'
     | '/author/$id/series'
     | '/publisher/$id/articles'
@@ -446,7 +423,6 @@ export interface FileRouteTypes {
     | '/_app/me'
     | '/_app/notifications'
     | '/_app/settings'
-    | '/admin/'
     | '/_app/settings/account'
     | '/_app/settings/appearance'
     | '/_app/settings/data'
@@ -467,11 +443,10 @@ export interface FileRouteTypes {
     | '/_public/book/$id'
     | '/_public/discover/authors'
     | '/_public/discover/books'
-    | '/_public/discover/genres'
     | '/_public/discover/publishers'
-    | '/_public/discover/recommendations'
     | '/_public/publisher/$id'
     | '/_public/u/$userId'
+    | '/api/auth/$'
     | '/_public/_marketing/'
     | '/_public/author/$id/books'
     | '/_public/author/$id/series'
@@ -482,7 +457,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
-  AdminIndexRoute: typeof AdminIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -499,13 +474,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/settings': {
@@ -550,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicMarketingIndexRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_public/u/$userId': {
       id: '/_public/u/$userId'
       path: '/u/$userId'
@@ -564,25 +539,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicPublisherIdRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_public/discover/recommendations': {
-      id: '/_public/discover/recommendations'
-      path: '/discover/recommendations'
-      fullPath: '/discover/recommendations'
-      preLoaderRoute: typeof PublicDiscoverRecommendationsRouteImport
-      parentRoute: typeof PublicRoute
-    }
     '/_public/discover/publishers': {
       id: '/_public/discover/publishers'
       path: '/discover/publishers'
       fullPath: '/discover/publishers'
       preLoaderRoute: typeof PublicDiscoverPublishersRouteImport
-      parentRoute: typeof PublicRoute
-    }
-    '/_public/discover/genres': {
-      id: '/_public/discover/genres'
-      path: '/discover/genres'
-      fullPath: '/discover/genres'
-      preLoaderRoute: typeof PublicDiscoverGenresRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/discover/books': {
@@ -841,9 +802,7 @@ interface PublicRouteChildren {
   PublicBookIdRoute: typeof PublicBookIdRoute
   PublicDiscoverAuthorsRoute: typeof PublicDiscoverAuthorsRoute
   PublicDiscoverBooksRoute: typeof PublicDiscoverBooksRoute
-  PublicDiscoverGenresRoute: typeof PublicDiscoverGenresRoute
   PublicDiscoverPublishersRoute: typeof PublicDiscoverPublishersRoute
-  PublicDiscoverRecommendationsRoute: typeof PublicDiscoverRecommendationsRoute
   PublicPublisherIdRoute: typeof PublicPublisherIdRouteWithChildren
   PublicUUserIdRoute: typeof PublicUUserIdRoute
   PublicMarketingIndexRoute: typeof PublicMarketingIndexRoute
@@ -861,9 +820,7 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicBookIdRoute: PublicBookIdRoute,
   PublicDiscoverAuthorsRoute: PublicDiscoverAuthorsRoute,
   PublicDiscoverBooksRoute: PublicDiscoverBooksRoute,
-  PublicDiscoverGenresRoute: PublicDiscoverGenresRoute,
   PublicDiscoverPublishersRoute: PublicDiscoverPublishersRoute,
-  PublicDiscoverRecommendationsRoute: PublicDiscoverRecommendationsRoute,
   PublicPublisherIdRoute: PublicPublisherIdRouteWithChildren,
   PublicUUserIdRoute: PublicUUserIdRoute,
   PublicMarketingIndexRoute: PublicMarketingIndexRoute,
@@ -875,17 +832,18 @@ const PublicRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
-  AdminIndexRoute: AdminIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }
