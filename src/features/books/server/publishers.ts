@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import type { PublisherListItem, PublisherOption } from "../types";
+import type { PublisherDetail, PublisherListItem, PublisherOption } from "../types";
 
 const publisherSearchSchema = z.object({
   q: z.string().max(100).optional(),
@@ -23,3 +23,10 @@ export const getPublisherOptions = createServerFn({ method: "GET" }).handler(
     return await getPublisherOptionsImpl();
   },
 );
+
+export const getPublisherById = createServerFn({ method: "GET" })
+  .inputValidator(z.uuid())
+  .handler(async ({ data: publisherId }): Promise<PublisherDetail | null> => {
+    const { getPublisherByIdImpl } = await import("./publishers.impl");
+    return await getPublisherByIdImpl(publisherId);
+  });

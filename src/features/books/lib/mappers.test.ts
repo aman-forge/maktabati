@@ -8,6 +8,7 @@ import {
   calculateRatingSummary,
   groupContributorsByBookId,
   mapBookCard,
+  mapRatingSummaryRow,
   selectPrimaryAuthor,
 } from "./mappers";
 
@@ -77,6 +78,31 @@ describe("book mappers", () => {
     expect(summary.totalRatings).toBe(3);
     expect(summary.totalReviews).toBe(3);
     expect(summary.distribution.find((item) => item.stars === 5)?.percent).toBe(67);
+  });
+
+  it("maps database rating summary rows without recalculating raw reviews", () => {
+    const summary = mapRatingSummaryRow({
+      bookId: book.id,
+      average: "4.25",
+      totalRatings: "4",
+      totalReviews: "2",
+      star1: "0",
+      star2: "0",
+      star3: "1",
+      star4: "1",
+      star5: "2",
+    });
+
+    expect(summary.average).toBe(4.25);
+    expect(summary.totalRatings).toBe(4);
+    expect(summary.totalReviews).toBe(2);
+    expect(summary.distribution).toEqual([
+      { stars: 5, percent: 50 },
+      { stars: 4, percent: 25 },
+      { stars: 3, percent: 25 },
+      { stars: 2, percent: 0 },
+      { stars: 1, percent: 0 },
+    ]);
   });
 
   it("maps book cards with tracking and contributor data", () => {

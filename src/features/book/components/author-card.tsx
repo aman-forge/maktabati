@@ -3,7 +3,6 @@ import {
   ArrowLeftIcon,
   BookOpenIcon,
   MapPinIcon,
-  UsersThreeIcon,
   BookmarkSimpleIcon,
   CalendarBlankIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -14,9 +13,6 @@ import type { AuthorSummary } from "@/features/books/types";
 interface AuthorCardProps {
   author?: AuthorSummary | null;
 }
-
-// TODO: Replace with database-backed follower counts once follow tables exist.
-const PLACEHOLDER_FOLLOWERS = "403K";
 
 export function AuthorCard({ author }: AuthorCardProps) {
   if (!author) return null;
@@ -31,11 +27,6 @@ export function AuthorCard({ author }: AuthorCardProps) {
       label: "الكتب",
       value: author.totalBooks,
       icon: <BookmarkSimpleIcon weight="duotone" className="h-4 w-4" />,
-    },
-    {
-      label: "المتابعون",
-      value: PLACEHOLDER_FOLLOWERS,
-      icon: <UsersThreeIcon weight="duotone" className="h-4 w-4" />,
     },
   ];
 
@@ -186,7 +177,11 @@ export function AuthorCard({ author }: AuthorCardProps) {
             ))}
 
             {/* "View all" tile */}
-            <Link to="/" className="group flex flex-1 flex-col items-center gap-1.5">
+            <Link
+              to="/author/$id"
+              params={{ id: author.id }}
+              className="group flex flex-1 flex-col items-center gap-1.5"
+            >
               <div className="bg-muted border-border hover:border-primary/40 hover:bg-primary/5 flex aspect-2/3 w-full items-center justify-center rounded-xl border border-dashed transition-all duration-200 group-hover:-translate-y-0.5">
                 <BookOpenIcon className="text-muted-foreground group-hover:text-primary h-5 w-5 transition-colors" />
               </div>

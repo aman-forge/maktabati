@@ -24,7 +24,6 @@ function MeRoute() {
 
   return (
     <div className="text-foreground flex min-h-[calc(100vh-4rem)] items-center justify-center">
-      {/* TODO: IMPROVE DESIGN */}
       <SpinnerGapIcon size={32} className="size-20 animate-spin" weight="regular" />
     </div>
   );

@@ -10,7 +10,6 @@ interface BookEditionsProps {
 }
 
 export function BookEditions({ book }: BookEditionsProps) {
-  // TODO: Replace this current-book fallback with database-backed editions once an editions table exists.
   const editions = book.editions;
   const [selected, setSelected] = useState(editions[0]?.id ?? "");
 

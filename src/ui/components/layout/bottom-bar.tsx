@@ -11,8 +11,6 @@ import { UserAvatar } from "@/features/auth/components/user-avatar";
 import { useUser } from "@/features/auth/use-user";
 import { cn } from "@/ui/lib/utils";
 
-const unreadNotifications = 2;
-
 type NavItem = {
   href: string;
   icon: React.ComponentType<{
@@ -37,7 +35,7 @@ const navItems: NavItem[] = [
     kind: "discover",
   },
   {
-    href: "/search",
+    href: "/discover/books",
     icon: MagnifyingGlassIcon,
     label: "بحث",
     kind: "search",
@@ -63,7 +61,7 @@ function isActiveRoute(pathname: string, item: NavItem) {
     case "discover":
       return pathname.startsWith("/discover");
     case "search":
-      return pathname.startsWith("/search");
+      return pathname.startsWith("/discover/books");
     case "library":
       return pathname.startsWith("/library");
     case "profile":
@@ -138,18 +136,10 @@ function BottomBar() {
                   <UserAvatar user={user} className="size-7" />
                 </div>
               ) : (
-                <div className="relative">
-                  <item.icon
-                    className="size-6 transition-all duration-200"
-                    weight={active ? "fill" : "regular"}
-                  />
-
-                  {item.kind === "profile" && unreadNotifications > 0 && (
-                    <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full text-[9px] font-bold">
-                      {unreadNotifications > 9 ? "9+" : unreadNotifications}
-                    </span>
-                  )}
-                </div>
+                <item.icon
+                  className="size-6 transition-all duration-200"
+                  weight={active ? "fill" : "regular"}
+                />
               )}
 
               <span className="text-[10px] leading-none font-medium">{item.label}</span>

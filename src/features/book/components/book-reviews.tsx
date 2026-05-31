@@ -1,39 +1,24 @@
 import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
-import { CaretDownIcon, ChatCircleIcon, StarIcon, ThumbsUpIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, StarIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import type { BookReviewItem } from "@/features/books/types";
 
-const SORT_OPTIONS = ["الأكثر إعجابًا", "الأحدث", "الأعلى تقييمًا"] as const;
+const SORT_OPTIONS = ["الأحدث", "الأعلى تقييمًا"] as const;
 
 interface BookReviewsProps {
   reviews?: BookReviewItem[];
 }
 
 export function BookReviews({ reviews = [] }: BookReviewsProps) {
-  // TODO: Replace local helpful-state and zero like counts once review-like tables exist.
   const [sort, setSort] = useState<string>(SORT_OPTIONS[0]);
   const [showAll, setShowAll] = useState(false);
-  const [likedReviews, setLikedReviews] = useState<Set<string>>(new Set());
-
-  const toggleLike = (id: string) => {
-    setLikedReviews((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
 
   const sortedReviews = [...reviews].sort((a, b) => {
-    if (sort === "الأحدث") return b.date.localeCompare(a.date);
     if (sort === "الأعلى تقييمًا") return b.rating - a.rating;
-    return b.likes - a.likes;
+    return b.date.localeCompare(a.date);
   });
   const displayed = showAll ? sortedReviews : sortedReviews.slice(0, 3);
 
@@ -59,10 +44,9 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-0">
-        {displayed.map((review, i) => {
-          const isLiked = likedReviews.has(review.id);
-          return (
+      {displayed.length > 0 ? (
+        <div className="flex flex-col gap-0">
+          {displayed.map((review, i) => (
             <div key={review.id}>
               <article className="flex flex-col gap-4 py-6">
                 <div className="flex items-start justify-between gap-4">
@@ -111,31 +95,19 @@ export function BookReviews({ reviews = [] }: BookReviewsProps) {
                   <h3 className="text-foreground text-sm font-semibold">{review.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{review.body}</p>
                 </div>
-
-                <div className="flex items-center gap-4 pe-13">
-                  <Button
-                    onClick={() => toggleLike(review.id)}
-                    variant={isLiked ? "default" : "ghost"}
-                    aria-label={`إعجاب بمراجعة ${review.name}`}
-                    aria-pressed={isLiked}
-                  >
-                    <ThumbsUpIcon weight={isLiked ? "fill" : "regular"} className="h-3.5 w-3.5" />
-                    {review.likes + (isLiked ? 1 : 0)} مفيدة
-                  </Button>
-                  <button
-                    type="button"
-                    className="text-muted-foreground flex items-center gap-1.5 text-xs transition-opacity hover:opacity-70"
-                  >
-                    <ChatCircleIcon weight="regular" className="h-3.5 w-3.5" />
-                    ردّ
-                  </button>
-                </div>
               </article>
               {i < displayed.length - 1 && <Separator className="bg-border" />}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bg-card rounded-xl border border-dashed px-5 py-10 text-center">
+          <p className="text-sm font-medium">لا توجد مراجعات بعد</p>
+          <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+            ستظهر هنا المراجعات المحفوظة عندما تتوفر من قاعدة البيانات.
+          </p>
+        </div>
+      )}
 
       {!showAll && reviews.length > 3 && (
         <Button

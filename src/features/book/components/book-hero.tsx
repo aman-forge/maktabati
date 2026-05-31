@@ -1,16 +1,8 @@
 import { Button } from "@components/ui/button";
-import {
-  BookmarkSimpleIcon,
-  BooksIcon,
-  CaretLeftIcon,
-  HeartIcon,
-  ShareNetworkIcon,
-  StarIcon,
-  TrophyIcon,
-} from "@phosphor-icons/react";
+import { BookmarkSimpleIcon, BooksIcon, StarIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { useUser } from "@/features/auth/use-user";
 import { BOOK_GENRES } from "@/features/books/constants";
@@ -18,28 +10,6 @@ import { useBookTracking } from "@/features/books/context/book-tracking-context"
 import { getUserBookTracking } from "@/features/books/server/library";
 import { DetailedBookType, type BookRatingSummary, getStatusConfig } from "@/features/books/types";
 import { cn } from "@/ui/lib/utils";
-
-// TODO: Replace with database-backed friends activity once social/follow tables exist.
-const FAKE_FRIENDS = [
-  {
-    id: "1",
-    name: "عمر خالد",
-    initials: "ع",
-    color: "bg-emerald-100 text-emerald-800",
-  },
-  {
-    id: "2",
-    name: "سارة محمد",
-    initials: "س",
-    color: "bg-violet-100 text-violet-800",
-  },
-  {
-    id: "3",
-    name: "محمد علي",
-    initials: "م",
-    color: "bg-amber-100 text-amber-800",
-  },
-];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -65,7 +35,6 @@ export function BookHero({
   book: DetailedBookType;
   ratingSummary: BookRatingSummary;
 }) {
-  const [liked, setLiked] = useState(false);
   const { openTrackModal } = useBookTracking();
   const { user } = useUser();
   const trackingQuery = useQuery({
@@ -163,7 +132,6 @@ export function BookHero({
 
               {/* Primary CTA */}
               <div className="w-full max-w-64 space-y-2">
-                {/*<ButtonGroup className="flex w-full overflow-hidden rounded-xl shadow-sm">*/}
                 <Button
                   className={cn(
                     "h-10 flex-1 gap-2 text-sm font-semibold shadow-none w-full",
@@ -176,48 +144,11 @@ export function BookHero({
                   <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
                   {statusConfig?.label ?? "إضافة الى المكتبة"}
                 </Button>
-                {/*<Button
-                    className={cn(
-                      "h-11 rounded-none border-r border-white/15 px-3 shadow-none",
-                      statusConfig?.bgColor,
-                      statusConfig?.bgHoverColor,
-                      statusConfig && "text-white",
-                    )}
-                    aria-label="خيارات التتبع"
-                    onClick={() => openTrackModal(trackingBook)}
-                  >
-                    <CaretDownIcon className="size-4" />
-                  </Button>*/}
-                {/*</ButtonGroup>*/}
-
-                {/* Secondary actions */}
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1 gap-1.5"
-                    onClick={() => setLiked((l) => !l)}
-                  >
-                    <HeartIcon
-                      weight={liked ? "fill" : "regular"}
-                      className={cn("size-4 transition-colors", liked && "text-destructive")}
-                    />
-                    <span className="text-xs">{liked ? "أعجبني" : "إعجاب"}</span>
-                  </Button>
-                  <Button variant="outline" size="icon" aria-label="مشاركة">
-                    <ShareNetworkIcon weight="bold" className="size-4" />
-                  </Button>
-                </div>
               </div>
             </div>
 
             {/* Info column */}
             <div className="flex flex-col gap-6">
-              {/* TODO: Replace with database-backed awards once awards tables exist. */}
-              <div className="flex w-fit items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200">
-                <TrophyIcon weight="duotone" className="size-3.5 text-amber-500" />
-                أفضل ترجمة عربية 2023
-              </div>
-
               {/* Title + author */}
               <div className="flex items-end justify-between">
                 <div className="w-full space-y-2">
@@ -253,7 +184,6 @@ export function BookHero({
                     )}
                   </div>
                 </div>
-                <FriendsWhoRead friends={FAKE_FRIENDS} />
               </div>
 
               {/* Rating */}
@@ -340,42 +270,5 @@ export function BookHero({
         </div>
       </div>
     </section>
-  );
-}
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-function FriendsWhoRead({ friends }: { friends: typeof FAKE_FRIENDS }) {
-  if (!friends.length) return null;
-  const shown = friends.slice(0, 3);
-  const display = shown.map((f) => f.name.split(" ")[0]).join("، ");
-
-  return (
-    <button
-      type="button"
-      className="bg-muted/30 hover:bg-muted/60 flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-right transition-colors"
-    >
-      {/* Stacked avatars */}
-      <div className="flex items-center">
-        {shown.map((f, i) => (
-          <div
-            key={f.id}
-            className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-full border-2 border-background text-xs font-medium",
-              f.color,
-              i > 0 && "-mr-2",
-            )}
-          >
-            {f.initials}
-          </div>
-        ))}
-      </div>
-      <span className="text-muted-foreground flex-1 text-sm">
-        <span className="text-foreground font-medium">{display}</span>
-        {friends.length > 3 && ` و${friends.length - 3} آخرون`}
-        {" قرأوا هذا الكتاب"}
-      </span>
-      <CaretLeftIcon className="text-muted-foreground size-4" />
-    </button>
   );
 }

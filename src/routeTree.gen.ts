@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './app/__root'
 import { Route as PublicRouteImport } from './app/_public'
 import { Route as AppRouteImport } from './app/_app'
 import { Route as AppSettingsRouteImport } from './app/_app/settings'
-import { Route as AppNotificationsRouteImport } from './app/_app/notifications'
 import { Route as AppMeRouteImport } from './app/_app/me'
 import { Route as AppLibraryRouteImport } from './app/_app/library'
 import { Route as AppDashboardRouteImport } from './app/_app/dashboard'
@@ -41,10 +40,6 @@ import { Route as AppSettingsIntegrationsRouteImport } from './app/_app/settings
 import { Route as AppSettingsDataRouteImport } from './app/_app/settings/data'
 import { Route as AppSettingsAppearanceRouteImport } from './app/_app/settings/appearance'
 import { Route as AppSettingsAccountRouteImport } from './app/_app/settings/account'
-import { Route as PublicPublisherIdBooksRouteImport } from './app/_public/publisher/$id.books'
-import { Route as PublicPublisherIdArticlesRouteImport } from './app/_public/publisher/$id.articles'
-import { Route as PublicAuthorIdSeriesRouteImport } from './app/_public/author/$id.series'
-import { Route as PublicAuthorIdBooksRouteImport } from './app/_public/author/$id.books'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -57,11 +52,6 @@ const AppRoute = AppRouteImport.update({
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppNotificationsRoute = AppNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMeRoute = AppMeRouteImport.update({
@@ -208,34 +198,12 @@ const AppSettingsAccountRoute = AppSettingsAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AppSettingsRoute,
 } as any)
-const PublicPublisherIdBooksRoute = PublicPublisherIdBooksRouteImport.update({
-  id: '/books',
-  path: '/books',
-  getParentRoute: () => PublicPublisherIdRoute,
-} as any)
-const PublicPublisherIdArticlesRoute =
-  PublicPublisherIdArticlesRouteImport.update({
-    id: '/articles',
-    path: '/articles',
-    getParentRoute: () => PublicPublisherIdRoute,
-  } as any)
-const PublicAuthorIdSeriesRoute = PublicAuthorIdSeriesRouteImport.update({
-  id: '/series',
-  path: '/series',
-  getParentRoute: () => PublicAuthorIdRoute,
-} as any)
-const PublicAuthorIdBooksRoute = PublicAuthorIdBooksRouteImport.update({
-  id: '/books',
-  path: '/books',
-  getParentRoute: () => PublicAuthorIdRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicMarketingIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/library': typeof AppLibraryRoute
   '/me': typeof AppMeRoute
-  '/notifications': typeof AppNotificationsRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
@@ -253,25 +221,20 @@ export interface FileRoutesByFullPath {
   '/account/$pathname': typeof PublicAccountPathnameRoute
   '/auth/$pathname': typeof PublicAuthPathnameRoute
   '/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/author/$id': typeof PublicAuthorIdRoute
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
   '/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
+  '/publisher/$id': typeof PublicPublisherIdRoute
   '/u/$userId': typeof PublicUUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/author/$id/series': typeof PublicAuthorIdSeriesRoute
-  '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
-  '/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicMarketingIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/library': typeof AppLibraryRoute
   '/me': typeof AppMeRoute
-  '/notifications': typeof AppNotificationsRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/appearance': typeof AppSettingsAppearanceRoute
@@ -289,18 +252,14 @@ export interface FileRoutesByTo {
   '/account/$pathname': typeof PublicAccountPathnameRoute
   '/auth/$pathname': typeof PublicAuthPathnameRoute
   '/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/author/$id': typeof PublicAuthorIdRoute
   '/book/$id': typeof PublicBookIdRoute
   '/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/discover/books': typeof PublicDiscoverBooksRoute
   '/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/publisher/$id': typeof PublicPublisherIdRouteWithChildren
+  '/publisher/$id': typeof PublicPublisherIdRoute
   '/u/$userId': typeof PublicUUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/author/$id/series': typeof PublicAuthorIdSeriesRoute
-  '/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
-  '/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -309,7 +268,6 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/library': typeof AppLibraryRoute
   '/_app/me': typeof AppMeRoute
-  '/_app/notifications': typeof AppNotificationsRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/settings/account': typeof AppSettingsAccountRoute
   '/_app/settings/appearance': typeof AppSettingsAppearanceRoute
@@ -327,19 +285,15 @@ export interface FileRoutesById {
   '/_public/account/$pathname': typeof PublicAccountPathnameRoute
   '/_public/auth/$pathname': typeof PublicAuthPathnameRoute
   '/_public/auth/welcome': typeof PublicAuthWelcomeRoute
-  '/_public/author/$id': typeof PublicAuthorIdRouteWithChildren
+  '/_public/author/$id': typeof PublicAuthorIdRoute
   '/_public/book/$id': typeof PublicBookIdRoute
   '/_public/discover/authors': typeof PublicDiscoverAuthorsRoute
   '/_public/discover/books': typeof PublicDiscoverBooksRoute
   '/_public/discover/publishers': typeof PublicDiscoverPublishersRoute
-  '/_public/publisher/$id': typeof PublicPublisherIdRouteWithChildren
+  '/_public/publisher/$id': typeof PublicPublisherIdRoute
   '/_public/u/$userId': typeof PublicUUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/_marketing/': typeof PublicMarketingIndexRoute
-  '/_public/author/$id/books': typeof PublicAuthorIdBooksRoute
-  '/_public/author/$id/series': typeof PublicAuthorIdSeriesRoute
-  '/_public/publisher/$id/articles': typeof PublicPublisherIdArticlesRoute
-  '/_public/publisher/$id/books': typeof PublicPublisherIdBooksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -348,7 +302,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/library'
     | '/me'
-    | '/notifications'
     | '/settings'
     | '/settings/account'
     | '/settings/appearance'
@@ -374,17 +327,12 @@ export interface FileRouteTypes {
     | '/publisher/$id'
     | '/u/$userId'
     | '/api/auth/$'
-    | '/author/$id/books'
-    | '/author/$id/series'
-    | '/publisher/$id/articles'
-    | '/publisher/$id/books'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
     | '/library'
     | '/me'
-    | '/notifications'
     | '/settings'
     | '/settings/account'
     | '/settings/appearance'
@@ -410,10 +358,6 @@ export interface FileRouteTypes {
     | '/publisher/$id'
     | '/u/$userId'
     | '/api/auth/$'
-    | '/author/$id/books'
-    | '/author/$id/series'
-    | '/publisher/$id/articles'
-    | '/publisher/$id/books'
   id:
     | '__root__'
     | '/_app'
@@ -421,7 +365,6 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/library'
     | '/_app/me'
-    | '/_app/notifications'
     | '/_app/settings'
     | '/_app/settings/account'
     | '/_app/settings/appearance'
@@ -448,10 +391,6 @@ export interface FileRouteTypes {
     | '/_public/u/$userId'
     | '/api/auth/$'
     | '/_public/_marketing/'
-    | '/_public/author/$id/books'
-    | '/_public/author/$id/series'
-    | '/_public/publisher/$id/articles'
-    | '/_public/publisher/$id/books'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -481,13 +420,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/notifications': {
-      id: '/_app/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/me': {
@@ -686,34 +618,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsAccountRouteImport
       parentRoute: typeof AppSettingsRoute
     }
-    '/_public/publisher/$id/books': {
-      id: '/_public/publisher/$id/books'
-      path: '/books'
-      fullPath: '/publisher/$id/books'
-      preLoaderRoute: typeof PublicPublisherIdBooksRouteImport
-      parentRoute: typeof PublicPublisherIdRoute
-    }
-    '/_public/publisher/$id/articles': {
-      id: '/_public/publisher/$id/articles'
-      path: '/articles'
-      fullPath: '/publisher/$id/articles'
-      preLoaderRoute: typeof PublicPublisherIdArticlesRouteImport
-      parentRoute: typeof PublicPublisherIdRoute
-    }
-    '/_public/author/$id/series': {
-      id: '/_public/author/$id/series'
-      path: '/series'
-      fullPath: '/author/$id/series'
-      preLoaderRoute: typeof PublicAuthorIdSeriesRouteImport
-      parentRoute: typeof PublicAuthorIdRoute
-    }
-    '/_public/author/$id/books': {
-      id: '/_public/author/$id/books'
-      path: '/books'
-      fullPath: '/author/$id/books'
-      preLoaderRoute: typeof PublicAuthorIdBooksRouteImport
-      parentRoute: typeof PublicAuthorIdRoute
-    }
   }
 }
 
@@ -749,7 +653,6 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppLibraryRoute: typeof AppLibraryRoute
   AppMeRoute: typeof AppMeRoute
-  AppNotificationsRoute: typeof AppNotificationsRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
 }
 
@@ -757,38 +660,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppLibraryRoute: AppLibraryRoute,
   AppMeRoute: AppMeRoute,
-  AppNotificationsRoute: AppNotificationsRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
-
-interface PublicAuthorIdRouteChildren {
-  PublicAuthorIdBooksRoute: typeof PublicAuthorIdBooksRoute
-  PublicAuthorIdSeriesRoute: typeof PublicAuthorIdSeriesRoute
-}
-
-const PublicAuthorIdRouteChildren: PublicAuthorIdRouteChildren = {
-  PublicAuthorIdBooksRoute: PublicAuthorIdBooksRoute,
-  PublicAuthorIdSeriesRoute: PublicAuthorIdSeriesRoute,
-}
-
-const PublicAuthorIdRouteWithChildren = PublicAuthorIdRoute._addFileChildren(
-  PublicAuthorIdRouteChildren,
-)
-
-interface PublicPublisherIdRouteChildren {
-  PublicPublisherIdArticlesRoute: typeof PublicPublisherIdArticlesRoute
-  PublicPublisherIdBooksRoute: typeof PublicPublisherIdBooksRoute
-}
-
-const PublicPublisherIdRouteChildren: PublicPublisherIdRouteChildren = {
-  PublicPublisherIdArticlesRoute: PublicPublisherIdArticlesRoute,
-  PublicPublisherIdBooksRoute: PublicPublisherIdBooksRoute,
-}
-
-const PublicPublisherIdRouteWithChildren =
-  PublicPublisherIdRoute._addFileChildren(PublicPublisherIdRouteChildren)
 
 interface PublicRouteChildren {
   PublicMarketingAboutRoute: typeof PublicMarketingAboutRoute
@@ -798,12 +673,12 @@ interface PublicRouteChildren {
   PublicAccountPathnameRoute: typeof PublicAccountPathnameRoute
   PublicAuthPathnameRoute: typeof PublicAuthPathnameRoute
   PublicAuthWelcomeRoute: typeof PublicAuthWelcomeRoute
-  PublicAuthorIdRoute: typeof PublicAuthorIdRouteWithChildren
+  PublicAuthorIdRoute: typeof PublicAuthorIdRoute
   PublicBookIdRoute: typeof PublicBookIdRoute
   PublicDiscoverAuthorsRoute: typeof PublicDiscoverAuthorsRoute
   PublicDiscoverBooksRoute: typeof PublicDiscoverBooksRoute
   PublicDiscoverPublishersRoute: typeof PublicDiscoverPublishersRoute
-  PublicPublisherIdRoute: typeof PublicPublisherIdRouteWithChildren
+  PublicPublisherIdRoute: typeof PublicPublisherIdRoute
   PublicUUserIdRoute: typeof PublicUUserIdRoute
   PublicMarketingIndexRoute: typeof PublicMarketingIndexRoute
 }
@@ -816,12 +691,12 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicAccountPathnameRoute: PublicAccountPathnameRoute,
   PublicAuthPathnameRoute: PublicAuthPathnameRoute,
   PublicAuthWelcomeRoute: PublicAuthWelcomeRoute,
-  PublicAuthorIdRoute: PublicAuthorIdRouteWithChildren,
+  PublicAuthorIdRoute: PublicAuthorIdRoute,
   PublicBookIdRoute: PublicBookIdRoute,
   PublicDiscoverAuthorsRoute: PublicDiscoverAuthorsRoute,
   PublicDiscoverBooksRoute: PublicDiscoverBooksRoute,
   PublicDiscoverPublishersRoute: PublicDiscoverPublishersRoute,
-  PublicPublisherIdRoute: PublicPublisherIdRouteWithChildren,
+  PublicPublisherIdRoute: PublicPublisherIdRoute,
   PublicUUserIdRoute: PublicUUserIdRoute,
   PublicMarketingIndexRoute: PublicMarketingIndexRoute,
 }

@@ -57,6 +57,7 @@ Drizzle commands use `DATABASE_MIGRATION_URL`, then `DATABASE_URL_UNPOOLED`, the
 ```bash
 pnpm lint
 pnpm test
+pnpm check
 pnpm build
 ```
 

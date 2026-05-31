@@ -41,6 +41,7 @@ This document describes the stack currently used by Maktabati and the convention
 - Use Neon HTTP for single serverless queries; use an unpooled connection string for Drizzle migrations.
 - Keep user-specific server function responses private and never publicly cache session-aware data.
 - Use Vite/Rolldown code splitting for large third-party dependency groups.
+- Use `lazyRouteComponent` for heavy route UI while keeping loaders and search validation in route files.
 
 ## Quality Gates
 

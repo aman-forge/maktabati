@@ -127,6 +127,11 @@ export interface PublisherSummary {
   country?: string | null;
 }
 
+export interface PublisherDetail extends PublisherSummary {
+  bookCount: number;
+  books: BookCardType[];
+}
+
 export interface BookContributor {
   role: BookAuthorRole;
   order: number;
