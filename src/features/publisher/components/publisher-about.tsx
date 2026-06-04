@@ -1,21 +1,26 @@
 import type { PublisherType } from "@/features/publisher/server/get-publisher";
 
-import { BooksIcon } from "@phosphor-icons/react";
+import { BookOpenIcon, BooksIcon } from "@phosphor-icons/react";
 
-import { toAuthorSummary } from "@/features/books/lib/mappers";
-import { AuthorCard } from "@/features/book/components/author-card";
 import { BookCard } from "@/ui/components/book/book-card";
 
+const DEFAULT_TAGLINE = "نشر الفكر · إحياء الكلمة · بناء المعرفة";
+
+// Dev-only previews — real DB values always win via ?? below
+const DEMO_TAGLINE = "نشر الفكر العربي · إحياء التراث · بناء المعرفة";
+const DEMO_DESCRIPTION =
+  "دار نشر عربية رائدة تُعنى بإصدار الأعمال الأدبية والفكرية والتراثية، وتسعى لربط القارئ العربي بأفضل ما كُتب من رواية وشعر وتاريخ وفلسفة، مع التزام بمعايير التحرير والتصميم العالية.";
+
 export function PublisherAbout({ publisher }: { publisher: PublisherType }) {
-  const uniqueAuthors = Array.from(
-    new Map(
-      publisher.books.flatMap((book) =>
-        book.bookAuthors.flatMap((ba) =>
-          ba.author ? [[ba.author.id, ba.author] as const] : [],
-        ),
-      ),
-    ).values(),
-  ).map(toAuthorSummary);
+  const p = publisher as PublisherType & {
+    tagline?: string;
+    description?: string;
+  };
+
+  const isDev = import.meta.env.DEV;
+  const tagline = p.tagline ?? (isDev ? DEMO_TAGLINE : undefined);
+  const description = p.description ?? (isDev ? DEMO_DESCRIPTION : undefined);
+
   // Derive unique series from books
   const uniqueSeries = Array.from(
     new Map(
@@ -28,10 +33,31 @@ export function PublisherAbout({ publisher }: { publisher: PublisherType }) {
   return (
     <div className="flex flex-col gap-10" dir="rtl">
 
+      {/* ── About ── */}
+      <section>
+        <SectionTitle>عن الدار</SectionTitle>
+        <p className="text-foreground/80 text-sm leading-relaxed font-light">
+          {description ?? tagline ?? DEFAULT_TAGLINE}
+        </p>
+      </section>
+
       {/* ── Books ── */}
       {publisher.books.length > 0 && (
-        <section>
-          <SectionTitle>أشهر الكتب</SectionTitle>
+        <section id="books">
+          <SectionTitle
+            action={
+              <a
+                href="#books"
+                className="border-border/60 bg-background/40 hover:bg-background/70 flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors"
+              >
+                <BookOpenIcon className="size-3.5" />
+                <span className="hidden sm:inline">استكشف الكتب</span>
+                <span className="sm:hidden">الكتب</span>
+              </a>
+            }
+          >
+            أشهر الكتب
+          </SectionTitle>
           <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
             {publisher.books.map((book) => (
               <div key={book.id} className="flex shrink-0 pt-1">
@@ -68,7 +94,7 @@ export function PublisherAbout({ publisher }: { publisher: PublisherType }) {
                       </p>
                     )}
                     <p className="text-muted-foreground mt-2 text-xs">
-                      {bookCount.toLocaleString("ar-EG")} كتب
+                      {bookCount.toLocaleString("ar-US")} كتب
                     </p>
                   </div>
                 </div>
@@ -77,31 +103,24 @@ export function PublisherAbout({ publisher }: { publisher: PublisherType }) {
           </div>
         </section>
       )}
-
-      {/* ── Authors ── */}
-      {uniqueAuthors.length > 0 && (
-        <section>
-          <SectionTitle>المؤلفون</SectionTitle>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {uniqueAuthors.map((author) => (
-              <AuthorCard key={author.id} author={author} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <div className="border-border border-t py-8" />
     </div>
   );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionTitle({
+  children,
+  action,
+}: {
+  children: React.ReactNode;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="mb-4 flex items-center gap-3">
       <h2 className="text-foreground text-lg font-normal whitespace-nowrap">
         {children}
       </h2>
       <div className="bg-border h-px flex-1" />
+      {action}
     </div>
   );
 }

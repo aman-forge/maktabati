@@ -24,7 +24,16 @@ export const getPublisherById = createServerFn({ method: "GET" })
       },
     });
 
-    return publisher ?? null;
+    if (!publisher) {
+      return null;
+    }
+
+    return {
+      ...publisher,
+      website:
+        publisher.website ??
+        (import.meta.env.DEV ? "https://example.com" : null),
+    };
   });
 
 export type PublisherType = NonNullable<
