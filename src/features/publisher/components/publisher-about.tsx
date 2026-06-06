@@ -3,6 +3,7 @@ import type { PublisherType } from "@/features/publisher/server/get-publisher";
 import { BookOpenIcon, BooksIcon } from "@phosphor-icons/react";
 
 import { BookCard } from "@/ui/components/book/book-card";
+import { Link } from "@tanstack/react-router";
 
 const DEFAULT_TAGLINE = "نشر الفكر · إحياء الكلمة · بناء المعرفة";
 
@@ -46,14 +47,14 @@ export function PublisherAbout({ publisher }: { publisher: PublisherType }) {
         <section id="books">
           <SectionTitle
             action={
-              <a
-                href="#books"
-                className="border-border/60 bg-background/40 hover:bg-background/70 flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors"
+              <Link
+                to="/discover/books"
+                className=" bg-primary hover:bg-background/70 flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors"
               >
                 <BookOpenIcon className="size-3.5" />
                 <span className="hidden sm:inline">استكشف الكتب</span>
                 <span className="sm:hidden">الكتب</span>
-              </a>
+              </Link>
             }
           >
             أشهر الكتب
