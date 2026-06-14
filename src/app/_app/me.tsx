@@ -1,0 +1,30 @@
+import { SpinnerGapIcon } from "@phosphor-icons/react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+
+import { useUser } from "@/features/auth/use-user";
+
+export const Route = createFileRoute("/_app/me")({
+  component: MeRoute,
+});
+
+function MeRoute() {
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user?.id) {
+      navigate({
+        to: "/u/$userId",
+        params: { userId: user.id },
+        replace: true,
+      });
+    }
+  }, [navigate, user?.id]);
+
+  return (
+    <div className="text-foreground flex min-h-[calc(100vh-4rem)] items-center justify-center">
+      <SpinnerGapIcon size={32} className="size-20 animate-spin" weight="regular" />
+    </div>
+  );
+}

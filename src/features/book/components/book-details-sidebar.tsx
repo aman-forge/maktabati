@@ -1,8 +1,5 @@
 import { Separator } from "@components/ui/separator";
-import {
-  ArrowSquareOutIcon,
-  BookOpenIcon,
-} from "@phosphor-icons/react/dist/ssr";
+import { ArrowSquareOutIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 
 // ── Reusable card shell ──────────────────────────────────────────────────────
 function SidebarCard({
@@ -15,10 +12,10 @@ function SidebarCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl overflow-hidden bg-card border border-border">
-      <div className="px-5 py-3.5 border-b border-border bg-secondary flex items-center gap-2">
-        {Icon && <Icon className="w-3.5 h-3.5 text-muted-foreground" />}
-        <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+    <section className="bg-card border-border overflow-hidden rounded-2xl border">
+      <div className="border-border bg-secondary flex items-center gap-2 border-b px-5 py-3.5">
+        {Icon && <Icon className="text-muted-foreground h-3.5 w-3.5" />}
+        <h2 className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
           {title}
         </h2>
       </div>
@@ -43,29 +40,22 @@ interface BookDetailsSidebarProps {
   otherEditions?: Edition[];
 }
 
-export function BookDetailsSidebar({
-  details = [],
-  otherEditions = [],
-}: BookDetailsSidebarProps) {
+export function BookDetailsSidebar({ details = [], otherEditions = [] }: BookDetailsSidebarProps) {
   return (
     <aside dir="rtl" className="flex flex-col gap-7">
       {/* Book Details */}
       {details.length > 0 && (
         <SidebarCard title="تفاصيل الكتاب">
-          <div className="px-5 py-4 flex flex-col gap-0">
+          <div className="flex flex-col gap-0 px-5 py-4">
             {details.map(({ label, value }, i) => (
               <div key={label}>
                 <div className="flex items-start justify-between gap-4 py-2.5">
-                  <span className="text-xs text-muted-foreground shrink-0 flex-1">
-                    {label}
-                  </span>
-                  <span className="text-xs font-medium text-foreground text-start flex-1">
+                  <span className="text-muted-foreground flex-1 shrink-0 text-xs">{label}</span>
+                  <span className="text-foreground flex-1 text-start text-xs font-medium">
                     {value}
                   </span>
                 </div>
-                {i < details.length - 1 && (
-                  <Separator className="bg-border opacity-50" />
-                )}
+                {i < details.length - 1 && <Separator className="bg-border opacity-50" />}
               </div>
             ))}
           </div>
@@ -75,24 +65,18 @@ export function BookDetailsSidebar({
       {/* Other Editions */}
       {otherEditions.length > 0 && (
         <SidebarCard icon={BookOpenIcon} title="طبعات أخرى">
-          <div className="px-5 py-4 flex flex-col gap-0">
+          <div className="flex flex-col gap-0 px-5 py-4">
             {otherEditions.map(({ format, detail, publisher }, i) => (
               <div key={format}>
-                <div className="flex items-center justify-between gap-4 py-2.5 group cursor-pointer">
+                <div className="group flex cursor-pointer items-center justify-between gap-4 py-2.5">
                   <div className="flex flex-col gap-0.5">
-                    <p className="text-xs font-semibold text-foreground">
-                      {format}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{detail}</p>
-                    <p className="text-[11px] text-muted-foreground/60">
-                      {publisher}
-                    </p>
+                    <p className="text-foreground text-xs font-semibold">{format}</p>
+                    <p className="text-muted-foreground text-xs">{detail}</p>
+                    <p className="text-muted-foreground/60 text-[11px]">{publisher}</p>
                   </div>
-                  <ArrowSquareOutIcon className="w-3.5 h-3.5 shrink-0 text-primary opacity-0 group-hover:opacity-70 transition-opacity" />
+                  <ArrowSquareOutIcon className="text-primary h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-70" />
                 </div>
-                {i < otherEditions.length - 1 && (
-                  <Separator className="bg-border opacity-50" />
-                )}
+                {i < otherEditions.length - 1 && <Separator className="bg-border opacity-50" />}
               </div>
             ))}
           </div>

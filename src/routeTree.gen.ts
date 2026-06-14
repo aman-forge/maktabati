@@ -9,169 +9,716 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './app/__root'
-import { Route as ProtectedRouteImport } from './app/_protected'
-import { Route as IndexRouteImport } from './app/index'
-import { Route as MainSearchRouteImport } from './app/_main/search'
-import { Route as ProtectedProfileIndexRouteImport } from './app/_protected/profile/index'
-import { Route as MainAuthPathnameRouteImport } from './app/_main/auth/$pathname'
-import { Route as MainAccountPathnameRouteImport } from './app/_main/account.$pathname'
+import { Route as PublicRouteImport } from './app/_public'
+import { Route as AppRouteImport } from './app/_app'
+import { Route as AppSettingsRouteImport } from './app/_app/settings'
+import { Route as AppMeRouteImport } from './app/_app/me'
+import { Route as AppLibraryRouteImport } from './app/_app/library'
+import { Route as AppDashboardRouteImport } from './app/_app/dashboard'
+import { Route as PublicMarketingIndexRouteImport } from './app/_public/_marketing/index'
+import { Route as ApiAuthSplatRouteImport } from './app/api/auth/$'
+import { Route as PublicUUserIdRouteImport } from './app/_public/u/$userId'
+import { Route as PublicPublisherIdRouteImport } from './app/_public/publisher/$id'
+import { Route as PublicDiscoverPublishersRouteImport } from './app/_public/discover/publishers'
+import { Route as PublicDiscoverBooksRouteImport } from './app/_public/discover/books'
+import { Route as PublicDiscoverAuthorsRouteImport } from './app/_public/discover/authors'
+import { Route as PublicBookIdRouteImport } from './app/_public/book/$id'
+import { Route as PublicAuthorIdRouteImport } from './app/_public/author/$id'
+import { Route as PublicAuthWelcomeRouteImport } from './app/_public/auth/welcome'
+import { Route as PublicAuthPathnameRouteImport } from './app/_public/auth/$pathname'
+import { Route as PublicAccountPathnameRouteImport } from './app/_public/account.$pathname'
+import { Route as PublicMarketingTermsRouteImport } from './app/_public/_marketing/terms'
+import { Route as PublicMarketingPrivacyRouteImport } from './app/_public/_marketing/privacy'
+import { Route as PublicMarketingChangelogRouteImport } from './app/_public/_marketing/changelog'
+import { Route as PublicMarketingAboutRouteImport } from './app/_public/_marketing/about'
+import { Route as AppSettingsSocialRouteImport } from './app/_app/settings/social'
+import { Route as AppSettingsReadingPreferencesRouteImport } from './app/_app/settings/readingPreferences'
+import { Route as AppSettingsProfileRouteImport } from './app/_app/settings/profile'
+import { Route as AppSettingsPrivacyRouteImport } from './app/_app/settings/privacy'
+import { Route as AppSettingsNotificationsRouteImport } from './app/_app/settings/notifications'
+import { Route as AppSettingsIntegrationsRouteImport } from './app/_app/settings/integrations'
+import { Route as AppSettingsDataRouteImport } from './app/_app/settings/data'
+import { Route as AppSettingsAppearanceRouteImport } from './app/_app/settings/appearance'
+import { Route as AppSettingsAccountRouteImport } from './app/_app/settings/account'
 
-const ProtectedRoute = ProtectedRouteImport.update({
-  id: '/_protected',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMeRoute = AppMeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const PublicMarketingIndexRoute = PublicMarketingIndexRouteImport.update({
+  id: '/_marketing/',
   path: '/',
+  getParentRoute: () => PublicRoute,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainSearchRoute = MainSearchRouteImport.update({
-  id: '/_main/search',
-  path: '/search',
-  getParentRoute: () => rootRouteImport,
+const PublicUUserIdRoute = PublicUUserIdRouteImport.update({
+  id: '/u/$userId',
+  path: '/u/$userId',
+  getParentRoute: () => PublicRoute,
 } as any)
-const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
-  id: '/profile/',
-  path: '/profile/',
-  getParentRoute: () => ProtectedRoute,
+const PublicPublisherIdRoute = PublicPublisherIdRouteImport.update({
+  id: '/publisher/$id',
+  path: '/publisher/$id',
+  getParentRoute: () => PublicRoute,
 } as any)
-const MainAuthPathnameRoute = MainAuthPathnameRouteImport.update({
-  id: '/_main/auth/$pathname',
+const PublicDiscoverPublishersRoute =
+  PublicDiscoverPublishersRouteImport.update({
+    id: '/discover/publishers',
+    path: '/discover/publishers',
+    getParentRoute: () => PublicRoute,
+  } as any)
+const PublicDiscoverBooksRoute = PublicDiscoverBooksRouteImport.update({
+  id: '/discover/books',
+  path: '/discover/books',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicDiscoverAuthorsRoute = PublicDiscoverAuthorsRouteImport.update({
+  id: '/discover/authors',
+  path: '/discover/authors',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicBookIdRoute = PublicBookIdRouteImport.update({
+  id: '/book/$id',
+  path: '/book/$id',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicAuthorIdRoute = PublicAuthorIdRouteImport.update({
+  id: '/author/$id',
+  path: '/author/$id',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicAuthWelcomeRoute = PublicAuthWelcomeRouteImport.update({
+  id: '/auth/welcome',
+  path: '/auth/welcome',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicAuthPathnameRoute = PublicAuthPathnameRouteImport.update({
+  id: '/auth/$pathname',
   path: '/auth/$pathname',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
 } as any)
-const MainAccountPathnameRoute = MainAccountPathnameRouteImport.update({
-  id: '/_main/account/$pathname',
+const PublicAccountPathnameRoute = PublicAccountPathnameRouteImport.update({
+  id: '/account/$pathname',
   path: '/account/$pathname',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMarketingTermsRoute = PublicMarketingTermsRouteImport.update({
+  id: '/_marketing/terms',
+  path: '/terms',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMarketingPrivacyRoute = PublicMarketingPrivacyRouteImport.update({
+  id: '/_marketing/privacy',
+  path: '/privacy',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMarketingChangelogRoute =
+  PublicMarketingChangelogRouteImport.update({
+    id: '/_marketing/changelog',
+    path: '/changelog',
+    getParentRoute: () => PublicRoute,
+  } as any)
+const PublicMarketingAboutRoute = PublicMarketingAboutRouteImport.update({
+  id: '/_marketing/about',
+  path: '/about',
+  getParentRoute: () => PublicRoute,
+} as any)
+const AppSettingsSocialRoute = AppSettingsSocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsReadingPreferencesRoute =
+  AppSettingsReadingPreferencesRouteImport.update({
+    id: '/readingPreferences',
+    path: '/readingPreferences',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
+const AppSettingsProfileRoute = AppSettingsProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsPrivacyRoute = AppSettingsPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsNotificationsRoute =
+  AppSettingsNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
+const AppSettingsIntegrationsRoute = AppSettingsIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsDataRoute = AppSettingsDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsAppearanceRoute = AppSettingsAppearanceRouteImport.update({
+  id: '/appearance',
+  path: '/appearance',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppSettingsAccountRoute = AppSettingsAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/search': typeof MainSearchRoute
-  '/account/$pathname': typeof MainAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthPathnameRoute
-  '/profile/': typeof ProtectedProfileIndexRoute
+  '/': typeof PublicMarketingIndexRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/library': typeof AppLibraryRoute
+  '/me': typeof AppMeRoute
+  '/settings': typeof AppSettingsRouteWithChildren
+  '/settings/account': typeof AppSettingsAccountRoute
+  '/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/settings/data': typeof AppSettingsDataRoute
+  '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/settings/social': typeof AppSettingsSocialRoute
+  '/about': typeof PublicMarketingAboutRoute
+  '/changelog': typeof PublicMarketingChangelogRoute
+  '/privacy': typeof PublicMarketingPrivacyRoute
+  '/terms': typeof PublicMarketingTermsRoute
+  '/account/$pathname': typeof PublicAccountPathnameRoute
+  '/auth/$pathname': typeof PublicAuthPathnameRoute
+  '/auth/welcome': typeof PublicAuthWelcomeRoute
+  '/author/$id': typeof PublicAuthorIdRoute
+  '/book/$id': typeof PublicBookIdRoute
+  '/discover/authors': typeof PublicDiscoverAuthorsRoute
+  '/discover/books': typeof PublicDiscoverBooksRoute
+  '/discover/publishers': typeof PublicDiscoverPublishersRoute
+  '/publisher/$id': typeof PublicPublisherIdRoute
+  '/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/search': typeof MainSearchRoute
-  '/account/$pathname': typeof MainAccountPathnameRoute
-  '/auth/$pathname': typeof MainAuthPathnameRoute
-  '/profile': typeof ProtectedProfileIndexRoute
+  '/': typeof PublicMarketingIndexRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/library': typeof AppLibraryRoute
+  '/me': typeof AppMeRoute
+  '/settings': typeof AppSettingsRouteWithChildren
+  '/settings/account': typeof AppSettingsAccountRoute
+  '/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/settings/data': typeof AppSettingsDataRoute
+  '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/settings/profile': typeof AppSettingsProfileRoute
+  '/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/settings/social': typeof AppSettingsSocialRoute
+  '/about': typeof PublicMarketingAboutRoute
+  '/changelog': typeof PublicMarketingChangelogRoute
+  '/privacy': typeof PublicMarketingPrivacyRoute
+  '/terms': typeof PublicMarketingTermsRoute
+  '/account/$pathname': typeof PublicAccountPathnameRoute
+  '/auth/$pathname': typeof PublicAuthPathnameRoute
+  '/auth/welcome': typeof PublicAuthWelcomeRoute
+  '/author/$id': typeof PublicAuthorIdRoute
+  '/book/$id': typeof PublicBookIdRoute
+  '/discover/authors': typeof PublicDiscoverAuthorsRoute
+  '/discover/books': typeof PublicDiscoverBooksRoute
+  '/discover/publishers': typeof PublicDiscoverPublishersRoute
+  '/publisher/$id': typeof PublicPublisherIdRoute
+  '/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_protected': typeof ProtectedRouteWithChildren
-  '/_main/search': typeof MainSearchRoute
-  '/_main/account/$pathname': typeof MainAccountPathnameRoute
-  '/_main/auth/$pathname': typeof MainAuthPathnameRoute
-  '/_protected/profile/': typeof ProtectedProfileIndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/library': typeof AppLibraryRoute
+  '/_app/me': typeof AppMeRoute
+  '/_app/settings': typeof AppSettingsRouteWithChildren
+  '/_app/settings/account': typeof AppSettingsAccountRoute
+  '/_app/settings/appearance': typeof AppSettingsAppearanceRoute
+  '/_app/settings/data': typeof AppSettingsDataRoute
+  '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/_app/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/_app/settings/profile': typeof AppSettingsProfileRoute
+  '/_app/settings/readingPreferences': typeof AppSettingsReadingPreferencesRoute
+  '/_app/settings/social': typeof AppSettingsSocialRoute
+  '/_public/_marketing/about': typeof PublicMarketingAboutRoute
+  '/_public/_marketing/changelog': typeof PublicMarketingChangelogRoute
+  '/_public/_marketing/privacy': typeof PublicMarketingPrivacyRoute
+  '/_public/_marketing/terms': typeof PublicMarketingTermsRoute
+  '/_public/account/$pathname': typeof PublicAccountPathnameRoute
+  '/_public/auth/$pathname': typeof PublicAuthPathnameRoute
+  '/_public/auth/welcome': typeof PublicAuthWelcomeRoute
+  '/_public/author/$id': typeof PublicAuthorIdRoute
+  '/_public/book/$id': typeof PublicBookIdRoute
+  '/_public/discover/authors': typeof PublicDiscoverAuthorsRoute
+  '/_public/discover/books': typeof PublicDiscoverBooksRoute
+  '/_public/discover/publishers': typeof PublicDiscoverPublishersRoute
+  '/_public/publisher/$id': typeof PublicPublisherIdRoute
+  '/_public/u/$userId': typeof PublicUUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_public/_marketing/': typeof PublicMarketingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/search'
+    | '/dashboard'
+    | '/library'
+    | '/me'
+    | '/settings'
+    | '/settings/account'
+    | '/settings/appearance'
+    | '/settings/data'
+    | '/settings/integrations'
+    | '/settings/notifications'
+    | '/settings/privacy'
+    | '/settings/profile'
+    | '/settings/readingPreferences'
+    | '/settings/social'
+    | '/about'
+    | '/changelog'
+    | '/privacy'
+    | '/terms'
     | '/account/$pathname'
     | '/auth/$pathname'
-    | '/profile/'
+    | '/auth/welcome'
+    | '/author/$id'
+    | '/book/$id'
+    | '/discover/authors'
+    | '/discover/books'
+    | '/discover/publishers'
+    | '/publisher/$id'
+    | '/u/$userId'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/search' | '/account/$pathname' | '/auth/$pathname' | '/profile'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/library'
+    | '/me'
+    | '/settings'
+    | '/settings/account'
+    | '/settings/appearance'
+    | '/settings/data'
+    | '/settings/integrations'
+    | '/settings/notifications'
+    | '/settings/privacy'
+    | '/settings/profile'
+    | '/settings/readingPreferences'
+    | '/settings/social'
+    | '/about'
+    | '/changelog'
+    | '/privacy'
+    | '/terms'
+    | '/account/$pathname'
+    | '/auth/$pathname'
+    | '/auth/welcome'
+    | '/author/$id'
+    | '/book/$id'
+    | '/discover/authors'
+    | '/discover/books'
+    | '/discover/publishers'
+    | '/publisher/$id'
+    | '/u/$userId'
+    | '/api/auth/$'
   id:
     | '__root__'
-    | '/'
-    | '/_protected'
-    | '/_main/search'
-    | '/_main/account/$pathname'
-    | '/_main/auth/$pathname'
-    | '/_protected/profile/'
+    | '/_app'
+    | '/_public'
+    | '/_app/dashboard'
+    | '/_app/library'
+    | '/_app/me'
+    | '/_app/settings'
+    | '/_app/settings/account'
+    | '/_app/settings/appearance'
+    | '/_app/settings/data'
+    | '/_app/settings/integrations'
+    | '/_app/settings/notifications'
+    | '/_app/settings/privacy'
+    | '/_app/settings/profile'
+    | '/_app/settings/readingPreferences'
+    | '/_app/settings/social'
+    | '/_public/_marketing/about'
+    | '/_public/_marketing/changelog'
+    | '/_public/_marketing/privacy'
+    | '/_public/_marketing/terms'
+    | '/_public/account/$pathname'
+    | '/_public/auth/$pathname'
+    | '/_public/auth/welcome'
+    | '/_public/author/$id'
+    | '/_public/book/$id'
+    | '/_public/discover/authors'
+    | '/_public/discover/books'
+    | '/_public/discover/publishers'
+    | '/_public/publisher/$id'
+    | '/_public/u/$userId'
+    | '/api/auth/$'
+    | '/_public/_marketing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ProtectedRoute: typeof ProtectedRouteWithChildren
-  MainSearchRoute: typeof MainSearchRoute
-  MainAccountPathnameRoute: typeof MainAccountPathnameRoute
-  MainAuthPathnameRoute: typeof MainAuthPathnameRoute
+  AppRoute: typeof AppRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_protected': {
-      id: '/_protected'
+    '/_public': {
+      id: '/_public'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof ProtectedRouteImport
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/me': {
+      id: '/_app/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof AppMeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/library': {
+      id: '/_app/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_public/_marketing/': {
+      id: '/_public/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof PublicMarketingIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/search': {
-      id: '/_main/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof MainSearchRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_public/u/$userId': {
+      id: '/_public/u/$userId'
+      path: '/u/$userId'
+      fullPath: '/u/$userId'
+      preLoaderRoute: typeof PublicUUserIdRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_protected/profile/': {
-      id: '/_protected/profile/'
-      path: '/profile'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof ProtectedProfileIndexRouteImport
-      parentRoute: typeof ProtectedRoute
+    '/_public/publisher/$id': {
+      id: '/_public/publisher/$id'
+      path: '/publisher/$id'
+      fullPath: '/publisher/$id'
+      preLoaderRoute: typeof PublicPublisherIdRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_main/auth/$pathname': {
-      id: '/_main/auth/$pathname'
+    '/_public/discover/publishers': {
+      id: '/_public/discover/publishers'
+      path: '/discover/publishers'
+      fullPath: '/discover/publishers'
+      preLoaderRoute: typeof PublicDiscoverPublishersRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/discover/books': {
+      id: '/_public/discover/books'
+      path: '/discover/books'
+      fullPath: '/discover/books'
+      preLoaderRoute: typeof PublicDiscoverBooksRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/discover/authors': {
+      id: '/_public/discover/authors'
+      path: '/discover/authors'
+      fullPath: '/discover/authors'
+      preLoaderRoute: typeof PublicDiscoverAuthorsRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/book/$id': {
+      id: '/_public/book/$id'
+      path: '/book/$id'
+      fullPath: '/book/$id'
+      preLoaderRoute: typeof PublicBookIdRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/author/$id': {
+      id: '/_public/author/$id'
+      path: '/author/$id'
+      fullPath: '/author/$id'
+      preLoaderRoute: typeof PublicAuthorIdRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/auth/welcome': {
+      id: '/_public/auth/welcome'
+      path: '/auth/welcome'
+      fullPath: '/auth/welcome'
+      preLoaderRoute: typeof PublicAuthWelcomeRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/auth/$pathname': {
+      id: '/_public/auth/$pathname'
       path: '/auth/$pathname'
       fullPath: '/auth/$pathname'
-      preLoaderRoute: typeof MainAuthPathnameRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicAuthPathnameRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_main/account/$pathname': {
-      id: '/_main/account/$pathname'
+    '/_public/account/$pathname': {
+      id: '/_public/account/$pathname'
       path: '/account/$pathname'
       fullPath: '/account/$pathname'
-      preLoaderRoute: typeof MainAccountPathnameRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicAccountPathnameRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/_marketing/terms': {
+      id: '/_public/_marketing/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof PublicMarketingTermsRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/_marketing/privacy': {
+      id: '/_public/_marketing/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PublicMarketingPrivacyRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/_marketing/changelog': {
+      id: '/_public/_marketing/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof PublicMarketingChangelogRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/_marketing/about': {
+      id: '/_public/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicMarketingAboutRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_app/settings/social': {
+      id: '/_app/settings/social'
+      path: '/social'
+      fullPath: '/settings/social'
+      preLoaderRoute: typeof AppSettingsSocialRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/readingPreferences': {
+      id: '/_app/settings/readingPreferences'
+      path: '/readingPreferences'
+      fullPath: '/settings/readingPreferences'
+      preLoaderRoute: typeof AppSettingsReadingPreferencesRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/profile': {
+      id: '/_app/settings/profile'
+      path: '/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof AppSettingsProfileRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/privacy': {
+      id: '/_app/settings/privacy'
+      path: '/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof AppSettingsPrivacyRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/notifications': {
+      id: '/_app/settings/notifications'
+      path: '/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof AppSettingsNotificationsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/integrations': {
+      id: '/_app/settings/integrations'
+      path: '/integrations'
+      fullPath: '/settings/integrations'
+      preLoaderRoute: typeof AppSettingsIntegrationsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/data': {
+      id: '/_app/settings/data'
+      path: '/data'
+      fullPath: '/settings/data'
+      preLoaderRoute: typeof AppSettingsDataRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/appearance': {
+      id: '/_app/settings/appearance'
+      path: '/appearance'
+      fullPath: '/settings/appearance'
+      preLoaderRoute: typeof AppSettingsAppearanceRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/account': {
+      id: '/_app/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof AppSettingsAccountRouteImport
+      parentRoute: typeof AppSettingsRoute
     }
   }
 }
 
-interface ProtectedRouteChildren {
-  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
+interface AppSettingsRouteChildren {
+  AppSettingsAccountRoute: typeof AppSettingsAccountRoute
+  AppSettingsAppearanceRoute: typeof AppSettingsAppearanceRoute
+  AppSettingsDataRoute: typeof AppSettingsDataRoute
+  AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
+  AppSettingsNotificationsRoute: typeof AppSettingsNotificationsRoute
+  AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
+  AppSettingsProfileRoute: typeof AppSettingsProfileRoute
+  AppSettingsReadingPreferencesRoute: typeof AppSettingsReadingPreferencesRoute
+  AppSettingsSocialRoute: typeof AppSettingsSocialRoute
 }
 
-const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
+const AppSettingsRouteChildren: AppSettingsRouteChildren = {
+  AppSettingsAccountRoute: AppSettingsAccountRoute,
+  AppSettingsAppearanceRoute: AppSettingsAppearanceRoute,
+  AppSettingsDataRoute: AppSettingsDataRoute,
+  AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
+  AppSettingsNotificationsRoute: AppSettingsNotificationsRoute,
+  AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
+  AppSettingsProfileRoute: AppSettingsProfileRoute,
+  AppSettingsReadingPreferencesRoute: AppSettingsReadingPreferencesRoute,
+  AppSettingsSocialRoute: AppSettingsSocialRoute,
 }
 
-const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
-  ProtectedRouteChildren,
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
+  AppSettingsRouteChildren,
 )
 
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppLibraryRoute: typeof AppLibraryRoute
+  AppMeRoute: typeof AppMeRoute
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRoute,
+  AppLibraryRoute: AppLibraryRoute,
+  AppMeRoute: AppMeRoute,
+  AppSettingsRoute: AppSettingsRouteWithChildren,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface PublicRouteChildren {
+  PublicMarketingAboutRoute: typeof PublicMarketingAboutRoute
+  PublicMarketingChangelogRoute: typeof PublicMarketingChangelogRoute
+  PublicMarketingPrivacyRoute: typeof PublicMarketingPrivacyRoute
+  PublicMarketingTermsRoute: typeof PublicMarketingTermsRoute
+  PublicAccountPathnameRoute: typeof PublicAccountPathnameRoute
+  PublicAuthPathnameRoute: typeof PublicAuthPathnameRoute
+  PublicAuthWelcomeRoute: typeof PublicAuthWelcomeRoute
+  PublicAuthorIdRoute: typeof PublicAuthorIdRoute
+  PublicBookIdRoute: typeof PublicBookIdRoute
+  PublicDiscoverAuthorsRoute: typeof PublicDiscoverAuthorsRoute
+  PublicDiscoverBooksRoute: typeof PublicDiscoverBooksRoute
+  PublicDiscoverPublishersRoute: typeof PublicDiscoverPublishersRoute
+  PublicPublisherIdRoute: typeof PublicPublisherIdRoute
+  PublicUUserIdRoute: typeof PublicUUserIdRoute
+  PublicMarketingIndexRoute: typeof PublicMarketingIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicMarketingAboutRoute: PublicMarketingAboutRoute,
+  PublicMarketingChangelogRoute: PublicMarketingChangelogRoute,
+  PublicMarketingPrivacyRoute: PublicMarketingPrivacyRoute,
+  PublicMarketingTermsRoute: PublicMarketingTermsRoute,
+  PublicAccountPathnameRoute: PublicAccountPathnameRoute,
+  PublicAuthPathnameRoute: PublicAuthPathnameRoute,
+  PublicAuthWelcomeRoute: PublicAuthWelcomeRoute,
+  PublicAuthorIdRoute: PublicAuthorIdRoute,
+  PublicBookIdRoute: PublicBookIdRoute,
+  PublicDiscoverAuthorsRoute: PublicDiscoverAuthorsRoute,
+  PublicDiscoverBooksRoute: PublicDiscoverBooksRoute,
+  PublicDiscoverPublishersRoute: PublicDiscoverPublishersRoute,
+  PublicPublisherIdRoute: PublicPublisherIdRoute,
+  PublicUUserIdRoute: PublicUUserIdRoute,
+  PublicMarketingIndexRoute: PublicMarketingIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ProtectedRoute: ProtectedRouteWithChildren,
-  MainSearchRoute: MainSearchRoute,
-  MainAccountPathnameRoute: MainAccountPathnameRoute,
-  MainAuthPathnameRoute: MainAuthPathnameRoute,
+  AppRoute: AppRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

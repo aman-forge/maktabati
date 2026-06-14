@@ -1,281 +1,241 @@
-// constants/books.ts
+import {
+  BookmarkIcon,
+  BookOpenIcon,
+  CheckCircleIcon,
+  PauseCircleIcon,
+  SquaresFourIcon,
+  TrashIcon,
+} from "@phosphor-icons/react";
+import type React from "react";
 
-// ─────────────────────────────────────────────────────────────
-// 1. التصنيفات الرئيسية (Genres)
-// يفضّل إجبار المستخدم على اختيار 1 إلى 3 فقط
-// ─────────────────────────────────────────────────────────────
-export interface BookGenre {
-  value: string;
-  label: string;
-}
-export const BOOK_GENRES: BookGenre[] = [
-  // أدب / روايات / قصص
-  { value: "fiction", label: "أدب قصصي / عام" },
-  { value: "literary_fiction", label: "أدب أدبي / رفيع" },
-  { value: "historical_fiction", label: "رواية تاريخية" },
-  { value: "mystery_thriller", label: "غموض وإثارة" },
-  { value: "crime", label: "جريمة وتحقيق" },
-  { value: "horror", label: "رعب" },
-  { value: "romance", label: "رومانسية" },
-  { value: "science_fiction", label: "خيال علمي" },
-  { value: "fantasy", label: "فنتازيا" },
-  { value: "adventure", label: "مغامرات" },
-  { value: "drama", label: "دراما" },
-  { value: "satire", label: "سخرية / تهكم" },
-  { value: "poetry", label: "شعر" },
-  { value: "short_stories", label: "قصص قصيرة" },
-  { value: "novella", label: "نوفيلا / رواية قصيرة" },
-  { value: "young_adult", label: "يافعين / ناشئة" },
-  { value: "children", label: "أدب أطفال" },
-  { value: "translated_literature", label: "أدب مترجم" },
+import type { BookRow, SeriesRow } from "./schema-types";
 
-  // غير قصصي / معرفي
-  { value: "biography", label: "سيرة ذاتية" },
-  { value: "memoir", label: "مذكرات" },
-  { value: "history", label: "تاريخ" },
-  { value: "psychology", label: "علم نفس" },
-  { value: "self_help", label: "تطوير الذات" },
-  { value: "business_economics", label: "أعمال واقتصاد" },
-  { value: "science_technology", label: "علوم وتكنولوجيا" },
-  { value: "philosophy", label: "فلسفة" },
-  { value: "politics", label: "سياسة وفكر سياسي" },
-  { value: "sociology", label: "علم اجتماع" },
-  { value: "education", label: "تربية وتعليم" },
-  { value: "arts_culture", label: "فنون وثقافة" },
-  { value: "travel", label: "سفر ورحلات" },
-  { value: "health_medicine", label: "صحة وطب" },
-  { value: "reference", label: "مراجع وموسوعات" },
-  { value: "academic", label: "أكاديمي / دراسي" },
-
-  // إسلاميات وعلوم شرعية
-  { value: "islamic_studies", label: "دراسات إسلامية" },
-  { value: "aqidah", label: "عقيدة" },
-  { value: "fiqh", label: "فقه" },
-  { value: "usul_fiqh", label: "أصول الفقه" },
-  { value: "qawaid_fiqhiyyah", label: "القواعد الفقهية" },
-  { value: "maqasid_al_sharia", label: "مقاصد الشريعة" },
-  { value: "tafsir", label: "تفسير القرآن" },
-  { value: "ulum_al_quran", label: "علوم القرآن" },
-  { value: "qiraat", label: "القراءات" },
-  { value: "tajweed", label: "التجويد" },
-  { value: "hadith", label: "الحديث النبوي" },
-  { value: "mustalah_hadith", label: "مصطلح الحديث" },
-  { value: "rijal", label: "الرجال والتراجم" },
-  { value: "sirah", label: "السيرة النبوية" },
-  { value: "shamaail", label: "الشمائل" },
-  { value: "tazkiyah", label: "تزكية النفس" },
-  { value: "akhlaq", label: "الأخلاق والآداب" },
-  { value: "islamic_finance", label: "الاقتصاد والمالية الإسلامية" },
-  { value: "comparative_religion", label: "مقارنة الأديان" },
+export const READING_STATUSES = [
+  "want_to_read",
+  "currently_reading",
+  "completed",
+  "on_hold",
+  "dropped",
 ] as const;
 
-// ─────────────────────────────────────────────────────────────
-// 2. الوسوم (Tags / Tropes / Topics)
-// يمكن اختيار عدد مفتوح منها
-// مقسّمة لتناسب الروايات والكتب الإسلامية والعربية والمعرفة العامة
-// ─────────────────────────────────────────────────────────────
-export const BOOK_TAGS = [
-  // ── إعدادات وعوالم القصة ──
-  { value: "space", label: "فضاء" },
-  { value: "dystopia", label: "ديستوبيا" },
-  { value: "utopia", label: "يوتوبيا" },
-  { value: "cyberpunk", label: "سايبربانك" },
-  { value: "steampunk", label: "ستيم بانك" },
-  { value: "post_apocalyptic", label: "ما بعد الكارثة" },
-  { value: "alternate_history", label: "تاريخ بديل" },
-  { value: "medieval", label: "عصور وسطى" },
-  { value: "school_life", label: "حياة مدرسية / جامعية" },
-  { value: "academy", label: "أكاديمية / معهد" },
-  { value: "virtual_reality", label: "واقع افتراضي" },
-  { value: "multiverse", label: "عوالم متعددة" },
-  { value: "time_travel", label: "سفر عبر الزمن" },
-  { value: "prison", label: "سجن / معتقل" },
-  { value: "desert", label: "صحراء" },
-  { value: "city_life", label: "حياة مدينة" },
-  { value: "village_life", label: "حياة ريفية / قروية" },
-  { value: "royal_court", label: "قصر / بلاط ملكي" },
-  { value: "interstellar", label: "بين النجوم" },
+export const BOOK_AUTHOR_ROLES = ["author", "co_author", "editor", "translator"] as const;
 
-  // ── الحبكات والموضوعات العامة ──
-  { value: "survival", label: "بقاء على قيد الحياة" },
-  { value: "revenge", label: "انتقام" },
-  { value: "redemption", label: "خلاص / توبة / فداء" },
-  { value: "sacrifice", label: "تضحية" },
-  { value: "rebellion", label: "تمرد / ثورة" },
-  { value: "war_military", label: "حروب ومعارك" },
-  { value: "politics", label: "سياسة ومؤامرات" },
-  { value: "conspiracy", label: "مؤامرة" },
-  { value: "prophecy", label: "نبوءة" },
-  { value: "secret_society", label: "جمعيات سرية" },
-  { value: "investigation", label: "تحقيق" },
-  { value: "mystery", label: "ألغاز" },
-  { value: "quest", label: "مهمة / رحلة" },
-  { value: "treasure_hunt", label: "البحث عن كنز" },
-  { value: "journey", label: "رحلة" },
-  { value: "trial", label: "محاكمة / ابتلاء" },
-  { value: "competition", label: "منافسة / بطولة" },
-  { value: "coming_of_age", label: "نضوج وبلوغ" },
-  { value: "family_drama", label: "دراما عائلية" },
-  { value: "friendship", label: "صداقة" },
-  { value: "betrayal", label: "خيانة" },
-  { value: "betrayal_and_loyalty", label: "خيانة ووفاء" },
-  { value: "amnesia", label: "فقدان الذاكرة" },
-  { value: "identity_secret", label: "هوية سرية" },
-  { value: "destiny", label: "قدر / مصير" },
-  { value: "moral_dilemma", label: "مأزق أخلاقي" },
-  { value: "found_family", label: "عائلة مكتسبة" },
-  { value: "chosen_one", label: "المختار" },
-  { value: "forbidden_knowledge", label: "معرفة محرمة" },
-  { value: "under_dog", label: "بطل من الهامش" },
-  { value: "slice_of_life", label: "حياة يومية" },
-  { value: "dark_comedy", label: "كوميديا سوداء" },
-  { value: "philosophical", label: "فلسفي / تأملي" },
-  { value: "plot_twist", label: "حبكة صادمة" },
-  { value: "fast_paced", label: "إيقاع سريع" },
-  { value: "slow_paced", label: "إيقاع هادئ" },
-  { value: "tragic", label: "تراجيدي" },
-  { value: "cozy", label: "دافئ / مريح" },
-  { value: "suspense", label: "تشويق" },
-  { value: "multiple_pov", label: "تعدد وجهات النظر" },
-  { value: "first_person", label: "سرد بضمير المتكلم" },
-  { value: "third_person", label: "سرد بضمير الغائب" },
-  { value: "epistolary", label: "سرد بالرسائل / المذكرات" },
-  { value: "anthology", label: "مجموعة / أنطولوجيا" },
+export type ReadingStatus = (typeof READING_STATUSES)[number];
+export type BookAuthorRole = (typeof BOOK_AUTHOR_ROLES)[number];
 
-  // ── شخصيات وأنماط شخصيات ──
-  { value: "villain_protagonist", label: "بطل شرير" },
-  { value: "anti_hero", label: "بطل غير مثالي" },
-  { value: "strong_female_lead", label: "بطلة قوية" },
-  { value: "detective", label: "محقق ذكي" },
-  { value: "scholar_protagonist", label: "بطل/بطلة من أهل العلم" },
-  { value: "warrior", label: "محارب" },
-  { value: "ruler", label: "حاكم / ملك" },
-  { value: "prince_princess", label: "أمير / أميرة" },
-  { value: "orphan", label: "يتيم" },
-  { value: "assassin", label: "قاتل مأجور" },
-  { value: "unreliable_narrator", label: "راوٍ غير موثوق" },
-  { value: "genius", label: "عبقري" },
-  { value: "mentor", label: "مرشد / معلّم" },
-  { value: "child_protagonist", label: "بطل طفل" },
-  { value: "outcast", label: "منبوذ / معزول" },
-  { value: "female_protagonist", label: "بطلة رئيسية" },
-  { value: "male_protagonist", label: "بطل رئيسي" },
-
-  // ── عناصر خيالية / أسطورية ──
-  { value: "magic", label: "سحر وقوى خارقة" },
-  { value: "mythology", label: "أساطير وميثولوجيا" },
-  { value: "vampires", label: "مصاصو دماء" },
-  { value: "demons", label: "شياطين" },
-  { value: "jinn", label: "جن" },
-  { value: "angels", label: "ملائكة" },
-  { value: "aliens", label: "كائنات فضائية" },
-
-  // ── الرومانسية ──
-  { value: "enemies_to_lovers", label: "من أعداء إلى عشاق" },
-  { value: "friends_to_lovers", label: "من أصدقاء إلى عشاق" },
-  { value: "fake_dating", label: "مواعدة مزيفة" },
-  { value: "love_triangle", label: "مثلث حب" },
-  { value: "slow_burn", label: "حب بطيء الاشتعال" },
-  { value: "arranged_marriage", label: "زواج مدبّر" },
-  { value: "second_chance", label: "فرصة ثانية" },
-  { value: "forbidden_love", label: "حب ممنوع" },
-  { value: "childhood_friends", label: "أصدقاء الطفولة" },
-  { value: "opposites_attract", label: "الأضداد تتجاذب" },
-  { value: "contract_marriage", label: "زواج تعاقدي" },
-  { value: "protective_mc", label: "بطل/بطلة حامية" },
-
-  // ── إسلاميات وموضوعات شرعية ──
-  { value: "tawhid", label: "توحيد" },
-  { value: "asma_wa_sifat", label: "الأسماء والصفات" },
-  { value: "iman", label: "الإيمان" },
-  { value: "qadar", label: "القدر" },
-  { value: "imaniyyat", label: "إيمانيات" },
-  { value: "usul_al_tafsir", label: "أصول التفسير" },
-  { value: "tafsir_themes", label: "موضوعات قرآنية" },
-  { value: "quranic_sciences", label: "علوم قرآنية" },
-  { value: "qiraat_studies", label: "دراسات قرآنية / قراءات" },
-  { value: "tajweed_rules", label: "أحكام التجويد" },
-  { value: "hadith_studies", label: "دراسات حديثية" },
-  { value: "mustalah", label: "مصطلح الحديث" },
-  { value: "jarh_tadil", label: "الجرح والتعديل" },
-  { value: "rijal_al_hadith", label: "رجال الحديث" },
-  { value: "sirah_nabawiyyah", label: "السيرة النبوية" },
-  { value: "shamaail_nabawiyyah", label: "الشمائل النبوية" },
-  { value: "sahaba", label: "الصحابة" },
-  { value: "tabiun", label: "التابعون" },
-  { value: "fiqh_ibadat", label: "فقه العبادات" },
-  { value: "fiqh_muamalat", label: "فقه المعاملات" },
-  { value: "fiqh_family", label: "فقه الأسرة" },
-  { value: "fiqh_inheritance", label: "فقه المواريث" },
-  { value: "fiqh_zakat", label: "فقه الزكاة" },
-  { value: "fiqh_salah", label: "فقه الصلاة" },
-  { value: "fiqh_sawm", label: "فقه الصيام" },
-  { value: "fiqh_hajj", label: "فقه الحج" },
-  { value: "halal_haram", label: "حلال وحرام" },
-  { value: "adab_islami", label: "آداب إسلامية" },
-  { value: "akhlaq_tazkiyah", label: "أخلاق وتزكية" },
-  { value: "spirituality", label: "روحانيات" },
-  { value: "dawah", label: "دعوة" },
-  { value: "comparative_fiqh", label: "فقه مقارن" },
-  { value: "madhahib", label: "المذاهب الفقهية" },
-  { value: "aqeedah_deviant_sects", label: "فرق ومذاهب عقدية" },
-  { value: "islamic_history", label: "تاريخ إسلامي" },
-  { value: "islamic_civilization", label: "حضارة إسلامية" },
-  { value: "islamic_finance", label: "مالية إسلامية" },
-  { value: "waqf", label: "الوقف" },
-  { value: "endowments", label: "الأوقاف" },
-
-  // ── اللغة العربية والأدب ──
-  { value: "grammar", label: "قواعد" },
-  { value: "morphology", label: "صرف" },
-  { value: "rhetoric", label: "بلاغة" },
-  { value: "prosody", label: "عَروض" },
-  { value: "philology", label: "فقه اللغة" },
-  { value: "semantics", label: "دلالة ومعنى" },
-  { value: "vocabulary", label: "مفردات" },
-  { value: "writing_skills", label: "مهارات كتابة" },
-  { value: "reading_skills", label: "مهارات قراءة" },
-  { value: "classical_arabic", label: "عربية تراثية" },
-  { value: "modern_arabic", label: "عربية معاصرة" },
-  { value: "poetry_classical", label: "شعر عربي كلاسيكي" },
-  { value: "poetry_modern", label: "شعر حديث" },
-
-  // ── أنواع الكتب والهيئة العامة ──
-  { value: "classic", label: "كلاسيكي" },
-  { value: "contemporary", label: "معاصر" },
-  { value: "translated", label: "مترجم" },
-  { value: "original_arabic", label: "مؤلف عربي أصلي" },
-  { value: "abridged", label: "مختصر" },
-  { value: "annotated", label: "مشروح / معلّق" },
-  { value: "illustrated", label: "مُصوّر" },
-  { value: "standalone", label: "كتاب مستقل" },
-  { value: "series", label: "سلسلة" },
-  { value: "omnibus", label: "مجموعة مجلدات" },
-  { value: "essay_collection", label: "مجموعة مقالات" },
-  { value: "guide", label: "دليل" },
-  { value: "manual", label: "كتيّب / مرجع عملي" },
-  { value: "textbook", label: "كتاب دراسي" },
-  { value: "workbook", label: "دفتر تدريبات" },
-  { value: "reference_work", label: "مرجع" },
-  { value: "encyclopedia", label: "موسوعة" },
-  { value: "interview", label: "حوار / مقابلات" },
-  { value: "research", label: "بحث علمي" },
-  { value: "case_study", label: "دراسة حالة" },
-  { value: "review", label: "مراجعة / عرض" },
-] as const;
-
-// ─────────────────────────────────────────────────────────────
-// 3. استخراج الأنواع (TypeScript Utility Types)
-// ─────────────────────────────────────────────────────────────
-export type GenreValue = (typeof BOOK_GENRES)[number]["value"];
-export type TagValue = (typeof BOOK_TAGS)[number]["value"];
-
-export interface GenreOption {
-  value: GenreValue;
+// ─── Status config ────────────────────────────────────────────────
+// Single source of truth for colors, icons, and labels across all components
+export interface StatusConfig {
+  value: ReadingStatus | "all";
   label: string;
+  icon: React.ElementType;
+  // Tailwind text color class  e.g. "text-blue-500"
+  color: string;
+  // Tailwind badge classes     e.g. "bg-blue-500/10 text-blue-500"
+  badgeClass: string;
+  // Tailwind solid bg class    e.g. "bg-blue-500"  (for dots, stripes, pills)
+  bgColor: string;
+  bgHoverColor?: string;
 }
 
-export interface TagOption {
-  value: TagValue;
-  label: string;
+export const STATUS_CONFIG = [
+  {
+    value: "all",
+    label: "المكتبة كلها",
+    icon: SquaresFourIcon,
+    color: "text-foreground",
+    badgeClass: "bg-foreground/10 text-foreground",
+    bgColor: "bg-foreground",
+    bgHoverColor: "hover:bg-foreground/60!",
+  },
+  {
+    value: "currently_reading",
+    label: "قيد القراءة",
+    icon: BookOpenIcon,
+    color: "text-blue-500",
+    badgeClass: "bg-blue-500/70 text-foreground",
+    bgColor: "bg-blue-500",
+    bgHoverColor: "hover:bg-blue-500/60!",
+  },
+  {
+    value: "want_to_read",
+    label: "أخطط لقراءته",
+    icon: BookmarkIcon,
+    color: "text-amber-500",
+    badgeClass: "bg-amber-500/70 text-foreground",
+    bgColor: "bg-amber-500",
+    bgHoverColor: "hover:bg-amber-500/60!",
+  },
+  {
+    value: "completed",
+    label: "مكتمل",
+    icon: CheckCircleIcon,
+    color: "text-emerald-500",
+    badgeClass: "bg-emerald-500/70 text-foreground",
+    bgColor: "bg-emerald-500",
+    bgHoverColor: "hover:bg-emerald-500/60!",
+  },
+  {
+    value: "on_hold",
+    label: "متوقف",
+    icon: PauseCircleIcon,
+    color: "text-orange-500",
+    badgeClass: "bg-orange-500/70 text-foreground",
+    bgColor: "bg-orange-500",
+    bgHoverColor: "hover:bg-orange-500/60!",
+  },
+  {
+    value: "dropped",
+    label: "متروك",
+    icon: TrashIcon,
+    color: "text-rose-500",
+    badgeClass: "bg-rose-500/70 text-foreground",
+    bgColor: "bg-rose-500",
+    bgHoverColor: "hover:bg-rose-500/60!",
+  },
+] as const satisfies ReadonlyArray<StatusConfig>;
+
+// Lookup helper — avoids .find() boilerplate at every call site
+export function getStatusConfig(status: ReadingStatus): StatusConfig {
+  return STATUS_CONFIG.find((s) => s.value === status) ?? STATUS_CONFIG[0];
+}
+
+export interface AuthorSummary {
+  id: string;
+  slug: string;
+  name: string;
+  nameEn?: string | null;
+  profileImage?: string | null;
+  bio?: string | null;
+  birthYear?: number | null;
+  deathYear?: number | null;
+  nationality?: string | null;
+  totalBooks?: number;
+  books?: Array<{
+    id: string;
+    title: string;
+    coverImageUrl: string | null;
+  }>;
+}
+
+export interface PublisherSummary {
+  id: string;
+  slug: string;
+  name: string;
+  logoUrl?: string | null;
+  website?: string | null;
+  country?: string | null;
+}
+
+export interface PublisherDetail extends PublisherSummary {
+  bookCount: number;
+  books: BookCardType[];
+}
+
+export interface BookContributor {
+  role: BookAuthorRole;
+  order: number;
+  author: AuthorSummary;
+}
+
+export interface BookRatingSummary {
+  average: number;
+  totalRatings: number;
+  totalReviews: number;
+  distribution: Array<{ stars: 1 | 2 | 3 | 4 | 5; percent: number }>;
+}
+
+export interface BookReviewItem {
+  id: string;
+  name: string;
+  avatar: string;
+  rating: number;
+  date: string;
+  shelf: string;
+  title: string;
+  body: string;
+  likes: number;
+  verified?: boolean;
+}
+
+export interface BibliographicEdition {
+  id: string;
+  format: string;
+  edition: string;
+  publisher: string;
+  publication: string;
+  isbn?: string;
+  isbn13?: string;
+  language: string;
+  translator?: string;
+  pageCount?: number;
+}
+
+/**
+ * Base properties required by most UI components that display a book
+ * (Cards, Modals, Simple Lists)
+ */
+export interface BaseBook {
+  id: string;
+  slug: string;
+  title: string;
+  coverImageUrl?: string | null;
+  pageCount?: number | null;
+  publicationYear?: number | null;
+  status?: ReadingStatus | null;
+  pageProgress?: number | null;
+  notes?: string | null;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  primaryAuthor?: AuthorSummary | null;
+  contributors?: BookContributor[];
+  averageRating?: number | null;
+  totalRatings?: number;
+}
+
+/**
+ * Type for book search results and list items
+ */
+export interface BookCardType extends BaseBook {
+  subtitle?: string | null;
+  description?: string | null;
+  publicationDate?: string | null;
+  originalLanguage?: string | null;
+  originalTitle?: string | null;
+  genres?: string[] | null;
+  topics?: string[] | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * Full book details with all relations
+ * (Matches the result of findFirst with all relations)
+ */
+export type DetailedBookType = BookRow & {
+  primaryAuthor: AuthorSummary | null;
+  contributors: BookContributor[];
+  authors: AuthorSummary[];
+  translators: AuthorSummary[];
+  editors: AuthorSummary[];
+  series: Pick<SeriesRow, "id" | "name" | "slug"> | null;
+  publisher: PublisherSummary | null;
+  ratingSummary: BookRatingSummary;
+  reviews: BookReviewItem[];
+  editions: BibliographicEdition[];
+  relatedBooks: BookCardType[];
+};
+
+export interface AuthorListItem extends AuthorSummary {
+  bookCount: number;
+}
+
+export interface PublisherListItem extends PublisherSummary {
+  bookCount: number;
+}
+
+export interface PublisherOption {
+  id: string;
+  name: string;
+  slug: string;
 }

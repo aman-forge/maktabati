@@ -2,12 +2,8 @@
 
 import { GridFourIcon, RowsIcon, SquaresFourIcon } from "@phosphor-icons/react";
 import { ToggleGroup, ToggleGroupItem } from "@shadcn/toggle-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@shadcn/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@shadcn/tooltip";
+
 import { cn } from "@/ui/lib/utils";
 
 const VIEW_OPTIONS = [
@@ -16,7 +12,7 @@ const VIEW_OPTIONS = [
   { value: "list" as const, label: "قائمة", Icon: RowsIcon },
 ] as const;
 
-export type ViewMode = "grid" | "detailed" | "list";
+type ViewMode = "grid" | "detailed" | "list";
 
 interface ViewToggleProps {
   value: ViewMode;
@@ -49,10 +45,7 @@ export function ViewToggle({ value, onValueChange }: ViewToggleProps) {
                     "transition-all duration-150",
                   )}
                 >
-                  <Icon
-                    weight={value === optionValue ? "fill" : "regular"}
-                    className="h-4 w-4"
-                  />
+                  <Icon weight={value === optionValue ? "fill" : "regular"} className="h-4 w-4" />
                 </ToggleGroupItem>
               }
             />

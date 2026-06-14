@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@lonik/themer";
 import {
   CheckCircleIcon,
   InfoIcon,
@@ -7,11 +8,10 @@ import {
   WarningIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
-import { useTheme } from "@lonik/themer";
-import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { ExternalToast, Toaster as Sonner, type ToasterProps, toast as sonnerToast } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Sonner
@@ -34,12 +34,40 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: "cn-toast font-sans!",
         },
       }}
+      id="main-app-toaster"
       {...props}
     />
   );
 };
 
-export { Toaster };
+const defaultOptions: ExternalToast = {
+  toasterId: "main-app-toaster",
+};
+
+const toast = Object.assign(
+  (message: string | React.ReactNode, options?: ExternalToast) =>
+    sonnerToast(message, { ...defaultOptions, ...options }),
+  {
+    success: (message: string | React.ReactNode, options?: ExternalToast) =>
+      sonnerToast.success(message, { ...defaultOptions, ...options }),
+
+    error: (message: string | React.ReactNode, options?: ExternalToast) =>
+      sonnerToast.error(message, { ...defaultOptions, ...options }),
+
+    info: (message: string | React.ReactNode, options?: ExternalToast) =>
+      sonnerToast.info(message, { ...defaultOptions, ...options }),
+
+    warning: (message: string | React.ReactNode, options?: ExternalToast) =>
+      sonnerToast.warning(message, { ...defaultOptions, ...options }),
+
+    loading: (message: string | React.ReactNode, options?: ExternalToast) =>
+      sonnerToast.loading(message, { ...defaultOptions, ...options }),
+
+    dismiss: (id?: string | number) => sonnerToast.dismiss(id),
+  },
+);
+
+export { Toaster, toast };

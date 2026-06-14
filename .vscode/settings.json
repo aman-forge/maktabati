@@ -1,8 +1,15 @@
 {
-	"files.exclude": {
-		".vscode": true,
-		".cursor": true,
-		".agents": true,
-		"node_modules": true
-	}
+  "files.exclude": {
+    ".vscode": true,
+    ".cursor": true,
+    ".agents": true,
+    "node_modules": true,
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always",
+  },
+  "oxc.typeAware": true,
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
 }

@@ -1,72 +1,97 @@
-import type { Icon } from "@phosphor-icons/react";
 import {
-  BookmarkIcon,
   BooksIcon,
-  ChartLineIcon,
-  CheckIcon,
+  BuildingsIcon,
+  ChatCircleIcon,
   ClockIcon,
+  FireIcon,
+  type Icon,
+  ListBulletsIcon,
+  StarIcon,
+  TrophyIcon,
   UserCircleIcon,
   UsersIcon,
-  UsersThreeIcon,
-} from "@phosphor-icons/react/ssr";
+} from "@phosphor-icons/react";
 
 export type NavItem = {
   title: string;
   href: string;
   description: string;
   icon: Icon;
+  disabled?: boolean;
+  badge?: string; // e.g. "جديد", "قريباً"
 };
-
-export const browseItems: NavItem[] = [
-  {
-    title: "نشاط القراءة",
-    href: "/activity",
-    description: "تتبع تقدمك وسجل قراءاتك",
-    icon: ClockIcon,
-  },
-  {
-    title: "الأصدقاء",
-    href: "/friends",
-    description: "شاهد ما يقرأه أصدقاؤك",
-    icon: UsersIcon,
-  },
-  {
-    title: "الإحصائيات",
-    href: "/statistics",
-    description: "تحليلات عن عادات القراءة",
-    icon: ChartLineIcon,
-  },
-  {
-    title: "قوائم القراءة",
-    href: "/reading-lists",
-    description: "قوائمك المحفوظة والمفضلة",
-    icon: CheckIcon,
-  },
-];
 
 export const discoverItems: NavItem[] = [
   {
     title: "الكتب",
     href: "/discover/books",
-    description: "اكتشف كتب جديدة والأكثر مبيعاً",
+    description: "استكشف الكتب عبر التصنيفات والتقييمات",
     icon: BooksIcon,
   },
   {
     title: "المؤلفون",
     href: "/discover/authors",
-    description: "ابحث عن مؤلفيك المفضلين",
+    description: "اكتشف المؤلفين وأعمالهم",
     icon: UserCircleIcon,
   },
   {
-    title: "القراء",
-    href: "/discover/readers",
-    description: "تواصل مع محبي الكتب",
-    icon: UsersThreeIcon,
+    title: "دور النشر",
+    href: "/discover/publishers",
+    description: "استعرض دور النشر وتاريخها",
+    icon: BuildingsIcon,
   },
   {
-    title: "القوائم المنسقة",
-    href: "/discover/lists",
-    description: "قوائم قراءة وتوصيات مختارة",
-    icon: BookmarkIcon,
+    title: "القوائم",
+    href: "/lists",
+    description: "قوائم القراءة المنتقاة من المجتمع",
+    icon: ListBulletsIcon,
+    disabled: true,
+  },
+  {
+    title: "الجوائز",
+    href: "/awards-2026",
+    description: "أفضل الكتب لعام 2026 بالتصويت الشعبي",
+    icon: TrophyIcon,
+    disabled: true,
+    badge: "2026",
+  },
+];
+
+export const communityItems: NavItem[] = [
+  {
+    title: "التحديات",
+    href: "/challenges",
+    description: "تحديات القراءة الشهرية والسنوية",
+    icon: FireIcon,
+    disabled: true,
+    badge: "جديد",
+  },
+  {
+    title: "الأصدقاء",
+    href: "/friends",
+    description: "تابع نشاط أصدقائك القراء",
+    icon: UsersIcon,
+    disabled: true,
+  },
+  {
+    title: "التحديثات",
+    href: "/feed",
+    description: "آخر المراجعات والتقييمات",
+    icon: ClockIcon,
+    disabled: true,
+  },
+  {
+    title: "المراجعات",
+    href: "/reviews",
+    description: "آراء القراء حول الكتب",
+    icon: ChatCircleIcon,
+    disabled: true,
+  },
+  {
+    title: "لوحة الصدارة",
+    href: "/leaderboard",
+    description: "أكثر القراء نشاطاً هذا الشهر",
+    icon: StarIcon,
+    disabled: true,
   },
 ];

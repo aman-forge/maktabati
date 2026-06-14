@@ -1,255 +1,274 @@
-// import { Badge } from "@components/ui/badge";
 import { Button } from "@components/ui/button";
-import { Separator } from "@components/ui/separator";
-// import type { BookDetail } from "@features/books/types";
-import {
-  BookmarkSimpleIcon,
-  BookOpenIcon,
-  CheckIcon,
-  HeartIcon,
-  ShareNetworkIcon,
-  // StarIcon,
-} from "@phosphor-icons/react";
-import { useState } from "react";
+import { BookmarkSimpleIcon, BooksIcon, StarIcon } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 
-const SHELF_OPTIONS = [
-  { label: "أريد القراءة", icon: BookmarkSimpleIcon },
-  { label: "أقرأ الآن", icon: BookOpenIcon },
-  { label: "قرأتُه", icon: CheckIcon },
-] as const;
+import { useUser } from "@/features/auth/use-user";
+import { BOOK_GENRES } from "@/features/books/constants";
+import { useBookTracking } from "@/features/books/context/book-tracking-context";
+import { getUserBookTracking } from "@/features/books/server/library";
+import { DetailedBookType, type BookRatingSummary, getStatusConfig } from "@/features/books/types";
+import { cn } from "@/ui/lib/utils";
 
-// export function BookHero({ book }: { book: BookDetail }) {
-export function BookHero() {
-  const [shelf, setShelf] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
-  const [shelfOpen, setShelfOpen] = useState(false);
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const LANGUAGE_MAP: Record<string, string> = {
+  ar: "العربية",
+  eng: "الإنجليزية",
+  fr: "الفرنسية",
+  de: "الألمانية",
+  es: "الإسبانية",
+};
+
+function formatNumber(n?: number) {
+  if (!n) return "—";
+  return n.toLocaleString("ar-US");
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+export function BookHero({
+  book,
+  ratingSummary,
+}: {
+  book: DetailedBookType;
+  ratingSummary: BookRatingSummary;
+}) {
+  const { openTrackModal } = useBookTracking();
+  const { user } = useUser();
+  const trackingQuery = useQuery({
+    queryKey: ["book-tracking", book.id],
+    queryFn: () => getUserBookTracking({ data: { bookId: book.id } }),
+    enabled: !!user?.id,
+  });
+  const tracking = trackingQuery.data;
+  const trackingStatus = tracking?.status ?? undefined;
+  const statusConfig = trackingStatus ? getStatusConfig(trackingStatus) : null;
+  const StatusIcon = statusConfig?.icon ?? BookmarkSimpleIcon;
+  const trackingBook = useMemo(
+    () => ({
+      ...book,
+      status: trackingStatus,
+      pageProgress: tracking?.pageProgress ?? null,
+      notes: tracking?.notes ?? null,
+      startedAt: tracking?.startedAt ?? null,
+      finishedAt: tracking?.finishedAt ?? null,
+    }),
+    [
+      book,
+      tracking?.finishedAt,
+      tracking?.notes,
+      tracking?.pageProgress,
+      tracking?.startedAt,
+      trackingStatus,
+    ],
+  );
+
+  const languageLabel = useMemo(
+    () => LANGUAGE_MAP[book.originalLanguage ?? ""] ?? book.originalLanguage ?? "غير معروفة",
+    [book.originalLanguage],
+  );
+  const primaryAuthor = book.primaryAuthor;
+  const translatorLabel = useMemo(
+    () => book.translators.map((translator) => translator.name).join("، "),
+    [book.translators],
+  );
+
+  const genreLabels = useMemo(
+    () =>
+      (book.genres ?? []).slice(0, 5).map((g) => ({
+        value: g,
+        label: BOOK_GENRES.find((bg) => bg.value === g)?.label ?? g,
+      })),
+    [book.genres],
+  );
+
+  const meta = useMemo(
+    () =>
+      [
+        { label: "الناشر", value: book.publisher?.name },
+        { label: "سنة النشر", value: book.publicationYear?.toString() },
+        {
+          label: "عدد الصفحات",
+          value: book.pageCount ? `${book.pageCount} صفحة` : undefined,
+        },
+        { label: "اللغة الأصلية", value: languageLabel },
+        { label: "المترجم", value: translatorLabel },
+        {
+          label: "السلسلة",
+          value: book.series
+            ? book.seriesPosition
+              ? `${book.series.name} – #${book.seriesPosition}`
+              : book.series.name
+            : undefined,
+        },
+      ].filter((item) => item.value) as { label: string; value: string }[],
+    [book, languageLabel, translatorLabel],
+  );
 
   return (
-    <section className="relative overflow-hidden hidden">
-      {/* Subtle ash/mist background glow */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle at 20% 80%, hsl(200 40% 20% / 0.4) 0%, transparent 60%)",
-        }}
-      />
-      {/* Main content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-12 lg:py-16">
-        <div className="grid lg:grid-cols-[minmax(0,auto)_1fr] gap-10 lg:gap-16 items-start">
-          {/* Cover + Actions */}
-          <div className="flex flex-col items-center gap-6 lg:sticky lg:top-8">
-            {/* <div
-              className="relative w-56 sm:w-64 lg:w-72 shrink-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/50"
-              style={{ aspectRatio: "2/3" }}
-            >
-              <img
-                src={book.cover}
-                alt={`غلاف كتاب ${book.title}`}
-                className="object-cover"
-                priority
-              />
-            </div> */}
-
-            {/* Shelf & Actions */}
-            <div className="w-full max-w-70 flex flex-col gap-3">
+    <section className="border-b" dir="rtl">
+      {/* ── Top: cover + info ── */}
+      <div className="bg-muted/30">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+          <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:gap-12">
+            {/* Cover column */}
+            <div className="flex flex-col items-center gap-4 lg:sticky lg:top-20 lg:self-start">
               <div className="relative">
-                <Button
-                  className="w-full gap-2.5 rounded-xl font-semibold bg-linear-to-r from-primary to-primary/90 text-primary-foreground hover:brightness-110 shadow-md"
-                  onClick={() => setShelfOpen((o) => !o)}
-                >
-                  {shelf ? (
-                    <>
-                      <CheckIcon weight="bold" className="w-5 h-5" />
-                      {shelf}
-                    </>
-                  ) : (
-                    <>
-                      <BookmarkSimpleIcon weight="bold" className="w-5 h-5" />
-                      أضف إلى الرف
-                    </>
-                  )}
-                </Button>
-
-                {shelfOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 z-30 rounded-xl overflow-hidden shadow-2xl border border-border bg-popover/95 backdrop-blur-sm">
-                    {SHELF_OPTIONS.map(({ label, icon: Icon }) => (
-                      <button
-                        key={label}
-                        type="button"
-                        className="w-full flex items-center gap-3 px-5 py-3.5 text-sm text-right transition-colors hover:bg-accent/70"
-                        style={{
-                          color:
-                            shelf === label ? "hsl(var(--primary))" : undefined,
-                        }}
-                        onClick={() => {
-                          setShelf(label);
-                          setShelfOpen(false);
-                        }}
-                      >
-                        <Icon weight="bold" className="w-5 h-5 shrink-0" />
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                <img
+                  src={book.coverImageUrl ?? "/books/book.jpg"}
+                  alt={`غلاف ${book.title}`}
+                  className="ring-border/50 w-44 rounded-xl object-cover shadow-xl ring-1 sm:w-52 lg:w-56"
+                  style={{ aspectRatio: "2/3" }}
+                />
+                {/* Edition badge */}
+                {book.originalLanguage && book.originalLanguage !== "ar" && (
+                  <span className="absolute bottom-2 left-2 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                    مترجم
+                  </span>
                 )}
               </div>
 
-              <div className="flex gap-2.5">
+              {/* Primary CTA */}
+              <div className="w-full max-w-64 space-y-2">
                 <Button
-                  variant="outline"
-                  className="flex-1 gap-2 rounded-xl text-sm font-medium"
-                  onClick={() => setLiked((l) => !l)}
-                  aria-label={liked ? "إلغاء الإعجاب" : "إعجاب"}
+                  className={cn(
+                    "h-10 flex-1 gap-2 text-sm font-semibold shadow-none w-full",
+                    statusConfig?.bgColor,
+                    statusConfig?.bgHoverColor,
+                    statusConfig && "text-white",
+                  )}
+                  onClick={() => openTrackModal(trackingBook)}
                 >
-                  <HeartIcon
-                    weight={liked ? "fill" : "regular"}
-                    className="w-5 h-5 transition-all"
-                    style={{
-                      color: liked ? "hsl(var(--destructive))" : undefined,
-                    }}
-                  />
-                  {liked ? "أعجبني" : "أعجبني"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-xl shrink-0"
-                  aria-label="مشاركة الكتاب"
-                >
-                  <ShareNetworkIcon weight="bold" className="w-5 h-5" />
+                  <StatusIcon weight={trackingStatus ? "fill" : "bold"} className="size-4" />
+                  {statusConfig?.label ?? "إضافة الى المكتبة"}
                 </Button>
               </div>
             </div>
-          </div>
 
-          {/* Details */}
-          <div className="flex flex-col gap-8">
-            {/* Badges */}
-            {/* {book.badges && book.badges.length > 0 && (
-              <div className="flex flex-wrap gap-2.5">
-                {book.badges.map((b, i) => (
-                  <Badge
-                    key={b}
-                    variant={i === 0 ? "default" : "secondary"}
-                    className={`text-xs px-4 py-1.5 font-semibold ${
-                      i === 0
-                        ? "bg-primary text-primary-foreground border-0 shadow-sm"
-                        : ""
-                    }`}
-                  >
-                    {b}
-                  </Badge>
-                ))}
-              </div>
-            )} */}
-
-            {/* Title & Author */}
-            {/* <div className="flex flex-col gap-3">
-              <h1
-                className="text-xxl lg:text-3xl font-extrabold leading-[1.05] text-balance tracking-tight text-foreground"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {book.title}
-              </h1>
-              <p className="text-xl text-primary font-medium">{book.author}</p>
-            </div> */}
-
-            {/* Series info */}
-            {/* {book.series && (
-              <p className="text-base text-muted-foreground font-medium">
-                {book.series}
-              </p>
-            )} */}
-
-            {/* Rating */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-8">
-              <div className="flex flex-col items-start gap-2">
-                {/* <div className="flex items-baseline gap-3">
-                  <span
-                    className="text-6xl lg:text-7xl font-black text-foreground"
-                    style={{ fontFamily: "var(--font-display)" }}
-                  >
-                    {book.rating}
-                  </span>
-                  <span className="text-xl text-muted-foreground">/5</span>
-                </div> */}
-                {/* <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <StarIcon
-                      key={star}
-                      weight="fill"
-                      className={`w-6 h-6 ${
-                        star <= Math.round(book.rating)
-                          ? "text-yellow-400"
-                          : "text-muted/30"
-                      }`}
-                    />
-                  ))}
-                </div> */}
-                {/* <p className="text-sm text-muted-foreground">
-                  {book.ratingTotal?.toLocaleString("ar-EG")} تقييم ·{" "}
-                  {book.reviewCountTotal?.toLocaleString("ar-EG")} مراجعة
-                </p> */}
+            {/* Info column */}
+            <div className="flex flex-col gap-6">
+              {/* Title + author */}
+              <div className="flex items-end justify-between">
+                <div className="w-full space-y-2">
+                  <h1 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl lg:text-4xl">
+                    {book.title}
+                  </h1>
+                  {book.subtitle && (
+                    <p className="text-muted-foreground text-base">{book.subtitle}</p>
+                  )}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                    <span className="text-muted-foreground">بقلم</span>
+                    {primaryAuthor ? (
+                      <Link
+                        to="/author/$id"
+                        params={{ id: primaryAuthor.id }}
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        {primaryAuthor.name}
+                      </Link>
+                    ) : (
+                      <span className="text-primary font-semibold">غير معروف</span>
+                    )}
+                    {book.series && (
+                      <>
+                        <span className="text-muted-foreground/50">·</span>
+                        <span className="bg-background text-muted-foreground inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs">
+                          <BooksIcon className="size-3" />
+                          {book.seriesPosition
+                            ? `ج${book.seriesPosition} — ${book.series.name}`
+                            : book.series.name}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              <Separator
-                orientation="vertical"
-                className="hidden sm:block h-20 opacity-30"
-              />
-
-              {/* <div className="flex flex-col gap-2 flex-1 max-w-md">
-                {book.ratingCounts?.map(({ stars, pct }) => (
-                  <div key={stars} className="flex items-center gap-3">
-                    <span className="text-sm w-5 text-right shrink-0 text-muted-foreground tabular-nums">
-                      {stars}
-                    </span>
-                    <StarIcon
-                      weight="fill"
-                      className="w-4 h-4 shrink-0 text-yellow-400/80"
-                    />
-                    <div className="flex-1 h-2 rounded-full overflow-hidden bg-muted/60">
-                      <div
-                        className="h-full rounded-full bg-linear-to-r from-primary to-primary/80 transition-all duration-500"
-                        style={{ width: `${pct}%` }}
-                      />
+              {/* Rating */}
+              <div className="border-border bg-card rounded-2xl border p-4">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="text-foreground text-4xl font-black tabular-nums">
+                      {ratingSummary?.average?.toFixed(1)}
                     </div>
-                    <span className="text-sm w-10 shrink-0 text-muted-foreground tabular-nums">
-                      {pct}%
-                    </span>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <StarIcon
+                            key={star}
+                            weight={
+                              star <= Math.round(ratingSummary?.average ?? 0) ? "fill" : "regular"
+                            }
+                            className="text-primary h-4 w-4"
+                          />
+                        ))}
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        {formatNumber(ratingSummary?.totalRatings)} تقييم
+                        <span className="px-2">·</span>
+                        {formatNumber(ratingSummary?.totalReviews)} مراجعة
+                      </p>
+                    </div>
                   </div>
-                ))}
-              </div> */}
-            </div>
 
-            <Separator className="my-2 bg-border/50" />
-
-            {/* Meta */}
-            {/* {book.meta && book.meta.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                {book.meta.map(({ label, value }) => (
-                  <div key={label} className="flex flex-col gap-1.5">
-                    <span className="text-xs uppercase tracking-widest font-medium text-muted-foreground">
-                      {label}
-                    </span>
-                    <span className="text-base font-semibold text-foreground">
-                      {value}
-                    </span>
+                  <div className="flex flex-col gap-2.5">
+                    {ratingSummary?.distribution?.map(({ stars, percent }) => (
+                      <div key={stars} className="flex items-center gap-2.5">
+                        <span className="text-muted-foreground w-4 text-xs tabular-nums">
+                          {stars}
+                        </span>
+                        <div className="bg-secondary h-2 flex-1 overflow-hidden rounded-full">
+                          <div
+                            className="bg-primary h-full rounded-full"
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                        <span className="text-muted-foreground w-10 text-left text-xs tabular-nums">
+                          %{percent}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            )} */}
+
+              {/* Meta grid */}
+              {meta.length > 0 && (
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
+                  {meta.map(({ label, value }) => (
+                    <div key={label} className="flex flex-col gap-0.5">
+                      <span className="text-muted-foreground text-[11px]">{label}</span>
+                      <span className="text-sm font-medium">{value}</span>
+                    </div>
+                  ))}
+                  {/* Genre chips */}
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-muted-foreground text-[11px]">التصنيفات</span>
+                    <span className="text-sm font-medium">
+                      {genreLabels.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {genreLabels.map(({ value, label }) => (
+                            <Link
+                              key={value}
+                              to="/discover/books"
+                              search={{ genres: [value] }}
+                              className="bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground rounded-full border px-3 py-1 text-xs transition-colors"
+                            >
+                              {label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      {/* Bottom fade for clean section end */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, hsl(var(--background)) 70%)",
-        }}
-      />
     </section>
   );
 }

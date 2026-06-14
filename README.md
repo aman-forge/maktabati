@@ -1,76 +1,81 @@
-# [Maktabati Tech Stack](https://github.com/aman-forge/maktabati)
+# Maktabati
 
-**Official Tech Stack for Maktabati** — The ultimate Goodreads killer for Arabic readers.
+Arabic-first book discovery and reading tracker built with TanStack Start, Neon Postgres, Neon Auth, Drizzle ORM, Tailwind CSS, and shadcn/ui.
 
----
+## Stack
 
-**Status Key**:
+- **TanStack Start + Router**: file-based routes, SSR, server functions, request middleware, route guards, and search-param validation.
+- **Neon Postgres**: serverless Postgres using the Neon HTTP driver for serverless-friendly query execution.
+- **Neon Auth**: same-origin `/api/auth` proxy to the Neon Auth branch endpoint, with app-owned profiles in `public.profiles`.
+- **Drizzle ORM**: typed schema, relations v2, RLS policies, Neon roles, and `drizzle-kit` migrations scoped to the public schema.
+- **React Query**: client server-state cache for interactive UI workflows.
+- **Tailwind CSS v4 + shadcn/ui**: RTL-ready component system using Base UI primitives.
 
-- `[x]` = Currently in use / fully integrated
-- `[  ]` = Planned for future phases
+## Requirements
 
----
+- Node.js compatible with the pinned toolchain in `pnpm-lock.yaml`
+- pnpm
+- A Neon project with Postgres and Neon Auth enabled
 
-## Core Stack
+## Environment
 
-### Database & Backend
+Create `.env.local` from `.env.example` and fill in:
 
-- [x] **[Neon Postgres](https://neon.com/docs/introduction/architecture-overview)** — Serverless Postgres with branching, autoscaling, and built-in RLS. Primary data store for all platform data.
-- [x] **[Drizzle ORM](https://orm.drizzle.team/)** — Type-safe ORM with Drizzle Kit for migrations and Drizzle Studio for database inspection.
-- [x] **[Neon Auth](https://neon.com/docs/auth/overview)** (built on Better Auth) — Database-native authentication. Handles sessions, OAuth, and email/password out of the box.
+- `DATABASE_URL`: pooled Neon app connection string.
+- `DATABASE_MIGRATION_URL`: optional unpooled migration connection string.
+- `DATABASE_URL_UNPOOLED`: optional unpooled fallback for Drizzle commands.
+- `NEON_AUTH_BASE_URL`: server-side Neon Auth branch URL.
+- `NEON_AUTH_COOKIE_SECRET`: 32+ character secret reserved for auth cookie/session support.
+- `VITE_APP_URL`: public app origin, such as `http://localhost:3000`.
+- `VITE_NEON_DATA_API_URL`: Neon Data API URL for browser-side authenticated data access.
 
-### Framework & Routing
+## Development
 
-- [x] **[TanStack Start v1](https://tanstack.com/start/latest/docs/framework/react/overview)** — Full-stack React framework powered by Vite and Vinxi. Server Functions replace traditional API routes.
-- [x] **[TanStack Router](https://tanstack.com/router/latest/docs/overview)** — Fully type-safe file-based routing with built-in search param validation and route loaders.
-- [x] **[Vite](https://vite.dev/guide/)** — Build tool and dev server. Significantly faster than Webpack-based alternatives.
+```bash
+pnpm install
+pnpm dev
+```
 
-### TanStack Ecosystem
+Use HTTPS for LAN or mobile auth testing:
 
-- [x] **[TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)** — Server state management: caching, background refetching, and optimistic updates.
-- [ ] **[TanStack Table](https://tanstack.com/table/latest/docs/introduction)** — Headless table primitives for book catalog, admin dashboards, and analytics.
-- [ ] **[TanStack Form](https://tanstack.com/form/latest/docs/overview)** — Type-safe form handling with Zod integration.
-- [ ] **[TanStack Virtual](https://tanstack.com/virtual/latest/docs/introduction)** — Virtualized lists for rendering large book catalogs without performance degradation.
+```bash
+pnpm dev:https
+```
 
-### UI & Styling
+## Database
 
-- [x] **[Tailwind CSS v4](https://tailwindcss.com/docs)** — Utility-first CSS, RTL-first configuration.
-- [x] **[Shadcn/UI (Nova — Base UI)](https://ui.shadcn.com/docs)** — Component library built on Base UI primitives instead of Radix.
-- [x] **[Base UI](https://base-ui.com/react/overview/about)** — Unstyled, accessible primitives powering Shadcn Nova components.
-- [x] **[Dark Mode](https://lukonik.github.io/themer/docs/get-started)** - Shadcn's `next-themes` alternative for tanstack start
-- [x] **[Phosphor Icons](https://phosphoricons.com/)** — Consistent icon library with React package and SSR-safe imports.
-- [x] **[Sonner](https://sonner.emilkowal.ski/)** — Toast notifications.
-- [x] **[Fontsource (Arabic subsets)](https://fontsource.org/?subsets=arabic)** — Self-hosted Arabic fonts (Noto Naskh Arabic, Noto Sans Arabic).
-- [ ] **[Shadcn Charts (Recharts)](https://ui.shadcn.com/docs/charts)** — Reading heatmaps, genre breakdowns, and yearly stats.
+```bash
+pnpm db:generate
+pnpm db:migrate
+pnpm db:studio
+```
 
-### Forms & Validation
+Drizzle commands use `DATABASE_MIGRATION_URL`, then `DATABASE_URL_UNPOOLED`, then a de-pooled `DATABASE_URL` fallback. App migrations intentionally use `schemaFilter: ["public"]` so Neon Auth's `neon_auth` schema stays provider-managed.
 
-- [x] **[Zod](https://zod.dev/)** — Runtime schema validation. Used across Server Functions, forms, and API boundaries.
-- [x] **[t3-env](https://env.t3.gg/docs/introduction)** — Type-safe environment variable validation on startup.
+## Quality
 
-### Date & Time
+```bash
+pnpm lint
+pnpm test
+pnpm check
+pnpm build
+```
 
-- [x] **[date-fns](https://date-fns.org/)** — Lightweight, tree-shakeable date utility library (Arabic locale included).
+The production build emits client, SSR, and Nitro server output in `.output`.
 
-### Development Tools
+## Project Map
 
-- [x] **[pnpm](https://pnpm.io/)** — Fast, disk-efficient package manager with strict dependency isolation.
-- [x] **[Biome](https://biomejs.dev/)** — Replaces ESLint + Prettier. Single tool for linting and formatting.
-- [x] **[TypeScript (strict)](https://www.typescriptlang.org/)** — Full type safety across frontend, backend, DB schema, and router.
-- [x] **[Zed](https://zed.dev/)** — Primary high-performance IDE.
-- [ ] **[Vitest](https://vitest.dev/guide/) + [Playwright](https://playwright.dev/)** — Unit, integration, and end-to-end testing.
+- `src/app`: TanStack Start file routes and server routes.
+- `src/features/auth`: Neon Auth client, proxy, request middleware, session normalization, and profile provisioning.
+- `src/features/books`: book search, library tracking, mappers, validators, and server functions.
+- `src/db`: Drizzle schema, tables, relations, Neon roles, and RLS policies.
+- `src/ui`: shared layout, RTL styles, and shadcn/ui components.
+- `docs`: architecture, auth notes, and project changelog.
 
----
+## References
 
-## Future
-
-- [ ] **[Turborepo](https://turborepo.dev/docs)** — Monorepo management for scaling.
-- [ ] **[Tauri v2](https://v2.tauri.app/)** — Desktop and mobile apps sharing the same Vite/React codebase.
-- [ ] **[Fumadocs](https://www.fumadocs.dev/docs)** — Developer and publisher documentation site.
-- [ ] **[Cloudflare R2](https://developers.cloudflare.com/r2/)** — S3-compatible object storage with zero egress fees.
-- [ ] **[Resend](https://resend.com/)** — Transactional email with React Email for templates.
-- [ ] **[Trigger.dev v3](https://trigger.dev/docs/introduction)** — Background jobs for book imports and scheduled updates.
-- [ ] **[Upstash (Redis)](https://upstash.com/docs/introduction)** — Serverless Redis for rate limiting and hot data caching.
-- [ ] **[Typesense](https://typesense.org/docs/)** — Typo-tolerant full-text search engine for Arabic book discovery.
-- [ ] **[PostHog](https://posthog.com/)** — Product analytics, feature flags, and session replay.
-- [ ] **[Sentry](https://sentry.io/docs/)** — Error monitoring and performance tracing.
+- [TanStack Start React docs](https://tanstack.com/start/latest/docs/framework/react/)
+- [TanStack Router docs](https://tanstack.com/router/latest/docs)
+- [Drizzle with Neon](https://orm.drizzle.team/docs/get-started/neon-new)
+- [Neon Auth branchable identity](https://neon.com/blog/neon-auth-branchable-identity-in-your-database)
+- [Vite build options](https://vite.dev/config/build-options.html)
